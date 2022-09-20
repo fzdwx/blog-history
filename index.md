@@ -6,10 +6,23 @@ layout: home
 title: fzdwx
 ---
 
-
-hello 仄仄仄仄仄仄仄做做做做
-
-啊啊啊啊啊啊啊
+<div class="topbar">
+    <div class="topbar-button topbar-mine">
+        <a href="{{ site.url }}/index">fzdwx</a>
+    </div>
+    <div class="topbar-button">
+        <a href="{{ site.url }}/tags">Tags</a>
+    </div>
+    <!--    <div class="topbar-button">-->
+    <!--        <a href="{{ site.url }}/projects.html">Projects</a>-->
+    <!--    </div>-->
+    <div class="topbar-button">
+        <a href="{{ site.url }}/feed.xml">Feeds</a>
+    </div>
+    <div class="topbar-button topbar-about">
+        <a href="{{ site.url }}/about">About</a>
+    </div>
+</div>
 
 
 <ul>
