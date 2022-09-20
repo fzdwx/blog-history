@@ -3,9 +3,63 @@
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
 layout: home
+title: fzdwx
 ---
 
 
 hello 仄仄仄仄仄仄仄做做做做
 
 啊啊啊啊啊啊啊
+
+
+<ul>
+  <div class="char-total-counter">
+    {% assign count = 0 %}
+    {% for post in site.posts %}
+    {% assign single_count = post.content | strip_html | strip_newlines | remove: " " | size %}
+    {% assign count = count | plus: single_count %}
+    {% endfor %}
+
+    {{ site.posts.size }}篇文章
+    {{ count }}字
+  </div>
+
+{% for post in site.posts %}
+
+  <li class="post-line">
+    <a
+      class="post-title"
+      href="{{ site.baseurl }}{{ post.url }}">
+      {{ post.title }}
+    </a>
+
+    <a href="{{ site.baseurl }}{{ post.url }}">
+      <div class="post-summary">
+        {{ post.content | strip_html | truncate: 80, " ..." }}
+      </div>
+    </a>
+    <div class="post-info">
+      <div class="category-area">
+        {% for category in post.categories %}
+        <a href="{{ site.url }}/tags.html#{{ category }}">
+          <div class="category">
+            {{ category }}
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+      <div class="right-info-area">
+        <div class="char-counter">
+          {{ post.content | strip_html | strip_newlines | remove: " " | size }}字
+        </div>
+        
+        <div class="post-date">
+          {{ post.date | date: "%Y-%m-%d" }}
+        </div>
+      </div>
+    </div>
+  </li>
+
+{% endfor %}
+
+</ul>
