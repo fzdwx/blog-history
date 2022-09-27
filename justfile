@@ -12,3 +12,6 @@ update_theme:
 
 new filename="" :
     go run main.go {{filename}}
+
+view:
+    open url http://localhost:1313/

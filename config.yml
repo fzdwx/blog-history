@@ -80,14 +80,14 @@ params:
     - name: rss-simple
       url: "feed.xml"
   links:
-    - name: Manateelazycat - 博客
-      url: https://manateelazycat.github.io/
-      description: emacs hacker.
-      favicon: https://avatars.githubusercontent.com/u/237487?v=4
     - name: 阮一峰的网络日志
       favicon: https://www.ruanyifeng.com/blog/images/person2_s.jpg
       url: https://www.ruanyifeng.com/blog/
       description: 科技爱好者周刊
+    - name: Manateelazycat - 博客
+      url: https://manateelazycat.github.io/
+      description: Emacs hacker.
+      favicon: https://avatars.githubusercontent.com/u/237487?v=4
     - name: Alex Chi - 博客
       url: https://www.skyzh.dev/posts/
       favicon: https://avatars.githubusercontent.com/u/4198311
