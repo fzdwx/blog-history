@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Tags on fzdwx</title>
+    <link>https://fzdwx.github.io/tags/</link>
+    <description>Recent content in Tags on fzdwx</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <lastBuildDate>Sun, 18 Sep 2022 22:15:39 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/tags/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>launcher</title>
+      <link>https://fzdwx.github.io/tags/launcher/</link>
+      <pubDate>Sun, 18 Sep 2022 22:15:39 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/tags/launcher/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+  </channel>
+</rss>
