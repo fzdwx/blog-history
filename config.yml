@@ -96,6 +96,10 @@ params:
       description: Coding and writing, don't Panic
       url: https://catcoding.me/
       favicon: https://catcoding.me//css/images/favicon.ico
+    - name: 王垠
+      description: 当然我在扯淡
+      url: http://www.yinwang.org/
+      favicon: https://www.yinwang.org/images/Yc.jpg
 
   #  analytics:
   #    google:
