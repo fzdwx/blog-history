@@ -19,9 +19,9 @@ summary: 一个 linux 下的 application launcher, 让你只用键盘就可以�
 yay -S rofi
 ```
 
-2.添加自定义快捷键 绑定 hotkey 为  `alt` + `space` 触发 `rofi -show`。
+2.添加自定义快捷键绑定 hotkey 为`alt`+`space`触发`rofi -show`。
 
-3.press `alt` + `space`，然后使用 `shift` + `left` or `right` 进行切换 mode 。
+3.press`alt`+`space`，然后使用`shift`+`left`or`right`进行切换 mode 。
 
 ---
 
@@ -46,9 +46,9 @@ sed -i '8c show-icons: true;' ~/.config/rofi/config.rasi
 
 ## wmctrl
 
-**我的 `wmctrl` 的配置示例**:
+**我的`wmctrl`的配置示例**:
 
-使用 `xprop WM_CLASS` 获取前缀。
+使用`xprop WM_CLASS`获取前缀。
 
 ```shell
 alias chrome="wmctrl -x -a google-chrome || google-chrome-stable > /dev/null 2>&1 &"
