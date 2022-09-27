@@ -5,7 +5,7 @@ on:
     tags:
       - '*'
     branches:
-      - posts
+      - main
 
 jobs:
   build:
