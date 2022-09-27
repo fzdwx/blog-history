@@ -23,6 +23,7 @@ languages:
 
 
 params:
+  EnableInstantClick: true
   env: production # to enable google analytics, opengraph, twitter-cards and schema.
   title: fzdwx
   description: "What you say ?"
