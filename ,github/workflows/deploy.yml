@@ -1,9 +1,7 @@
-name: my-pipeline
+name: pages
 
 on:
   push:
-    tags:
-      - '*'
     branches:
       - main
 
