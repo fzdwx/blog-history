@@ -11,6 +11,7 @@ buildExpired: false
 pygmentsUseClasses: true
 
 #googleAnalytics: UA-123-45
+Copyright: "Copyright [fzdwx](https://github.com/fzdwx) since 2022"
 
 minify:
   disableXML: true
