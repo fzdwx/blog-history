@@ -1,0 +1,12 @@
+<article  class="home-info">
+    <header class="entry-header">
+        <h1>Coming soon ...</h1>
+    </header>
+    <section class="entry-content">
+        {{- partial "personal_intro.html" -}}
+    </section>
+</article>
+
+<footer class="entry-footer">
+    {{- partial "social_icons.html" (dict "icons" site.Params.socialIcons "svg" $.Site.Data.svg "MaskedEmail" site.Params.MaskedEmail "Email" site.Params.Email) -}}
+</footer>

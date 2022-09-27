@@ -1,0 +1,157 @@
+baseURL: "https://fzdwx.github.io/"
+title: fzdwx
+paginate: 5
+theme: PaperModX
+
+timeZone: Asia/Shanghai
+enableRobotsTXT: true
+buildDrafts: false
+buildFuture: false
+buildExpired: false
+pygmentsUseClasses: true
+
+#googleAnalytics: UA-123-45
+
+minify:
+  disableXML: true
+  minifyOutput: true
+
+languages:
+  en:
+    languageName: "English"
+    homeInfoParams: "use custom home_info.html"
+
+
+params:
+  env: production # to enable google analytics, opengraph, twitter-cards and schema.
+  title: fzdwx
+  description: "What you say ?"
+  keywords: [ Blog, Portfolio, PaperModX ]
+  author: fzdwx
+  # author: ["Me", "You"] # multiple authors
+  images: [ "<link or path of image for opengraph, twitter-cards>" ]
+  DateFormat: "2006-01-02"
+  defaultTheme: auto # dark, light
+  disableThemeToggle: false
+
+  ShowReadingTime: true
+  ShowShareButtons: true
+  ShowPostNavLinks: true
+  ShowBreadCrumbs: true
+  ShowWordCount: true
+  ShowCodeCopyButtons: true
+  Email: likelovec@gmail.com
+  disableSpecial1stPost: false
+  disableScrollToTop: false
+  comments: false
+  hidemeta: false
+  hideSummary: false
+  showtoc: true
+  tocopen: true
+  TocSide: right
+
+  assets:
+  # disableFingerprinting: true
+  #    favicon: "/favicon.ico"
+  #    favicon16x16: "/favicon.ico"
+  #    favicon32x32: "/favicon.ico"
+  #    apple_touch_icon: "<link / abs url>"
+  #    safari_pinned_tab: "<link / abs url>"
+
+  #  label:
+  #    text: "Home"
+  #    icon: /favicon.ico
+  #    iconHeight: 35
+
+  # home-info mode
+#  homeInfoParams:
+#    Title: "Hi there \U0001F44B"
+#    Content: ""
+
+  socialIcons:
+    - name: github
+      url: "https://github.com/fzdwx"
+    - name: gmail
+      url: "mailto://likelovec@gmail.com"
+    - name: bilibili
+      url: "https://space.bilibili.com/353383309"
+    - name: twitter
+      url: "https://twitter.com/fzdwx"
+    - name: rss-simple
+      url: "feed.xml"
+  links:
+    - name: Manateelazycat - 博客
+      url: https://manateelazycat.github.io/
+      description: emacs hacker.
+      favicon: https://avatars.githubusercontent.com/u/237487?v=4
+    - name: 阮一峰的网络日志
+      favicon: https://www.ruanyifeng.com/blog/images/person2_s.jpg
+      url: https://www.ruanyifeng.com/blog/
+      description: 科技爱好者周刊
+    - name: Alex Chi - 博客
+      url: https://www.skyzh.dev/posts/
+      favicon: https://avatars.githubusercontent.com/u/4198311
+      description: 一些跟rust有关的博客
+    - name: 程序员的喵
+      description: Coding and writing, don't Panic
+      url: https://catcoding.me/
+      favicon: https://catcoding.me//css/images/favicon.ico
+
+  #  analytics:
+  #    google:
+  #      SiteVerificationTag: "XYZabc"
+  #    bing:
+  #      SiteVerificationTag: "XYZabc"
+  #    yandex:
+  #      SiteVerificationTag: "XYZabc"
+
+  cover:
+    hidden: true # hide everywhere but not in structured data
+    hiddenInList: true # hide on list pages and home
+    hiddenInSingle: true # hide on single page
+
+  editPost:
+    URL: "https://github.com/fzdwx/fzdwx.github.io/content"
+    Text: "Suggest Changes" # edit text
+    appendFilePath: true # to append file path to Edit link
+
+  # for search
+  # https://fusejs.io/api/options.html
+  fuseOpts:
+    isCaseSensitive: false
+    shouldSort: true
+    location: 0
+    distance: 1000
+    threshold: 0.4
+    minMatchCharLength: 0
+    keys: [ "title", "permalink", "summary", "content" ]
+menu:
+  main:
+    - name: Blog
+      url: /posts/
+      weight: 1
+    - name: Archives
+      url: /archives/
+      weight: 4
+    - name: Tags
+      url: /tags/
+      weight: 2
+    - name: Links
+      url: /links/
+      weight: 3
+
+# prefer feed.xml rather than index.xml
+outputFormats:
+  RSS:
+    mediatype: "application/rss"
+    baseName: "feed"
+
+# Read: https://github.com/reorx/hugo-PaperModX/wiki/FAQs#using-hugos-syntax-highlighter-chroma
+# pygmentsUseClasses: true
+# markup:
+#     highlight:
+#         # anchorLineNos: true
+#         codeFences: true
+#         guessSyntax: true
+#         lineNos: true
+#         style: monokai
