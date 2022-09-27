@@ -2,19 +2,25 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
+    <loc>https://fzdwx.github.io/</loc>
+    <lastmod>2022-09-27T21:45:29+08:00</lastmod>
+  </url><url>
+    <loc>https://fzdwx.github.io/posts/2022-09-27-mit6.824-lab1/</loc>
+    <lastmod>2022-09-27T21:45:29+08:00</lastmod>
+  </url><url>
+    <loc>https://fzdwx.github.io/tags/mit6.824/</loc>
+    <lastmod>2022-09-27T21:45:29+08:00</lastmod>
+  </url><url>
+    <loc>https://fzdwx.github.io/posts/</loc>
+    <lastmod>2022-09-27T21:45:29+08:00</lastmod>
+  </url><url>
+    <loc>https://fzdwx.github.io/tags/</loc>
+    <lastmod>2022-09-27T21:45:29+08:00</lastmod>
+  </url><url>
     <loc>https://fzdwx.github.io/posts/2022-09-18-about-rofi/</loc>
     <lastmod>2022-09-18T22:15:39+08:00</lastmod>
   </url><url>
-    <loc>https://fzdwx.github.io/</loc>
-    <lastmod>2022-09-18T22:15:39+08:00</lastmod>
-  </url><url>
     <loc>https://fzdwx.github.io/tags/launcher/</loc>
-    <lastmod>2022-09-18T22:15:39+08:00</lastmod>
-  </url><url>
-    <loc>https://fzdwx.github.io/posts/</loc>
-    <lastmod>2022-09-18T22:15:39+08:00</lastmod>
-  </url><url>
-    <loc>https://fzdwx.github.io/tags/</loc>
     <lastmod>2022-09-18T22:15:39+08:00</lastmod>
   </url><url>
     <loc>https://fzdwx.github.io/links/</loc>
