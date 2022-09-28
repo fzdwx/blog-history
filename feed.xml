@@ -13,13 +13,63 @@
       <pubDate>Wed, 28 Sep 2022 15:59:37 +0800</pubDate>
       
       <guid>https://fzdwx.github.io/posts/2022-09-28-neovim-use-notes/</guid>
-      <description> 由于最近切换到了linux，不可避免的经常需要使用vi等编辑器，所以这次好好折腾一下。
-我的配置地址: https://github.com/fzdwx/nvim，它是在 nvchad 的基础上改的
-一些教程 Rust and nvim </description>
+      <description>由于最近切换到了linux，不可避免的经常需要使用vi等编辑器，所以这次好好折腾一下。
+我的配置地址: https://github.com/fzdwx/nvim。
+我的配置 pakcer 我选用的插件管理器是packer，我也不知道选什么好，就按最新的来吧。
+--- setup packer local fn = vim.fn local install_path = fn.stdpath(&amp;#39;data&amp;#39;) .. &amp;#39;/site/pack/packer/start/packer.nvim&amp;#39; if fn.empty(fn.glob(install_path)) &amp;gt; 0 then packer_bootstrap = fn.system({ &amp;#39;git&amp;#39;, &amp;#39;clone&amp;#39;, &amp;#39;--depth&amp;#39;, &amp;#39;1&amp;#39;, &amp;#39;https://github.com/wbthomason/packer.nvim&amp;#39;, install_path }) vim.cmd(&amp;#34;packadd packer.nvim&amp;#34;) end --- add plugins require(&amp;#39;packer&amp;#39;).startup(function(use) -- 自托管 use &amp;#39;wbthomason/packer.nvim&amp;#39; -- 其他插件 -- 如果是第一次则同步 if packer_bootstrap then require(&amp;#39;packer&amp;#39;).sync() end end) alpha 是一个dashboard，也可以说是一个欢迎界面，了解详情。
+require(&amp;#39;packer&amp;#39;).startup(function(use) -- ... --- 添加下面两行进行安装 use &amp;#34;goolord/alpha-nvim&amp;#34;; use &amp;#34;kyazdani42/nvim-web-devicons&amp;#34;; -- ... end) 配置代码太长了就不放了，可以点击这里 这里 参考。</description>
       <content:encoded><![CDATA[<blockquote>
 <p>由于最近切换到了linux，不可避免的经常需要使用vi等编辑器，所以这次好好折腾一下。</p>
 </blockquote>
-<p>我的配置地址: <a href="https://github.com/fzdwx/nvim">https://github.com/fzdwx/nvim</a>，它是在<a href="https://nvchad.com/"> nvchad </a>的基础上改的</p>
+<p>我的配置地址: <a href="https://github.com/fzdwx/nvim">https://github.com/fzdwx/nvim</a>。</p>
+<h2 id="我的配置">我的配置</h2>
+<h3 id="pakcer">pakcer</h3>
+<p>我选用的插件管理器是<code>packer</code>，我也不知道选什么好，就按最新的来吧。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="c1">--- setup packer</span>
+</span></span><span class="line"><span class="cl"><span class="kd">local</span> <span class="n">fn</span> <span class="o">=</span> <span class="n">vim.fn</span>
+</span></span><span class="line"><span class="cl"><span class="kd">local</span> <span class="n">install_path</span> <span class="o">=</span> <span class="n">fn.stdpath</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">)</span> <span class="o">..</span> <span class="s1">&#39;/site/pack/packer/start/packer.nvim&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kr">if</span> <span class="n">fn.empty</span><span class="p">(</span><span class="n">fn.glob</span><span class="p">(</span><span class="n">install_path</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="kr">then</span>
+</span></span><span class="line"><span class="cl">    <span class="n">packer_bootstrap</span> <span class="o">=</span> <span class="n">fn.system</span><span class="p">({</span> <span class="s1">&#39;git&#39;</span><span class="p">,</span> <span class="s1">&#39;clone&#39;</span><span class="p">,</span> <span class="s1">&#39;--depth&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;https://github.com/wbthomason/packer.nvim&#39;</span><span class="p">,</span> <span class="n">install_path</span> <span class="p">})</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vim.cmd</span><span class="p">(</span><span class="s2">&#34;packadd packer.nvim&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="kr">end</span>
+</span></span><span class="line"><span class="cl"><span class="c1">--- add plugins</span>
+</span></span><span class="line"><span class="cl"><span class="n">require</span><span class="p">(</span><span class="s1">&#39;packer&#39;</span><span class="p">).</span><span class="n">startup</span><span class="p">(</span><span class="kr">function</span><span class="p">(</span><span class="n">use</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">-- 自托管</span>
+</span></span><span class="line"><span class="cl">    <span class="n">use</span> <span class="s1">&#39;wbthomason/packer.nvim&#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">-- 其他插件</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">-- 如果是第一次则同步</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">if</span> <span class="n">packer_bootstrap</span> <span class="kr">then</span>
+</span></span><span class="line"><span class="cl">        <span class="n">require</span><span class="p">(</span><span class="s1">&#39;packer&#39;</span><span class="p">).</span><span class="n">sync</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">end</span>
+</span></span><span class="line"><span class="cl"><span class="kr">end</span><span class="p">)</span>
+</span></span></code></pre></div><h3 id="alpha">alpha</h3>
+<p>是一个dashboard，也可以说是一个欢迎界面，<a href="https://github.com/goolord/alpha-nvim">了解详情</a>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="n">require</span><span class="p">(</span><span class="s1">&#39;packer&#39;</span><span class="p">).</span><span class="n">startup</span><span class="p">(</span><span class="kr">function</span><span class="p">(</span><span class="n">use</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">-- ...</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">--- 添加下面两行进行安装</span>
+</span></span><span class="line"><span class="cl">    <span class="n">use</span> <span class="s2">&#34;goolord/alpha-nvim&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">use</span> <span class="s2">&#34;kyazdani42/nvim-web-devicons&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">-- ...</span>
+</span></span><span class="line"><span class="cl"><span class="kr">end</span><span class="p">)</span>
+</span></span></code></pre></div><p>配置代码太长了就不放了，可以点击这里<a href="https://github.com/fzdwx/nvim/blob/main/lua/config/plugins/alpha.lua"> 这里 </a>参考。</p>
+<h3 id="telescope">telescope</h3>
+<p>主要作用是文件的查找与预览。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="n">require</span><span class="p">(</span><span class="s1">&#39;packer&#39;</span><span class="p">).</span><span class="n">startup</span><span class="p">(</span><span class="kr">function</span><span class="p">(</span><span class="n">use</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">-- ...</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">--- 添加下面代码进行安装</span>
+</span></span><span class="line"><span class="cl">    <span class="n">use</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="s1">&#39;nvim-telescope/telescope.nvim&#39;</span><span class="p">,</span> <span class="n">tag</span> <span class="o">=</span> <span class="s1">&#39;0.1.0&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s1">&#39;nvim-telescope/telescope-file-browser.nvim&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s1">&#39;nvim-telescope/telescope-project.nvim&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s1">&#39;nvim-lua/plenary.nvim&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">-- ...</span>
+</span></span><span class="line"><span class="cl"><span class="kr">end</span><span class="p">)</span>
+</span></span></code></pre></div><ul>
+<li><a href="https://github.com/fzdwx/nvim/blob/main/lua/config/plugins/telescope.lua">配置</a></li>
+<li><a href="https://github.com/fzdwx/nvim/blob/main/lua/config/key/init.lua#L34-L52">key map</a></li>
+</ul>
 <h2 id="一些教程">一些教程</h2>
 <ol>
 <li><a href="https://rsdlt.github.io/posts/rust-nvim-ide-guide-walkthrough-development-debug/">Rust and nvim</a></li>
