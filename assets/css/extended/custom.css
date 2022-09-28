@@ -1,11 +1,3 @@
-:root {
-    --link-color: var(--primary);
-    --link-hover-color: #73BC83;
-    --link-underline-shadow: 0 1px 0 var(--link-color);
-    --link-hover-underline-color: #73BC83;
-    --link-hover-underline-shadow: 0 2px 0 var(--link-hover-underline-color);
-}
-
 @font-face {
     font-family: 'JetBrains Mono';
     src: url('https://cdn.jsdelivr.net/gh/JetBrains/JetBrainsMono/web/woff2/JetBrainsMono-Bold-Italic.woff2') format('woff2'),
@@ -79,297 +71,72 @@
 }
 
 @font-face {
-    font-family: 'angelina';
-    src: url('https://fzdwx.github.io/font/angelina.ttf') format('woff2'),
-    url('https://fzdwx.github.io/font/angelina.ttf') format('woff');
-    font-weight: 700;
-    font-style: italic;
-    font-display: swap;
+    font-family: mottoFont;
+    src: url("https://fzdwx.github.io/font/SCRIPTIN.ttf") format("TrueType");
 }
 
 @font-face {
-    font-family: 'angelina';
-    src: url('https://fzdwx.github.io/font/angelina.ttf') format('woff2'),
-    url('https://fzdwx.github.io/font/angelina.ttf') format('woff');
-    font-weight: 700;
-    font-style: normal;
-    font-display: swap;
+    font-family: angelinaFont;
+    src: url("https://fzdwx.github.io/font/angelina.ttf") format("TrueType");
 }
 
 @font-face {
-    font-family: 'angelina';
-    src: url('https://fzdwx.github.io/font/angelina.ttf') format('woff2'),
-    url('https://fzdwx.github.io/font/angelina.ttf') format('woff');
-    font-weight: 800;
-    font-style: italic;
-    font-display: swap;
+    font-family: jinkaiFont;
+    src: url("https://fzdwx.github.io/font/jinkai.ttf") format("TrueType");
 }
 
 @font-face {
-    font-family: 'angelina';
-    src: url('https://fzdwx.github.io/font/angelina.ttf') format('woff2'),
-    url('https://fzdwx.github.io/font/angelina.ttf') format('woff');
-    font-weight: 800;
-    font-style: normal;
-    font-display: swap;
+    font-family: ffFont;
+    src: url("https://fzdwx.github.io/font/f1.ttf") format("TrueType");
 }
 
 @font-face {
-    font-family: 'angelina';
-    src: url('https://fzdwx.github.io/font/angelina.ttf') format('woff2'),
-    url('https://fzdwx.github.io/font/angelina.ttf') format('woff');
-    font-weight: 400;
-    font-style: italic;
-    font-display: swap;
+    font-family: fzdwxFont;
+    src: url("https://fzdwx.github.io/font/fzdwx.ttf") format("TrueType");
 }
 
-@font-face {
-    font-family: 'angelina';
-    src: url('https://fzdwx.github.io/font/angelina.ttf') format('woff2'),
-    url('https://fzdwx.github.io/font/angelina.ttf') format('woff');
-    font-weight: 500;
-    font-style: italic;
-    font-display: swap;
+:root {
+    --link-color: var(--primary);
+    --link-hover-color: #73bca7;
+    --link-underline-shadow: 0 1px 0 var(--link-color);
+    --link-hover-underline-color: #73BC83;
+    --link-hover-underline-shadow: 0 2px 0 var(--link-hover-underline-color);
 }
 
-@font-face {
-    font-family: 'angelina';
-    src: url('https://fzdwx.github.io/font/angelina.ttf') format('woff2'),
-    url('https://fzdwx.github.io/font/angelina.ttf') format('woff');
-    font-weight: 500;
-    font-style: normal;
-    font-display: swap;
+.dark {
+    --link-color: var(--primary);
+    --link-hover-color: #73bca7;
+    --link-underline-shadow: 0 1px 0 var(--link-color);
+    --link-hover-underline-color: #73BC83;
+    --link-hover-underline-shadow: 0 2px 0 var(--link-hover-underline-color);
 }
 
-@font-face {
-    font-family: 'angelina';
-    src: url('https://fzdwx.github.io/font/angelina.ttf') format('woff2'),
-    url('https://fzdwx.github.io/font/angelina.ttf') format('woff');
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
+.logo {
+    font-family: 'angelinaFont', monospace !important;
 }
 
-@font-face {
-    font-family: 'ffff';
-    src: url('https://fzdwx.github.io/font/f1.ttf') format('woff2'),
-    url('https://fzdwx.github.io/font/f1.ttf') format('woff');
-    font-weight: 700;
-    font-style: italic;
-    font-display: swap;
+.post-title {
+    font-family: 'fzdwxFont', monospace !important;
 }
 
-@font-face {
-    font-family: 'ffff';
-    src: url('https://fzdwx.github.io/font/f1.ttf') format('woff2'),
-    url('https://fzdwx.github.io/font/f1.ttf') format('woff');
-    font-weight: 700;
-    font-style: normal;
-    font-display: swap;
+.post-content {
+    font-size: 20px;
+    font-family: 'jinkaiFont', monospace !important;
 }
 
-@font-face {
-    font-family: 'ffff';
-    src: url('https://fzdwx.github.io/font/f1.ttf') format('woff2'),
-    url('https://fzdwx.github.io/font/f1.ttf') format('woff');
-    font-weight: 800;
-    font-style: italic;
-    font-display: swap;
+.entry-header {
+    font-family: 'jinkaiFont', monospace !important;
 }
 
-@font-face {
-    font-family: 'ffff';
-    src: url('https://fzdwx.github.io/font/f1.ttf') format('woff2'),
-    url('https://fzdwx.github.io/font/f1.ttf') format('woff');
-    font-weight: 800;
-    font-style: normal;
-    font-display: swap;
+.entry-content {
+    font-size: 17px;
+    font-family: 'jinkaiFont', monospace !important;
 }
 
-@font-face {
-    font-family: 'ffff';
-    src: url('https://fzdwx.github.io/font/f1.ttf') format('woff2'),
-    url('https://fzdwx.github.io/font/f1.ttf') format('woff');
-    font-weight: 400;
-    font-style: italic;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'ffff';
-    src: url('https://fzdwx.github.io/font/f1.ttf') format('woff2'),
-    url('https://fzdwx.github.io/font/f1.ttf') format('woff');
-    font-weight: 500;
-    font-style: italic;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'ffff';
-    src: url('https://fzdwx.github.io/font/f1.ttf') format('woff2'),
-    url('https://fzdwx.github.io/font/f1.ttf') format('woff');
-    font-weight: 500;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'ffff';
-    src: url('https://fzdwx.github.io/font/f1.ttf') format('woff2'),
-    url('https://fzdwx.github.io/font/f1.ttf') format('woff');
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'jinkai';
-    src: url('https://fzdwx.github.io/font/jinkai.ttf') format('woff2'),
-    url('https://fzdwx.github.io/font/jinkai.ttf') format('woff');
-    font-weight: 700;
-    font-style: italic;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'jinkai';
-    src: url('https://fzdwx.github.io/font/jinkai.ttf') format('woff2'),
-    url('https://fzdwx.github.io/font/jinkai.ttf') format('woff');
-    font-weight: 700;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'jinkai';
-    src: url('https://fzdwx.github.io/font/jinkai.ttf') format('woff2'),
-    url('https://fzdwx.github.io/font/jinkai.ttf') format('woff');
-    font-weight: 800;
-    font-style: italic;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'jinkai';
-    src: url('https://fzdwx.github.io/font/jinkai.ttf') format('woff2'),
-    url('https://fzdwx.github.io/font/jinkai.ttf') format('woff');
-    font-weight: 800;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'jinkai';
-    src: url('https://fzdwx.github.io/font/jinkai.ttf') format('woff2'),
-    url('https://fzdwx.github.io/font/jinkai.ttf') format('woff');
-    font-weight: 400;
-    font-style: italic;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'jinkai';
-    src: url('https://fzdwx.github.io/font/jinkai.ttf') format('woff2'),
-    url('https://fzdwx.github.io/font/jinkai.ttf') format('woff');
-    font-weight: 500;
-    font-style: italic;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'jinkai';
-    src: url('https://fzdwx.github.io/font/jinkai.ttf') format('woff2'),
-    url('https://fzdwx.github.io/font/jinkai.ttf') format('woff');
-    font-weight: 500;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'jinkai';
-    src: url('https://fzdwx.github.io/font/jinkai.ttf') format('woff2'),
-    url('https://fzdwx.github.io/font/jinkai.ttf') format('woff');
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'SCRIPTIN';
-    src: url('https://fzdwx.github.io/font/SCRIPTIN.ttf') format('woff2'),
-    url('https://fzdwx.github.io/font/SCRIPTIN.ttf') format('woff');
-    font-weight: 700;
-    font-style: italic;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'SCRIPTIN';
-    src: url('https://fzdwx.github.io/font/SCRIPTIN.ttf') format('woff2'),
-    url('https://fzdwx.github.io/font/SCRIPTIN.ttf') format('woff');
-    font-weight: 700;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'SCRIPTIN';
-    src: url('https://fzdwx.github.io/font/SCRIPTIN.ttf') format('woff2'),
-    url('https://fzdwx.github.io/font/SCRIPTIN.ttf') format('woff');
-    font-weight: 800;
-    font-style: italic;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'SCRIPTIN';
-    src: url('https://fzdwx.github.io/font/SCRIPTIN.ttf') format('woff2'),
-    url('https://fzdwx.github.io/font/SCRIPTIN.ttf') format('woff');
-    font-weight: 800;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'SCRIPTIN';
-    src: url('https://fzdwx.github.io/font/SCRIPTIN.ttf') format('woff2'),
-    url('https://fzdwx.github.io/font/SCRIPTIN.ttf') format('woff');
-    font-weight: 400;
-    font-style: italic;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'SCRIPTIN';
-    src: url('https://fzdwx.github.io/font/SCRIPTIN.ttf') format('woff2'),
-    url('https://fzdwx.github.io/font/SCRIPTIN.ttf') format('woff');
-    font-weight: 500;
-    font-style: italic;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'SCRIPTIN';
-    src: url('https://fzdwx.github.io/font/SCRIPTIN.ttf') format('woff2'),
-    url('https://fzdwx.github.io/font/SCRIPTIN.ttf') format('woff');
-    font-weight: 500;
-    font-style: normal;
-    font-display: swap;
-}
-
-@font-face {
-    font-family: 'SCRIPTIN';
-    src: url('https://fzdwx.github.io/font/SCRIPTIN.ttf') format('woff2'),
-    url('https://fzdwx.github.io/font/SCRIPTIN.ttf') format('woff');
-    font-weight: 400;
-    font-style: normal;
-    font-display: swap;
-}
-
-.main.post {
-    font-family: 'Jetbrains Mono', monospace !important;
+#menu {
+    font-family: 'ffFont', monospace !important;
 }
 
 code {
-    font-family: 'Jetbrains Mono', Menlo, Consolas, 'DejaVu Sans Mono', 'Bitstream Vera Sans Mono', 'Lucida Console', Monaco, 'Droid Sans Mono', monospace !important;
+    font-family: 'Jetbrains Mono', monospace !important;
 }
