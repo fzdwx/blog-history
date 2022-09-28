@@ -62,8 +62,7 @@ require('packer').startup(function(use)
     --- 添加下面代码进行安装
     use {
         'nvim-telescope/telescope.nvim', tag = '0.1.0',
-        'nvim-telescope/telescope-file-browser.nvim',
-        'nvim-telescope/telescope-project.nvim',
+        "ahmedkhalf/project.nvim",
         'nvim-lua/plenary.nvim',
     }
     -- ...
