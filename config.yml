@@ -31,7 +31,7 @@ params:
   keywords: [ Blog, Portfolio, PaperModX ]
   author: fzdwx
   # author: ["Me", "You"] # multiple authors
-  images: [ "<link or path of image for opengraph, twitter-cards>" ]
+  images: [ "https://avatars.githubusercontent.com/u/65269574?v=4" ]
   DateFormat: "2006-01-02"
   defaultTheme: auto # dark, light
   disableThemeToggle: false
