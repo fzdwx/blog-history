@@ -14,11 +14,12 @@
       
       <guid>https://fzdwx.github.io/posts/2022-09-18-about-rofi/</guid>
       <description>一个 linux 下的 application launcher, 让你只用键盘就可以进行应用的启动与切换。</description>
-      <content:encoded><![CDATA[<h2 id="rofi">rofi</h2>
-<p>今天发现了一个 linux 下的 application launcher <a href="https://github.com/davatorium/rofi">rofi</a>，它可以快速切换窗口和启动程序。
-我用它和 <code>wmctrl</code> 进行配合使用。</p>
-<p><strong>我的使用过程</strong>：</p>
-<p>1.archlinux install</p>
+      <content:encoded><![CDATA[<blockquote>
+<p>今天发现了一个 linux 下的 application launcher <a href="https://github.com/davatorium/rofi">rofi</a> ，它可以快速切换窗口和启动程序，
+我用它和<code>wmctrl</code>进行配合使用。</p>
+</blockquote>
+<p><strong>我的使用过程:</strong></p>
+<p>1.Archlinux install</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">yay -S rofi
 </span></span></code></pre></div><p>2.添加自定义快捷键绑定 hotkey 为<code>alt</code>+<code>space</code>触发<code>rofi -show</code>。</p>
 <p>3.press<code>alt</code>+<code>space</code>，然后使用<code>shift</code>+<code>left</code>or<code>right</code>进行切换 mode 。</p>
@@ -31,9 +32,11 @@
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">sed -i <span class="s1">&#39;8c show-icons: true;&#39;</span> ~/.config/rofi/config.rasi
 </span></span></code></pre></div><p>3.更换主题</p>
 <p>参考 <a href="https://github.com/lr-tech/rofi-themes-collection#installing-themes">https://github.com/lr-tech/rofi-themes-collection#installing-themes</a></p>
-<h2 id="wmctrl">wmctrl</h2>
+<hr>
 <p><strong>我的<code>wmctrl</code>的配置示例</strong>:</p>
+<blockquote>
 <p>使用<code>xprop WM_CLASS</code>获取前缀。</p>
+</blockquote>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">alias</span> <span class="nv">chrome</span><span class="o">=</span><span class="s2">&#34;wmctrl -x -a google-chrome || google-chrome-stable &gt; /dev/null 2&gt;&amp;1 &amp;&#34;</span>
 </span></span><span class="line"><span class="cl"><span class="nb">alias</span> <span class="nv">note</span><span class="o">=</span><span class="s2">&#34;wmctrl -x -a obsidian || /usr/bin/obsidian &gt; /dev/null 2&gt;&amp;1 &amp;&#34;</span>
 </span></span><span class="line"><span class="cl"><span class="nb">alias</span> <span class="nv">codew</span><span class="o">=</span><span class="s2">&#34;wmctrl -x -a code || /opt/code/code &gt; /dev/null 2&gt;&amp;1 &amp;&#34;</span>
