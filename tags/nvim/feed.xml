@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>nvim on fzdwx</title>
+    <link>https://fzdwx.github.io/tags/nvim/</link>
+    <description>Recent content in nvim on fzdwx</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Copyright [fzdwx](https://github.com/fzdwx) since 2022</copyright>
+    <lastBuildDate>Wed, 28 Sep 2022 15:59:37 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/tags/nvim/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Neovim使用记录  </title>
+      <link>https://fzdwx.github.io/posts/2022-09-28-neovim-use-notes/</link>
+      <pubDate>Wed, 28 Sep 2022 15:59:37 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/posts/2022-09-28-neovim-use-notes/</guid>
+      <description> 由于最近切换到了linux，不可避免的经常需要使用vi等编辑器，所以这次好好折腾一下。
+我的配置地址: https://github.com/fzdwx/nvim，它是在 nvchad 的基础上改的
+一些教程 Rust and nvim </description>
+      <content:encoded><![CDATA[<blockquote>
+<p>由于最近切换到了linux，不可避免的经常需要使用vi等编辑器，所以这次好好折腾一下。</p>
+</blockquote>
+<p>我的配置地址: <a href="https://github.com/fzdwx/nvim">https://github.com/fzdwx/nvim</a>，它是在<a href="https://nvchad.com/"> nvchad </a>的基础上改的</p>
+<h2 id="一些教程">一些教程</h2>
+<ol>
+<li><a href="https://rsdlt.github.io/posts/rust-nvim-ide-guide-walkthrough-development-debug/">Rust and nvim</a></li>
+</ol>
+]]></content:encoded>
+    </item>
+    
+  </channel>
+</rss>
