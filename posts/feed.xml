@@ -60,8 +60,7 @@ require(&amp;#39;packer&amp;#39;).startup(function(use) -- ... --- 添加下面�
 </span></span><span class="line"><span class="cl">    <span class="c1">--- 添加下面代码进行安装</span>
 </span></span><span class="line"><span class="cl">    <span class="n">use</span> <span class="p">{</span>
 </span></span><span class="line"><span class="cl">        <span class="s1">&#39;nvim-telescope/telescope.nvim&#39;</span><span class="p">,</span> <span class="n">tag</span> <span class="o">=</span> <span class="s1">&#39;0.1.0&#39;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">        <span class="s1">&#39;nvim-telescope/telescope-file-browser.nvim&#39;</span><span class="p">,</span>
-</span></span><span class="line"><span class="cl">        <span class="s1">&#39;nvim-telescope/telescope-project.nvim&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;ahmedkhalf/project.nvim&#34;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">        <span class="s1">&#39;nvim-lua/plenary.nvim&#39;</span><span class="p">,</span>
 </span></span><span class="line"><span class="cl">    <span class="p">}</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">-- ...</span>
