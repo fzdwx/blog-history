@@ -1,13 +1,31 @@
 ---
 title: "HTTP协议"
 date: 2022-09-28T12:19:15+08:00
-draft: true
+draft: false
 tags: ["network","interview"]
 ---
 
 > HTTP 1.1之前的实现就不讨论了，因为它们已经过时太久了，我上网的时候就已经接触不到了，所以主要说说HTTP/1.1、HTTP/2。
 
-##    
+## HTTP协议报文简介
+
+> CRLF: `\r\n`
+>
+> METHOD: HTTP请求，`GET`、`POST`、`PUT`、`DELETE`...
+>
+> URI: 统一资源标识符，比如`/`，`/index.html`...
+>
+> HTTPVersion: HTTP协议的版本号，比如`HTTP/1.1`，`HTTP/2`
+
+```text
+METHOD<SPACE>URI<SPACE>HTTPVersion<CRLF>
+```
+
+## 生成测试签名
+
+```shell
+go run $GOROOT/src/crypto/tls/generate_cert.go --host localhost
+```
 
 ## Links
 

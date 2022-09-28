@@ -120,7 +120,7 @@
 }
 
 .post-content {
-    font-size: 20px;
+    font-size: 19px;
     font-family: 'jinkaiFont', monospace !important;
 }
 
@@ -138,5 +138,6 @@
 }
 
 code {
+    font-size: 15px !important;
     font-family: 'Jetbrains Mono', monospace !important;
 }
