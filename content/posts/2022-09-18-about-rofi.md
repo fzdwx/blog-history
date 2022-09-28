@@ -6,14 +6,12 @@ tags: ["launcher"]
 summary: 一个 linux 下的 application launcher, 让你只用键盘就可以进行应用的启动与切换。
 ---
 
-## rofi
+> 今天发现了一个 linux 下的 application launcher [rofi](https://github.com/davatorium/rofi) ，它可以快速切换窗口和启动程序，
+> 我用它和`wmctrl`进行配合使用。
 
-今天发现了一个 linux 下的 application launcher [rofi](https://github.com/davatorium/rofi)，它可以快速切换窗口和启动程序。
-我用它和 `wmctrl` 进行配合使用。
+**我的使用过程:**
 
-**我的使用过程**：
-
-1.archlinux install
+1.Archlinux install
 
 ```shell
 yay -S rofi
@@ -44,11 +42,11 @@ sed -i '8c show-icons: true;' ~/.config/rofi/config.rasi
 
 参考 https://github.com/lr-tech/rofi-themes-collection#installing-themes
 
-## wmctrl
+---
 
 **我的`wmctrl`的配置示例**:
 
-使用`xprop WM_CLASS`获取前缀。
+> 使用`xprop WM_CLASS`获取前缀。
 
 ```shell
 alias chrome="wmctrl -x -a google-chrome || google-chrome-stable > /dev/null 2>&1 &"

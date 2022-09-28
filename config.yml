@@ -66,9 +66,9 @@ params:
   #    iconHeight: 35
 
   # home-info mode
-#  homeInfoParams:
-#    Title: "Hi there \U0001F44B"
-#    Content: ""
+  #  homeInfoParams:
+  #    Title: "Hi there \U0001F44B"
+  #    Content: ""
 
   socialIcons:
     - name: github
@@ -79,8 +79,9 @@ params:
       url: "https://space.bilibili.com/353383309"
     - name: twitter
       url: "https://twitter.com/fzdwx"
-    - name: rss-simple
-      url: "feed.xml"
+    - name: rss
+      url: "/posts/feed.xml"
+
   links:
     - name: 阮一峰的网络日志
       favicon: https://www.ruanyifeng.com/blog/images/person2_s.jpg
@@ -133,12 +134,9 @@ params:
     keys: [ "title", "permalink", "summary", "content" ]
 menu:
   main:
-    - name: Blog
-      url: /posts/
-      weight: 1
     - name: Archives
       url: /archives/
-      weight: 4
+      weight: 1
     - name: Tags
       url: /tags/
       weight: 2
