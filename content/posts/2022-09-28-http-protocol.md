@@ -162,6 +162,8 @@ curl https://zcygov.cn -vv
 
 ## Links
 
+- [Hypertext Transfer Protocol Version 2 (HTTP/2)](https://httpwg.org/specs/rfc7540.html)
+- [HPACK: Header Compression for HTTP/2](https://httpwg.org/specs/rfc7541.html)
 - [HTTP/2资料汇总](https://imququ.com/post/http2-resource.html)
 - [HTTP/2中帧的定义](https://halfrost.com/http2-http-frames-definitions/)
 - [HTTP/2新的机遇与挑战](https://www.dropbox.com/s/4duv6cqrhud4qzw/HTTP2%EF%BC%9A%E6%96%B0%E7%9A%84%E6%9C%BA%E9%81%87%E4%B8%8E%E6%8C%91%E6%88%98.pdf?dl=0)
