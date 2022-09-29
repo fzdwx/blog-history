@@ -90,11 +90,13 @@ HTTP2中的主要概念:
 3. `Message`: 对应HTTP/1.1中的请求或响应，包含一条或多条`Frame`。
 4. `Frame`: **最小传输单位**，它以**二进制**进行编码。
 
-{{< figure align=center src="/images/1.png" title="HTTP通讯简图">}}
+[HTTP通讯简图](/images/1.png)
 
 在HTTP/1.1中是有`Start Line` + `header` + `body` 组成的，而在H2中是由一个`HEADER Frame`以及多个`DATA Frame`组成的。
 
-{{< figure align=center src="/images/2.png" title="HTTP/1.1与H2报文组成的区别">}}
+![HTTP/1.1与H2报文组成的区别](/images/2.png)
+
+{{< tweet-ref "https://twitter.com/fzdwx/status/1575314588488593408" >}}
 
 ### Frame
 
