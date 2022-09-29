@@ -96,7 +96,7 @@ HTTP2中的主要概念:
 
 ![HTTP/1.1与H2报文组成的区别](/images/2.png)
 
-{{< tweet-ref "https://twitter.com/fzdwx/status/1575314588488593408" >}}
+{{< bili  BV1aV4y1N71f>}}
 
 ### Frame
 

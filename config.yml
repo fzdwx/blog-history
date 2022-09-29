@@ -152,7 +152,10 @@ outputFormats:
 
 # Read: https://github.com/reorx/hugo-PaperModX/wiki/FAQs#using-hugos-syntax-highlighter-chroma
 # pygmentsUseClasses: true
-# markup:
+markup:
+  goldmark:
+    renderer:
+      unsafe: true
 #     highlight:
 #         # anchorLineNos: true
 #         codeFences: true
