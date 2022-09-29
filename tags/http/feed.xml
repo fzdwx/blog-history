@@ -84,10 +84,14 @@
     </figcaption>
     
 </figure></p>
-<div class="tweet-ref">From <a href="https://twitter.com/fzdwx/status/1575314588488593408">twitter.com/fzdwx/status/1575314588488593408</a>:<blockquote class="twitter-tweet" data-dnt="true"><p lang="zh" dir="ltr">国庆玩一下dwm suckless</p>&mdash; like (@fzdwx) <a href="https://twitter.com/fzdwx/status/1575314588488593408?ref_src=twsrc%5Etfw">September 29, 2022</a></blockquote>
 
+
+<div>
+    <iframe
+            src="https://player.bilibili.com/player.html?bvid=BV1aV4y1N71f&page=1&as_wide=1&high_quality=1&danmaku=0"
+            scrolling="no" framespacing="0" webkitallowfullscreen mozallowfullscreen allowfullscreen>
+    </iframe>
 </div>
-
 <h3 id="frame">Frame</h3>
 <p>通常有一些公共的字段，比如<code>Length</code>，<code>Type</code>，<code>Flags</code>以及<code>Stream Id</code>；也各个类型所独有的字段。</p>
 <p>分类如下:</p>
