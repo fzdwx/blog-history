@@ -141,3 +141,11 @@ code {
     font-size: 15px !important;
     font-family: 'Jetbrains Mono', monospace !important;
 }
+
+figcaption {
+    color: #73bca7 !important;
+}
+
+strong {
+    color: #73BC83 !important;
+}

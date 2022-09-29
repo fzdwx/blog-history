@@ -3,6 +3,7 @@ title: "Neovim使用记录  "
 date: 2022-09-28T15:59:37+08:00
 draft: false
 tags: ["nvim"]
+summary: 由于最近切换到了linux，不可避免的经常需要使用vi等编辑器，所以这次好好折腾一下。
 ---
 
 > 由于最近切换到了linux，不可避免的经常需要使用vi等编辑器，所以这次好好折腾一下。
@@ -36,9 +37,9 @@ require('packer').startup(function(use)
 end)
 ```
 
-### alpha
+### [alpha](https://github.com/goolord/alpha-nvim)
 
-是一个dashboard，也可以说是一个欢迎界面，[了解详情](https://github.com/goolord/alpha-nvim)。
+是一个dashboard，也可以说是一个欢迎界面。
 
 ```lua
 require('packer').startup(function(use)
@@ -52,7 +53,7 @@ end)
 
 配置代码太长了就不放了，可以点击这里[ 这里 ](https://github.com/fzdwx/nvim/blob/main/lua/config/plugins/alpha.lua)参考。
 
-### telescope
+### [telescope](https://github.com/nvim-telescope/telescope.nvim)
 
 主要作用是文件的查找与预览。
 
