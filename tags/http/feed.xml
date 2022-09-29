@@ -140,6 +140,8 @@
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">curl https://zcygov.cn -vv
 </span></span></code></pre></div><h2 id="links">Links</h2>
 <ul>
+<li><a href="https://httpwg.org/specs/rfc7540.html">Hypertext Transfer Protocol Version 2 (HTTP/2)</a></li>
+<li><a href="https://httpwg.org/specs/rfc7541.html">HPACK: Header Compression for HTTP/2</a></li>
 <li><a href="https://imququ.com/post/http2-resource.html">HTTP/2资料汇总</a></li>
 <li><a href="https://halfrost.com/http2-http-frames-definitions/">HTTP/2中帧的定义</a></li>
 <li><a href="https://www.dropbox.com/s/4duv6cqrhud4qzw/HTTP2%EF%BC%9A%E6%96%B0%E7%9A%84%E6%9C%BA%E9%81%87%E4%B8%8E%E6%8C%91%E6%88%98.pdf?dl=0">HTTP/2新的机遇与挑战</a></li>
