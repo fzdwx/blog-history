@@ -6,7 +6,17 @@
     <description>Recent content in Tags on fzdwx</description>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright [fzdwx](https://github.com/fzdwx) since 2022</copyright>
-    <lastBuildDate>Wed, 28 Sep 2022 15:59:37 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/tags/feed.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 29 Sep 2022 23:42:41 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/tags/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>dwm</title>
+      <link>https://fzdwx.github.io/tags/dwm/</link>
+      <pubDate>Thu, 29 Sep 2022 23:42:41 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/tags/dwm/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
     <item>
       <title>nvim</title>
       <link>https://fzdwx.github.io/tags/nvim/</link>

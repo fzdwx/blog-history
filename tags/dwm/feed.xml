@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>dwm on fzdwx</title>
+    <link>https://fzdwx.github.io/tags/dwm/</link>
+    <description>Recent content in dwm on fzdwx</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Copyright [fzdwx](https://github.com/fzdwx) since 2022</copyright>
+    <lastBuildDate>Thu, 29 Sep 2022 23:42:41 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/tags/dwm/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Dwm初体验</title>
+      <link>https://fzdwx.github.io/posts/2022-09-29-dwm/</link>
+      <pubDate>Thu, 29 Sep 2022 23:42:41 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/posts/2022-09-29-dwm/</guid>
+      <description>安装: git clone https://git.suckless.org/dwm cd cmd sudo make clean install 启动 如果已经有了sddm，可以使用sudo systemctl disable sddm.service 来进行关闭，如果到时候不想用了可以用sudo systemctl enable sddm.service来开启sddm。
+# 准备配置文件 cp /etc/X11/xinit/xinitrc ~/.xinitrc vim ~/.xinitrc # 添加 exec dwm # 注释 #twm &amp;amp; #xclock -geometry 50x50-1+1 &amp;amp; #xterm -geometry 80x50+494+51 &amp;amp; #xterm -geometry 80x20+494-0 &amp;amp; #exec xterm -geometry 80x66+0+0 -name login 然后重启并调用startx即可。
+遇到的问题 直接断网 使用NetworkManager进行连接，可能要用到dhcpcd。
+nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 可能会连接失败，你可以试试nmcli connection show 来查看是否存在以前的连接信息，可以用nmcli connection delete {{wifi name}}来删除对应的信息</description>
+      <content:encoded><![CDATA[<h2 id="安装">安装:</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">git clone https://git.suckless.org/dwm
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> cmd
+</span></span><span class="line"><span class="cl">sudo make clean install
+</span></span></code></pre></div><h2 id="启动">启动</h2>
+<p>如果已经有了sddm，可以使用<code>sudo systemctl disable sddm.service</code>
+来进行关闭，如果到时候不想用了可以用<code>sudo systemctl enable sddm.service</code>来开启sddm。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 准备配置文件</span>
+</span></span><span class="line"><span class="cl">cp /etc/X11/xinit/xinitrc ~/.xinitrc
+</span></span><span class="line"><span class="cl">vim ~/.xinitrc
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 添加</span>
+</span></span><span class="line"><span class="cl"><span class="nb">exec</span> dwm
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 注释</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#twm &amp;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#xclock -geometry 50x50-1+1 &amp;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#xterm -geometry 80x50+494+51 &amp;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#xterm -geometry 80x20+494-0 &amp;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#exec xterm -geometry 80x66+0+0 -name login</span>
+</span></span></code></pre></div><p>然后重启并调用<code>startx</code>即可。</p>
+<h2 id="遇到的问题">遇到的问题</h2>
+<h3 id="直接断网">直接断网</h3>
+<p>使用NetworkManager进行连接，可能要用到<code>dhcpcd</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">nmcli device wifi list
+</span></span><span class="line"><span class="cl">nmcli device wifi connect <span class="o">{{</span>wifi name<span class="o">}}</span> password <span class="o">{{</span>pwd<span class="o">}}</span>
+</span></span></code></pre></div><p>可能会连接失败，你可以试试<code>nmcli connection show</code>
+来查看是否存在以前的连接信息，可以用<code>nmcli connection delete {{wifi name}}</code>来删除对应的信息</p>
+<h3 id="输入法失效">输入法失效</h3>
+<p>添加配置文件</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">vim ~/.pam_environment
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">INPUT_METHOD <span class="nv">DEFAULT</span><span class="o">=</span>fcitx5
+</span></span><span class="line"><span class="cl">GTK_IM_MODULE <span class="nv">DEFAULT</span><span class="o">=</span>fcitx5
+</span></span><span class="line"><span class="cl">QT_IM_MODULE <span class="nv">DEFAULT</span><span class="o">=</span>fcitx5
+</span></span><span class="line"><span class="cl">XMODIFIERS <span class="nv">DEFAULT</span><span class="o">=</span>@im<span class="o">=</span>fcitx5
+</span></span></code></pre></div><p>添加启动命令</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">vim ~/.xinitrc1
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 在exec dwm之间添加</span>
+</span></span><span class="line"><span class="cl"><span class="nb">exec</span> fcitx5 <span class="p">&amp;</span>
+</span></span></code></pre></div><h3 id="扩展屏幕无效">扩展屏幕无效</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 可以先查看有哪些屏幕</span>
+</span></span><span class="line"><span class="cl">xrandr 
+</span></span><span class="line"><span class="cl"><span class="c1"># 我有两个，是上下关系，其他有 left 以及 right</span>
+</span></span><span class="line"><span class="cl">xrandr --output eDP-1-1  --auto --below HDMI-0
+</span></span></code></pre></div><h2 id="常用快捷键">常用快捷键</h2>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>desc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ALT+SHIFT+ENTER</code></td>
+<td>新开终端</td>
+</tr>
+<tr>
+<td><code>ALT+J/K</code></td>
+<td>切换窗口</td>
+</tr>
+</tbody>
+</table>
+<p>feh &ndash;randomize &ndash;bg-fill ~/Pictures/0494e945880511ebb6edd017c2d2eca2.png</p>
+]]></content:encoded>
+    </item>
+    
+  </channel>
+</rss>
