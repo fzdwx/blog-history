@@ -74,18 +74,19 @@
 <li><code>Message</code>: 对应HTTP/1.1中的请求或响应，包含一条或多条<code>Frame</code>。</li>
 <li><code>Frame</code>: <strong>最小传输单位</strong>，它以<strong>二进制</strong>进行编码。</li>
 </ol>
-<figure class="align-center ">
-    <img loading="lazy" src="/images/1.png#center"/> <figcaption>
-            HTTP通讯简图
-        </figcaption>
-</figure>
-
+<p><a href="/images/1.png">HTTP通讯简图</a></p>
 <p>在HTTP/1.1中是有<code>Start Line</code> + <code>header</code> + <code>body</code> 组成的，而在H2中是由一个<code>HEADER Frame</code>以及多个<code>DATA Frame</code>组成的。</p>
-<figure class="align-center ">
-    <img loading="lazy" src="/images/2.png#center"/> <figcaption>
-            HTTP/1.1与H2报文组成的区别
-        </figcaption>
-</figure>
+<p><figure class="align-center">
+    <img src="/images/2.png" alt="HTTP/1.1与H2报文组成的区别"  />
+    
+    <figcaption>
+       HTTP/1.1与H2报文组成的区别
+    </figcaption>
+    
+</figure></p>
+<div class="tweet-ref">From <a href="https://twitter.com/fzdwx/status/1575314588488593408">twitter.com/fzdwx/status/1575314588488593408</a>:<blockquote class="twitter-tweet" data-dnt="true"><p lang="zh" dir="ltr">国庆玩一下dwm suckless</p>&mdash; like (@fzdwx) <a href="https://twitter.com/fzdwx/status/1575314588488593408?ref_src=twsrc%5Etfw">September 29, 2022</a></blockquote>
+
+</div>
 
 <h3 id="frame">Frame</h3>
 <p>通常有一些公共的字段，比如<code>Length</code>，<code>Type</code>，<code>Flags</code>以及<code>Stream Id</code>；也各个类型所独有的字段。</p>
