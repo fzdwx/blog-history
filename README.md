@@ -16,8 +16,28 @@ or
 
 ## 视频
 
-### bilibili
+[参考](https://github.com/Lednerb/bilberry-hugo-theme#video)
 
 ```markdown
-{{< bili  BV1aV4y1N71f>}}
+<!-- YouTube -->
+{{< video type="youtube" id="<youtube-video-id>" >}}
+
+<!-- Vimeo -->
+{{< video type="vimeo" id="<vimeo-video-id>" >}}
+
+<!-- Prezi -->
+{{< video type="prezi" id="<prezi-video-id>" >}}
+
+<!-- bilibili -->
+{{< video type="bili" id="<bilibili-video-id>" >}}
+
+<!-- PeerTube -->
+{{< video type="peertube" id="<peertube-video-id>" >}}
+
+<!-- MP4 external -->
+{{< video type="mp4" url="<video-file-url>" imageUrl="<image-video-file-url>" >}}
+
+<!-- MP4 in site's static folder -->
+{{< video type="mp4" url="/<video-file-name>.mp4" imageUrl="/<image-video-file-name>.png" >}}
+
 ```

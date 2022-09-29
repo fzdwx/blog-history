@@ -96,8 +96,6 @@ HTTP2中的主要概念:
 
 ![HTTP/1.1与H2报文组成的区别](/images/2.png)
 
-{{< bili  BV1aV4y1N71f>}}
-
 ### Frame
 
 通常有一些公共的字段，比如`Length`，`Type`，`Flags`以及`Stream Id`；也各个类型所独有的字段。
