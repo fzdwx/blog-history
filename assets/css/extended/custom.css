@@ -72,27 +72,27 @@
 
 @font-face {
     font-family: mottoFont;
-    src: url("https://fzdwx.github.io/font/SCRIPTIN.ttf") format("TrueType");
+    src: url("/font/SCRIPTIN.ttf") format("TrueType");
 }
 
 @font-face {
     font-family: angelinaFont;
-    src: url("https://fzdwx.github.io/font/angelina.ttf") format("TrueType");
+    src: url("/font/angelina.ttf") format("TrueType");
 }
 
 @font-face {
     font-family: jinkaiFont;
-    src: url("https://fzdwx.github.io/font/jinkai.ttf") format("TrueType");
+    src: url("/font/jinkai.ttf") format("TrueType");
 }
 
 @font-face {
     font-family: f1Font;
-    src: url("https://fzdwx.github.io/font/f1.ttf") format("TrueType");
+    src: url("/font/f1.ttf") format("TrueType");
 }
 
 @font-face {
     font-family: fzdwxFont;
-    src: url("https://fzdwx.github.io/font/fzdwx.ttf") format("TrueType");
+    src: url("/font/fzdwx.ttf") format("TrueType");
 }
 
 :root {
