@@ -13,7 +13,7 @@
       <pubDate>Thu, 29 Sep 2022 23:42:41 +0800</pubDate>
       
       <guid>https://fzdwx.github.io/posts/2022-09-29-dwm/</guid>
-      <description>安装: git clone https://git.suckless.org/dwm cd dwm sudo make clean install 启动z 如果已经有了sddm，可以使用sudo systemctl disable sddm.service 来进行关闭，如果到时候不想用了可以用sudo systemctl enable sddm.service来开启sddm。
+      <description>安装: git clone https://git.suckless.org/dwm cd dwm sudo make clean install 启动 如果已经有了sddm，可以使用sudo systemctl disable sddm.service 来进行关闭，如果到时候不想用了可以用sudo systemctl enable sddm.service来开启sddm。
 # 准备配置文件 cp /etc/X11/xinit/xinitrc ~/.xinitrc vim ~/.xinitrc # 添加 exec dwm # 注释 #twm &amp;amp; #xclock -geometry 50x50-1+1 &amp;amp; #xterm -geometry 80x50+494+51 &amp;amp; #xterm -geometry 80x20+494-0 &amp;amp; #exec xterm -geometry 80x66+0+0 -name login 然后重启并调用startx即可。
 遇到的问题 直接断网 使用NetworkManager进行连接，可能要用到dhcpcd。
 nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 可能会连接失败，你可以试试nmcli connection show 来查看是否存在以前的连接信息，可以用nmcli connection delete {{wifi name}}来删除对应的信息</description>
@@ -21,7 +21,7 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">git clone https://git.suckless.org/dwm
 </span></span><span class="line"><span class="cl"><span class="nb">cd</span> dwm
 </span></span><span class="line"><span class="cl">sudo make clean install
-</span></span></code></pre></div><h2 id="启动z">启动z</h2>
+</span></span></code></pre></div><h2 id="启动">启动</h2>
 <p>如果已经有了sddm，可以使用<code>sudo systemctl disable sddm.service</code>
 来进行关闭，如果到时候不想用了可以用<code>sudo systemctl enable sddm.service</code>来开启sddm。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 准备配置文件</span>
@@ -178,12 +178,9 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
 <td><code>MOD + SHIFT + t</code></td>
 <td>开启/关闭 全部目标的浮动模式</td>
 </tr>
-<tr>
-<td><code>MOD + SHIFT + f</code></td>
-<td>开启/关闭 状态栏</td>
-</tr>
 </tbody>
 </table>
+<p>| <code>MOD + SHIFT + f</code>  | 开启/关闭 状态栏       |</p>
 <h3 id="切换屏幕">切换屏幕</h3>
 <table>
 <thead>
