@@ -13,13 +13,13 @@
       <pubDate>Thu, 29 Sep 2022 23:42:41 +0800</pubDate>
       
       <guid>https://fzdwx.github.io/posts/2022-09-29-dwm/</guid>
-      <description>安装: git clone https://git.suckless.org/dwm cd cmd sudo make clean install 启动 如果已经有了sddm，可以使用sudo systemctl disable sddm.service 来进行关闭，如果到时候不想用了可以用sudo systemctl enable sddm.service来开启sddm。
+      <description>安装: git clone https://git.suckless.org/dwm cd dwm sudo make clean install 启动 如果已经有了sddm，可以使用sudo systemctl disable sddm.service 来进行关闭，如果到时候不想用了可以用sudo systemctl enable sddm.service来开启sddm。
 # 准备配置文件 cp /etc/X11/xinit/xinitrc ~/.xinitrc vim ~/.xinitrc # 添加 exec dwm # 注释 #twm &amp;amp; #xclock -geometry 50x50-1+1 &amp;amp; #xterm -geometry 80x50+494+51 &amp;amp; #xterm -geometry 80x20+494-0 &amp;amp; #exec xterm -geometry 80x66+0+0 -name login 然后重启并调用startx即可。
 遇到的问题 直接断网 使用NetworkManager进行连接，可能要用到dhcpcd。
 nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 可能会连接失败，你可以试试nmcli connection show 来查看是否存在以前的连接信息，可以用nmcli connection delete {{wifi name}}来删除对应的信息</description>
       <content:encoded><![CDATA[<h2 id="安装">安装:</h2>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">git clone https://git.suckless.org/dwm
-</span></span><span class="line"><span class="cl"><span class="nb">cd</span> cmd
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> dwm
 </span></span><span class="line"><span class="cl">sudo make clean install
 </span></span></code></pre></div><h2 id="启动">启动</h2>
 <p>如果已经有了sddm，可以使用<code>sudo systemctl disable sddm.service</code>
@@ -64,6 +64,7 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
 </span></span><span class="line"><span class="cl"><span class="c1"># 我有两个，是上下关系，其他有 left 以及 right</span>
 </span></span><span class="line"><span class="cl">xrandr --output eDP-1-1  --auto --below HDMI-0
 </span></span></code></pre></div><h2 id="常用快捷键">常用快捷键</h2>
+<p>可以参考我配置： <a href="https://github.com/fzdwx/dwm">https://github.com/fzdwx/dwm</a></p>
 <table>
 <thead>
 <tr>
@@ -82,7 +83,6 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
 </tr>
 </tbody>
 </table>
-<p>feh &ndash;randomize &ndash;bg-fill ~/Pictures/0494e945880511ebb6edd017c2d2eca2.png</p>
 ]]></content:encoded>
     </item>
     
