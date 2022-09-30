@@ -1,0 +1,22 @@
+{{ $type := .Get "type" }}
+
+{{ if eq $type "details" }}
+<details class="details custom-block">
+    <summary> {{.Get "title"}}</summary>
+    {{ .Inner | markdownify }}
+</details>
+{{end}}
+
+{{ if eq $type "tip" }}
+<div class="tip custom-block">
+    <p class="custom-block-title">
+        {{ $title := .Get "title"}}
+        {{ if $title }}
+            {{ $title }}
+        {{else}}
+            TIP
+        {{end}}
+    </p>
+    <p> {{ .Inner | markdownify }} </p>
+</div>
+{{end}}

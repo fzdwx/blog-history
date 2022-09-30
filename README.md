@@ -41,3 +41,46 @@ or
 {{< video type="mp4" url="/<video-file-name>.mp4" imageUrl="/<image-video-file-name>.png" >}}
 
 ```
+
+## 代码块高亮
+
+```text
+```go {hl_lines=[8,"15-17"]}
+package main
+
+import (
+	"fmt"
+	"os"
+	"os/exec"
+	"time"
+)
+//go:generate go tool yacc -o gopher.go -p parser gopher.y
+func main() {
+	// hello world
+	postsName := fmt.Sprintf(
+		"posts/%s-%s.md",
+		time.Now().Format("2006-01-02"),
+		os.Args[1])
+
+	err := exec.Command("hugo", "new", postsName).Run()
+	if err != nil {
+		panic(err)
+	}
+}
+/```
+```
+
+## 自定义块
+
+当前支持:
+
+- details
+- tip
+
+使用模板:
+
+```
+{{< block type="xxx" title="xxx">}}
+## 这里是内容
+{{< /block >}}
+```
