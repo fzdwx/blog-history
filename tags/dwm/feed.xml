@@ -56,12 +56,14 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
 </span></span></code></pre></div><p>添加启动命令</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">vim ~/.xinitrc1
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1"># 在exec dwm之间添加</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 在exec dwm之前添加</span>
 </span></span><span class="line"><span class="cl"><span class="nb">exec</span> fcitx5 <span class="p">&amp;</span>
 </span></span></code></pre></div><h3 id="扩展屏幕无效">扩展屏幕无效</h3>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 可以先查看有哪些屏幕</span>
 </span></span><span class="line"><span class="cl">xrandr 
-</span></span><span class="line"><span class="cl"><span class="c1"># 我有两个，是上下关系，其他有 left 以及 right</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 将下面的命令加入 ~/.xinitrc1 中，在exec dwm之前添加</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 我有两个，是上下关系，所以用below 其他有 left 以及 right</span>
 </span></span><span class="line"><span class="cl">xrandr --output eDP-1-1  --auto --below HDMI-0
 </span></span></code></pre></div><h2 id="常用快捷键">常用快捷键</h2>
 <p>可以参考我配置： <a href="https://github.com/fzdwx/dwm">https://github.com/fzdwx/dwm</a></p>
@@ -83,6 +85,12 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
 </tr>
 </tbody>
 </table>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="https://wiki.archlinux.org/title/Dwm_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)">ArchWiki Dwm</a></li>
+<li><a href="https://dwm.suckless.org/patches/">Dwm patches</a></li>
+<li><a href="https://yaocc.cc/2022/06/19/linux%E4%B8%9D%E6%BB%91%E7%9A%84%E5%8A%A8%E7%94%BB%E4%BD%93%E9%AA%8C%E2%80%94%E2%80%94picom/">picom美化</a></li>
+</ul>
 ]]></content:encoded>
     </item>
     
