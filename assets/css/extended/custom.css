@@ -649,3 +649,7 @@ strong {
 .padding-header{
     height: var(--header-height);
 }
+
+.dark .header {
+    background: rgba(36,36,36,.7);
+}
