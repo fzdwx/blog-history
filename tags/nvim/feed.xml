@@ -17,7 +17,8 @@
       <content:encoded><![CDATA[<blockquote>
 <p>由于最近切换到了linux，不可避免的经常需要使用vi等编辑器，所以这次好好折腾一下。</p>
 </blockquote>
-<p>我的配置地址: <a href="https://github.com/fzdwx/nvim">https://github.com/fzdwx/nvim</a>。</p>
+<p>我的配置地址: <a href="https://github.com/fzdwx/nvim" target="_blank" rel="noopener">https://github.com/fzdwx/nvim</a>
+。</p>
 <h2 id="我的配置">我的配置</h2>
 <h3 id="pakcer">pakcer</h3>
 <p>我选用的插件管理器是<code>packer</code>，我也不知道选什么好，就按最新的来吧。</p>
@@ -39,7 +40,8 @@
 </span></span><span class="line"><span class="cl">        <span class="n">require</span><span class="p">(</span><span class="s1">&#39;packer&#39;</span><span class="p">).</span><span class="n">sync</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl">    <span class="kr">end</span>
 </span></span><span class="line"><span class="cl"><span class="kr">end</span><span class="p">)</span>
-</span></span></code></pre></div><h3 id="alphahttpsgithubcomgoolordalpha-nvim"><a href="https://github.com/goolord/alpha-nvim">alpha</a></h3>
+</span></span></code></pre></div><h3 id="alphahttpsgithubcomgoolordalpha-nvim"><a href="https://github.com/goolord/alpha-nvim" target="_blank" rel="noopener">alpha</a>
+</h3>
 <p>是一个dashboard，也可以说是一个欢迎界面。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="n">require</span><span class="p">(</span><span class="s1">&#39;packer&#39;</span><span class="p">).</span><span class="n">startup</span><span class="p">(</span><span class="kr">function</span><span class="p">(</span><span class="n">use</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">-- ...</span>
@@ -48,8 +50,10 @@
 </span></span><span class="line"><span class="cl">    <span class="n">use</span> <span class="s2">&#34;kyazdani42/nvim-web-devicons&#34;</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">-- ...</span>
 </span></span><span class="line"><span class="cl"><span class="kr">end</span><span class="p">)</span>
-</span></span></code></pre></div><p>配置代码太长了就不放了，可以点击这里<a href="https://github.com/fzdwx/nvim/blob/main/lua/config/plugins/alpha.lua"> 这里 </a>参考。</p>
-<h3 id="telescopehttpsgithubcomnvim-telescopetelescopenvim"><a href="https://github.com/nvim-telescope/telescope.nvim">telescope</a></h3>
+</span></span></code></pre></div><p>配置代码太长了就不放了，可以点击这里<a href="https://github.com/fzdwx/nvim/blob/main/lua/config/plugins/alpha.lua" target="_blank" rel="noopener"> 这里 </a>
+参考。</p>
+<h3 id="telescopehttpsgithubcomnvim-telescopetelescopenvim"><a href="https://github.com/nvim-telescope/telescope.nvim" target="_blank" rel="noopener">telescope</a>
+</h3>
 <p>主要作用是文件的查找与预览。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="n">require</span><span class="p">(</span><span class="s1">&#39;packer&#39;</span><span class="p">).</span><span class="n">startup</span><span class="p">(</span><span class="kr">function</span><span class="p">(</span><span class="n">use</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">-- ...</span>
@@ -62,12 +66,15 @@
 </span></span><span class="line"><span class="cl">    <span class="c1">-- ...</span>
 </span></span><span class="line"><span class="cl"><span class="kr">end</span><span class="p">)</span>
 </span></span></code></pre></div><ul>
-<li><a href="https://github.com/fzdwx/nvim/blob/main/lua/config/plugins/telescope.lua">配置</a></li>
-<li><a href="https://github.com/fzdwx/nvim/blob/main/lua/config/key/init.lua#L34-L52">key map</a></li>
+<li><a href="https://github.com/fzdwx/nvim/blob/main/lua/config/plugins/telescope.lua" target="_blank" rel="noopener">配置</a>
+</li>
+<li><a href="https://github.com/fzdwx/nvim/blob/main/lua/config/key/init.lua#L34-L52" target="_blank" rel="noopener">key map</a>
+</li>
 </ul>
 <h2 id="一些教程">一些教程</h2>
 <ol>
-<li><a href="https://rsdlt.github.io/posts/rust-nvim-ide-guide-walkthrough-development-debug/">Rust and nvim</a></li>
+<li><a href="https://rsdlt.github.io/posts/rust-nvim-ide-guide-walkthrough-development-debug/" target="_blank" rel="noopener">Rust and nvim</a>
+</li>
 </ol>
 ]]></content:encoded>
     </item>

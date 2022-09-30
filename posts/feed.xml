@@ -66,7 +66,8 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
 </span></span><span class="line"><span class="cl"><span class="c1"># 我有两个，是上下关系，所以用below 其他有 left 以及 right</span>
 </span></span><span class="line"><span class="cl">xrandr --output eDP-1-1  --auto --below HDMI-0
 </span></span></code></pre></div><h2 id="常用快捷键">常用快捷键</h2>
-<p>可以参考我配置： <a href="https://github.com/fzdwx/dwm">https://github.com/fzdwx/dwm</a></p>
+<p>可以参考我配置： <a href="https://github.com/fzdwx/dwm" target="_blank" rel="noopener">https://github.com/fzdwx/dwm</a>
+</p>
 <table>
 <thead>
 <tr>
@@ -87,10 +88,14 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
 </table>
 <h2 id="links">Links</h2>
 <ul>
-<li><a href="https://wiki.archlinux.org/title/Dwm_(%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87)">ArchWiki Dwm</a></li>
-<li><a href="https://dwm.suckless.org/patches/">Dwm patches</a></li>
-<li><a href="https://github.com/Katzeee/dwm-patches-chinese/blob/master/dwm-patches-chinese.md">Dwm patches中文翻译</a></li>
-<li><a href="https://yaocc.cc/2022/06/19/linux%E4%B8%9D%E6%BB%91%E7%9A%84%E5%8A%A8%E7%94%BB%E4%BD%93%E9%AA%8C%E2%80%94%E2%80%94picom/">picom美化</a></li>
+<li><a href="https://wiki.archlinux.org/title/Dwm_%28%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%29" target="_blank" rel="noopener">ArchWiki Dwm</a>
+</li>
+<li><a href="https://dwm.suckless.org/patches/" target="_blank" rel="noopener">Dwm patches</a>
+</li>
+<li><a href="https://github.com/Katzeee/dwm-patches-chinese/blob/master/dwm-patches-chinese.md" target="_blank" rel="noopener">Dwm patches中文翻译</a>
+</li>
+<li><a href="https://yaocc.cc/2022/06/19/linux%E4%B8%9D%E6%BB%91%E7%9A%84%E5%8A%A8%E7%94%BB%E4%BD%93%E9%AA%8C%E2%80%94%E2%80%94picom/" target="_blank" rel="noopener">picom美化</a>
+</li>
 </ul>
 ]]></content:encoded>
     </item>
@@ -105,7 +110,8 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
       <content:encoded><![CDATA[<blockquote>
 <p>由于最近切换到了linux，不可避免的经常需要使用vi等编辑器，所以这次好好折腾一下。</p>
 </blockquote>
-<p>我的配置地址: <a href="https://github.com/fzdwx/nvim">https://github.com/fzdwx/nvim</a>。</p>
+<p>我的配置地址: <a href="https://github.com/fzdwx/nvim" target="_blank" rel="noopener">https://github.com/fzdwx/nvim</a>
+。</p>
 <h2 id="我的配置">我的配置</h2>
 <h3 id="pakcer">pakcer</h3>
 <p>我选用的插件管理器是<code>packer</code>，我也不知道选什么好，就按最新的来吧。</p>
@@ -127,7 +133,8 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
 </span></span><span class="line"><span class="cl">        <span class="n">require</span><span class="p">(</span><span class="s1">&#39;packer&#39;</span><span class="p">).</span><span class="n">sync</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl">    <span class="kr">end</span>
 </span></span><span class="line"><span class="cl"><span class="kr">end</span><span class="p">)</span>
-</span></span></code></pre></div><h3 id="alphahttpsgithubcomgoolordalpha-nvim"><a href="https://github.com/goolord/alpha-nvim">alpha</a></h3>
+</span></span></code></pre></div><h3 id="alphahttpsgithubcomgoolordalpha-nvim"><a href="https://github.com/goolord/alpha-nvim" target="_blank" rel="noopener">alpha</a>
+</h3>
 <p>是一个dashboard，也可以说是一个欢迎界面。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="n">require</span><span class="p">(</span><span class="s1">&#39;packer&#39;</span><span class="p">).</span><span class="n">startup</span><span class="p">(</span><span class="kr">function</span><span class="p">(</span><span class="n">use</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">-- ...</span>
@@ -136,8 +143,10 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
 </span></span><span class="line"><span class="cl">    <span class="n">use</span> <span class="s2">&#34;kyazdani42/nvim-web-devicons&#34;</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">-- ...</span>
 </span></span><span class="line"><span class="cl"><span class="kr">end</span><span class="p">)</span>
-</span></span></code></pre></div><p>配置代码太长了就不放了，可以点击这里<a href="https://github.com/fzdwx/nvim/blob/main/lua/config/plugins/alpha.lua"> 这里 </a>参考。</p>
-<h3 id="telescopehttpsgithubcomnvim-telescopetelescopenvim"><a href="https://github.com/nvim-telescope/telescope.nvim">telescope</a></h3>
+</span></span></code></pre></div><p>配置代码太长了就不放了，可以点击这里<a href="https://github.com/fzdwx/nvim/blob/main/lua/config/plugins/alpha.lua" target="_blank" rel="noopener"> 这里 </a>
+参考。</p>
+<h3 id="telescopehttpsgithubcomnvim-telescopetelescopenvim"><a href="https://github.com/nvim-telescope/telescope.nvim" target="_blank" rel="noopener">telescope</a>
+</h3>
 <p>主要作用是文件的查找与预览。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="n">require</span><span class="p">(</span><span class="s1">&#39;packer&#39;</span><span class="p">).</span><span class="n">startup</span><span class="p">(</span><span class="kr">function</span><span class="p">(</span><span class="n">use</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">-- ...</span>
@@ -150,12 +159,15 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
 </span></span><span class="line"><span class="cl">    <span class="c1">-- ...</span>
 </span></span><span class="line"><span class="cl"><span class="kr">end</span><span class="p">)</span>
 </span></span></code></pre></div><ul>
-<li><a href="https://github.com/fzdwx/nvim/blob/main/lua/config/plugins/telescope.lua">配置</a></li>
-<li><a href="https://github.com/fzdwx/nvim/blob/main/lua/config/key/init.lua#L34-L52">key map</a></li>
+<li><a href="https://github.com/fzdwx/nvim/blob/main/lua/config/plugins/telescope.lua" target="_blank" rel="noopener">配置</a>
+</li>
+<li><a href="https://github.com/fzdwx/nvim/blob/main/lua/config/key/init.lua#L34-L52" target="_blank" rel="noopener">key map</a>
+</li>
 </ul>
 <h2 id="一些教程">一些教程</h2>
 <ol>
-<li><a href="https://rsdlt.github.io/posts/rust-nvim-ide-guide-walkthrough-development-debug/">Rust and nvim</a></li>
+<li><a href="https://rsdlt.github.io/posts/rust-nvim-ide-guide-walkthrough-development-debug/" target="_blank" rel="noopener">Rust and nvim</a>
+</li>
 </ol>
 ]]></content:encoded>
     </item>
@@ -227,7 +239,8 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
 <li><code>Message</code>: 对应HTTP/1.1中的请求或响应，包含一条或多条<code>Frame</code>。</li>
 <li><code>Frame</code>: <strong>最小传输单位</strong>，它以<strong>二进制</strong>进行编码。</li>
 </ol>
-<p><a href="/images/1.png">HTTP通讯简图</a></p>
+<p><a href="/images/1.png">HTTP通讯简图</a>
+</p>
 <p>在HTTP/1.1中是有<code>Start Line</code> + <code>header</code> + <code>body</code> 组成的，而在H2中是由一个<code>HEADER Frame</code>以及多个<code>DATA Frame</code>组成的。</p>
 <p><figure class="align-center">
     <img src="/images/2.png" alt="HTTP/1.1与H2报文组成的区别"  />
@@ -241,16 +254,26 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
 <p>通常有一些公共的字段，比如<code>Length</code>，<code>Type</code>，<code>Flags</code>以及<code>Stream Id</code>；也各个类型所独有的字段。</p>
 <p>分类如下:</p>
 <ul>
-<li><a href="https://halfrost.com/http2-http-frames-definitions/#toc-0">DATA</a>: 用于传输http消息体。</li>
-<li><a href="https://halfrost.com/http2-http-frames-definitions/#toc-1">HEADERS</a>: 用于传输首部字段。</li>
-<li><a href="https://halfrost.com/http2-http-frames-definitions/#toc-2">PRIORITY</a>: 用于指定或重新指定引用资源的优先级。</li>
-<li><a href="https://halfrost.com/http2-http-frames-definitions/#toc-3">RST_STREAM</a>: 用于通知流的非正常终止。</li>
-<li><a href="https://halfrost.com/http2-http-frames-definitions/#toc-4">SETTINGS</a>: 用于约定客户端和服务端的配置数据。比如设置初识的双向流量控制窗口大小。</li>
-<li><a href="https://halfrost.com/http2-http-frames-definitions/#toc-9">PUSH_PROMISE</a>: 服务端推送许可。</li>
-<li><a href="https://halfrost.com/http2-http-frames-definitions/#toc-10">PING</a>: 用于计算往返时间，执行“ 活性” 检活。</li>
-<li><a href="https://halfrost.com/http2-http-frames-definitions/#toc-11">GOAWAY</a>: 用于通知对端停止在当前连接中创建流。</li>
-<li><a href="https://halfrost.com/http2-http-frames-definitions/#toc-12">WINDOW_UPDATE</a>: 用于调整个别流或个别连接的流量。</li>
-<li><a href="https://halfrost.com/http2-http-frames-definitions/#toc-17">CONTINUATION</a>: 专门用于传递较大 HTTP 头部时的持续帧。</li>
+<li><a href="https://halfrost.com/http2-http-frames-definitions/#toc-0" target="_blank" rel="noopener">DATA</a>
+: 用于传输http消息体。</li>
+<li><a href="https://halfrost.com/http2-http-frames-definitions/#toc-1" target="_blank" rel="noopener">HEADERS</a>
+: 用于传输首部字段。</li>
+<li><a href="https://halfrost.com/http2-http-frames-definitions/#toc-2" target="_blank" rel="noopener">PRIORITY</a>
+: 用于指定或重新指定引用资源的优先级。</li>
+<li><a href="https://halfrost.com/http2-http-frames-definitions/#toc-3" target="_blank" rel="noopener">RST_STREAM</a>
+: 用于通知流的非正常终止。</li>
+<li><a href="https://halfrost.com/http2-http-frames-definitions/#toc-4" target="_blank" rel="noopener">SETTINGS</a>
+: 用于约定客户端和服务端的配置数据。比如设置初识的双向流量控制窗口大小。</li>
+<li><a href="https://halfrost.com/http2-http-frames-definitions/#toc-9" target="_blank" rel="noopener">PUSH_PROMISE</a>
+: 服务端推送许可。</li>
+<li><a href="https://halfrost.com/http2-http-frames-definitions/#toc-10" target="_blank" rel="noopener">PING</a>
+: 用于计算往返时间，执行“ 活性” 检活。</li>
+<li><a href="https://halfrost.com/http2-http-frames-definitions/#toc-11" target="_blank" rel="noopener">GOAWAY</a>
+: 用于通知对端停止在当前连接中创建流。</li>
+<li><a href="https://halfrost.com/http2-http-frames-definitions/#toc-12" target="_blank" rel="noopener">WINDOW_UPDATE</a>
+: 用于调整个别流或个别连接的流量。</li>
+<li><a href="https://halfrost.com/http2-http-frames-definitions/#toc-17" target="_blank" rel="noopener">CONTINUATION</a>
+: 专门用于传递较大 HTTP 头部时的持续帧。</li>
 </ul>
 <h3 id="为什么h2必须要走https">为什么H2必须要走HTTPS？</h3>
 <p>这其实在H2标准中没有规定，主要是为了更方便的进行HTTP协议的 升级/协商，确认一个Web服务器是否支持H2通常有两种方式:</p>
@@ -260,7 +283,8 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
 字段，在<code>Client Hello</code>与<code>Server Hello</code>这个阶段就可以确定下来。</li>
 </ol>
 <p>而现在的<strong>浏览器</strong>基本都是<strong>实现的方式二</strong>，即<strong>与HTTPS绑定在一起</strong>。但是如果我们不用浏览器进行访问，当然也可以不用HTTPS。</p>
-<p>详细可<a href="https://imququ.com/post/protocol-negotiation-in-http2.html">参考</a>。</p>
+<p>详细可<a href="https://imququ.com/post/protocol-negotiation-in-http2.html" target="_blank" rel="noopener">参考</a>
+。</p>
 <h3 id="为什么h2能实现并行响应请求">为什么H2能实现并行响应请求?</h3>
 <p>在HTTP/1.1中，请求与响应是一一对应的，在同一个连接里，客户端依次发送两个请求，一段时间以后收到来自服务器的一个响应，这个响应一定是对应于第一个发出去的请求的。
 因为<strong>没有一个标志来表示哪个响应对应哪个请求</strong>。</p>
@@ -271,11 +295,14 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
 <ol>
 <li>多路复用: 只用一个TCP连接就能处理多对 请求/响应 ，不用在开启另外的TCP连接，就是通过<code>Stream</code>与<code>Frame</code>来实现的。</li>
 <li>二进制分帧: 使用<code>Frame</code>为最小单位进行通讯，并采用二进制编码。</li>
-<li><a href="https://juejin.cn/post/7133238781452222472">头部压缩</a>: 使用<code>HPACK</code>算法进行优化.
+<li><a href="https://juejin.cn/post/7133238781452222472" target="_blank" rel="noopener">头部压缩</a>
+: 使用<code>HPACK</code>算法进行优化.
 <ul>
-<li>维护一份相同的<a href="https://httpwg.org/specs/rfc7541.html#static.table.definition">静态字典</a>，包含常见的请求头的KV组合</li>
+<li>维护一份相同的<a href="https://httpwg.org/specs/rfc7541.html#static.table.definition" target="_blank" rel="noopener">静态字典</a>
+，包含常见的请求头的KV组合</li>
 <li>一份动态字典，可以动态的扩容(每个连接单独维护)</li>
-<li>支持哈夫曼编码(<a href="https://httpwg.org/specs/rfc7541.html#huffman.code">静态哈夫曼码表</a>)</li>
+<li>支持哈夫曼编码(<a href="https://httpwg.org/specs/rfc7541.html#huffman.code" target="_blank" rel="noopener">静态哈夫曼码表</a>
+)</li>
 </ul>
 <blockquote>
 <p>在HTTP/1中消息体可以用gzip进行压缩，但是请求头通常没有任何压缩，有时候请求头的数据可能比请求体的数据还多。</p>
@@ -290,13 +317,20 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">curl https://zcygov.cn -vv
 </span></span></code></pre></div><h2 id="links">Links</h2>
 <ul>
-<li><a href="https://httpwg.org/specs/rfc7540.html">Hypertext Transfer Protocol Version 2 (HTTP/2)</a></li>
-<li><a href="https://httpwg.org/specs/rfc7541.html">HPACK: Header Compression for HTTP/2</a></li>
-<li><a href="https://imququ.com/post/http2-resource.html">HTTP/2资料汇总</a></li>
-<li><a href="https://halfrost.com/http2-http-frames-definitions/">HTTP/2中帧的定义</a></li>
-<li><a href="https://www.dropbox.com/s/4duv6cqrhud4qzw/HTTP2%EF%BC%9A%E6%96%B0%E7%9A%84%E6%9C%BA%E9%81%87%E4%B8%8E%E6%8C%91%E6%88%98.pdf?dl=0">HTTP/2新的机遇与挑战</a></li>
-<li><a href="https://zhuanlan.zhihu.com/p/566351358">探索http1.0到http3.0的发展史，详解http2.0</a></li>
-<li><a href="https://www.zhihu.com/question/34074946/answer/2264788574">HTTP/2相比1.0有哪些重大改进</a></li>
+<li><a href="https://httpwg.org/specs/rfc7540.html" target="_blank" rel="noopener">Hypertext Transfer Protocol Version 2 (HTTP/2)</a>
+</li>
+<li><a href="https://httpwg.org/specs/rfc7541.html" target="_blank" rel="noopener">HPACK: Header Compression for HTTP/2</a>
+</li>
+<li><a href="https://imququ.com/post/http2-resource.html" target="_blank" rel="noopener">HTTP/2资料汇总</a>
+</li>
+<li><a href="https://halfrost.com/http2-http-frames-definitions/" target="_blank" rel="noopener">HTTP/2中帧的定义</a>
+</li>
+<li><a href="https://www.dropbox.com/s/4duv6cqrhud4qzw/HTTP2%EF%BC%9A%E6%96%B0%E7%9A%84%E6%9C%BA%E9%81%87%E4%B8%8E%E6%8C%91%E6%88%98.pdf?dl=0" target="_blank" rel="noopener">HTTP/2新的机遇与挑战</a>
+</li>
+<li><a href="https://zhuanlan.zhihu.com/p/566351358" target="_blank" rel="noopener">探索http1.0到http3.0的发展史，详解http2.0</a>
+</li>
+<li><a href="https://www.zhihu.com/question/34074946/answer/2264788574" target="_blank" rel="noopener">HTTP/2相比1.0有哪些重大改进</a>
+</li>
 </ul>
 ]]></content:encoded>
     </item>
@@ -309,7 +343,8 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
       <guid>https://fzdwx.github.io/posts/2022-09-27-mit6.824-lab1/</guid>
       <description>about mit6.824 lab1(Map reduce framework)</description>
       <content:encoded><![CDATA[<p>看的时候很懵，写的时候更懵，我以为是要写几个<code>MapReduce</code>的程序，在把官方的<code>A few rules</code>以及<code>Hints</code>(
-翻译可以看<a href="https://www.nowcoder.com/discuss/962675">这里</a>) 仔细的阅读了几遍后才发现是要写一个
+翻译可以看<a href="https://www.nowcoder.com/discuss/962675" target="_blank" rel="noopener">这里</a>
+) 仔细的阅读了几遍后才发现是要写一个
 MapReduce 的调度框架。。。</p>
 <p>解题思路可以分为 3 步。</p>
 <ol>
@@ -343,7 +378,8 @@ MapReduce 的调度框架。。。</p>
       <guid>https://fzdwx.github.io/posts/2022-09-18-about-rofi/</guid>
       <description>一个 linux 下的 application launcher, 让你只用键盘就可以进行应用的启动与切换。</description>
       <content:encoded><![CDATA[<blockquote>
-<p>今天发现了一个 linux 下的 application launcher <a href="https://github.com/davatorium/rofi">rofi</a> ，它可以快速切换窗口和启动程序，
+<p>今天发现了一个 linux 下的 application launcher <a href="https://github.com/davatorium/rofi" target="_blank" rel="noopener">rofi</a>
+ ，它可以快速切换窗口和启动程序，
 我用它和<code>wmctrl</code>进行配合使用。</p>
 </blockquote>
 <p><strong>我的使用过程:</strong></p>
@@ -359,7 +395,8 @@ MapReduce 的调度框架。。。</p>
 </span></span></code></pre></div><p>2.显示icon</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">sed -i <span class="s1">&#39;8c show-icons: true;&#39;</span> ~/.config/rofi/config.rasi
 </span></span></code></pre></div><p>3.更换主题</p>
-<p>参考 <a href="https://github.com/lr-tech/rofi-themes-collection#installing-themes">https://github.com/lr-tech/rofi-themes-collection#installing-themes</a></p>
+<p>参考 <a href="https://github.com/lr-tech/rofi-themes-collection#installing-themes" target="_blank" rel="noopener">https://github.com/lr-tech/rofi-themes-collection#installing-themes</a>
+</p>
 <hr>
 <p><strong>我的<code>wmctrl</code>的配置示例</strong>:</p>
 <blockquote>

@@ -15,7 +15,8 @@
       <guid>https://fzdwx.github.io/posts/2022-09-27-mit6.824-lab1/</guid>
       <description>about mit6.824 lab1(Map reduce framework)</description>
       <content:encoded><![CDATA[<p>看的时候很懵，写的时候更懵，我以为是要写几个<code>MapReduce</code>的程序，在把官方的<code>A few rules</code>以及<code>Hints</code>(
-翻译可以看<a href="https://www.nowcoder.com/discuss/962675">这里</a>) 仔细的阅读了几遍后才发现是要写一个
+翻译可以看<a href="https://www.nowcoder.com/discuss/962675" target="_blank" rel="noopener">这里</a>
+) 仔细的阅读了几遍后才发现是要写一个
 MapReduce 的调度框架。。。</p>
 <p>解题思路可以分为 3 步。</p>
 <ol>
