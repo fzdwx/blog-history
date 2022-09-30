@@ -13,7 +13,7 @@
       <pubDate>Thu, 29 Sep 2022 23:42:41 +0800</pubDate>
       
       <guid>https://fzdwx.github.io/posts/2022-09-29-dwm/</guid>
-      <description>安装: git clone https://git.suckless.org/dwm cd dwm sudo make clean install 启动 如果已经有了sddm，可以使用sudo systemctl disable sddm.service 来进行关闭，如果到时候不想用了可以用sudo systemctl enable sddm.service来开启sddm。
+      <description>安装: git clone https://git.suckless.org/dwm cd dwm sudo make clean install 启动z 如果已经有了sddm，可以使用sudo systemctl disable sddm.service 来进行关闭，如果到时候不想用了可以用sudo systemctl enable sddm.service来开启sddm。
 # 准备配置文件 cp /etc/X11/xinit/xinitrc ~/.xinitrc vim ~/.xinitrc # 添加 exec dwm # 注释 #twm &amp;amp; #xclock -geometry 50x50-1+1 &amp;amp; #xterm -geometry 80x50+494+51 &amp;amp; #xterm -geometry 80x20+494-0 &amp;amp; #exec xterm -geometry 80x66+0+0 -name login 然后重启并调用startx即可。
 遇到的问题 直接断网 使用NetworkManager进行连接，可能要用到dhcpcd。
 nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 可能会连接失败，你可以试试nmcli connection show 来查看是否存在以前的连接信息，可以用nmcli connection delete {{wifi name}}来删除对应的信息</description>
@@ -21,7 +21,7 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">git clone https://git.suckless.org/dwm
 </span></span><span class="line"><span class="cl"><span class="nb">cd</span> dwm
 </span></span><span class="line"><span class="cl">sudo make clean install
-</span></span></code></pre></div><h2 id="启动">启动</h2>
+</span></span></code></pre></div><h2 id="启动z">启动z</h2>
 <p>如果已经有了sddm，可以使用<code>sudo systemctl disable sddm.service</code>
 来进行关闭，如果到时候不想用了可以用<code>sudo systemctl enable sddm.service</code>来开启sddm。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 准备配置文件</span>
@@ -68,6 +68,7 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
 </span></span></code></pre></div><h2 id="常用快捷键">常用快捷键</h2>
 <p>可以参考我配置： <a href="https://github.com/fzdwx/dwm" target="_blank" rel="noopener">https://github.com/fzdwx/dwm</a>
 </p>
+<p><code>MOD</code> -&gt; <code>WIN</code></p>
 <table>
 <thead>
 <tr>
@@ -77,12 +78,128 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
 </thead>
 <tbody>
 <tr>
-<td><code>ALT+SHIFT+ENTER</code></td>
+<td><code>MOD+SHIFT+ENTER</code></td>
 <td>新开终端</td>
 </tr>
+</tbody>
+</table>
+<h3 id="在本tag内切换聚焦窗口">在本tag内切换聚焦窗口</h3>
+<table>
+<thead>
 <tr>
-<td><code>ALT+J/K</code></td>
-<td>切换窗口</td>
+<th>快捷键</th>
+<th>desc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ALT + tab</code></td>
+<td>切换聚焦窗口</td>
+</tr>
+<tr>
+<td><code>MOD + up</code></td>
+<td>切换聚焦窗口</td>
+</tr>
+<tr>
+<td><code>MOD + down</code></td>
+<td>切换聚焦窗口</td>
+</tr>
+</tbody>
+</table>
+<h3 id="跨tag操作">跨tag操作</h3>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>desc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MOD + left / right</code></td>
+<td>切换tag</td>
+</tr>
+<tr>
+<td><code>MOD + SHIGT + left / tight</code></td>
+<td>将当前窗口移动到其他tag</td>
+</tr>
+<tr>
+<td><code>MOD + a</code></td>
+<td>第一次是显示所有tag，第二次是跳转到聚焦的窗口所在的窗口</td>
+</tr>
+</tbody>
+</table>
+<h3 id="窗口操作">窗口操作</h3>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>desc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MOD + q</code></td>
+<td>退出窗口</td>
+</tr>
+<tr>
+<td><code>MOD + h</code></td>
+<td>隐藏窗口</td>
+</tr>
+<tr>
+<td><code>MOD + SHIFT + h</code></td>
+<td>显示窗口（像一个栈一样。）</td>
+</tr>
+<tr>
+<td><code>MOD + ENTER</code></td>
+<td>将当前窗口设置为主窗口</td>
+</tr>
+<tr>
+<td><code>MOD + f</code></td>
+<td>将当前窗口全屏</td>
+</tr>
+<tr>
+<td><code>MOD + CTRL + 方向键</code></td>
+<td>移动窗口</td>
+</tr>
+<tr>
+<td><code>MOD + ALT + 方向键</code></td>
+<td>调整窗口大小</td>
+</tr>
+<tr>
+<td><code>MOD + o</code></td>
+<td>只显示当前窗口/显示所有窗口</td>
+</tr>
+<tr>
+<td><code>MOD + t</code></td>
+<td>开启/关闭 聚焦目标的浮动模式</td>
+</tr>
+<tr>
+<td><code>MOD + SHIFT + t</code></td>
+<td>开启/关闭 全部目标的浮动模式</td>
+</tr>
+<tr>
+<td><code>MOD + SHIFT + f</code></td>
+<td>开启/关闭 状态栏</td>
+</tr>
+</tbody>
+</table>
+<h3 id="切换屏幕">切换屏幕</h3>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>desc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MOD + x</code></td>
+<td>将鼠标移动到其他屏幕</td>
+</tr>
+<tr>
+<td><code>MOD + SHIFT + X</code></td>
+<td>将当前窗口移动到其他屏幕</td>
 </tr>
 </tbody>
 </table>
