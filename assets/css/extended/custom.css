@@ -101,7 +101,8 @@
     --link-underline-shadow: 0 1px 0 var(--link-color);
     --link-hover-underline-color: #73BC83;
     --link-hover-underline-shadow: 0 2px 0 var(--link-hover-underline-color);
-
+    --vp-nav-height-desktop: 72px;
+    
     --docsearch-primary-color: #5468ff;
     --docsearch-text-color: #1c1e21;
     --docsearch-spacing: 12px;
@@ -631,3 +632,20 @@ strong {
 }
 
 /* block */
+
+/* nav */
+
+.header{
+    position: fixed;
+    justify-content: center;
+    z-index: var(--vp-z-index-nav);
+    width: 100%;
+    transition: border-color .5s,background-color .5s;
+    background: rgba(255,255,255,.7);
+    -webkit-backdrop-filter: saturate(50%) blur(8px);
+    backdrop-filter: saturate(50%) blur(8px);
+}
+
+.padding-header{
+    height: var(--header-height);
+}
