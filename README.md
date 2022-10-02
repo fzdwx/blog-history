@@ -1,6 +1,6 @@
 # What you say ?
 
-> theme 基于 https://github.com/reorx/hugo-PaperModX，并同时也自定义了许多功能。
+> theme 基于 https://github.com/reorx/hugo-PaperModX ,并同时也自定义了许多功能。
 
 ## 添加图片:
 
