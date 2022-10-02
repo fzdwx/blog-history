@@ -1,0 +1,31 @@
+{{- define "main" }}
+
+<h1 class="fzdwx post-title">Start Page</h1>
+
+<div class="startItems-wrap">
+    <div class="startItems">
+        {{- range site.Params.Startpages }}
+        <div class="grid-3 startItems">
+            <a href="{{ .url }}"  target="_blank" class="startItems-article" >
+
+                {{ if .icon }}
+                <i icon-name="{{ .icon }}" class="startItems-article-icon"></i>
+                {{ else }}
+                {{ if .favicon }}
+                <img class="startItems-article-icon" src="{{ .favicon }}" alt="{{ .name }}">
+                {{ end }}
+                {{ end }}
+
+                <h3 class="startItems-article-name fzdwx">{{ .name }}</h3>
+            </a>
+        </div>
+        {{- end }}
+    </div>
+</div>
+
+<script src="https://unpkg.com/lucide@latest"></script>
+<script>
+    lucide.createIcons();
+</script>
+
+{{- end }}{{/* end main */}}

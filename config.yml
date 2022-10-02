@@ -103,6 +103,16 @@ params:
       url: http://www.yinwang.org/
       favicon: https://www.yinwang.org/images/Yc.jpg
 
+  startpages:
+    - name: cubox
+      url: https://cubox.pro/my/inbox
+      favicon: https://cubox.pro/my/favicon.ico
+    - name: github
+      url: https://github.com/
+      icon: github
+    - name: twitter
+      url: https://twitter.com/home
+      icon: twitter
   #  analytics:
   #    google:
   #      SiteVerificationTag: "XYZabc"
@@ -152,6 +162,9 @@ menu:
     - name: 🔍
       url: /search/
       weight: 200
+    - name: 🧬
+      url: /startpage/
+      weight: 300
 
 # prefer feed.xml rather than index.xml
 outputFormats:
