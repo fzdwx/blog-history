@@ -667,16 +667,13 @@ strong {
 .startItems {
     display: flex;
     flex-wrap: wrap;
-    margin: -8px;
+    padding: 8px;
 }
 
 .grid-3 {
     width: calc(100% / 3);
 }
 
-.startItems {
-    padding: 8px;
-}
 
 .startItems-article {
     border: 1px solid var(--vp-c-bg-soft);

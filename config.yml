@@ -113,6 +113,9 @@ params:
     - name: twitter
       url: https://twitter.com/home
       icon: twitter
+    - name: rust cli
+      url: https://lib.rs/command-line-utilities
+      favicon: https://lib.rs/crates-logo.png
   #  analytics:
   #    google:
   #      SiteVerificationTag: "XYZabc"
