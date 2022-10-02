@@ -1,3 +1,7 @@
+# What you say ?
+
+> theme 基于 https://github.com/reorx/hugo-PaperModX，并同时也自定义了许多功能。
+
 ## 添加图片:
 
 ```markdown
@@ -84,7 +88,6 @@ func main() {
 ## 这里是内容
 {{< /block >}}
 ```
-
 
 ## StartPage
 

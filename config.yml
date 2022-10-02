@@ -103,19 +103,6 @@ params:
       url: http://www.yinwang.org/
       favicon: https://www.yinwang.org/images/Yc.jpg
 
-  startpages:
-    - name: cubox
-      url: https://cubox.pro/my/inbox
-      favicon: https://cubox.pro/my/favicon.ico
-    - name: github
-      url: https://github.com/
-      icon: github
-    - name: twitter
-      url: https://twitter.com/home
-      icon: twitter
-    - name: rust cli
-      url: https://lib.rs/command-line-utilities
-      favicon: https://lib.rs/crates-logo.png
   #  analytics:
   #    google:
   #      SiteVerificationTag: "XYZabc"
@@ -144,6 +131,26 @@ params:
     threshold: 0.4
     minMatchCharLength: 0
     keys: [ "title", "permalink", "summary", "content","tags" ]
+
+  startpages:
+    - name: cubox
+      url: https://cubox.pro/my/inbox
+      favicon: https://cubox.pro/my/favicon.ico
+    - name: github
+      url: https://github.com/
+      icon: github
+    - name: twitter
+      url: https://twitter.com/home
+      icon: twitter
+    - name: rust cli
+      url: https://lib.rs/command-line-utilities
+      favicon: https://lib.rs/crates-logo.png
+    - name: 电子书
+      url: https://zh.b-ok.global
+      favicon: https://zh.b-ok.global/favicon.svg
+    - name: 多摸鱼
+      url: https://duomoyu.com/
+      favicon: https://duomoyu.com/favicon.ico
 
 outputs:
   home:
