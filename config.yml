@@ -154,6 +154,12 @@ params:
     - name: 多摸鱼
       url: https://duomoyu.com/
       favicon: https://duomoyu.com/favicon.ico
+    - name: 中文博客
+      url: https://xyzrank.com/
+      favicon: https://xyzrank.justinbot.com/public/favicon.png
+    - url: https://yandex.com/
+      name: yandex
+      favicon: https://yastatic.net/s3/home-static/_/a5/a557b72322add07a6b41fc8f71cfffc8.png
 
 outputs:
   home:
