@@ -148,6 +148,9 @@ params:
     - name: 电子书
       url: https://zh.b-ok.global
       favicon: https://zh.b-ok.global/favicon.svg
+    - name: 豆瓣电影
+      url: https://movie.douban.com/
+      favicon: https://img3.doubanio.com/favicon.ico
     - name: 多摸鱼
       url: https://duomoyu.com/
       favicon: https://duomoyu.com/favicon.ico
