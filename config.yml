@@ -136,7 +136,7 @@ params:
     - name: cubox
       url: https://cubox.pro/my/inbox
       favicon: https://cubox.pro/my/favicon.ico
-    - name: github
+    - name: github s
       url: https://github.com/
       icon: github
     - name: twitter
