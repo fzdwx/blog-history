@@ -7,6 +7,7 @@ hello:
 init_theme:
     git submodule update --init --recursive
 
+# asdasdasd
 update_theme:
     git submodule update --remote --merge
 
