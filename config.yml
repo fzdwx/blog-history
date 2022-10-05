@@ -133,10 +133,10 @@ params:
     keys: [ "title", "permalink", "summary", "content","tags" ]
 
   startpages:
-    - name: cubox
-      url: https://cubox.pro/my/inbox
-      favicon: https://cubox.pro/my/favicon.ico
-    - name: github s
+    - name: flomo
+      url: https://v.flomoapp.com/mine
+      favicon: https://v.flomoapp.com/favicon.ico
+    - name: github
       url: https://github.com/
       icon: github
     - name: twitter
