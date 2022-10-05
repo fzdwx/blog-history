@@ -134,7 +134,7 @@ params:
 
   startpages:
     - name: flomo
-      url: https://v.flomoapp.com/mine
+      url: /flomo
       favicon: https://v.flomoapp.com/favicon.ico
     - name: github
       url: https://github.com/
