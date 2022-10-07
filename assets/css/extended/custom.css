@@ -638,11 +638,13 @@ strong {
 /* tip */
 .post-content .custom-block p:first-child {
     margin: 0;
+    font-size: 21px;
 }
 
 .post-content .custom-block p {
     margin: 8px 0;
     line-height: 24px;
+    font-size: 18px;
 }
 
 .custom-block-title {
