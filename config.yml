@@ -136,6 +136,9 @@ params:
     - name: github
       url: https://github.com/
       icon: github
+    - name: 格式转换
+      url: https://tinywow.com
+      favicon: https://tinywow.com/v2/img/favicon.png
     - name: twitter
       url: https://twitter.com/home
       icon: twitter
@@ -148,9 +151,6 @@ params:
     - name: 豆瓣电影
       url: https://movie.douban.com/
       favicon: https://img3.doubanio.com/favicon.ico
-    - name: 多摸鱼
-      url: https://duomoyu.com/
-      favicon: https://duomoyu.com/favicon.ico
     - name: 中文播客
       url: https://xyzrank.com/
       favicon: https://xyzrank.justinbot.com/public/favicon.png
