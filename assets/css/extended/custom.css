@@ -706,8 +706,8 @@ strong {
     display: flex;
     justify-content: center;
     border-radius: 6px;
-    width: 48px;
-    height: 48px;
+    width: 24px;
+    height: 24px;
     font-size: 24px;
 }
 
@@ -720,6 +720,10 @@ strong {
 
 .fzdwx {
     font-family: 'fzdwxFont', monospace !important;
+}
+
+.jinkai{
+    font-family: 'jinkaiFont', monospace !important;
 }
 
 .google-search-a{

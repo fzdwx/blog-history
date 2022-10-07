@@ -151,9 +151,6 @@ params:
     - name: 豆瓣电影
       url: https://movie.douban.com/
       favicon: https://img3.doubanio.com/favicon.ico
-    - name: 多摸鱼
-      url: https://duomoyu.com/
-      favicon: https://duomoyu.com/favicon.ico
     - name: 中文播客
       url: https://xyzrank.com/
       favicon: https://xyzrank.justinbot.com/public/favicon.png
