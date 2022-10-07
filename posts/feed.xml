@@ -6,7 +6,70 @@
     <description>Recent content in Posts on fzdwx</description>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright [fzdwx](https://github.com/fzdwx) since 2022</copyright>
-    <lastBuildDate>Tue, 04 Oct 2022 10:07:28 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/posts/feed.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 07 Oct 2022 21:12:56 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/posts/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>GFS</title>
+      <link>https://fzdwx.github.io/posts/2022-10-07-gfs/</link>
+      <pubDate>Fri, 07 Oct 2022 21:12:56 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/posts/2022-10-07-gfs/</guid>
+      <description> 为了性能(Performance), 所以将数据分割放到大量的服务器上，从而实现并行的读取数据，这就是分片(Sharding)。 而成败上千的机器总会发生错误，所以有了容错(Fault Tolerance)。 实现容错最简单的方式就是复制(Replication)，其中一个发生故障了就切换另一个。 使用了复制，如果你不够小心，那么它们之间就可能会不一致。数据就有可能出现问题，所以就有了不一致的问题(Inconsistency)。 如果为了实现一致性(Consistency)，那么就需要多进行额外的交互来保证一致性，所以代价就是低性能(Low Perf) ，但这与我们开始的希望不符合。 TIP So，强一致性代表着低性能。 GFS Master 中主要的两个data table filename -&amp;gt; chunk ids(chunk handles) NV chunk handle与chunk数据的对应关系 chunk保存在哪个服务器上(chunk server list) chunk的version no NV chunk的primary chunk server，因为写操作在在其上进行 primary chunk server的lease expiration 这两个data table都在master的内存中存放，为了容错(比如说重启后数据不丢失数据)，它会在磁盘上存储log，读取的使用从内存里面读取，写的时候会写入内存以及磁盘。 每当有数据变更时，就会在磁盘上的日志进行追加，并且定期创建checkpoint(类似快照，不用从头开始读取)
+next https://mit-public-courses-cn-translatio.gitbook.io/mit6-824/lecture-03-gfs/3.5 Links gfs paper 原文 gfs paper 中文翻译 gfs 视频 gfs 视频翻译 Bad Replication Design </description>
+      <content:encoded><![CDATA[<ol>
+<li>为了性能(<strong>Performance</strong>), 所以将数据分割放到大量的服务器上，从而实现并行的读取数据，这就是分片(<strong>Sharding</strong>)。</li>
+<li>而成败上千的机器总会发生错误，所以有了容错(<strong>Fault Tolerance</strong>)。</li>
+<li>实现容错最简单的方式就是复制(<strong>Replication</strong>)，其中一个发生故障了就切换另一个。</li>
+<li>使用了复制，如果你不够小心，那么它们之间就可能会不一致。数据就有可能出现问题，所以就有了不一致的问题(<strong>Inconsistency</strong>)。</li>
+<li>如果为了实现一致性(<strong>Consistency</strong>)，那么就需要多进行额外的交互来保证一致性，所以代价就是低性能(<strong>Low Perf</strong>)
+，但这与我们开始的希望不符合。</li>
+</ol>
+
+
+
+
+
+<div class="tip custom-block">
+    <p class="custom-block-title">
+        
+        
+            TIP
+        
+    </p>
+    <p> So，强一致性代表着低性能。 </p>
+</div>
+
+<h2 id="gfs-master-中主要的两个data-table">GFS Master 中主要的两个data table</h2>
+<ol>
+<li>filename -&gt; chunk ids(chunk handles) <em><strong>NV</strong></em></li>
+<li>chunk handle与chunk数据的对应关系
+<ul>
+<li>chunk保存在哪个服务器上(chunk server list)</li>
+<li>chunk的version no <em><strong>NV</strong></em></li>
+<li>chunk的primary chunk server，因为写操作在在其上进行</li>
+<li>primary chunk server的lease expiration</li>
+</ul>
+</li>
+</ol>
+<p>这两个data table都在master的内存中存放，为了容错(比如说重启后数据不丢失数据)，它会在磁盘上存储log，读取的使用从内存里面读取，写的时候会写入内存以及磁盘。
+每当有数据变更时，就会在磁盘上的日志进行追加，并且定期创建checkpoint(类似快照，不用从头开始读取)</p>
+<p>next <a href="https://mit-public-courses-cn-translatio.gitbook.io/mit6-824/lecture-03-gfs/3.5" target="_blank" rel="noopener">https://mit-public-courses-cn-translatio.gitbook.io/mit6-824/lecture-03-gfs/3.5</a>
+</p>
+<h2 id="links">Links</h2>
+<ol>
+<li><a href="https://static.googleusercontent.com/media/research.google.com/zh-CN//archive/gfs-sosp2003.pdf" target="_blank" rel="noopener">gfs paper 原文</a>
+</li>
+<li><a href="https://zhuanlan.zhihu.com/p/424677701" target="_blank" rel="noopener">gfs paper 中文翻译</a>
+</li>
+<li><a href="https://www.bilibili.com/video/BV1R7411t71W/?p=3&amp;spm_id_from=333.788.top_right_bar_window_history.content.click&amp;vd_source=98f230be6561d2fc7450e7ce05876f68" target="_blank" rel="noopener">gfs 视频</a>
+</li>
+<li><a href="https://mit-public-courses-cn-translatio.gitbook.io/mit6-824/lecture-03-gfs/3.1" target="_blank" rel="noopener">gfs 视频翻译</a>
+</li>
+<li><a href="https://mit-public-courses-cn-translatio.gitbook.io/mit6-824/lecture-03-gfs/3.2-qiang-yi-zhi-xing-strong-consistency" target="_blank" rel="noopener">Bad Replication Design</a>
+</li>
+</ol>
+]]></content:encoded>
+    </item>
+    
     <item>
       <title>调节linux屏幕的亮度</title>
       <link>https://fzdwx.github.io/posts/2022-10-04-backlight/</link>
