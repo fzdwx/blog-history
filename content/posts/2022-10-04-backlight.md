@@ -23,14 +23,7 @@ cat /sys/class/backlight/intel_backlight/max_brightness
 **修改亮度:**
 
 ```shell
-sudo vim /sys/class/backlight/intel_backlight/brightness
-```
-or
-```shell
-sudo chmod 777 /sys/class/backlight/intel_backlight/brightness
-sudo echo '10000' > /sys/class/backlight/intel_backlight/brightness
-```
+cat /sys/class/backlight/intel_backlight
 
-TODO:
-
-- [ ] 提供一个命令行功能，来调节亮度
+echo 5000 | sudo tee brightness
+```
