@@ -17,7 +17,7 @@
 1.SIGSTKSZ参数找不到
 SIGSTKSZ参数找不到 将SIGSTKSZ修改为一个固定的参数
 //uint8_t sigstack[SIGSTKSZ]; uint8_t sigstack[8192]; 2.serial不正确
-SIGSTKSZ参数找不到 修改nemu/src/device/serial.c#init_serial，每个人的不同，我的是9。</description>
+serial不正确 修改nemu/src/device/serial.c#init_serial，每个人的不同，我的是9。</description>
       <content:encoded><![CDATA[<p>最近在学习jyy的<a href="http://jyywiki.cn/ICS/2021/" target="_blank" rel="noopener">计算机系统基础习题课</a>
 
 ，在做<a href="https://nju-projectn.github.io/ics-pa-gitbook/ics2021/1.1.html#nemu%E6%98%AF%E4%BB%80%E4%B9%88" target="_blank" rel="noopener">pa1</a>
@@ -47,10 +47,10 @@ SIGSTKSZ参数找不到 修改nemu/src/device/serial.c#init_serial，每个人�
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">uint8_t</span> <span class="n">sigstack</span><span class="p">[</span><span class="mi">8192</span><span class="p">];</span>
 </span></span></code></pre></div><p>2.serial不正确</p>
 <p><figure class="align-center">
-    <img src="/images/6.png" alt="SIGSTKSZ参数找不到"  />
+    <img src="/images/6.png" alt="serial不正确"  />
     
     <figcaption>
-       SIGSTKSZ参数找不到
+       serial不正确
     </figcaption>
     
 </figure></p>
