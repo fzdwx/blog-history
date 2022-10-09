@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Tags on fzdwx</title>
+    <link>https://fzdwx.github.io/tags/</link>
+    <description>Recent content in Tags on fzdwx</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Copyright [fzdwx](https://github.com/fzdwx) since 2022</copyright>
+    <lastBuildDate>Tue, 04 Oct 2022 10:07:28 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/tags/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>linux</title>
+      <link>https://fzdwx.github.io/tags/linux/</link>
+      <pubDate>Tue, 04 Oct 2022 10:07:28 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/tags/linux/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>dwm</title>
+      <link>https://fzdwx.github.io/tags/dwm/</link>
+      <pubDate>Thu, 29 Sep 2022 23:42:41 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/tags/dwm/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>nvim</title>
+      <link>https://fzdwx.github.io/tags/nvim/</link>
+      <pubDate>Wed, 28 Sep 2022 15:59:37 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/tags/nvim/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>http</title>
+      <link>https://fzdwx.github.io/tags/http/</link>
+      <pubDate>Wed, 28 Sep 2022 12:19:15 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/tags/http/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>network</title>
+      <link>https://fzdwx.github.io/tags/network/</link>
+      <pubDate>Wed, 28 Sep 2022 12:19:15 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/tags/network/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>mit6.824</title>
+      <link>https://fzdwx.github.io/tags/mit6.824/</link>
+      <pubDate>Tue, 27 Sep 2022 21:45:29 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/tags/mit6.824/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>launcher</title>
+      <link>https://fzdwx.github.io/tags/launcher/</link>
+      <pubDate>Sun, 18 Sep 2022 22:15:39 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/tags/launcher/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+  </channel>
+</rss>

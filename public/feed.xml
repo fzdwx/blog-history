@@ -1,0 +1,554 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>fzdwx</title>
+    <link>https://fzdwx.github.io/</link>
+    <description>Recent content on fzdwx</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Copyright [fzdwx](https://github.com/fzdwx) since 2022</copyright>
+    <lastBuildDate>Tue, 04 Oct 2022 10:07:28 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>调节linux屏幕的亮度</title>
+      <link>https://fzdwx.github.io/posts/2022-10-04-backlight/</link>
+      <pubDate>Tue, 04 Oct 2022 10:07:28 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/posts/2022-10-04-backlight/</guid>
+      <description>由于使用DWM，它不能像KDE那样之间有图形化的亮度调节功能，所以记录一下。</description>
+      <content:encoded><![CDATA[<p><strong>查看当前backlight由什么控制:</strong></p>
+<blockquote>
+<p>一般都是<code>intel</code>。</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">ls /sys/class/backlight
+</span></span></code></pre></div><p><strong>查看当前的亮度:</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">cat /sys/class/backlight/intel_backlight/max_brightness
+</span></span></code></pre></div><p><strong>修改亮度:</strong></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">sudo vim /sys/class/backlight/intel_backlight/brightness
+</span></span></code></pre></div><p>or</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">sudo chmod <span class="m">777</span> /sys/class/backlight/intel_backlight/brightness
+</span></span><span class="line"><span class="cl">sudo <span class="nb">echo</span> <span class="s1">&#39;10000&#39;</span> &gt; /sys/class/backlight/intel_backlight/brightness
+</span></span></code></pre></div><p>TODO:</p>
+<ul>
+<li><input disabled="" type="checkbox"> 提供一个命令行功能，来调节亮度</li>
+</ul>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>Dwm初体验</title>
+      <link>https://fzdwx.github.io/posts/2022-09-29-dwm/</link>
+      <pubDate>Thu, 29 Sep 2022 23:42:41 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/posts/2022-09-29-dwm/</guid>
+      <description>安装: git clone https://git.suckless.org/dwm cd dwm sudo make clean install 启动 如果已经有了sddm，可以使用sudo systemctl disable sddm.service 来进行关闭，如果到时候不想用了可以用sudo systemctl enable sddm.service来开启sddm。
+# 准备配置文件 cp /etc/X11/xinit/xinitrc ~/.xinitrc vim ~/.xinitrc # 添加 exec dwm # 注释 #twm &amp;amp; #xclock -geometry 50x50-1+1 &amp;amp; #xterm -geometry 80x50+494+51 &amp;amp; #xterm -geometry 80x20+494-0 &amp;amp; #exec xterm -geometry 80x66+0+0 -name login 然后重启并调用startx即可。
+遇到的问题 直接断网 使用NetworkManager进行连接，可能要用到dhcpcd。
+nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 可能会连接失败，你可以试试nmcli connection show 来查看是否存在以前的连接信息，可以用nmcli connection delete {{wifi name}}来删除对应的信息</description>
+      <content:encoded><![CDATA[<h2 id="安装">安装:</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">git clone https://git.suckless.org/dwm
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> dwm
+</span></span><span class="line"><span class="cl">sudo make clean install
+</span></span></code></pre></div><h2 id="启动">启动</h2>
+<p>如果已经有了sddm，可以使用<code>sudo systemctl disable sddm.service</code>
+来进行关闭，如果到时候不想用了可以用<code>sudo systemctl enable sddm.service</code>来开启sddm。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 准备配置文件</span>
+</span></span><span class="line"><span class="cl">cp /etc/X11/xinit/xinitrc ~/.xinitrc
+</span></span><span class="line"><span class="cl">vim ~/.xinitrc
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 添加</span>
+</span></span><span class="line"><span class="cl"><span class="nb">exec</span> dwm
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 注释</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#twm &amp;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#xclock -geometry 50x50-1+1 &amp;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#xterm -geometry 80x50+494+51 &amp;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#xterm -geometry 80x20+494-0 &amp;</span>
+</span></span><span class="line"><span class="cl"><span class="c1">#exec xterm -geometry 80x66+0+0 -name login</span>
+</span></span></code></pre></div><p>然后重启并调用<code>startx</code>即可。</p>
+<h2 id="遇到的问题">遇到的问题</h2>
+<h3 id="直接断网">直接断网</h3>
+<p>使用NetworkManager进行连接，可能要用到<code>dhcpcd</code>。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">nmcli device wifi list
+</span></span><span class="line"><span class="cl">nmcli device wifi connect <span class="o">{{</span>wifi name<span class="o">}}</span> password <span class="o">{{</span>pwd<span class="o">}}</span>
+</span></span></code></pre></div><p>可能会连接失败，你可以试试<code>nmcli connection show</code>
+来查看是否存在以前的连接信息，可以用<code>nmcli connection delete {{wifi name}}</code>来删除对应的信息</p>
+<h3 id="输入法失效">输入法失效</h3>
+<p>添加配置文件</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">vim ~/.pam_environment
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">INPUT_METHOD <span class="nv">DEFAULT</span><span class="o">=</span>fcitx5
+</span></span><span class="line"><span class="cl">GTK_IM_MODULE <span class="nv">DEFAULT</span><span class="o">=</span>fcitx5
+</span></span><span class="line"><span class="cl">QT_IM_MODULE <span class="nv">DEFAULT</span><span class="o">=</span>fcitx5
+</span></span><span class="line"><span class="cl">XMODIFIERS <span class="nv">DEFAULT</span><span class="o">=</span>@im<span class="o">=</span>fcitx5
+</span></span></code></pre></div><p>添加启动命令</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">vim ~/.xinitrc1
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 在exec dwm之前添加</span>
+</span></span><span class="line"><span class="cl"><span class="nb">exec</span> fcitx5 <span class="p">&amp;</span>
+</span></span></code></pre></div><h3 id="扩展屏幕无效">扩展屏幕无效</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 可以先查看有哪些屏幕</span>
+</span></span><span class="line"><span class="cl">xrandr 
+</span></span><span class="line"><span class="cl"><span class="c1">#</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 将下面的命令加入 ~/.xinitrc1 中，在exec dwm之前添加</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 我有两个，是上下关系，所以用below 其他有 left 以及 right</span>
+</span></span><span class="line"><span class="cl">xrandr --output eDP-1-1  --auto --below HDMI-0
+</span></span></code></pre></div><h2 id="常用快捷键">常用快捷键</h2>
+<p>可以参考我配置： <a href="https://github.com/fzdwx/dwm" target="_blank" rel="noopener">https://github.com/fzdwx/dwm</a>
+</p>
+<p><code>MOD</code> -&gt; <code>WIN</code></p>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>desc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MOD+SHIFT+ENTER</code></td>
+<td>新开终端</td>
+</tr>
+</tbody>
+</table>
+<h3 id="在本tag内切换聚焦窗口">在本tag内切换聚焦窗口</h3>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>desc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ALT + tab</code></td>
+<td>切换聚焦窗口</td>
+</tr>
+<tr>
+<td><code>MOD + up</code></td>
+<td>切换聚焦窗口</td>
+</tr>
+<tr>
+<td><code>MOD + down</code></td>
+<td>切换聚焦窗口</td>
+</tr>
+</tbody>
+</table>
+<h3 id="跨tag操作">跨tag操作</h3>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>desc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MOD + left / right</code></td>
+<td>切换tag</td>
+</tr>
+<tr>
+<td><code>MOD + SHIGT + left / tight</code></td>
+<td>将当前窗口移动到其他tag</td>
+</tr>
+<tr>
+<td><code>MOD + a</code></td>
+<td>第一次是显示所有tag，第二次是跳转到聚焦的窗口所在的窗口</td>
+</tr>
+</tbody>
+</table>
+<h3 id="窗口操作">窗口操作</h3>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>desc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MOD + q</code></td>
+<td>退出窗口</td>
+</tr>
+<tr>
+<td><code>MOD + h</code></td>
+<td>隐藏窗口</td>
+</tr>
+<tr>
+<td><code>MOD + SHIFT + h</code></td>
+<td>显示窗口（像一个栈一样。）</td>
+</tr>
+<tr>
+<td><code>MOD + ENTER</code></td>
+<td>将当前窗口设置为主窗口</td>
+</tr>
+<tr>
+<td><code>MOD + f</code></td>
+<td>将当前窗口全屏</td>
+</tr>
+<tr>
+<td><code>MOD + CTRL + 方向键</code></td>
+<td>移动窗口</td>
+</tr>
+<tr>
+<td><code>MOD + ALT + 方向键</code></td>
+<td>调整窗口大小</td>
+</tr>
+<tr>
+<td><code>MOD + o</code></td>
+<td>只显示当前窗口/显示所有窗口</td>
+</tr>
+<tr>
+<td><code>MOD + t</code></td>
+<td>开启/关闭 聚焦目标的浮动模式</td>
+</tr>
+<tr>
+<td><code>MOD + SHIFT + t</code></td>
+<td>开启/关闭 全部目标的浮动模式</td>
+</tr>
+</tbody>
+</table>
+<p>| <code>MOD + SHIFT + f</code>  | 开启/关闭 状态栏       |</p>
+<h3 id="切换屏幕">切换屏幕</h3>
+<table>
+<thead>
+<tr>
+<th>快捷键</th>
+<th>desc</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>MOD + x</code></td>
+<td>将鼠标移动到其他屏幕</td>
+</tr>
+<tr>
+<td><code>MOD + SHIFT + X</code></td>
+<td>将当前窗口移动到其他屏幕</td>
+</tr>
+</tbody>
+</table>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="https://wiki.archlinux.org/title/Dwm_%28%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%29" target="_blank" rel="noopener">ArchWiki Dwm</a>
+</li>
+<li><a href="https://dwm.suckless.org/patches/" target="_blank" rel="noopener">Dwm patches</a>
+</li>
+<li><a href="https://github.com/Katzeee/dwm-patches-chinese/blob/master/dwm-patches-chinese.md" target="_blank" rel="noopener">Dwm patches中文翻译</a>
+</li>
+<li><a href="https://yaocc.cc/2022/06/19/linux%E4%B8%9D%E6%BB%91%E7%9A%84%E5%8A%A8%E7%94%BB%E4%BD%93%E9%AA%8C%E2%80%94%E2%80%94picom/" target="_blank" rel="noopener">picom美化</a>
+</li>
+</ul>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>Neovim使用记录  </title>
+      <link>https://fzdwx.github.io/posts/2022-09-28-neovim-use-notes/</link>
+      <pubDate>Wed, 28 Sep 2022 15:59:37 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/posts/2022-09-28-neovim-use-notes/</guid>
+      <description>由于最近切换到了linux，不可避免的经常需要使用vi等编辑器，所以这次好好折腾一下。</description>
+      <content:encoded><![CDATA[<blockquote>
+<p>由于最近切换到了linux，不可避免的经常需要使用vi等编辑器，所以这次好好折腾一下。</p>
+</blockquote>
+<p>我的配置地址: <a href="https://github.com/fzdwx/nvim" target="_blank" rel="noopener">https://github.com/fzdwx/nvim</a>
+。</p>
+<h2 id="我的配置">我的配置</h2>
+<h3 id="pakcer">pakcer</h3>
+<p>我选用的插件管理器是<code>packer</code>，我也不知道选什么好，就按最新的来吧。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="c1">--- setup packer</span>
+</span></span><span class="line"><span class="cl"><span class="kd">local</span> <span class="n">fn</span> <span class="o">=</span> <span class="n">vim.fn</span>
+</span></span><span class="line"><span class="cl"><span class="kd">local</span> <span class="n">install_path</span> <span class="o">=</span> <span class="n">fn.stdpath</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">)</span> <span class="o">..</span> <span class="s1">&#39;/site/pack/packer/start/packer.nvim&#39;</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kr">if</span> <span class="n">fn.empty</span><span class="p">(</span><span class="n">fn.glob</span><span class="p">(</span><span class="n">install_path</span><span class="p">))</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="kr">then</span>
+</span></span><span class="line"><span class="cl">    <span class="n">packer_bootstrap</span> <span class="o">=</span> <span class="n">fn.system</span><span class="p">({</span> <span class="s1">&#39;git&#39;</span><span class="p">,</span> <span class="s1">&#39;clone&#39;</span><span class="p">,</span> <span class="s1">&#39;--depth&#39;</span><span class="p">,</span> <span class="s1">&#39;1&#39;</span><span class="p">,</span> <span class="s1">&#39;https://github.com/wbthomason/packer.nvim&#39;</span><span class="p">,</span> <span class="n">install_path</span> <span class="p">})</span>
+</span></span><span class="line"><span class="cl">    <span class="n">vim.cmd</span><span class="p">(</span><span class="s2">&#34;packadd packer.nvim&#34;</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl"><span class="kr">end</span>
+</span></span><span class="line"><span class="cl"><span class="c1">--- add plugins</span>
+</span></span><span class="line"><span class="cl"><span class="n">require</span><span class="p">(</span><span class="s1">&#39;packer&#39;</span><span class="p">).</span><span class="n">startup</span><span class="p">(</span><span class="kr">function</span><span class="p">(</span><span class="n">use</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">-- 自托管</span>
+</span></span><span class="line"><span class="cl">    <span class="n">use</span> <span class="s1">&#39;wbthomason/packer.nvim&#39;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">-- 其他插件</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">-- 如果是第一次则同步</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">if</span> <span class="n">packer_bootstrap</span> <span class="kr">then</span>
+</span></span><span class="line"><span class="cl">        <span class="n">require</span><span class="p">(</span><span class="s1">&#39;packer&#39;</span><span class="p">).</span><span class="n">sync</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl">    <span class="kr">end</span>
+</span></span><span class="line"><span class="cl"><span class="kr">end</span><span class="p">)</span>
+</span></span></code></pre></div><h3 id="alphahttpsgithubcomgoolordalpha-nvim"><a href="https://github.com/goolord/alpha-nvim" target="_blank" rel="noopener">alpha</a>
+</h3>
+<p>是一个dashboard，也可以说是一个欢迎界面。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="n">require</span><span class="p">(</span><span class="s1">&#39;packer&#39;</span><span class="p">).</span><span class="n">startup</span><span class="p">(</span><span class="kr">function</span><span class="p">(</span><span class="n">use</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">-- ...</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">--- 添加下面两行进行安装</span>
+</span></span><span class="line"><span class="cl">    <span class="n">use</span> <span class="s2">&#34;goolord/alpha-nvim&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="n">use</span> <span class="s2">&#34;kyazdani42/nvim-web-devicons&#34;</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">-- ...</span>
+</span></span><span class="line"><span class="cl"><span class="kr">end</span><span class="p">)</span>
+</span></span></code></pre></div><p>配置代码太长了就不放了，可以点击这里<a href="https://github.com/fzdwx/nvim/blob/main/lua/config/plugins/alpha.lua" target="_blank" rel="noopener"> 这里 </a>
+参考。</p>
+<h3 id="telescopehttpsgithubcomnvim-telescopetelescopenvim"><a href="https://github.com/nvim-telescope/telescope.nvim" target="_blank" rel="noopener">telescope</a>
+</h3>
+<p>主要作用是文件的查找与预览。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="n">require</span><span class="p">(</span><span class="s1">&#39;packer&#39;</span><span class="p">).</span><span class="n">startup</span><span class="p">(</span><span class="kr">function</span><span class="p">(</span><span class="n">use</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">-- ...</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">--- 添加下面代码进行安装</span>
+</span></span><span class="line"><span class="cl">    <span class="n">use</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl">        <span class="s1">&#39;nvim-telescope/telescope.nvim&#39;</span><span class="p">,</span> <span class="n">tag</span> <span class="o">=</span> <span class="s1">&#39;0.1.0&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s2">&#34;ahmedkhalf/project.nvim&#34;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">        <span class="s1">&#39;nvim-lua/plenary.nvim&#39;</span><span class="p">,</span>
+</span></span><span class="line"><span class="cl">    <span class="p">}</span>
+</span></span><span class="line"><span class="cl">    <span class="c1">-- ...</span>
+</span></span><span class="line"><span class="cl"><span class="kr">end</span><span class="p">)</span>
+</span></span></code></pre></div><ul>
+<li><a href="https://github.com/fzdwx/nvim/blob/main/lua/config/plugins/telescope.lua" target="_blank" rel="noopener">配置</a>
+</li>
+<li><a href="https://github.com/fzdwx/nvim/blob/main/lua/config/key/init.lua#L34-L52" target="_blank" rel="noopener">key map</a>
+</li>
+</ul>
+<h2 id="一些教程">一些教程</h2>
+<ol>
+<li><a href="https://rsdlt.github.io/posts/rust-nvim-ide-guide-walkthrough-development-debug/" target="_blank" rel="noopener">Rust and nvim</a>
+</li>
+</ol>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>HTTP协议</title>
+      <link>https://fzdwx.github.io/posts/2022-09-28-http-protocol/</link>
+      <pubDate>Wed, 28 Sep 2022 12:19:15 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/posts/2022-09-28-http-protocol/</guid>
+      <description>简介HTTP/1.1与H2。</description>
+      <content:encoded><![CDATA[<blockquote>
+<p>HTTP 1.1之前的实现就不讨论了，因为它们已经过时太久了，我上网的时候就已经接触不到了，所以主要说说HTTP/1.1、HTTP/2。</p>
+</blockquote>
+<h2 id="http11">HTTP/1.1</h2>
+<h3 id="http11协议报文简介">HTTP/1.1协议报文简介</h3>
+<blockquote>
+<p>CRLF: <code>\r\n</code></p>
+<p>METHOD: HTTP请求，<code>GET</code>、<code>POST</code>、<code>PUT</code>、<code>DELETE</code>&hellip;</p>
+<p>URI: 统一资源标识符，比如<code>/</code>，<code>/index.html</code>&hellip;</p>
+<p>HTTPVersion: HTTP协议的版本号，比如<code>HTTP/1.1</code>，<code>HTTP/2</code></p>
+<p>HEADERS: 请求头，比如<code>Host:localhost</code>，<code>Accept: */*</code>。</p>
+<p>BODY: 请求体，比如说一个JSON数据<code>{&quot;name&quot;:&quot;fzdwx&quot;}</code></p>
+<p>HTTPStatus: HTTP响应状态，常见的有<code>200</code>，<code>404</code>等</p>
+<p>HTTPStatusDesc: HTTP响应状态描述，<code>200</code>对应的<code>OK</code>。</p>
+</blockquote>
+<h4 id="请求">请求</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">METHOD&lt;SPACE&gt;URI&lt;SPACE&gt;HTTPVersion
+</span></span><span class="line"><span class="cl">HEADERS
+</span></span><span class="line"><span class="cl">&lt;CRLF&gt;
+</span></span><span class="line"><span class="cl">BODY
+</span></span></code></pre></div><p>示例:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="line"><span class="cl"><span class="nf">GET</span> <span class="nn">/hello</span> <span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span>
+</span></span><span class="line"><span class="cl"><span class="n">Host</span><span class="o">:</span> <span class="l">192.168.1.107:8889</span>
+</span></span><span class="line"><span class="cl"><span class="n">Connection</span><span class="o">:</span> <span class="l">keep-alive</span>
+</span></span><span class="line"><span class="cl"><span class="n">Cache-Control</span><span class="o">:</span> <span class="l">max-age=0</span>
+</span></span><span class="line"><span class="cl"><span class="n">Upgrade-Insecure-Requests</span><span class="o">:</span> <span class="l">1</span>
+</span></span><span class="line"><span class="cl"><span class="n">User-Agent</span><span class="o">:</span> <span class="l">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/99.0.4844.82 Safari/537.36</span>
+</span></span><span class="line"><span class="cl"><span class="n">Accept</span><span class="o">:</span> <span class="l">text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.9</span>
+</span></span><span class="line"><span class="cl"><span class="n">Accept-Encoding</span><span class="o">:</span> <span class="l">gzip, deflate</span>
+</span></span><span class="line"><span class="cl"><span class="n">Accept-Language</span><span class="o">:</span> <span class="l">zh-CN,zh;q=0.9</span>
+</span></span></code></pre></div><h4 id="响应">响应</h4>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">HTTPVersion HTTPStatus HTTPStatusDesc
+</span></span><span class="line"><span class="cl">HEADERS
+</span></span><span class="line"><span class="cl">&lt;CRLF&gt;
+</span></span><span class="line"><span class="cl">BODY
+</span></span></code></pre></div><p>示例:</p>
+<blockquote>
+<p>如果响应中使用了<code>transfer-encoding: chunked</code>这个来替代<code>Content-Length</code>
+，就表示这是一个不固定大小的响应，结尾通常用<code>0\r\n</code>来分割。</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-http" data-lang="http"><span class="line"><span class="cl"><span class="kr">HTTP</span><span class="o">/</span><span class="m">1.1</span> <span class="m">200</span> <span class="ne">OK</span>
+</span></span><span class="line"><span class="cl"><span class="n">transfer-encoding</span><span class="o">:</span> <span class="l">chunked</span>
+</span></span><span class="line"><span class="cl"><span class="n">content-type</span><span class="o">:</span> <span class="l">application/json; charset=utf-8</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="mi">0</span><span class="err">/r/n</span>
+</span></span></code></pre></div><h3 id="http11主要新特性">HTTP/1.1主要新特性</h3>
+<ol>
+<li>默认是长连接(<code>Connection: Keep-alive</code>)，支持一个TCP连接处理多个请求。</li>
+<li>缓存策略，在请求头中使用<code>Cache-Control</code>，<code>Expires</code>，<code>Last-Modified</code>，<code>ETag</code>等来控制。</li>
+<li>允许响应分块，就是上面提到的<code>transfer-encoding: chunked</code>，允许服务端可以多次返回响应体。</li>
+</ol>
+<p>但是还是存在一定的问题，比如说如果有一个TCP连接阻塞了，还是会开启新的TCP连接进行处理请求。</p>
+<h2 id="h2">H2</h2>
+<p>HTTP2中的主要概念:</p>
+<ol>
+<li><code>Connection</code>: 一个TCP连接包含一个或多个<code>Stream</code>,所有的通讯都在<strong>一个TCP连接</strong>上完成。</li>
+<li><code>Stream</code>: 一个可以双向通讯的数据流，包含一条或多条<code>Message</code>，每个数据流都一个<strong>唯一标识符</strong>以及<strong>可选的优先级</strong>信息。</li>
+<li><code>Message</code>: 对应HTTP/1.1中的请求或响应，包含一条或多条<code>Frame</code>。</li>
+<li><code>Frame</code>: <strong>最小传输单位</strong>，它以<strong>二进制</strong>进行编码。</li>
+</ol>
+<p><a href="/images/1.png">HTTP通讯简图</a>
+</p>
+<p>在HTTP/1.1中是有<code>Start Line</code> + <code>header</code> + <code>body</code> 组成的，而在H2中是由一个<code>HEADER Frame</code>以及多个<code>DATA Frame</code>组成的。</p>
+<p><figure class="align-center">
+    <img src="/images/2.png" alt="HTTP/1.1与H2报文组成的区别"  />
+    
+    <figcaption>
+       HTTP/1.1与H2报文组成的区别
+    </figcaption>
+    
+</figure></p>
+<h3 id="frame">Frame</h3>
+<p>通常有一些公共的字段，比如<code>Length</code>，<code>Type</code>，<code>Flags</code>以及<code>Stream Id</code>；也各个类型所独有的字段。</p>
+<p>分类如下:</p>
+<ul>
+<li><a href="https://halfrost.com/http2-http-frames-definitions/#toc-0" target="_blank" rel="noopener">DATA</a>
+: 用于传输http消息体。</li>
+<li><a href="https://halfrost.com/http2-http-frames-definitions/#toc-1" target="_blank" rel="noopener">HEADERS</a>
+: 用于传输首部字段。</li>
+<li><a href="https://halfrost.com/http2-http-frames-definitions/#toc-2" target="_blank" rel="noopener">PRIORITY</a>
+: 用于指定或重新指定引用资源的优先级。</li>
+<li><a href="https://halfrost.com/http2-http-frames-definitions/#toc-3" target="_blank" rel="noopener">RST_STREAM</a>
+: 用于通知流的非正常终止。</li>
+<li><a href="https://halfrost.com/http2-http-frames-definitions/#toc-4" target="_blank" rel="noopener">SETTINGS</a>
+: 用于约定客户端和服务端的配置数据。比如设置初识的双向流量控制窗口大小。</li>
+<li><a href="https://halfrost.com/http2-http-frames-definitions/#toc-9" target="_blank" rel="noopener">PUSH_PROMISE</a>
+: 服务端推送许可。</li>
+<li><a href="https://halfrost.com/http2-http-frames-definitions/#toc-10" target="_blank" rel="noopener">PING</a>
+: 用于计算往返时间，执行“ 活性” 检活。</li>
+<li><a href="https://halfrost.com/http2-http-frames-definitions/#toc-11" target="_blank" rel="noopener">GOAWAY</a>
+: 用于通知对端停止在当前连接中创建流。</li>
+<li><a href="https://halfrost.com/http2-http-frames-definitions/#toc-12" target="_blank" rel="noopener">WINDOW_UPDATE</a>
+: 用于调整个别流或个别连接的流量。</li>
+<li><a href="https://halfrost.com/http2-http-frames-definitions/#toc-17" target="_blank" rel="noopener">CONTINUATION</a>
+: 专门用于传递较大 HTTP 头部时的持续帧。</li>
+</ul>
+<h3 id="为什么h2必须要走https">为什么H2必须要走HTTPS？</h3>
+<p>这其实在H2标准中没有规定，主要是为了更方便的进行HTTP协议的 升级/协商，确认一个Web服务器是否支持H2通常有两种方式:</p>
+<ol>
+<li>在请求头中设置<code>Upgrade: HTTP/2.0</code>以及<code>Connection: Upgrade,HTTP2-Settings</code>等，类似升级到<code>Websocket</code>。</li>
+<li>使用<code>TLS</code>中的<code>ALPN</code>(Application Layer Protocol Negotiation，应用层协议协商)中的<code>ALPN Next Protocol</code>
+字段，在<code>Client Hello</code>与<code>Server Hello</code>这个阶段就可以确定下来。</li>
+</ol>
+<p>而现在的<strong>浏览器</strong>基本都是<strong>实现的方式二</strong>，即<strong>与HTTPS绑定在一起</strong>。但是如果我们不用浏览器进行访问，当然也可以不用HTTPS。</p>
+<p>详细可<a href="https://imququ.com/post/protocol-negotiation-in-http2.html" target="_blank" rel="noopener">参考</a>
+。</p>
+<h3 id="为什么h2能实现并行响应请求">为什么H2能实现并行响应请求?</h3>
+<p>在HTTP/1.1中，请求与响应是一一对应的，在同一个连接里，客户端依次发送两个请求，一段时间以后收到来自服务器的一个响应，这个响应一定是对应于第一个发出去的请求的。
+因为<strong>没有一个标志来表示哪个响应对应哪个请求</strong>。</p>
+<p>而在H2中基于<code>Stream</code>和<code>Frame</code>的设计: <strong>每个<code>Frame</code>都带有<code>Stream Id</code>来标识是否为同一个<code>Stream</code>里面的数据</strong>，每个<code>Stream</code>
+互不影响，这样就能做到在一个TCP里面连接里面传输多对请求/响应。</p>
+<h2 id="h2的新特性">H2的新特性</h2>
+<p>H2的对HTTP/1.1优化的核心就是 <strong>使用尽可能少的连接数</strong>。</p>
+<ol>
+<li>多路复用: 只用一个TCP连接就能处理多对 请求/响应 ，不用在开启另外的TCP连接，就是通过<code>Stream</code>与<code>Frame</code>来实现的。</li>
+<li>二进制分帧: 使用<code>Frame</code>为最小单位进行通讯，并采用二进制编码。</li>
+<li><a href="https://juejin.cn/post/7133238781452222472" target="_blank" rel="noopener">头部压缩</a>
+: 使用<code>HPACK</code>算法进行优化.
+<ul>
+<li>维护一份相同的<a href="https://httpwg.org/specs/rfc7541.html#static.table.definition" target="_blank" rel="noopener">静态字典</a>
+，包含常见的请求头的KV组合</li>
+<li>一份动态字典，可以动态的扩容(每个连接单独维护)</li>
+<li>支持哈夫曼编码(<a href="https://httpwg.org/specs/rfc7541.html#huffman.code" target="_blank" rel="noopener">静态哈夫曼码表</a>
+)</li>
+</ul>
+<blockquote>
+<p>在HTTP/1中消息体可以用gzip进行压缩，但是请求头通常没有任何压缩，有时候请求头的数据可能比请求体的数据还多。</p>
+</blockquote>
+</li>
+<li>请求优先级: 一般在<code>HEADERS</code>帧与<code>PRIORITY</code>帧中携带，通常依赖于服务端的支持程度。</li>
+</ol>
+<h2 id="工具">工具</h2>
+<h3 id="生成测试签名">生成测试签名</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">go run <span class="nv">$GOROOT</span>/src/crypto/tls/generate_cert.go --host localhost
+</span></span></code></pre></div><h3 id="使用curl调试https">使用curl调试HTTPS</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">curl https://zcygov.cn -vv
+</span></span></code></pre></div><h2 id="links">Links</h2>
+<ul>
+<li><a href="https://httpwg.org/specs/rfc7540.html" target="_blank" rel="noopener">Hypertext Transfer Protocol Version 2 (HTTP/2)</a>
+</li>
+<li><a href="https://httpwg.org/specs/rfc7541.html" target="_blank" rel="noopener">HPACK: Header Compression for HTTP/2</a>
+</li>
+<li><a href="https://imququ.com/post/http2-resource.html" target="_blank" rel="noopener">HTTP/2资料汇总</a>
+</li>
+<li><a href="https://halfrost.com/http2-http-frames-definitions/" target="_blank" rel="noopener">HTTP/2中帧的定义</a>
+</li>
+<li><a href="https://www.dropbox.com/s/4duv6cqrhud4qzw/HTTP2%EF%BC%9A%E6%96%B0%E7%9A%84%E6%9C%BA%E9%81%87%E4%B8%8E%E6%8C%91%E6%88%98.pdf?dl=0" target="_blank" rel="noopener">HTTP/2新的机遇与挑战</a>
+</li>
+<li><a href="https://zhuanlan.zhihu.com/p/566351358" target="_blank" rel="noopener">探索http1.0到http3.0的发展史，详解http2.0</a>
+</li>
+<li><a href="https://www.zhihu.com/question/34074946/answer/2264788574" target="_blank" rel="noopener">HTTP/2相比1.0有哪些重大改进</a>
+</li>
+</ul>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>Mit6.824 lab1思路</title>
+      <link>https://fzdwx.github.io/posts/2022-09-27-mit6.824-lab1/</link>
+      <pubDate>Tue, 27 Sep 2022 21:45:29 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/posts/2022-09-27-mit6.824-lab1/</guid>
+      <description>about mit6.824 lab1(Map reduce framework)</description>
+      <content:encoded><![CDATA[<p>看的时候很懵，写的时候更懵，我以为是要写几个<code>MapReduce</code>的程序，在把官方的<code>A few rules</code>以及<code>Hints</code>(
+翻译可以看<a href="https://www.nowcoder.com/discuss/962675" target="_blank" rel="noopener">这里</a>
+) 仔细的阅读了几遍后才发现是要写一个
+MapReduce 的调度框架。。。</p>
+<p>解题思路可以分为 3 步。</p>
+<ol>
+<li><code>worker</code>与<code>master</code>先通过<code>rpc</code>进行通信，即<code>worker</code>发送请求，<code>master</code>能够正确的应答且<code>worker</code>
+能够收到。这一部分其实示例代码已经给到了，可以模仿着写一个从<code>master</code>获取需要执行的任务名称的<code>rpc request</code>。</li>
+<li>上面一步完成后就可以进行真正的<code>Map task</code>请求以及执行了:
+<ul>
+<li><code>Map task</code>何时生成？</li>
+<li>每个<code>worker</code>只向<code>master</code>请求一次就好了吗？</li>
+<li><code>Map task</code>执行 超时/失败 需要有重试机制吗？</li>
+<li>如何保证<code>Map task</code>消费时的线程安全？</li>
+</ul>
+</li>
+<li>当所有的<code>Map task</code>执行完毕后就需要执行<code>Reduce task</code>了，如果你写完了第 2 步，那么<code>Reduce task</code>其实就是水到渠成了。
+<ul>
+<li>生成<code>Reduce task</code>，这里的每个<code>Reduce task</code>需要加载的文件按什么分成一组？</li>
+<li>剩下的与<code>Map task</code>处理方法相同。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<p>我就是卡在了<code>Reduce task</code>创建时文件分组这个地方了，我直接把同一个<code>Map task</code>生成的文件当成一组了&hellip;但是显然不是这样。</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>About rofi</title>
+      <link>https://fzdwx.github.io/posts/2022-09-18-about-rofi/</link>
+      <pubDate>Sun, 18 Sep 2022 22:15:39 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/posts/2022-09-18-about-rofi/</guid>
+      <description>一个 linux 下的 application launcher, 让你只用键盘就可以进行应用的启动与切换。</description>
+      <content:encoded><![CDATA[<blockquote>
+<p>今天发现了一个 linux 下的 application launcher <a href="https://github.com/davatorium/rofi" target="_blank" rel="noopener">rofi</a>
+ ，它可以快速切换窗口和启动程序，
+我用它和<code>wmctrl</code>进行配合使用。</p>
+</blockquote>
+<p><strong>我的使用过程:</strong></p>
+<p>1.Archlinux install</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">yay -S rofi
+</span></span></code></pre></div><p>2.添加自定义快捷键绑定 hotkey 为<code>alt</code>+<code>space</code>触发<code>rofi -show</code>。</p>
+<p>3.press<code>alt</code>+<code>space</code>，然后使用<code>shift</code>+<code>left</code>or<code>right</code>进行切换 mode 。</p>
+<hr>
+<p><strong>更改主题以及显示 icon</strong>:</p>
+<p>1.生成配置文件</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">mkdir -p ~/.config/rofi
+</span></span><span class="line"><span class="cl">rofi -dump-config &gt; ~/.config/rofi/config.rasi
+</span></span></code></pre></div><p>2.显示icon</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">sed -i <span class="s1">&#39;8c show-icons: true;&#39;</span> ~/.config/rofi/config.rasi
+</span></span></code></pre></div><p>3.更换主题</p>
+<p>参考 <a href="https://github.com/lr-tech/rofi-themes-collection#installing-themes" target="_blank" rel="noopener">https://github.com/lr-tech/rofi-themes-collection#installing-themes</a>
+</p>
+<hr>
+<p><strong>我的<code>wmctrl</code>的配置示例</strong>:</p>
+<blockquote>
+<p>使用<code>xprop WM_CLASS</code>获取前缀。</p>
+</blockquote>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">alias</span> <span class="nv">chrome</span><span class="o">=</span><span class="s2">&#34;wmctrl -x -a google-chrome || google-chrome-stable &gt; /dev/null 2&gt;&amp;1 &amp;&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">alias</span> <span class="nv">note</span><span class="o">=</span><span class="s2">&#34;wmctrl -x -a obsidian || /usr/bin/obsidian &gt; /dev/null 2&gt;&amp;1 &amp;&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">alias</span> <span class="nv">codew</span><span class="o">=</span><span class="s2">&#34;wmctrl -x -a code || /opt/code/code &gt; /dev/null 2&gt;&amp;1 &amp;&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">alias</span> <span class="nv">idea</span><span class="o">=</span><span class="s2">&#34;wmctrl -x -a jetbrains-idea || /opt/idea/bin/idea.sh &gt; /dev/null 2&gt;&amp;1 &amp;&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="nb">alias</span> <span class="nv">discord</span><span class="o">=</span><span class="s2">&#34;wmctrl -x -a discord || /opt/discord/Discord &gt; /dev/null 2&gt;&amp;1 &amp;&#34;</span>
+</span></span></code></pre></div>]]></content:encoded>
+    </item>
+    
+  </channel>
+</rss>

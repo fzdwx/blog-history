@@ -34,7 +34,7 @@ rofi -dump-config > ~/.config/rofi/config.rasi
 
 2.显示icon
 
-```shell    
+```shell
 sed -i '8c show-icons: true;' ~/.config/rofi/config.rasi
 ```
 

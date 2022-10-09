@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+Sitemap: https://fzdwx.github.io/sitemap.xml
