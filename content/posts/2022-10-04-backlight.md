@@ -27,3 +27,5 @@ cat /sys/class/backlight/intel_backlight
 
 echo 5000 | sudo tee brightness
 ```
+export NEMU_HOME=/home/like/IdeaProjects/ics2021/nemu
+export AM_HOME=/home/like/IdeaProjects/ics2021/abstract-machine
