@@ -22,15 +22,10 @@
 </span></span></code></pre></div><p><strong>查看当前的亮度:</strong></p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">cat /sys/class/backlight/intel_backlight/max_brightness
 </span></span></code></pre></div><p><strong>修改亮度:</strong></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">sudo vim /sys/class/backlight/intel_backlight/brightness
-</span></span></code></pre></div><p>or</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">sudo chmod <span class="m">777</span> /sys/class/backlight/intel_backlight/brightness
-</span></span><span class="line"><span class="cl">sudo <span class="nb">echo</span> <span class="s1">&#39;10000&#39;</span> &gt; /sys/class/backlight/intel_backlight/brightness
-</span></span></code></pre></div><p>TODO:</p>
-<ul>
-<li><input disabled="" type="checkbox"> 提供一个命令行功能，来调节亮度</li>
-</ul>
-]]></content:encoded>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">cat /sys/class/backlight/intel_backlight
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="m">5000</span> <span class="p">|</span> sudo tee brightness
+</span></span></code></pre></div>]]></content:encoded>
     </item>
     
   </channel>
