@@ -6,7 +6,58 @@
     <description>Recent content on fzdwx</description>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright [fzdwx](https://github.com/fzdwx) since 2022</copyright>
-    <lastBuildDate>Fri, 07 Oct 2022 21:12:56 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/feed.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 09 Oct 2022 19:40:42 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>在Abstract Machine上玩超级马里奥</title>
+      <link>https://fzdwx.github.io/posts/2022-10-09-mario-nes/</link>
+      <pubDate>Sun, 09 Oct 2022 19:40:42 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/posts/2022-10-09-mario-nes/</guid>
+      <description>最近在学习jyy的计算机系统基础习题课 ，在做pa1 的时候提到一个运行红白机游戏的项目 运行起来的效果 遇到的坑:
+1.SIGSTKSZ参数找不到
+SIGSTKSZ参数找不到 将SIGSTKSZ修改为一个固定的参数
+//uint8_t sigstack[SIGSTKSZ]; uint8_t sigstack[8192]; 2.serial不正确
+SIGSTKSZ参数找不到 修改nemu/src/device/serial.c#init_serial，每个人的不同，我的是9。</description>
+      <content:encoded><![CDATA[<p>最近在学习jyy的<a href="http://jyywiki.cn/ICS/2021/" target="_blank" rel="noopener">计算机系统基础习题课</a>
+
+，在做<a href="https://nju-projectn.github.io/ics-pa-gitbook/ics2021/1.1.html#nemu%E6%98%AF%E4%BB%80%E4%B9%88" target="_blank" rel="noopener">pa1</a>
+
+的时候提到一个运行红白机游戏的<a href="https://github.com/NJU-ProjectN/fceux-am" target="_blank" rel="noopener">项目</a>
+</p>
+<p><figure class="align-center">
+    <img src="/images/4.png" alt="运行起来的效果"  />
+    
+    <figcaption>
+       运行起来的效果
+    </figcaption>
+    
+</figure></p>
+<p>遇到的坑:</p>
+<p>1.SIGSTKSZ参数找不到</p>
+<p><figure class="align-center">
+    <img src="/images/5.png" alt="SIGSTKSZ参数找不到"  />
+    
+    <figcaption>
+       SIGSTKSZ参数找不到
+    </figcaption>
+    
+</figure></p>
+<p>将<code>SIGSTKSZ</code>修改为一个固定的参数</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">//uint8_t sigstack[SIGSTKSZ];
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">uint8_t</span> <span class="n">sigstack</span><span class="p">[</span><span class="mi">8192</span><span class="p">];</span>
+</span></span></code></pre></div><p>2.serial不正确</p>
+<p><figure class="align-center">
+    <img src="/images/6.png" alt="SIGSTKSZ参数找不到"  />
+    
+    <figcaption>
+       SIGSTKSZ参数找不到
+    </figcaption>
+    
+</figure></p>
+<p>修改<code>nemu/src/device/serial.c#init_serial</code>，每个人的不同，我的是9。</p>
+]]></content:encoded>
+    </item>
+    
     <item>
       <title>GFS</title>
       <link>https://fzdwx.github.io/posts/2022-10-07-gfs/</link>
@@ -182,7 +233,9 @@ no大于它的记录，master会采用更高的version no进行更新。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">cat /sys/class/backlight/intel_backlight
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="m">5000</span> <span class="p">|</span> sudo tee brightness
-</span></span></code></pre></div>]]></content:encoded>
+</span></span></code></pre></div><p>export NEMU_HOME=/home/like/IdeaProjects/ics2021/nemu
+export AM_HOME=/home/like/IdeaProjects/ics2021/abstract-machine</p>
+]]></content:encoded>
     </item>
     
     <item>

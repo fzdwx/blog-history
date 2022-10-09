@@ -25,7 +25,9 @@
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">cat /sys/class/backlight/intel_backlight
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="m">5000</span> <span class="p">|</span> sudo tee brightness
-</span></span></code></pre></div>]]></content:encoded>
+</span></span></code></pre></div><p>export NEMU_HOME=/home/like/IdeaProjects/ics2021/nemu
+export AM_HOME=/home/like/IdeaProjects/ics2021/abstract-machine</p>
+]]></content:encoded>
     </item>
     
   </channel>
