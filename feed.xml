@@ -6,7 +6,29 @@
     <description>Recent content on fzdwx</description>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright [fzdwx](https://github.com/fzdwx) since 2022</copyright>
-    <lastBuildDate>Sun, 09 Oct 2022 19:40:42 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/feed.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 10 Oct 2022 22:43:27 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Code:alias</title>
+      <link>https://fzdwx.github.io/posts/2022-10-10-codealias/</link>
+      <pubDate>Mon, 10 Oct 2022 22:43:27 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/posts/2022-10-10-codealias/</guid>
+      <description>目前有一个想法，是在命令行下管理脚本的工具。
+比如说我有一些常用的脚本:
+cd $(find . -name &amp;#34;*&amp;#34; -type d | fzf) 然后通过命令行添加
+cli load &amp;#34;cd $(find . -name &amp;#34;*&amp;#34; -type d | fzf)&amp;#34; -alias cdf 然后使用cdf进行运行
+cli cdf `` </description>
+      <content:encoded><![CDATA[<p>目前有一个想法，是在命令行下管理脚本的工具。</p>
+<p>比如说我有一些常用的脚本:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span> <span class="k">$(</span>find . -name <span class="s2">&#34;*&#34;</span> -type d <span class="p">|</span> fzf<span class="k">)</span>
+</span></span></code></pre></div><p>然后通过命令行添加</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">cli load <span class="s2">&#34;cd </span><span class="k">$(</span>find . -name <span class="s2">&#34;*&#34;</span> -type d <span class="p">|</span> fzf<span class="k">)</span><span class="s2">&#34;</span> -alias cdf
+</span></span></code></pre></div><p>然后使用cdf进行运行</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">cli cdf 
+</span></span><span class="line"><span class="cl"><span class="sb">``</span>
+</span></span></code></pre></div>]]></content:encoded>
+    </item>
+    
     <item>
       <title>在Abstract Machine上玩超级马里奥</title>
       <link>https://fzdwx.github.io/posts/2022-10-09-mario-nes/</link>
@@ -678,7 +700,7 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
     </item>
     
     <item>
-      <title>Mit6.824 lab1思路</title>
+      <title>MapReduce 框架实现思路</title>
       <link>https://fzdwx.github.io/posts/2022-09-27-mit6.824-lab1/</link>
       <pubDate>Tue, 27 Sep 2022 21:45:29 +0800</pubDate>
       
