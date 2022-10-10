@@ -17,8 +17,7 @@
 1.SIGSTKSZ参数找不到
 SIGSTKSZ参数找不到 将SIGSTKSZ修改为一个固定的参数
 //uint8_t sigstack[SIGSTKSZ]; uint8_t sigstack[8192]; 2.serial不正确
-serial不正确 修改nemu/src/device/serial.c#init_serial，每个人的不同，我的是9。
-img.png use grep::{run, Config}; use std::{env, process}; fn main() { // args.push(String::from(&amp;#34;bOdY&amp;#34;)); // args.push(String::from(&amp;#34;poem.txt&amp;#34;)); let config = Config::from(env::args()).unwrap_or_else(|e| { eprintln!(&amp;#34;problem parsing arguments:{}&amp;#34;, e); process::exit(1); }); if let Err(e) = run(config) { eprintln!(&amp;#34;Application error: {}&amp;#34;, e); process::exit(1); }; } </description>
+serial不正确 修改nemu/src/device/serial.c#init_serial，每个人的不同，我的是9。</description>
       <content:encoded><![CDATA[<p>最近在学习jyy的<a href="http://jyywiki.cn/ICS/2021/" target="_blank" rel="noopener"> 计算机系统基础习题课 </a>
 ，
 在做<a href="https://nju-projectn.github.io/ics-pa-gitbook/ics2021/1.1.html#nemu%E6%98%AF%E4%BB%80%E4%B9%88" target="_blank" rel="noopener"> pa1 </a>
@@ -56,34 +55,7 @@ img.png use grep::{run, Config}; use std::{env, process}; fn main() { // args.pu
     
 </figure></p>
 <p>修改<code>nemu/src/device/serial.c#init_serial</code>，每个人的不同，我的是9。</p>
-<p><figure class="align-center">
-    <img src="/img.png" alt="img.png"  />
-    
-    <figcaption>
-       img.png
-    </figcaption>
-    
-</figure></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="k">use</span><span class="w"> </span><span class="n">grep</span>::<span class="p">{</span><span class="n">run</span><span class="p">,</span><span class="w"> </span><span class="n">Config</span><span class="p">};</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">use</span><span class="w"> </span><span class="n">std</span>::<span class="p">{</span><span class="n">env</span><span class="p">,</span><span class="w"> </span><span class="n">process</span><span class="p">};</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">fn</span> <span class="nf">main</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// args.push(String::from(&#34;bOdY&#34;));
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="c1">// args.push(String::from(&#34;poem.txt&#34;));
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">config</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">Config</span>::<span class="n">from</span><span class="p">(</span><span class="n">env</span>::<span class="n">args</span><span class="p">()).</span><span class="n">unwrap_or_else</span><span class="p">(</span><span class="o">|</span><span class="n">e</span><span class="o">|</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="fm">eprintln!</span><span class="p">(</span><span class="s">&#34;problem parsing arguments:{}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">process</span>::<span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">});</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="kd">let</span><span class="w"> </span><span class="nb">Err</span><span class="p">(</span><span class="n">e</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">run</span><span class="p">(</span><span class="n">config</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="fm">eprintln!</span><span class="p">(</span><span class="s">&#34;Application error: {}&#34;</span><span class="p">,</span><span class="w"> </span><span class="n">e</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">process</span>::<span class="n">exit</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">};</span><span class="w">
-</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
-</span></span></span></code></pre></div>]]></content:encoded>
+]]></content:encoded>
     </item>
     
     <item>
