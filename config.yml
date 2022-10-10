@@ -1,6 +1,6 @@
 baseURL: "https://fzdwx.github.io/"
 title: fzdwx
-paginate: 5
+paginate: 100000
 theme: PaperModX
 
 timeZone: Asia/Shanghai
@@ -194,9 +194,9 @@ markup:
   goldmark:
     renderer:
       unsafe: true
-#     highlight:
-#         # anchorLineNos: true
-#         codeFences: true
-#         guessSyntax: true
-#         lineNos: true
-#         style: monokai
+    highlight:
+        # anchorLineNos: true
+        codeFences: true
+        guessSyntax: true
+        lineNos: true
+#        style: monokai
