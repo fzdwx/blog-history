@@ -1072,10 +1072,10 @@ strong {
     background: var(--link-hover-underline-color)
 }
 
-.dark pre{
-    box-shadow: var(--bule-shadow-1);
-}
+/*.dark pre{*/
+/*    box-shadow: var(--bule-shadow-1);*/
+/*}*/
 
-.dark .post-entry{
-    box-shadow: var(--white-shadow-1);
-}
+/*.dark .post-entry{*/
+/*    box-shadow: var(--white-shadow-1);*/
+/*}*/
