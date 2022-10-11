@@ -6,7 +6,56 @@
     <description>Recent content in linux on fzdwx</description>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright [fzdwx](https://github.com/fzdwx) since 2022</copyright>
-    <lastBuildDate>Sun, 09 Oct 2022 19:40:42 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/tags/linux/feed.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Tue, 11 Oct 2022 16:55:35 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/tags/linux/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>在shell脚本中执行cd后改变main shell的路径</title>
+      <link>https://fzdwx.github.io/posts/2022-10-11-about-source/</link>
+      <pubDate>Tue, 11 Oct 2022 16:55:35 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/posts/2022-10-11-about-source/</guid>
+      <description>起因 昨天晚上想用fzf与cd联动，就是fzf的结果传递给cd来执行于是有了这么一条命令:
+cd $(fd --type d | fzf) 这个命令也确实能完成任务，但是问题有两个:
+如果直接退出的话会回到家目录，因为$(..)的执行结果为空 每次都要输入这么多会很麻烦 用alias 然后尝试用alias来试试，所以就往.zshrc里面添加:
+alias cdf=&amp;#34;cd $(fd --type d | fzf)&amp;#34; 结果是直接不能运行，因为它直接识别了$(..)这一段，然后直接运行了，但是后面就不会运行。
+用shell脚本 然后就写了这个文件:
+#!/bin/sh path=$(fd --type d --strip-cwd-prefix --hidden --follow --exclude .git --exclude node_modules | fzf) if [ -z &amp;#34;$path&amp;#34; ]; then exit fi cd &amp;#34;$path&amp;#34; || exit 结果也是不行，后面我在最下面加了一行echo &amp;quot;$PWD&amp;quot;，我看到是执行了的，但是程序退出了就失效了。
+解决 最后我搜索到可以使用source xxx或者. xxx来解决，最后是alias+shell脚本来完成这个操作的:
+alias cdf=&amp;#34;source /path/to/cdf&amp;#34; 同时它也解决我上面提到的两个问题。
+source为什么能解决？ 之所以直接用shell脚本直接运行会不行，是因为它不是在当前shell环境中运行的，而是一个子shell，所以结果就不能改变当前的文件目录了。
+而source或者.就代表着在当前的shell环境中执行，所以就能成功。</description>
+      <content:encoded><![CDATA[<h2 id="起因">起因</h2>
+<p>昨天晚上想用fzf与cd联动，就是fzf的结果传递给cd来执行于是有了这么一条命令:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">cd</span> <span class="k">$(</span>fd --type d <span class="p">|</span> fzf<span class="k">)</span>
+</span></span></code></pre></div><p>这个命令也确实能完成任务，但是问题有两个:</p>
+<ol>
+<li>如果直接退出的话会回到家目录，因为<code>$(..)</code>的执行结果为空</li>
+<li>每次都要输入这么多会很麻烦</li>
+</ol>
+<h2 id="用alias">用alias</h2>
+<p>然后尝试用alias来试试，所以就往<code>.zshrc</code>里面添加:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">alias</span> <span class="nv">cdf</span><span class="o">=</span><span class="s2">&#34;cd </span><span class="k">$(</span>fd --type d <span class="p">|</span> fzf<span class="k">)</span><span class="s2">&#34;</span>
+</span></span></code></pre></div><p>结果是直接不能运行，因为它直接识别了<code>$(..)</code>这一段，然后直接运行了，但是后面就不会运行。</p>
+<h2 id="用shell脚本">用shell脚本</h2>
+<p>然后就写了这个文件:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="cp">#!/bin/sh
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="nv">path</span><span class="o">=</span><span class="k">$(</span>fd --type d --strip-cwd-prefix --hidden --follow --exclude .git --exclude node_modules <span class="p">|</span> fzf<span class="k">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[</span> -z <span class="s2">&#34;</span><span class="nv">$path</span><span class="s2">&#34;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">exit</span>
+</span></span><span class="line"><span class="cl"><span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> <span class="s2">&#34;</span><span class="nv">$path</span><span class="s2">&#34;</span> <span class="o">||</span> <span class="nb">exit</span>
+</span></span></code></pre></div><p>结果也是不行，后面我在最下面加了一行<code>echo &quot;$PWD&quot;</code>，我看到是执行了的，但是程序退出了就失效了。</p>
+<h2 id="解决">解决</h2>
+<p>最后我搜索到可以使用<code>source xxx</code>或者<code>. xxx</code>来解决，最后是alias+shell脚本来完成这个操作的:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">alias</span> <span class="nv">cdf</span><span class="o">=</span><span class="s2">&#34;source /path/to/cdf&#34;</span>
+</span></span></code></pre></div><p>同时它也解决我上面提到的两个问题。</p>
+<h2 id="source为什么能解决">source为什么能解决？</h2>
+<p>之所以直接用shell脚本直接运行会不行，是因为它不是在当前shell环境中运行的，而是一个子shell，所以结果就不能改变当前的文件目录了。</p>
+<p>而<code>source</code>或者<code>.</code>就代表着在当前的shell环境中执行，所以就能成功。</p>
+]]></content:encoded>
+    </item>
+    
     <item>
       <title>在Abstract Machine上玩超级马里奥</title>
       <link>https://fzdwx.github.io/posts/2022-10-09-mario-nes/</link>
