@@ -78,6 +78,51 @@ cli cdf </description>
     </item>
     
     <item>
+      <title>Raft Kv</title>
+      <link>https://fzdwx.github.io/posts/2022-10-10-raftkv/</link>
+      <pubDate>Mon, 10 Oct 2022 22:26:55 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/posts/2022-10-10-raftkv/</guid>
+      <description>Introduction 这是一系列实验中的第一个，我们将构建一个fault-tolerant key/value storage system。在本实验中我们将实现Raft(一 种复制的状态机协议)。在下一个实验中，我们将在Raft上构建一个key/value service。然后，您将在多个复制的状态机上进行shard来提高性能。
+复制的服务通过在多个复制服务器上存储其状态(即数据)的完整副本来实现fault tolerance。即使有一些服务器出现故障(崩溃或网络断开和抖动)replication也允许它们继续运行。挑战在于failures 可能导致副本存在不同的数据。
+Raft将客户端的请求组织成一个序列，被成为log，并且确保所有replica servers看到相同的log。每个副本按照日志的顺序来执行客户端的请求，将它们应用于其本地的服务状态副本。由于所有存活的副本读取的日志内容都是相同的，所以都以相同的顺序来执行请求，因此它们都有相同的服务状态。如果一个服务器失败了但是后来又恢复来，Raft会复制把它的日志更新。只要至少大多数的服务器还或者，并且能够继续通信，那么Raft将继续运行。如果没有到达这个数量，那么Raft将会停止运行，直到到达这个数量才会重新开始。
+在本lab中，你将把Raft实现为一个带有相关方法的GO的对象类型，目的是为了能在更大的模块中使用。一组Raft实例通过RPC来维护replicated logs。你的Raft实例将支持一连串不确定编号(数量?)的command，也可以叫log entries。这些entries 通过索引来进行编号。具有给定索引的log entry将被提交，此时，您的Raft应该将这个条log发送到更大的服务上执行。
+你应该遵循 extended Raft paper 中设计，特别是图2.你将实现论文宏的大部分内容，包括保存持久化状态和节点故障自动重启后读取状态。你将不会实现集群成员的变化(Section 6)。
+你可能会发现这个 指南 很有用，还有这个关于concurrency的 锁 和 结构 的建议，如果需要更广泛的视角，可以看看axos, Chubby, Paxos Made Live, Spanner, Zookeeper, Harp, Viewstamped Replication 和 Bolosky et al 。
+Links 项目地址: https://pdos.csail.mit.edu/6.824/labs/lab-raft.html GFS 相关资料: https://fzdwx.github.io/posts/2022-10-07-gfs/#links Raft paper: https://pdos.csail.mit.edu/6.824/papers/raft-extended.pdf 指南: https://thesquareplanet.com/blog/students-guide-to-raft/ 锁: https://pdos.csail.mit.edu/6.824/labs/raft-locking.txt 结构: https://pdos.csail.mit.edu/6.824/labs/raft-structure.txt </description>
+      <content:encoded><![CDATA[<h2 id="introduction">Introduction</h2>
+<p>这是一系列实验中的第一个，我们将构建一个<code>fault-tolerant key/value storage system</code>。在本实验中我们将实现<code>Raft</code>(一
+种复制的状态机协议)。在下一个实验中，我们将在<code>Raft</code>上构建一个<code>key/value service</code>。然后，您将在多个复制的状态机上进行<code>shard</code>来提高性能。</p>
+<p>复制的服务通过在多个复制服务器上存储其状态(即数据)的完整副本来实现<code>fault tolerance</code>。即使有一些服务器出现故障(崩溃或网络断开和抖动)<code>replication</code>也允许它们继续运行。挑战在于<strong>failures 可能导致副本存在不同的数据</strong>。</p>
+<p><code>Raft</code>将客户端的请求组织成一个序列，被成为<code>log</code>，并且确保所有<code>replica servers</code>看到相同的<code>log</code>。每个副本按照日志的顺序来执行客户端的请求，将它们应用于其本地的服务状态副本。由于<strong>所有存活的副本读取的日志内容都是相同的，所以都以相同的顺序来执行请求，因此它们都有相同的服务状态</strong>。如果一个服务器失败了但是后来又恢复来，<code>Raft</code>会复制把它的日志更新。只要至少大多数的服务器还或者，并且能够继续通信，那么<code>Raft</code>将继续运行。如果没有到达这个数量，那么<code>Raft</code>将会停止运行，直到到达这个数量才会重新开始。</p>
+<p>在本lab中，你将把<code>Raft</code>实现为一个带有相关方法的GO的对象类型，目的是为了能在更大的模块中使用。一组<code>Raft</code>实例通过<code>RPC</code>来维护<code>replicated logs</code>。你的<code>Raft</code>实例将支持一连串不确定编号(数量?)的<code>command</code>，也可以叫<code>log entries</code>。这些<code>entries</code>
+通过索引来进行编号。具有给定索引的<code>log entry</code>将被提交，此时，您的<code>Raft</code>应该将这个条<code>log</code>发送到更大的服务上执行。</p>
+<p>你应该遵循 <a href="https://pdos.csail.mit.edu/6.824/papers/raft-extended.pdf" target="_blank" rel="noopener">extended Raft paper</a>
+中设计，特别是图2.你将实现论文宏的大部分内容，包括<strong>保存持久化状态</strong>和节<strong>点故障自动重启后读取状态</strong>。你将不会实现集群成员的变化(Section 6)。</p>
+<p>你可能会发现这个 <a href="https://thesquareplanet.com/blog/students-guide-to-raft/" target="_blank" rel="noopener">指南</a>
+很有用，还有这个关于concurrency的 <a href="https://pdos.csail.mit.edu/6.824/labs/raft-locking.txt" target="_blank" rel="noopener">锁</a>
+和 <a href="https://pdos.csail.mit.edu/6.824/labs/raft-structure.txt" target="_blank" rel="noopener">结构</a>
+的建议，如果需要更广泛的视角，可以看看<code>axos, Chubby, Paxos Made Live, Spanner, Zookeeper, Harp, Viewstamped Replication</code> 和 <a href="https://static.usenix.org/event/nsdi11/tech/full_papers/Bolosky.pdf" target="_blank" rel="noopener">Bolosky et al</a>
+。</p>
+<h2 id="links">Links</h2>
+<ol>
+<li>项目地址: <a href="https://pdos.csail.mit.edu/6.824/labs/lab-raft.html" target="_blank" rel="noopener">https://pdos.csail.mit.edu/6.824/labs/lab-raft.html</a>
+</li>
+<li>GFS 相关资料: <a href="https://fzdwx.github.io/posts/2022-10-07-gfs/#links" target="_blank" rel="noopener">https://fzdwx.github.io/posts/2022-10-07-gfs/#links</a>
+</li>
+<li>Raft paper: <a href="https://pdos.csail.mit.edu/6.824/papers/raft-extended.pdf" target="_blank" rel="noopener">https://pdos.csail.mit.edu/6.824/papers/raft-extended.pdf</a>
+</li>
+<li>指南: <a href="https://thesquareplanet.com/blog/students-guide-to-raft/" target="_blank" rel="noopener">https://thesquareplanet.com/blog/students-guide-to-raft/</a>
+</li>
+<li>锁: <a href="https://pdos.csail.mit.edu/6.824/labs/raft-locking.txt" target="_blank" rel="noopener">https://pdos.csail.mit.edu/6.824/labs/raft-locking.txt</a>
+</li>
+<li>结构: <a href="https://pdos.csail.mit.edu/6.824/labs/raft-structure.txt" target="_blank" rel="noopener">https://pdos.csail.mit.edu/6.824/labs/raft-structure.txt</a>
+</li>
+</ol>
+]]></content:encoded>
+    </item>
+    
+    <item>
       <title>在Abstract Machine上玩超级马里奥</title>
       <link>https://fzdwx.github.io/posts/2022-10-09-mario-nes/</link>
       <pubDate>Sun, 09 Oct 2022 19:40:42 +0800</pubDate>
