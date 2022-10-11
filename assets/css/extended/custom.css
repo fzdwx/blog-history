@@ -1079,3 +1079,8 @@ strong {
 /*.dark .post-entry{*/
 /*    box-shadow: var(--white-shadow-1);*/
 /*}*/
+
+
+.dark .medium-zoom-overlay{
+    background: var(--theme) !important;
+}
