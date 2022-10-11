@@ -9,10 +9,10 @@
     <lastBuildDate>Mon, 10 Oct 2022 22:43:27 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Code:alias</title>
-      <link>https://fzdwx.github.io/posts/2022-10-10-codealias/</link>
+      <link>https://fzdwx.github.io/posts/2022-10-10-code-alias/</link>
       <pubDate>Mon, 10 Oct 2022 22:43:27 +0800</pubDate>
       
-      <guid>https://fzdwx.github.io/posts/2022-10-10-codealias/</guid>
+      <guid>https://fzdwx.github.io/posts/2022-10-10-code-alias/</guid>
       <description>目前有一个想法，是在命令行下管理脚本的工具。
 比如说我有一些常用的脚本:
 cd $(find . -name &amp;#34;*&amp;#34; -type d | fzf) 然后通过命令行添加
