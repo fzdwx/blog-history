@@ -351,6 +351,7 @@
     --vp-c-text-code: var(--vp-c-indigo-lighter);
 
     --bule-shadow-1: 0px 1px 0px var(--a2);
+    --white-shadow-1: 0px 0px 3px var(--a2);
 }
 
 .logo {
@@ -1073,4 +1074,8 @@ strong {
 
 .dark pre{
     box-shadow: var(--bule-shadow-1);
+}
+
+.dark .post-entry{
+    box-shadow: var(--white-shadow-1);
 }
