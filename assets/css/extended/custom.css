@@ -96,10 +96,22 @@
 }
 
 :root {
+    --a1: #a277ff;
+    --a2: #a394f0;
+    --b1: #15141b;
+    --b2: #edecee;
+    --blank: #110f18;
+    --blue: #61ffca;
+    --red: #ff6767;
+    --yellow: #ffca85;
+    --bBlack: #4d4d4d;
+    --bCyna: #73BC83;
+    --selection: #3d375e7f;
+    
     --link-color: var(--primary);
-    --link-hover-color: #73BC83;
+    --link-hover-color: var(--bCyna);
     --link-underline-shadow: 0 1px 0 var(--link-color);
-    --link-hover-underline-color: #a277ff;
+    --link-hover-underline-color: var(--a1);
     --link-hover-underline-shadow: 0 2px 0 var(--link-hover-underline-color);
     --vp-nav-height-desktop: 72px;
 
@@ -337,6 +349,8 @@
     --vp-c-text-inverse-3: var(--vp-c-text-light-3);
     --vp-c-text-inverse-4: var(--vp-c-text-light-4);
     --vp-c-text-code: var(--vp-c-indigo-lighter);
+
+    --bule-shadow-1: 0px 1px 0px var(--a2);
 }
 
 .logo {
@@ -624,7 +638,6 @@ strong {
 .google-search-1 input {
     writing-mode: horizontal-tb !important;
     text-rendering: auto;
-    color: fieldtext;
     letter-spacing: normal;
     word-spacing: normal;
     line-height: normal;
@@ -1047,4 +1060,17 @@ strong {
 
 .dark .chroma .mi {
     color: #61ffca;
+}
+
+.paginav a:hover {
+    color: var(--link-hover-color);
+    /*text-decoration: underline var(--link-hover-underline-color);*/
+}
+
+.post-content hr {
+    background: var(--link-hover-underline-color)
+}
+
+.dark pre{
+    box-shadow: var(--bule-shadow-1);
 }
