@@ -16,13 +16,13 @@ summary: 简介HTTP/1.1与H2。
 >
 > METHOD: HTTP请求，`GET`、`POST`、`PUT`、`DELETE`...
 >
-> URI: 统一资源标识符，比如`/`，`/index.html`...
+> URI: 统一资源标识符，例如`/`，`/index.html`...
 >
-> HTTPVersion: HTTP协议的版本号，比如`HTTP/1.1`，`HTTP/2`
+> HTTPVersion: HTTP协议的版本号，例如`HTTP/1.1`，`HTTP/2`
 >
-> HEADERS: 请求头，比如`Host:localhost`，`Accept: */*`。
+> HEADERS: 请求头，例如`Host:localhost`，`Accept: */*`。
 >
-> BODY: 请求体，比如说一个JSON数据`{"name":"fzdwx"}`
+> BODY: 请求体，例如说一个JSON数据`{"name":"fzdwx"}`
 >
 > HTTPStatus: HTTP响应状态，常见的有`200`，`404`等
 >
@@ -79,7 +79,7 @@ content-type: application/json; charset=utf-8
 2. 缓存策略，在请求头中使用`Cache-Control`，`Expires`，`Last-Modified`，`ETag`等来控制。
 3. 允许响应分块，就是上面提到的`transfer-encoding: chunked`，允许服务端可以多次返回响应体。
 
-但是还是存在一定的问题，比如说如果有一个TCP连接阻塞了，还是会开启新的TCP连接进行处理请求。
+但是还是存在一定的问题，例如说如果有一个TCP连接阻塞了，还是会开启新的TCP连接进行处理请求。
 
 ## H2
 
@@ -98,7 +98,7 @@ HTTP2中的主要概念:
 
 ### Frame
 
-通常有一些公共的字段，比如`Length`，`Type`，`Flags`以及`Stream Id`；也各个类型所独有的字段。
+通常有一些公共的字段，例如`Length`，`Type`，`Flags`以及`Stream Id`；也各个类型所独有的字段。
 
 分类如下:
 
@@ -106,7 +106,7 @@ HTTP2中的主要概念:
 - [HEADERS](https://halfrost.com/http2-http-frames-definitions/#toc-1): 用于传输首部字段。
 - [PRIORITY](https://halfrost.com/http2-http-frames-definitions/#toc-2): 用于指定或重新指定引用资源的优先级。
 - [RST_STREAM](https://halfrost.com/http2-http-frames-definitions/#toc-3): 用于通知流的非正常终止。
-- [SETTINGS](https://halfrost.com/http2-http-frames-definitions/#toc-4): 用于约定客户端和服务端的配置数据。比如设置初识的双向流量控制窗口大小。
+- [SETTINGS](https://halfrost.com/http2-http-frames-definitions/#toc-4): 用于约定客户端和服务端的配置数据。例如设置初识的双向流量控制窗口大小。
 - [PUSH_PROMISE](https://halfrost.com/http2-http-frames-definitions/#toc-9): 服务端推送许可。
 - [PING](https://halfrost.com/http2-http-frames-definitions/#toc-10): 用于计算往返时间，执行“ 活性” 检活。
 - [GOAWAY](https://halfrost.com/http2-http-frames-definitions/#toc-11): 用于通知对端停止在当前连接中创建流。
