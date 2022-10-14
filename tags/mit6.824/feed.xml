@@ -23,10 +23,10 @@ Raft将客户端的请求组织成一个序列，被成为log，并且确保所�
 我们还提供了 Raft 交互图 ， 可以帮助阐明Raft代码如何与上层(使用者?)交互。</description>
       <content:encoded><![CDATA[<h2 id="lab2文档翻译">Lab2文档翻译</h2>
 <h3 id="introduction">Introduction</h3>
-<p>这是一系列实验中的第一个，我们将构建一个<strong>fault-tolerant key/value storage system</strong>。
-在本实验中我们将实现<code>Raft(一种复制的状态机协议)</code>。在下一个实验中，我们将在Raft上构建一个key/value service。
+<p>这是一系列实验中的第一个，我们将构建一个<em>fault-tolerant key/value storage system</em>。
+在本实验中我们将实现<em>Raft(一种复制的状态机协议)</em>。在下一个实验中，我们将在Raft上构建一个key/value service。
 然后，您将在多个复制的状态机上进行shard来提高性能。</p>
-<p>复制的服务通过在多个复制服务器上存储其状态(即数据)的完整副本来实现<strong>fault tolerance</strong>。
+<p>复制的服务通过在多个复制服务器上存储其状态(即数据)的完整副本来实现<em>fault tolerance</em>。
 即使有一些服务器出现故障(崩溃或网络断开和抖动)replication也允许它们继续运行。
 挑战在于<strong>failures可能导致副本存在不同的数据</strong>。</p>
 <p>Raft将客户端的请求组织成一个序列，被成为log，并且确保所有replica servers看到相同的log。
@@ -99,10 +99,11 @@ Raft将客户端的请求组织成一个序列，被成为log，并且确保所�
 必须快速返回，所以它应该为一些长时间运行的任务启动<code>goruntines</code>。</li>
 </ol>
 <h4 id="startcommand-interface-int-int-bool">Start(command interface{}) (int, int, bool)</h4>
-<p>使用 rafr 的服务(e.g a k/v server)希望就下一个要追加到 raft 日志的命令达成一致(就是追加到 raft
-日志的下一条命令是相同的？)。如果当前 raft server 不是 leader，则返回 false。否则启动协议并<strong>立即返回</strong>
-，无需等待日志追加完成。<strong>所以无法保证次命令将一定会被提交到 raft 日志中，因为 leader 可能会失败或者在选举中失败</strong>。即使
-raft 实例被 kill，这个函数也应该return gracefully。</p>
+<p>使用Raft的服务(e.g a k/v server)希望就下一个要追加到raft日志的命令达成一致(就是追加到 raft
+日志的下一条命令是相同的？)。如果当前raft server不是leader则返回false。
+否则启动协议并<strong>立即返回</strong>，无需等待日志追加完成。
+<strong>所以无法保证次命令将一定会被提交到raft日志中，因为leader可能会失败或者在选举中失败</strong>。
+即使raft实例被kill这个函数也应该return gracefully。</p>
 <p>第一个返回值是该命令出现的索引，如果它曾经被提交的话。第二个返回值是当前的术语(???)。如果这个服务器认为它是领导者，第三个返回值是真。</p>
 <p>每个新提交的<code>raft log entity</code>都应该发送一个<code>AppliMsg</code>到<code>Make()</code>的<code>applyCh</code>中。</p>
 <h3 id="2a">2A</h3>
@@ -161,8 +162,8 @@ Replication), but it has several novel features:</p>
 <ul>
 <li>强领导者: Raft使用一种比其他共识算法更强的领导形式。例如，日志只从leader发送给其他服务器。这简化了对复制日志的管理，使的Raft更容易理解。</li>
 <li>领导选举: Raft使用随机定时器来选取leader。这种方式仅仅是在所有共识算法都需要改进的心跳机制上有些许改进，然而这使得Raft在解决冲突时更简单和快速。</li>
-<li>成员调整: 集群中更改server时，Raft使用了新的联合共识(join consensus)算法，两种不同的配置的majorities在变更期间重叠(
-overlap)， 允许集群在配置变更的时候，持续正常运行。</li>
+<li>成员调整: 集群中更改server时，Raft使用了新的联合共识(join consensus)算法，
+两种不同的配置的majorities在变更期间重叠(overlap)， 允许集群在配置变更的时候，持续正常运行。</li>
 </ul>
 <blockquote>
 <ul>
@@ -197,8 +198,8 @@ the context of replicated state machines.In this approach, state machines on a c
 copies of the same state and can continue operating even if some of the servers are down.</p>
 </blockquote>
 <p>复制状态机通过<strong>复制日志实现</strong>，如图一所示。每个服务保存包含一系列命令的日志，其状态机按照顺序来执行它们。
-每个<strong>日志包含相同顺序的相同命令</strong>，所以每个状态机处理相同的命令序列。因为<strong>状态机是确定的</strong>，所以每个状态机**
-会计算出相同的状态<strong>和</strong>相同顺序的输出**。</p>
+每个<strong>日志包含相同顺序的相同命令</strong>，所以每个状态机处理相同的命令序列。因为<strong>状态机是确定的</strong>，
+所以每个状态机<strong>会计算出相同的状态</strong>和<strong>相同顺序的输出</strong>。</p>
 <blockquote>
 <p>Replicated state machines are typically implemented using a replicated log, as shown in Figure 1. Each server stores a
 log containing a series of commands, which its state machine executes in order. Each log contains the same commands in
@@ -206,13 +207,75 @@ the same order, so each state machine processes the same sequence of commands. S
 deterministic, each computes the same state and the same sequence of outputs.</p>
 </blockquote>
 <p>共识算法的任务是<strong>保证复制日志的一致性</strong>。服务器上的共识模块接收来自客户端的命令并把它们添加到日志中，
-并与其他服务器上的共识模块进行通讯以确保它们的每一条日志最终都相同(相同的请求有相同的顺序)， 即使有一些服务失败了。一旦服务被正确的复制</p>
+并与其他服务器上的共识模块进行通讯以确保它们的每一条日志最终都相同(相同的请求有相同的顺序)， 即使有一些服务失败了。一旦命令被正确的复制，
+每一个服务的状态机会按照日志的顺序去处理它们，然后将结果返回给客户端。</p>
+<p>因此，这些服务似乎成为了一个单一的，高度可靠的状态机。</p>
 <blockquote>
 <p>Keeping the replicated log consistent is the job of the consensus algorithm. The consensus module on a server receives
 commands from clients and adds them to its log. It communicates with the consensus modules on other servers to ensure
 that every log eventually contains the same requests in the same order, even if some servers fail. Once commands are
 properly replicated, each server’s state machine processes them in log order, and the outputs are returned to clients.
 As a result, the servers appear to form a single, highly reliable state machine.</p>
+</blockquote>
+<p>在实际的共识算法通常有以下属性:</p>
+<ul>
+<li>确保非拜占庭(non-Byzantine)条件下的<em>安全性</em>(永远不返回错误的结果)，包括网络延迟，分区以及网络数据包丢失、冗余、乱序。</li>
+<li>只要大多数的服务都在运行并能相互通信且和客户端通信，它们就能发挥出全部的功能(<em>可用性</em>)。因此，一个5台服务的集群能容忍2台服务出现故障。
+假定服务应为停机而出现故障，它们可能稍后会从stable storage`中恢复状态并从新加入集群。</li>
+<li>不依赖与timing来保证日志的一致性: 错误的时钟和极端的信息延迟延迟在最坏的情况下会导致可用性问题。</li>
+<li>在一般情况下，一个命令的完成在于集群中的大多数对单轮远程调用作出响应，少数低水平的服务不会影响系统的整体性能。</li>
+</ul>
+<blockquote>
+<p>Consensus algorithms for practical systems typically have the following properties:</p>
+<ul>
+<li>They ensure <em>safety</em> (never returning an incorrect result) under all non-Byzantine conditions,
+including network delays, partitions, and packet loss, duplication, and reordering.</li>
+<li>They are fully functional (<em>available</em>) as long as any
+majority of the servers are operational and can communicate with each other and with clients. Thus, a
+typical cluster of five servers can tolerate the failure of any two servers. Servers are assumed to fail by
+stopping; they may later recover from state on stable storage and rejoin the cluster.</li>
+<li>They do not depend on timing to ensure the consistency of the logs: faulty clocks and extreme message
+delays can, at worst, cause availability problems.</li>
+<li>In the common case, a command can complete as soon as a majority of the cluster has responded to a single round of
+remote procedure calls; a minority of low servers need not impact overall system performance.</li>
+</ul>
+</blockquote>
+<h3 id="the-raft-consensus-algorithm">The Raft consensus algorithm</h3>
+<p>Raft就是用于管理上一解描述的复制日志的算法。图2是对该算法的精简型式的总结，图3列出来该算法的关键属性，接下来对这些部分进行逐一讨论。</p>
+<blockquote>
+<p>Raft is an algorithm for managing a replicated log of he form described in Section 2. Figure 2 summarizes the
+algorithm in condensed form for reference, and Figure 3 lists key properties of the algorithm; the elements of these
+figures are discussed piecewise over the rest of this section.</p>
+</blockquote>
+<p>// todo</p>
+<blockquote>
+<p>Raft implements consensus by first electing a distinguished leader, then giving the leader complete responsibility for
+managing the replicated log. The leader accepts log entries from clients, replicates them on other servers, and tells
+servers when it is safe to apply log entries to their state machines. Having a leader simplifies the management of the
+replicated log. For example, the leader can decide where to place new entries in the log without consulting other
+servers, and data flows in a simple fashion from the leader to other servers. A leader can fail or become disconnected
+from the other servers, in which casea new leader is elected.</p>
+</blockquote>
+<p><figure class="align-center">
+    <img src="/images/raftp2.png" alt="Figure 2: Raft共识算法的精简摘要(不包括成员更改以及日志压缩)。左上角的服务器行为被描述为一组独立且重复触发的规则。"  />
+    
+    <figcaption>
+       Figure 2: Raft共识算法的精简摘要(不包括成员更改以及日志压缩)。左上角的服务器行为被描述为一组独立且重复触发的规则。
+    </figcaption>
+    
+</figure></p>
+<p><figure class="align-center">
+    <img src="/images/f3.png" alt="Figure 3: Raft保证这些属性在在任何时候都上正确的。"  />
+    
+    <figcaption>
+       Figure 3: Raft保证这些属性在在任何时候都上正确的。
+    </figcaption>
+    
+</figure></p>
+<blockquote>
+<p>Raft is an algorithm for managing a replicated log of the form described in Section 2. Figure 2 summarizes the
+algorithm in condensed form for reference, and Figure 3 lists key properties of the algorithm; the elements of these
+figures are discussed piecewise over the rest of this section</p>
 </blockquote>
 <h2 id="links">Links</h2>
 <ol>
