@@ -13,52 +13,55 @@
       <pubDate>Mon, 10 Oct 2022 22:26:55 +0800</pubDate>
       
       <guid>https://fzdwx.github.io/posts/2022-10-10-raftkv/</guid>
-      <description>Lab2文档翻译 Introduction 这是一系列实验中的第一个，我们将构建一个fault-tolerant key/value storage system。在本实验中我们将实现Raft( 一种复制的状态机协议)。在下一个实验中，我们将在Raft上构建一个key/value service 。然后，您将在多个复制的状态机上进行shard来提高性能。
-复制的服务通过在多个复制服务器上存储其状态(即数据)的完整副本来实现fault tolerance。即使有一些服务器出现故障( 崩溃或网络断开和抖动)replication也允许它们继续运行。挑战在于failures 可能导致副本存在不同的数据。
-Raft将客户端的请求组织成一个序列，被成为log，并且确保所有replica servers看到相同的log 。每个副本按照日志的顺序来执行客户端的请求，将它们应用于其本地的服务状态副本。 由于所有存活的副本读取的日志内容都是相同的，所以都以相同的顺序来执行请求，因此它们都有相同的服务状态 。如果一个服务器失败了但是后来又恢复来，Raft会复制把它的日志更新。只要至少大多数的服务器还或者，并且能够继续通信， 那么Raft将继续运行。如果没有到达这个数量，那么Raft将会停止运行，直到到达这个数量才会重新开始。
-在本 lab 中，你将把Raft实现为一个带有相关方法的 GO 的对象类型，目的是为了能在更大的模块中使用。一组Raft实例通过RPC 来维护replicated logs。你的Raft实例将支持一连串不确定编号(数量?)的command，也可以叫log entries。这些entries 通过索引来进行编号。具有给定索引的log entry将被提交，此时，您的Raft应该将这个条log发送到更大的服务上执行。
-你应该遵循 extended Raft paper 中设计，特别是图 2.你将实现论文宏的大 部分内容，包括保存持久化状态和节点故障自动重启后读取状态。你将不会实现集群成员的变化(Section 6)。
-你可能会发现这个 指南 很有用，还有这个关于concurrency 的 锁 和 结构 的建议，如果需要更广泛的视角，可以看看Paxos, Chubby, Paxos Made Live, Spanner, Zookeeper, Harp, Viewstamped Replication 和 Bolosky et al 。
-请记住，本 lab 中最具挑战性的部分可能不是实现你的解决方案，而是调试它。为了帮助应对这一挑战，你可能需要把事件花在如何使你的实现更容易调试。你可以参考 指导页 和这篇关于有效打印声明的 博文 。
-我们还提供了 Raft 交互图 ，可以帮助阐明 Raft 代码如何与上层( 使用者?</description>
+      <description>Lab2文档翻译 Introduction 这是一系列实验中的第一个，我们将构建一个fault-tolerant key/value storage system。 在本实验中我们将实现Raft(一种复制的状态机协议)。在下一个实验中，我们将在Raft上构建一个key/value service。 然后，您将在多个复制的状态机上进行shard来提高性能。
+复制的服务通过在多个复制服务器上存储其状态(即数据)的完整副本来实现fault tolerance。 即使有一些服务器出现故障(崩溃或网络断开和抖动)replication也允许它们继续运行。 挑战在于failures可能导致副本存在不同的数据。
+Raft将客户端的请求组织成一个序列，被成为log，并且确保所有replica servers看到相同的log。 每个副本按照日志的顺序来执行客户端的请求，将它们应用于其本地的服务状态副本。 由于所有存活的副本读取的日志内容都是相同的，所以都以相同的顺序来执行请求，因此它们都有相同的服务状态。 如果一个服务器失败了但是后来又恢复来，Raft会复制把它的日志更新。只要至少大多数的服务器还或者，并且能够继续通信， 那么Raft将继续运行。如果没有到达这个数量，那么Raft将会停止运行，直到到达这个数量才会重新开始。
+在本lab中，你将把Raft实现为一个带有相关方法的GO的对象类型，目的是为了能在更大的模块中使用。 一组Raft实例通过RPC来维护replicated logs。你的Raft实例将支持一连串不确定编号(数量?)的command， 也可以叫log entries。 这些entries通过索引来进行编号。具有给定索引的log entry将被提交，此时， 您的Raft应该将这个条log发送到更大的服务上执行。
+你应该遵循 extended Raft paper 中设计， 特别是图 2.你将实现论文宏的大 部分内容，包括保存持久化状态和节点故障自动重启后读取状态。 你将不会实现集群成员的变化(Section 6)。
+你可能会发现这个 指南 很有用， 还有这个关于concurrency的锁 和结构 的建议， 如果需要更广泛的视角，可以看看Paxos, Chubby, Paxos Made Live, Spanner, Zookeeper, Harp, Viewstamped Replication和 Bolosky et al 。
+请记住，本 lab 中最具挑战性的部分可能不是实现你的解决方案，而是调试它。为了帮助应对这一挑战，你可能需要把事件花在如何使你的实现更容易调试。 你可以参考 指导页 和这篇关于有效打印声明的 博文 。
+我们还提供了 Raft 交互图 ， 可以帮助阐明Raft代码如何与上层(使用者?)交互。</description>
       <content:encoded><![CDATA[<h2 id="lab2文档翻译">Lab2文档翻译</h2>
 <h3 id="introduction">Introduction</h3>
-<p>这是一系列实验中的第一个，我们将构建一个<code>fault-tolerant key/value storage system</code>。在本实验中我们将实现<code>Raft</code>(
-一种复制的状态机协议)。在下一个实验中，我们将在<code>Raft</code>上构建一个<code>key/value service</code>
-。然后，您将在多个复制的状态机上进行<code>shard</code>来提高性能。</p>
-<p>复制的服务通过在多个复制服务器上存储其状态(即数据)的完整副本来实现<code>fault tolerance</code>。即使有一些服务器出现故障(
-崩溃或网络断开和抖动)<code>replication</code>也允许它们继续运行。挑战在于<strong>failures 可能导致副本存在不同的数据</strong>。</p>
-<p><code>Raft</code>将客户端的请求组织成一个序列，被成为<code>log</code>，并且确保所有<code>replica servers</code>看到相同的<code>log</code>
-。每个副本按照日志的顺序来执行客户端的请求，将它们应用于其本地的服务状态副本。
-由于<strong>所有存活的副本读取的日志内容都是相同的，所以都以相同的顺序来执行请求，因此它们都有相同的服务状态</strong>
-。如果一个服务器失败了但是后来又恢复来，<code>Raft</code>会复制把它的日志更新。只要至少大多数的服务器还或者，并且能够继续通信，
-那么<code>Raft</code>将继续运行。如果没有到达这个数量，那么<code>Raft</code>将会停止运行，直到到达这个数量才会重新开始。</p>
-<p>在本 lab 中，你将把<code>Raft</code>实现为一个带有相关方法的 GO 的对象类型，目的是为了能在更大的模块中使用。一组<code>Raft</code>实例通过<code>RPC</code>
-来维护<code>replicated logs</code>。你的<code>Raft</code>实例将支持一连串不确定编号(数量?)的<code>command</code>，也可以叫<code>log entries</code>。这些<code>entries</code>
-通过索引来进行编号。具有给定索引的<code>log entry</code>将被提交，此时，您的<code>Raft</code>应该将这个条<code>log</code>发送到更大的服务上执行。</p>
+<p>这是一系列实验中的第一个，我们将构建一个<strong>fault-tolerant key/value storage system</strong>。
+在本实验中我们将实现<code>Raft(一种复制的状态机协议)</code>。在下一个实验中，我们将在Raft上构建一个key/value service。
+然后，您将在多个复制的状态机上进行shard来提高性能。</p>
+<p>复制的服务通过在多个复制服务器上存储其状态(即数据)的完整副本来实现<strong>fault tolerance</strong>。
+即使有一些服务器出现故障(崩溃或网络断开和抖动)replication也允许它们继续运行。
+挑战在于<strong>failures可能导致副本存在不同的数据</strong>。</p>
+<p>Raft将客户端的请求组织成一个序列，被成为log，并且确保所有replica servers看到相同的log。
+每个副本按照日志的顺序来执行客户端的请求，将它们应用于其本地的服务状态副本。
+由于<strong>所有存活的副本读取的日志内容都是相同的，所以都以相同的顺序来执行请求，因此它们都有相同的服务状态</strong>。
+如果一个服务器失败了但是后来又恢复来，Raft会复制把它的日志更新。只要至少大多数的服务器还或者，并且能够继续通信，
+那么Raft将继续运行。如果没有到达这个数量，那么Raft将会停止运行，直到到达这个数量才会重新开始。</p>
+<p>在本lab中，你将把Raft实现为一个带有相关方法的GO的对象类型，目的是为了能在更大的模块中使用。
+一组Raft实例通过RPC来维护replicated logs。你的Raft实例将支持一连串不确定编号(数量?)的command，
+也可以叫log entries。 这些entries通过索引来进行编号。具有给定索引的log entry将被提交，此时，
+您的Raft应该将这个条log发送到更大的服务上执行。</p>
 <p>你应该遵循 <a href="https://pdos.csail.mit.edu/6.824/papers/raft-extended.pdf" target="_blank" rel="noopener">extended Raft paper</a>
-中设计，特别是图 2.你将实现论文宏的大
-部分内容，包括<strong>保存持久化状态</strong>和节<strong>点故障自动重启后读取状态</strong>。你将不会实现集群成员的变化(Section 6)。</p>
+中设计，
+特别是图 2.你将实现论文宏的大 部分内容，包括<strong>保存持久化状态</strong>和节<strong>点故障自动重启后读取状态</strong>。
+你将不会实现集群成员的变化(Section 6)。</p>
 <p>你可能会发现这个 <a href="https://thesquareplanet.com/blog/students-guide-to-raft/" target="_blank" rel="noopener">指南</a>
-很有用，还有这个关于concurrency
-的 <a href="https://pdos.csail.mit.edu/6.824/labs/raft-locking.txt" target="_blank" rel="noopener">锁</a>
+很有用，
+还有这个关于concurrency的<a href="https://pdos.csail.mit.edu/6.824/labs/raft-locking.txt" target="_blank" rel="noopener">锁</a>
 
-和 <a href="https://pdos.csail.mit.edu/6.824/labs/raft-structure.txt" target="_blank" rel="noopener">结构</a>
-
-的建议，如果需要更广泛的视角，可以看看<code>Paxos, Chubby, Paxos Made Live, Spanner, Zookeeper, Harp, Viewstamped Replication</code>
-和 <a href="https://static.usenix.org/event/nsdi11/tech/full_papers/Bolosky.pdf" target="_blank" rel="noopener">Bolosky et al</a>
+和<a href="https://pdos.csail.mit.edu/6.824/labs/raft-structure.txt" target="_blank" rel="noopener">结构</a>
+的建议，
+如果需要更广泛的视角，可以看看Paxos, Chubby, Paxos Made Live, Spanner, Zookeeper, Harp, Viewstamped Replication和
+<a href="https://static.usenix.org/event/nsdi11/tech/full_papers/Bolosky.pdf" target="_blank" rel="noopener">Bolosky et al</a>
 。</p>
-<p>请记住，本 lab
-中最具挑战性的部分可能不是实现你的解决方案，而是调试它。为了帮助应对这一挑战，你可能需要把事件花在如何使你的实现更容易调试。你可以参考 <a href="https://pdos.csail.mit.edu/6.824/labs/guidance.html" target="_blank" rel="noopener">指导页</a>
-
-和这篇关于有效打印声明的 <a href="https://blog.josejg.com/debugging-pretty/" target="_blank" rel="noopener">博文</a>
+<p>请记住，本 lab 中最具挑战性的部分可能不是实现你的解决方案，而是调试它。为了帮助应对这一挑战，你可能需要把事件花在如何使你的实现更容易调试。
+你可以参考 <a href="https://pdos.csail.mit.edu/6.824/labs/guidance.html" target="_blank" rel="noopener">指导页</a>
+和这篇关于有效打印声明的
+<a href="https://blog.josejg.com/debugging-pretty/" target="_blank" rel="noopener">博文</a>
 。</p>
 <p>我们还提供了 <a href="https://pdos.csail.mit.edu/6.824/notes/raft_diagram.pdf" target="_blank" rel="noopener">Raft 交互图</a>
-，可以帮助阐明 <code>Raft</code> 代码如何与上层(
-使用者?)交互。</p>
+，
+可以帮助阐明Raft代码如何与上层(使用者?)交互。</p>
 <h3 id="the-code">The code</h3>
-<p>通过向<code>raft/raft.go</code>添加代码来实现<code>Raft</code>。在该文件中，你会发现骨架代码，以及如何发送和接收 RPC
-的例子。你的实现必须支持以下接口，测试者和（最终）你的键/值服务器将使用该接口。你可以在<code>raft.go</code>的注释中找到更多细节。</p>
+<p>通过向<code>raft/raft.go</code>添加代码来实现Raft。在该文件中，你会发现骨架代码，以及如何发送和接收 RPC 的例子。
+你的实现必须支持以下接口，测试者和（最终）你的键/值服务器将使用该接口。你可以在<code>raft.go</code>的注释中找到更多细节。</p>
 
 
 
@@ -99,13 +102,13 @@ Raft将客户端的请求组织成一个序列，被成为log，并且确保所�
 <p>使用 rafr 的服务(e.g a k/v server)希望就下一个要追加到 raft 日志的命令达成一致(就是追加到 raft
 日志的下一条命令是相同的？)。如果当前 raft server 不是 leader，则返回 false。否则启动协议并<strong>立即返回</strong>
 ，无需等待日志追加完成。<strong>所以无法保证次命令将一定会被提交到 raft 日志中，因为 leader 可能会失败或者在选举中失败</strong>。即使
-raft 实例被 kill，这个函数也应该<code>retrun gracefully</code>。</p>
+raft 实例被 kill，这个函数也应该return gracefully。</p>
 <p>第一个返回值是该命令出现的索引，如果它曾经被提交的话。第二个返回值是当前的术语(???)。如果这个服务器认为它是领导者，第三个返回值是真。</p>
 <p>每个新提交的<code>raft log entity</code>都应该发送一个<code>AppliMsg</code>到<code>Make()</code>的<code>applyCh</code>中。</p>
 <h3 id="2a">2A</h3>
-<p>实现 Raft leader election 以及 heartbeats(<code>AppendEntries</code> RPCs 没有<code>log entries</code>.空的的意思?)。</p>
-<p>2A 的目标是: 选出一个 leader，如果没有失败，它仍然是 leader，如果 old leader 失败或者与 old leader 之间的数据包发生丢失则由
-new leader 接管。</p>
+<p>实现Raft leader election以及heartbeats(<code>AppendEntries</code>RPCs没有log entries。空的的意思?)。</p>
+<p>2A的目标是: 选出一个leader，如果没有失败，它仍然是leader，如果old leader失败或者与old leader之间的数据包发生丢失则由new
+leader接管。</p>
 
 
 
@@ -118,7 +121,7 @@ new leader 接管。</p>
             TIP
         
     </p>
-    <p> 这个失败是 leader 出现故障的意思？就是说只要它没出现运行故障或者网络问题就永远是 leader？ </p>
+    <p> 这个失败是 leader 出现故障的意思？就是说只要它没出现运行故障或者网络问题就永远是leader？ </p>
 </div>
 
 <p>要点:</p>
@@ -130,13 +133,12 @@ new leader 接管。</p>
 <li>实现<code>RequestVote()</code>，这样 raft 服务们就能互相投票了。添加<code>RequestVOteArgs</code>和<code>RequestVoteReply</code>者两个结构体。修改<code>Make()</code>
 ，创建一个 goroutine，用于检查心跳消息，如果有一段时间没有收到 peer 的消息时将发送<code>RequestVote</code>RPCs 来定期发起领导者选举。这样，如果有
 leader 了，peer 将知道谁是 leader，或者自己成为 leader。</li>
-<li>实现心跳，需要定义一个<code>AppendEntries</code>RPC 结构(尽管你可能还不需要所有参数)，并且让 leader
-定期发送它。编写一个<code>AppendEntries</code>RPC 的 handle method，用于重置选举超时，这样当有一个人已经当选时，其他服务器不会又成为
-leader。</li>
-<li>确保不同 peer 的选举超时不在同一时间发生，否则所有 peer 将只为自己投票，这样就没有人会成为 leader 了。</li>
-<li>在测试时，leader 每秒发送的 RPC 请求不能超过 10 次。</li>
-<li>在测试时，要求raft在old leader失败后5秒内选举new leader(如果大多数节点仍然能继续通讯)。但是请记住，如果出现split vote(
-如果数据包丢失或者候选人选择了相同的随机退避时间就有可能发生)，leader选举可能需要多轮。所以必须设置足够短的选举超时(
+<li>实现心跳，需要定义一个<code>AppendEntries</code>RPC 结构(尽管你可能还不需要所有参数)，
+并且让leader定期发送它。编写一个<code>AppendEntries</code>RPC 的 handle method，用于重置选举超时，
+这样当有一个人已经当选时，其他服务器不会又成为leader。</li>
+<li>确保不同peer的选举超时不在同一时间发生，否则所有peer将只为自己投票，这样就没有人会成为leader了。</li>
+<li>在测试时，leader每秒发送的RPC请求不能超过 10 次。</li>
+<li>在测试时，要求raft在old leader失败后5秒内选举new leader(如果大多数节点仍然能继续通讯)。但是请记住，如果出现<code>split vote( 如果数据包丢失或者候选人选择了相同的随机退避时间就有可能发生)</code>，leader选举可能需要多轮。所以必须设置足够短的选举超时(
 也就是心跳间隔)，即使会选举多轮，也有可能在5秒内完成。</li>
 <li>论文的第5.2节提到的选举超时范围是150到300毫秒。只有当leader发送心跳的频率大大高于150毫秒一次时，上面论文提到的范围才有意义。
 由于在测试时限制每秒10次心跳，所以必须使用比论文中更大的选举超时时间，但是不能太大，因为可能会无法在5秒内完成选举。</li>
@@ -194,16 +196,17 @@ crashes. Examples of replicated state machines include Chubby and ZooKeeper. Con
 the context of replicated state machines.In this approach, state machines on a collection of servers compute identical
 copies of the same state and can continue operating even if some of the servers are down.</p>
 </blockquote>
-<p>复制状态机通过<strong>复制日志实现</strong>，如图一所示。每个服务保存包含一系列命令的日志，其状态机按照顺序来执行它们。每个**
-日志包含相同顺序的相同命令**，所以每个状
-态机处理相同的命令序列。因为<strong>状态机是确定的</strong>，所以每个状态机<strong>会计算出相同的状态</strong>和<strong>相同顺序的输出</strong>。</p>
+<p>复制状态机通过<strong>复制日志实现</strong>，如图一所示。每个服务保存包含一系列命令的日志，其状态机按照顺序来执行它们。
+每个<strong>日志包含相同顺序的相同命令</strong>，所以每个状态机处理相同的命令序列。因为<strong>状态机是确定的</strong>，所以每个状态机**
+会计算出相同的状态<strong>和</strong>相同顺序的输出**。</p>
 <blockquote>
 <p>Replicated state machines are typically implemented using a replicated log, as shown in Figure 1. Each server stores a
 log containing a series of commands, which its state machine executes in order. Each log contains the same commands in
 the same order, so each state machine processes the same sequence of commands. Since the state machines are
 deterministic, each computes the same state and the same sequence of outputs.</p>
 </blockquote>
-<p>共识算法的任务是保持复制日志的一致性。服务器上的共识模块接收来自客户端的命令并把它们添加到日志中，并</p>
+<p>共识算法的任务是<strong>保证复制日志的一致性</strong>。服务器上的共识模块接收来自客户端的命令并把它们添加到日志中，
+并与其他服务器上的共识模块进行通讯以确保它们的每一条日志最终都相同(相同的请求有相同的顺序)， 即使有一些服务失败了。一旦服务被正确的复制</p>
 <blockquote>
 <p>Keeping the replicated log consistent is the job of the consensus algorithm. The consensus module on a server receives
 commands from clients and adds them to its log. It communicates with the consensus modules on other servers to ensure
