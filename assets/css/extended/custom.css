@@ -25,6 +25,8 @@
     --bBlack: #4d4d4d;
     --bCyna: #73BC83;
     --selection: #3d375e7f;
+    --main-width:880px;
+    --post-width:880px;
     
     --link-color: var(--primary);
     --link-hover-color: var(--bCyna);
