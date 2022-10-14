@@ -22,10 +22,10 @@
 <blockquote>
 <p>CRLF: <code>\r\n</code></p>
 <p>METHOD: HTTP请求，<code>GET</code>、<code>POST</code>、<code>PUT</code>、<code>DELETE</code>&hellip;</p>
-<p>URI: 统一资源标识符，比如<code>/</code>，<code>/index.html</code>&hellip;</p>
-<p>HTTPVersion: HTTP协议的版本号，比如<code>HTTP/1.1</code>，<code>HTTP/2</code></p>
-<p>HEADERS: 请求头，比如<code>Host:localhost</code>，<code>Accept: */*</code>。</p>
-<p>BODY: 请求体，比如说一个JSON数据<code>{&quot;name&quot;:&quot;fzdwx&quot;}</code></p>
+<p>URI: 统一资源标识符，例如<code>/</code>，<code>/index.html</code>&hellip;</p>
+<p>HTTPVersion: HTTP协议的版本号，例如<code>HTTP/1.1</code>，<code>HTTP/2</code></p>
+<p>HEADERS: 请求头，例如<code>Host:localhost</code>，<code>Accept: */*</code>。</p>
+<p>BODY: 请求体，例如说一个JSON数据<code>{&quot;name&quot;:&quot;fzdwx&quot;}</code></p>
 <p>HTTPStatus: HTTP响应状态，常见的有<code>200</code>，<code>404</code>等</p>
 <p>HTTPStatusDesc: HTTP响应状态描述，<code>200</code>对应的<code>OK</code>。</p>
 </blockquote>
@@ -65,7 +65,7 @@
 <li>缓存策略，在请求头中使用<code>Cache-Control</code>，<code>Expires</code>，<code>Last-Modified</code>，<code>ETag</code>等来控制。</li>
 <li>允许响应分块，就是上面提到的<code>transfer-encoding: chunked</code>，允许服务端可以多次返回响应体。</li>
 </ol>
-<p>但是还是存在一定的问题，比如说如果有一个TCP连接阻塞了，还是会开启新的TCP连接进行处理请求。</p>
+<p>但是还是存在一定的问题，例如说如果有一个TCP连接阻塞了，还是会开启新的TCP连接进行处理请求。</p>
 <h2 id="h2">H2</h2>
 <p>HTTP2中的主要概念:</p>
 <ol>
@@ -86,7 +86,7 @@
     
 </figure></p>
 <h3 id="frame">Frame</h3>
-<p>通常有一些公共的字段，比如<code>Length</code>，<code>Type</code>，<code>Flags</code>以及<code>Stream Id</code>；也各个类型所独有的字段。</p>
+<p>通常有一些公共的字段，例如<code>Length</code>，<code>Type</code>，<code>Flags</code>以及<code>Stream Id</code>；也各个类型所独有的字段。</p>
 <p>分类如下:</p>
 <ul>
 <li><a href="https://halfrost.com/http2-http-frames-definitions/#toc-0" target="_blank" rel="noopener">DATA</a>
@@ -98,7 +98,7 @@
 <li><a href="https://halfrost.com/http2-http-frames-definitions/#toc-3" target="_blank" rel="noopener">RST_STREAM</a>
 : 用于通知流的非正常终止。</li>
 <li><a href="https://halfrost.com/http2-http-frames-definitions/#toc-4" target="_blank" rel="noopener">SETTINGS</a>
-: 用于约定客户端和服务端的配置数据。比如设置初识的双向流量控制窗口大小。</li>
+: 用于约定客户端和服务端的配置数据。例如设置初识的双向流量控制窗口大小。</li>
 <li><a href="https://halfrost.com/http2-http-frames-definitions/#toc-9" target="_blank" rel="noopener">PUSH_PROMISE</a>
 : 服务端推送许可。</li>
 <li><a href="https://halfrost.com/http2-http-frames-definitions/#toc-10" target="_blank" rel="noopener">PING</a>
