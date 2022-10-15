@@ -1,0 +1,20 @@
+name: add event
+
+on:
+  issues:
+    types:
+      - created
+  
+jobs:
+  add:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v3
+      - name: add event to my blog
+         # You may pin to the exact commit or the version.
+         # uses: fzdwx/add-event-to-myblog@a16da29383b6ee0a37df134d2b4fc267223e3371
+        uses: fzdwx/add-event-to-myblog@v1.1
+        with:
+          # the repo PAT or GITHUB_TOKEN
+          token: ${{ secrets.TOKEN }}
