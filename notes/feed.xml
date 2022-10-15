@@ -13,7 +13,7 @@
       <pubDate>Sat, 01 Oct 2022 06:33:55 +0000</pubDate>
       
       <guid>https://fzdwx.github.io/notes/1/</guid>
-      <description> ranger 配置推荐 https://zhuanlan.zhihu.com/p/105731111 https://zhuanlan.zhihu.com/p/441083543 </description>
+      <description> ranger 配置推荐 https://zhuanlan.zhihu.com/p/105731111 https://zhuanlan.zhihu.com/p/441083543 fzf https://github.com/junegunn/fzf </description>
       <content:encoded><![CDATA[<ol>
 <li>ranger 配置推荐</li>
 </ol>
@@ -23,6 +23,10 @@
 <li><a href="https://zhuanlan.zhihu.com/p/441083543" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/441083543</a>
 </li>
 </ul>
+<ol start="2">
+<li>fzf <a href="https://github.com/junegunn/fzf" target="_blank" rel="noopener">https://github.com/junegunn/fzf</a>
+</li>
+</ol>
 ]]></content:encoded>
     </item>
     
