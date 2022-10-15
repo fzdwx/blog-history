@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>github on fzdwx</title>
+    <link>https://fzdwx.github.io/tags/github/</link>
+    <description>Recent content in github on fzdwx</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Copyright [fzdwx](https://github.com/fzdwx) since 2022</copyright>
+    <lastBuildDate>Sat, 15 Oct 2022 19:25:10 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/tags/github/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>写一个自己的github action</title>
+      <link>https://fzdwx.github.io/posts/2022-10-15-about-github-action/</link>
+      <pubDate>Sat, 15 Oct 2022 19:25:10 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/posts/2022-10-15-about-github-action/</guid>
+      <description>起因是因为想要有一种可以不用编辑文件而作用到网站上的方式，然后就了解到了github action的形式。</description>
+      <content:encoded><![CDATA[<p>主要原理就是通过github action的来监听issue的相关事件，然后读取issue中的内容创建文件提交到git上，最后直接部署。这样就能随时编辑并展示了。</p>
+<p>具体可以看 <a href="https://github.com/fzdwx/add-event-to-myblog" target="_blank" rel="noopener">add event to myb log</a>
+这个仓库，
+以及<a href="https://github.com/fzdwx/fzdwx.github.io/blob/main/.github/workflows/add-event.yml" target="_blank" rel="noopener">使用方式</a>
+。</p>
+<p>接下来介绍如何开发一个github action</p>
+<h3 id="1-克隆官方提供的template">1. 克隆官方提供的template</h3>
+<p><a href="https://github.com/actions/typescript-action" target="_blank" rel="noopener">https://github.com/actions/typescript-action</a>
+</p>
+<h3 id="2-定义想要在运行时用户输入的参数">2. 定义想要在运行时用户输入的参数</h3>
+<p>通过编辑<code>action.yml</code>这个文件来定义想要在运行时定义的参数，比如说<code>GITHUB_TOKEN</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;add event to my blog&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;add event to my blog&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">author</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;fzdwx&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">branding</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">icon</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;archive&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">color</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;white&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">inputs</span><span class="p">:</span><span class="w"> </span><span class="c"># 在这个key下面添加自定义参数</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">token</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="kc">true</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;the repo PAT or GITHUB_TOKEN&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">runs</span><span class="p">:</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">using</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;node16&#39;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="nt">main</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;dist/index.js&#39;</span><span class="w">
+</span></span></span></code></pre></div><p>参数有三个属性:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">required</span><span class="p">:</span><span class="w"> </span><span class="l">是否必须</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="l">描述</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l">默认值</span><span class="w">
+</span></span></span></code></pre></div><h3 id="3-实现想要的功能">3. 实现想要的功能</h3>
+<p>详细可以查看我的<a href="https://github.com/fzdwx/add-event-to-myblog/blob/v2.1/src/main.ts" target="_blank" rel="noopener">主要代码</a>
+。我的里面主要做了:</p>
+<ol>
+<li>根据当前issue number <a href="https://github.com/fzdwx/add-event-to-myblog/blob/v2.1/src/main.ts#L16" target="_blank" rel="noopener">获取该issue的内容</a>
+。</li>
+<li>根据预定义的模板，<a href="https://github.com/fzdwx/add-event-to-myblog/blob/v2.1/src/main.ts#L18-L33" target="_blank" rel="noopener">创建文件内容</a>
+。</li>
+<li>提交到 <a href="https://github.com/fzdwx/add-event-to-myblog/blob/v2.1/src/main.ts#L34-L38" target="_blank" rel="noopener">git</a>
+上。</li>
+</ol>
+<h3 id="4-发布到marketplace">4. 发布到marketplace</h3>
+<p>需要勾选<strong>Publish this Action to the GitHub Marketplace</strong>，可能需要2fa认真，找一个github支持就ok了。</p>
+<p><figure class="align-center">
+    <img src="/images/8.png" alt="Figure 1"  />
+    
+    <figcaption>
+       Figure 1
+    </figcaption>
+    
+</figure></p>
+<p>成功release后就能在别的项目中使用了。</p>
+]]></content:encoded>
+    </item>
+    
+  </channel>
+</rss>
