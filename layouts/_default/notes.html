@@ -1,0 +1,31 @@
+{{- define "main" }}
+
+{{- $pages := .Pages }}
+{{ $paginator := "" }}
+{{ if (.Param "paginate") }}
+{{- $paginator = .Paginate $pages (.Param "paginate") }}
+{{ else }}
+{{- $paginator = .Paginate $pages }}
+{{ end }}
+
+{{- range $index, $page := $paginator.Pages }}
+{{- $class := "post-entry" }}
+
+{{- $user_preferred := or site.Params.disableSpecial1stPost site.Params.homeInfoParams }}
+{{- $class = "post-entry tag-entry" }}
+
+<article class="{{ $class }}">
+    <header class="post-header">
+        <h1 class="post-title">
+            {{- .Title }}
+        </h1>
+    </header>
+    <div class="post-content">
+        {{ .Content }}
+    </div>
+
+</article>
+
+{{- end }}
+
+{{- end }}
