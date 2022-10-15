@@ -1,9 +1,9 @@
 name: add event
 
+
 on:
   issues:
-    types:
-      - created
+    types: [opened]
   
 jobs:
   add:
