@@ -17,10 +17,10 @@
 复制的服务通过在多个复制服务器上存储其状态(即数据)的完整副本来实现fault tolerance。 即使有一些服务器出现故障(崩溃或网络断开和抖动)replication也允许它们继续运行。 挑战在于failures可能导致副本存在不同的数据。
 Raft将客户端的请求组织成一个序列，被成为log，并且确保所有replica servers看到相同的log。 每个副本按照日志的顺序来执行客户端的请求，将它们应用于其本地的服务状态副本。 由于所有存活的副本读取的日志内容都是相同的，所以都以相同的顺序来执行请求，因此它们都有相同的服务状态。 如果一个服务器失败了但是后来又恢复来，Raft会复制把它的日志更新。只要至少大多数的服务器还或者，并且能够继续通信， 那么Raft将继续运行。如果没有到达这个数量，那么Raft将会停止运行，直到到达这个数量才会重新开始。
 在本lab中，你将把Raft实现为一个带有相关方法的GO的对象类型，目的是为了能在更大的模块中使用。 一组Raft实例通过RPC来维护replicated logs。你的Raft实例将支持一连串不确定编号(数量?)的command， 也可以叫log entries。 这些entries通过索引来进行编号。具有给定索引的log entry将被提交，此时， 您的Raft应该将这个条log发送到更大的服务上执行。
-你应该遵循 extended Raft paper 中设计， 特别是图 2.你将实现论文宏的大 部分内容，包括保存持久化状态和节点故障自动重启后读取状态。 你将不会实现集群成员的变化(Section 6)。
-你可能会发现这个 指南 很有用， 还有这个关于concurrency的锁 和结构 的建议， 如果需要更广泛的视角，可以看看Paxos, Chubby, Paxos Made Live, Spanner, Zookeeper, Harp, Viewstamped Replication和 Bolosky et al 。
-请记住，本 lab 中最具挑战性的部分可能不是实现你的解决方案，而是调试它。为了帮助应对这一挑战，你可能需要把事件花在如何使你的实现更容易调试。 你可以参考 指导页 和这篇关于有效打印声明的 博文 。
-我们还提供了 Raft 交互图 ， 可以帮助阐明Raft代码如何与上层(使用者?)交互。</description>
+你应该遵循 &amp;nbsp;extended Raft paper 中设计， 特别是图 2.你将实现论文宏的大 部分内容，包括保存持久化状态和节点故障自动重启后读取状态。 你将不会实现集群成员的变化(Section 6)。
+你可能会发现这个 &amp;nbsp;指南 很有用， 还有这个关于concurrency的&amp;nbsp;锁 和&amp;nbsp;结构 的建议， 如果需要更广泛的视角，可以看看Paxos, Chubby, Paxos Made Live, Spanner, Zookeeper, Harp, Viewstamped Replication和 &amp;nbsp;Bolosky et al 。
+请记住，本 lab 中最具挑战性的部分可能不是实现你的解决方案，而是调试它。为了帮助应对这一挑战，你可能需要把事件花在如何使你的实现更容易调试。 你可以参考 &amp;nbsp;指导页 和这篇关于有效打印声明的 &amp;nbsp;博文 。
+我们还提供了 &amp;nbsp;Raft 交互图 ， 可以帮助阐明Raft代码如何与上层(使用者?)交互。</description>
       <content:encoded><![CDATA[<h2 id="lab2文档翻译">Lab2文档翻译</h2>
 <h3 id="introduction">Introduction</h3>
 <p>这是一系列实验中的第一个，我们将构建一个<em>fault-tolerant key/value storage system</em>。
@@ -38,25 +38,25 @@ Raft将客户端的请求组织成一个序列，被成为log，并且确保所�
 一组Raft实例通过RPC来维护replicated logs。你的Raft实例将支持一连串不确定编号(数量?)的command，
 也可以叫log entries。 这些entries通过索引来进行编号。具有给定索引的log entry将被提交，此时，
 您的Raft应该将这个条log发送到更大的服务上执行。</p>
-<p>你应该遵循 <a href="https://pdos.csail.mit.edu/6.824/papers/raft-extended.pdf" target="_blank" rel="noopener">extended Raft paper</a>
+<p>你应该遵循 &nbsp;<a href="https://pdos.csail.mit.edu/6.824/papers/raft-extended.pdf" target="_blank" rel="noopener">extended Raft paper</a>
 中设计，
 特别是图 2.你将实现论文宏的大 部分内容，包括<strong>保存持久化状态</strong>和节<strong>点故障自动重启后读取状态</strong>。
 你将不会实现集群成员的变化(Section 6)。</p>
-<p>你可能会发现这个 <a href="https://thesquareplanet.com/blog/students-guide-to-raft/" target="_blank" rel="noopener">指南</a>
+<p>你可能会发现这个 &nbsp;<a href="https://thesquareplanet.com/blog/students-guide-to-raft/" target="_blank" rel="noopener">指南</a>
 很有用，
-还有这个关于concurrency的<a href="https://pdos.csail.mit.edu/6.824/labs/raft-locking.txt" target="_blank" rel="noopener">锁</a>
+还有这个关于concurrency的&nbsp;<a href="https://pdos.csail.mit.edu/6.824/labs/raft-locking.txt" target="_blank" rel="noopener">锁</a>
 
-和<a href="https://pdos.csail.mit.edu/6.824/labs/raft-structure.txt" target="_blank" rel="noopener">结构</a>
+和&nbsp;<a href="https://pdos.csail.mit.edu/6.824/labs/raft-structure.txt" target="_blank" rel="noopener">结构</a>
 的建议，
 如果需要更广泛的视角，可以看看Paxos, Chubby, Paxos Made Live, Spanner, Zookeeper, Harp, Viewstamped Replication和
-<a href="https://static.usenix.org/event/nsdi11/tech/full_papers/Bolosky.pdf" target="_blank" rel="noopener">Bolosky et al</a>
+&nbsp;<a href="https://static.usenix.org/event/nsdi11/tech/full_papers/Bolosky.pdf" target="_blank" rel="noopener">Bolosky et al</a>
 。</p>
 <p>请记住，本 lab 中最具挑战性的部分可能不是实现你的解决方案，而是调试它。为了帮助应对这一挑战，你可能需要把事件花在如何使你的实现更容易调试。
-你可以参考 <a href="https://pdos.csail.mit.edu/6.824/labs/guidance.html" target="_blank" rel="noopener">指导页</a>
+你可以参考 &nbsp;<a href="https://pdos.csail.mit.edu/6.824/labs/guidance.html" target="_blank" rel="noopener">指导页</a>
 和这篇关于有效打印声明的
-<a href="https://blog.josejg.com/debugging-pretty/" target="_blank" rel="noopener">博文</a>
+&nbsp;<a href="https://blog.josejg.com/debugging-pretty/" target="_blank" rel="noopener">博文</a>
 。</p>
-<p>我们还提供了 <a href="https://pdos.csail.mit.edu/6.824/notes/raft_diagram.pdf" target="_blank" rel="noopener">Raft 交互图</a>
+<p>我们还提供了 &nbsp;<a href="https://pdos.csail.mit.edu/6.824/notes/raft_diagram.pdf" target="_blank" rel="noopener">Raft 交互图</a>
 ，
 可以帮助阐明Raft代码如何与上层(使用者?)交互。</p>
 <h3 id="the-code">The code</h3>
@@ -279,28 +279,28 @@ figures are discussed piecewise over the rest of this section</p>
 </blockquote>
 <h2 id="links">Links</h2>
 <ol>
-<li>项目地址: <a href="https://pdos.csail.mit.edu/6.824/labs/lab-raft.html" target="_blank" rel="noopener">https://pdos.csail.mit.edu/6.824/labs/lab-raft.html</a>
+<li>项目地址: &nbsp;<a href="https://pdos.csail.mit.edu/6.824/labs/lab-raft.html" target="_blank" rel="noopener">https://pdos.csail.mit.edu/6.824/labs/lab-raft.html</a>
 </li>
-<li>GFS 相关资料: <a href="https://fzdwx.github.io/posts/2022-10-07-gfs/#links" target="_blank" rel="noopener">https://fzdwx.github.io/posts/2022-10-07-gfs/#links</a>
+<li>GFS 相关资料: &nbsp;<a href="https://fzdwx.github.io/posts/2022-10-07-gfs/#links" target="_blank" rel="noopener">https://fzdwx.github.io/posts/2022-10-07-gfs/#links</a>
 </li>
-<li>Raft paper: <a href="https://pdos.csail.mit.edu/6.824/papers/raft-extended.pdf" target="_blank" rel="noopener">https://pdos.csail.mit.edu/6.824/papers/raft-extended.pdf</a>
+<li>Raft paper: &nbsp;<a href="https://pdos.csail.mit.edu/6.824/papers/raft-extended.pdf" target="_blank" rel="noopener">https://pdos.csail.mit.edu/6.824/papers/raft-extended.pdf</a>
 </li>
-<li>Diagram of Raft interactions： <a href="https://pdos.csail.mit.edu/6.824/notes/raft_diagram.pdf" target="_blank" rel="noopener">https://pdos.csail.mit.edu/6.824/notes/raft_diagram.pdf</a>
+<li>Diagram of Raft interactions： &nbsp;<a href="https://pdos.csail.mit.edu/6.824/notes/raft_diagram.pdf" target="_blank" rel="noopener">https://pdos.csail.mit.edu/6.824/notes/raft_diagram.pdf</a>
 </li>
-<li>Students guid to Raft: <a href="https://thesquareplanet.com/blog/students-guide-to-raft/" target="_blank" rel="noopener">https://thesquareplanet.com/blog/students-guide-to-raft/</a>
+<li>Students guid to Raft: &nbsp;<a href="https://thesquareplanet.com/blog/students-guide-to-raft/" target="_blank" rel="noopener">https://thesquareplanet.com/blog/students-guide-to-raft/</a>
 </li>
-<li>Raft locking: <a href="https://pdos.csail.mit.edu/6.824/labs/raft-locking.txt" target="_blank" rel="noopener">https://pdos.csail.mit.edu/6.824/labs/raft-locking.txt</a>
+<li>Raft locking: &nbsp;<a href="https://pdos.csail.mit.edu/6.824/labs/raft-locking.txt" target="_blank" rel="noopener">https://pdos.csail.mit.edu/6.824/labs/raft-locking.txt</a>
 </li>
-<li>Raft structure: <a href="https://pdos.csail.mit.edu/6.824/labs/raft-structure.txt" target="_blank" rel="noopener">https://pdos.csail.mit.edu/6.824/labs/raft-structure.txt</a>
+<li>Raft structure: &nbsp;<a href="https://pdos.csail.mit.edu/6.824/labs/raft-structure.txt" target="_blank" rel="noopener">https://pdos.csail.mit.edu/6.824/labs/raft-structure.txt</a>
 </li>
 <li>Paxos Replicated State Machines as the Basis of a High-Performance Data
-Store <a href="https://static.usenix.org/event/nsdi11/tech/full_papers/Bolosky.pdf" target="_blank" rel="noopener">https://static.usenix.org/event/nsdi11/tech/full_papers/Bolosky.pdf</a>
+Store &nbsp;<a href="https://static.usenix.org/event/nsdi11/tech/full_papers/Bolosky.pdf" target="_blank" rel="noopener">https://static.usenix.org/event/nsdi11/tech/full_papers/Bolosky.pdf</a>
 </li>
-<li><a href="https://www.cnblogs.com/niejunlei/p/9719557.html" target="_blank" rel="noopener">https://www.cnblogs.com/niejunlei/p/9719557.html</a>
+<li>&nbsp;<a href="https://www.cnblogs.com/niejunlei/p/9719557.html" target="_blank" rel="noopener">https://www.cnblogs.com/niejunlei/p/9719557.html</a>
 </li>
-<li><a href="https://blog.csdn.net/viskaz/article/details/124232474" target="_blank" rel="noopener">https://blog.csdn.net/viskaz/article/details/124232474</a>
+<li>&nbsp;<a href="https://blog.csdn.net/viskaz/article/details/124232474" target="_blank" rel="noopener">https://blog.csdn.net/viskaz/article/details/124232474</a>
 </li>
-<li><a href="https://www.cnblogs.com/brianleelxt/p/13251540.html" target="_blank" rel="noopener">https://www.cnblogs.com/brianleelxt/p/13251540.html</a>
+<li>&nbsp;<a href="https://www.cnblogs.com/brianleelxt/p/13251540.html" target="_blank" rel="noopener">https://www.cnblogs.com/brianleelxt/p/13251540.html</a>
 </li>
 </ol>
 ]]></content:encoded>
@@ -314,7 +314,7 @@ Store <a href="https://static.usenix.org/event/nsdi11/tech/full_papers/Bolosky.p
       <guid>https://fzdwx.github.io/posts/2022-09-27-mit6.824-lab1/</guid>
       <description>about mit6.824 lab1(Map reduce framework)</description>
       <content:encoded><![CDATA[<p>看的时候很懵，写的时候更懵，我以为是要写几个<code>MapReduce</code>的程序，在把官方的<code>A few rules</code>以及<code>Hints</code>(
-翻译可以看<a href="https://www.nowcoder.com/discuss/962675" target="_blank" rel="noopener">这里</a>
+翻译可以看&nbsp;<a href="https://www.nowcoder.com/discuss/962675" target="_blank" rel="noopener">这里</a>
 ) 仔细的阅读了几遍后才发现是要写一个
 MapReduce 的调度框架。。。</p>
 <p>解题思路可以分为 3 步。</p>

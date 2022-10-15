@@ -66,7 +66,7 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
 </span></span><span class="line"><span class="cl"><span class="c1"># 我有两个，是上下关系，所以用below 其他有 left 以及 right</span>
 </span></span><span class="line"><span class="cl">xrandr --output eDP-1-1  --auto --below HDMI-0
 </span></span></code></pre></div><h2 id="常用快捷键">常用快捷键</h2>
-<p>可以参考我配置： <a href="https://github.com/fzdwx/dwm" target="_blank" rel="noopener">https://github.com/fzdwx/dwm</a>
+<p>可以参考我配置： &nbsp;<a href="https://github.com/fzdwx/dwm" target="_blank" rel="noopener">https://github.com/fzdwx/dwm</a>
 </p>
 <p><code>MOD</code> -&gt; <code>WIN</code></p>
 <table>
@@ -202,13 +202,13 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
 </table>
 <h2 id="links">Links</h2>
 <ul>
-<li><a href="https://wiki.archlinux.org/title/Dwm_%28%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%29" target="_blank" rel="noopener">ArchWiki Dwm</a>
+<li>&nbsp;<a href="https://wiki.archlinux.org/title/Dwm_%28%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%29" target="_blank" rel="noopener">ArchWiki Dwm</a>
 </li>
-<li><a href="https://dwm.suckless.org/patches/" target="_blank" rel="noopener">Dwm patches</a>
+<li>&nbsp;<a href="https://dwm.suckless.org/patches/" target="_blank" rel="noopener">Dwm patches</a>
 </li>
-<li><a href="https://github.com/Katzeee/dwm-patches-chinese/blob/master/dwm-patches-chinese.md" target="_blank" rel="noopener">Dwm patches中文翻译</a>
+<li>&nbsp;<a href="https://github.com/Katzeee/dwm-patches-chinese/blob/master/dwm-patches-chinese.md" target="_blank" rel="noopener">Dwm patches中文翻译</a>
 </li>
-<li><a href="https://yaocc.cc/2022/06/19/linux%E4%B8%9D%E6%BB%91%E7%9A%84%E5%8A%A8%E7%94%BB%E4%BD%93%E9%AA%8C%E2%80%94%E2%80%94picom/" target="_blank" rel="noopener">picom美化</a>
+<li>&nbsp;<a href="https://yaocc.cc/2022/06/19/linux%E4%B8%9D%E6%BB%91%E7%9A%84%E5%8A%A8%E7%94%BB%E4%BD%93%E9%AA%8C%E2%80%94%E2%80%94picom/" target="_blank" rel="noopener">picom美化</a>
 </li>
 </ul>
 ]]></content:encoded>

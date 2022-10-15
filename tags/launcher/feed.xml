@@ -15,7 +15,7 @@
       <guid>https://fzdwx.github.io/posts/2022-09-18-about-rofi/</guid>
       <description>一个 linux 下的 application launcher, 让你只用键盘就可以进行应用的启动与切换。</description>
       <content:encoded><![CDATA[<blockquote>
-<p>今天发现了一个 linux 下的 application launcher <a href="https://github.com/davatorium/rofi" target="_blank" rel="noopener">rofi</a>
+<p>今天发现了一个 linux 下的 application launcher &nbsp;<a href="https://github.com/davatorium/rofi" target="_blank" rel="noopener">rofi</a>
  ，它可以快速切换窗口和启动程序，
 我用它和<code>wmctrl</code>进行配合使用。</p>
 </blockquote>
@@ -32,7 +32,7 @@
 </span></span></code></pre></div><p>2.显示icon</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">sed -i <span class="s1">&#39;8c show-icons: true;&#39;</span> ~/.config/rofi/config.rasi
 </span></span></code></pre></div><p>3.更换主题</p>
-<p>参考 <a href="https://github.com/lr-tech/rofi-themes-collection#installing-themes" target="_blank" rel="noopener">https://github.com/lr-tech/rofi-themes-collection#installing-themes</a>
+<p>参考 &nbsp;<a href="https://github.com/lr-tech/rofi-themes-collection#installing-themes" target="_blank" rel="noopener">https://github.com/lr-tech/rofi-themes-collection#installing-themes</a>
 </p>
 <hr>
 <p><strong>我的<code>wmctrl</code>的配置示例</strong>:</p>
