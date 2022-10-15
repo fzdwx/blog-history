@@ -132,32 +132,6 @@ params:
     minMatchCharLength: 0
     keys: [ "title", "permalink", "summary", "content","tags" ]
 
-  startpages:
-    - name: github
-      url: https://github.com/
-      icon: github
-    - name: 格式转换
-      url: https://tinywow.com
-      favicon: https://tinywow.com/v2/img/favicon.png
-    - name: twitter
-      url: https://twitter.com/home
-      icon: twitter
-    - name: rust cli
-      url: https://lib.rs/command-line-utilities
-      favicon: https://lib.rs/crates-logo.png
-    - name: 电子书
-      url: https://zh.b-ok.global
-      favicon: https://zh.b-ok.global/favicon.svg
-    - name: 豆瓣电影
-      url: https://movie.douban.com/
-      favicon: https://img3.doubanio.com/favicon.ico
-    - name: 中文播客
-      url: https://xyzrank.com/
-      favicon: https://xyzrank.justinbot.com/public/favicon.png
-    - url: https://yandex.com/
-      name: yandex
-      favicon: https://yastatic.net/s3/home-static/_/a5/a557b72322add07a6b41fc8f71cfffc8.png
-
 outputs:
   home:
     - HTML
@@ -175,12 +149,6 @@ menu:
     - name: Links
       url: /links/
       weight: 100
-    - name: 🔍
-      url: /search/
-      weight: 200
-    - name: 🧬
-      url: /startpage/
-      weight: 300
 
 # prefer feed.xml rather than index.xml
 outputFormats:

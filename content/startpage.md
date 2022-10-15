@@ -1,4 +1,0 @@
----
-title: "StartPage"
-layout: "startpage"
----
