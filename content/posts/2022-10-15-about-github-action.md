@@ -49,9 +49,9 @@ default: 默认值
 
 详细可以查看我的[主要代码](https://github.com/fzdwx/add-event-to-myblog/blob/v2.1/src/main.ts)。我的里面主要做了:
 
-1. 根据当前issue number [获取该issue的内容](https://github.com/fzdwx/add-event-to-myblog/blob/v2.1/src/main.ts#L16)。
+1. 根据当前issue number[获取该issue的内容](https://github.com/fzdwx/add-event-to-myblog/blob/v2.1/src/main.ts#L16)。
 2. 根据预定义的模板，[创建文件内容](https://github.com/fzdwx/add-event-to-myblog/blob/v2.1/src/main.ts#L18-L33)。
-3. 提交到 [git](https://github.com/fzdwx/add-event-to-myblog/blob/v2.1/src/main.ts#L34-L38)上。
+3. 提交到[git](https://github.com/fzdwx/add-event-to-myblog/blob/v2.1/src/main.ts#L34-L38)上。
 
 ### 4. 发布到marketplace
 
