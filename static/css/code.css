@@ -79,7 +79,7 @@
 }
 
 .chroma .nt {
-    color: #7ee787
+    color: var(--red)
 }
 
 .chroma .nv {
@@ -172,11 +172,11 @@
 }
 
 .chroma .s1 {
-    color: #73BC83
+    color: var(--a2)
 }
 
 .dark .chroma .s1{
-    color: #73BC83
+    color: var(--a2)
 }
 
 .chroma .sx {
@@ -278,7 +278,7 @@
 }
 
 .dark .chroma .nt {
-    color: #7ee787
+    color: var(--red)
 }
 
 .dark .chroma .nv {
@@ -379,7 +379,7 @@
 }
 
 .dark .chroma .p {
-    color: #afd49d
+    color: var(--a2)
 }
 
 .dark .chroma .hl {
