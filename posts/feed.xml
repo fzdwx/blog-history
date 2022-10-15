@@ -54,7 +54,7 @@
 上。</li>
 </ol>
 <h3 id="4-发布到marketplace">4. 发布到marketplace</h3>
-<p>需要勾选<strong>Publish this Action to the GitHub Marketplace</strong>，可能需要2fa认真，找一个github支持就ok了。</p>
+<p>需要勾选<strong>Publish this Action to the GitHub Marketplace</strong>，可能需要2fa认证，找一个github支持就ok了。</p>
 <p><figure class="align-center">
     <img src="/images/8.png" alt="Figure 1"  />
     
