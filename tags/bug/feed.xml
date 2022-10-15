@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>bug on fzdwx</title>
+    <link>https://fzdwx.github.io/tags/bug/</link>
+    <description>Recent content in bug on fzdwx</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Copyright [fzdwx](https://github.com/fzdwx) since 2022</copyright>
+    <lastBuildDate>Sat, 01 Oct 2022 06:33:55 +0000</lastBuildDate><atom:link href="https://fzdwx.github.io/tags/bug/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>终端下好用的程序</title>
+      <link>https://fzdwx.github.io/notes/1/</link>
+      <pubDate>Sat, 01 Oct 2022 06:33:55 +0000</pubDate>
+      
+      <guid>https://fzdwx.github.io/notes/1/</guid>
+      <description>ranger 配置推荐 https://zhuanlan.zhihu.com/p/105731111 https://zhuanlan.zhihu.com/p/441083543 aaaaaaaaaa cccccccccccccccc dddddddddd zzzzzzzzzzzzz qqqqqqqqqqqqq
+cc
+ccccccccccccccccccccccccc</description>
+      <content:encoded><![CDATA[<ol>
+<li>ranger 配置推荐</li>
+</ol>
+<ul>
+<li><a href="https://zhuanlan.zhihu.com/p/105731111" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/105731111</a>
+</li>
+<li><a href="https://zhuanlan.zhihu.com/p/441083543" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/441083543</a>
+</li>
+</ul>
+<p>aaaaaaaaaa
+cccccccccccccccc
+dddddddddd
+zzzzzzzzzzzzz
+qqqqqqqqqqqqq</p>
+<p>cc</p>
+<p>ccccccccccccccccccccccccc</p>
+]]></content:encoded>
+    </item>
+    
+  </channel>
+</rss>
