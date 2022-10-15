@@ -11,7 +11,7 @@ jobs:
       - name: checkout
         uses: actions/checkout@v3
       - name: add event to my blog
-        uses: fzdwx/add-event-to-myblog@v1.9.1
+        uses: fzdwx/add-event-to-myblog@v1.9.2
         with:
           # the repo PAT or GITHUB_TOKEN
           token: ${{ secrets.TOKEN }}
