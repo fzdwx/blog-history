@@ -16,3 +16,29 @@ jobs:
           # the repo PAT or GITHUB_TOKEN
           token: ${{ secrets.TOKEN }}
           issueNumber: ${{ github.event.issue.number }}
+  build:
+    runs-on: ubuntu-latest
+    # permissions:
+    #   contents: read
+    #   packages: write
+    steps:
+      - name: checkout
+        uses: actions/checkout@v2
+        with:
+          submodules: true  # Fetch Hugo themes (true OR recursive)
+          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
+
+      - name: setup hugo
+        uses: peaceiris/actions-hugo@v2
+        with:
+          hugo-version: 'latest'
+          extended: true
+
+      - name: build
+        run: hugo --minify
+
+      - name: deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.TOKEN }}
+          publish_dir: ./public
