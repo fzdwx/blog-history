@@ -14,7 +14,7 @@
       
       <guid>https://fzdwx.github.io/notes/6/</guid>
       <description>关于jyy的计算机系统基础课
-主要资料 pa地址: &amp;nbsp;https://nju-projectn.github.io/ics-pa-gitbook/ics2021/ 课程视频地址: &amp;nbsp;https://www.bilibili.com/video/BV1qa4y1j7xk 课程主页: &amp;nbsp;http://jyywiki.cn/ICS/2021/ 扩展资料 Linux C编程一站式学习: &amp;nbsp;https://docs.huihoo.com/c/linux-c-programming/ 计算机教育中缺失的一课: &amp;nbsp;https://missing-semester-cn.github.io/ TODO pa1: &amp;nbsp;https://nju-projectn.github.io/ics-pa-gitbook/ics2021/PA1.html </description>
+主要资料 pa地址: &amp;nbsp;https://nju-projectn.github.io/ics-pa-gitbook/ics2021/ 课程视频地址: &amp;nbsp;https://www.bilibili.com/video/BV1qa4y1j7xk 课程主页: &amp;nbsp;http://jyywiki.cn/ICS/2021/ NEMU ISA相关的API: &amp;nbsp;https://nju-projectn.github.io/ics-pa-gitbook/ics2021/nemu-isa-api.html 扩展资料 Linux C编程一站式学习: &amp;nbsp;https://docs.huihoo.com/c/linux-c-programming/ 计算机教育中缺失的一课: &amp;nbsp;https://missing-semester-cn.github.io/ TODO pa1: &amp;nbsp;https://nju-projectn.github.io/ics-pa-gitbook/ics2021/PA1.html </description>
       <content:encoded><![CDATA[<p>关于jyy的计算机系统基础课</p>
 <h2 id="主要资料">主要资料</h2>
 <ol>
@@ -23,6 +23,8 @@
 <li>课程视频地址: &nbsp;<a href="https://www.bilibili.com/video/BV1qa4y1j7xk" target="_blank" rel="noopener">https://www.bilibili.com/video/BV1qa4y1j7xk</a>
 </li>
 <li>课程主页: &nbsp;<a href="http://jyywiki.cn/ICS/2021/" target="_blank" rel="noopener">http://jyywiki.cn/ICS/2021/</a>
+</li>
+<li>NEMU ISA相关的API: &nbsp;<a href="https://nju-projectn.github.io/ics-pa-gitbook/ics2021/nemu-isa-api.html" target="_blank" rel="noopener">https://nju-projectn.github.io/ics-pa-gitbook/ics2021/nemu-isa-api.html</a>
 </li>
 </ol>
 <h2 id="扩展资料">扩展资料</h2>
