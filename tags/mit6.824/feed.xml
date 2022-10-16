@@ -269,27 +269,26 @@ from the other servers, in which case a new leader is elected.</p>
     
 </figure></p>
 <p><strong>state</strong>:</p>
-<blockquote>
-<p>在所有服务器上持久化(在响应RPCs之前进行更新)</p>
-</blockquote>
+<ul>
+<li>在所有服务器上持久化(在响应RPCs之前进行更新)
 <ul>
 <li><code>currentTerm</code>: 服务器知道的最后的任期号(初始0，单调递增)</li>
 <li><code>votedFor</code>: 当前服务器投给哪个服务器？</li>
 <li><code>log[]</code>: 日志，包含要执行的命令以及收到该日志的时间。</li>
 </ul>
-<blockquote>
-<p>在所有服务器上不稳定存在</p>
-</blockquote>
+</li>
+<li>在所有服务器上不稳定存在
 <ul>
 <li><code>commitIndex</code>: 已知的提交的日志中的最大索引(初始0，单调递增)</li>
 <li><code>lastApplied</code>: 状态机执行的日志中的最大索引(初始0，单调递增)</li>
 </ul>
-<blockquote>
-<p>在leader上不稳定存在(在每次重新选举后初始化)</p>
-</blockquote>
+</li>
+<li>在leader上不稳定存在(在每次重新选举后初始化)
 <ul>
 <li><code>nextIndex[]</code>: 对于每一个服务器，记录需要发给它的下一个日志条目的索引(初始为leader的最后一条日志索引+1)</li>
 <li><code>matchIndex[]</code>: 对于每一个服务器，记录已经复制到该服务器的日志的最高索引值(初始0，单调递增)</li>
+</ul>
+</li>
 </ul>
 <p><strong>AppendEntries RPC</strong></p>
 <blockquote>
