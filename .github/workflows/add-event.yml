@@ -18,16 +18,13 @@ jobs:
           # the repo PAT or GITHUB_TOKEN
           token: ${{ secrets.TOKEN }}
           issueNumber: ${{ github.event.issue.number }}
-      - name: Setup Go environment
-        uses: actions/setup-go@v3.3.0
       - name: setup hugo
         uses: peaceiris/actions-hugo@v2
         with:
           hugo-version: 'latest'
           extended: true
-
       - name: build
-        run: hugo mod get -u && hugo --minify
+        run: hugo --minify
 
       - name: deploy
         uses: peaceiris/actions-gh-pages@v3
