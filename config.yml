@@ -175,7 +175,3 @@ markup:
         guessSyntax: true
         lineNos: true
 #        style: monokai
-
-module:
-  imports:
-    - path: github.com/reorx/hugo-PaperModX
