@@ -18,6 +18,8 @@ jobs:
           # the repo PAT or GITHUB_TOKEN
           token: ${{ secrets.TOKEN }}
           issueNumber: ${{ github.event.issue.number }}
+      - name: Setup Go environment
+        uses: actions/setup-go@v3.3.0
       - name: setup hugo
         uses: peaceiris/actions-hugo@v2
         with:
