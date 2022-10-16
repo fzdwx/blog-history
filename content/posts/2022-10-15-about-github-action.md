@@ -15,6 +15,8 @@ tags: ["github"]
 
 ### 1. 克隆官方提供的template
 
+官方主要对typescript的支持比较好，提供了一系列的[工具包](https://github.com/actions/toolkit)，没办法只能同ts来进行开发，
+
 https://github.com/actions/typescript-action
 
 ### 2. 定义想要在运行时用户输入的参数
