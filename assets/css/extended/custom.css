@@ -18,8 +18,7 @@
 }
 
 .post-title/* , .h1, h2, h3, h4, h5, h6 */{
-    font-family: 'f1Font', monospace !important;
-    font-size: 50px;
+    font-family: 'jinkaiFont', monospace !important;
 }
 
 .post-content {
