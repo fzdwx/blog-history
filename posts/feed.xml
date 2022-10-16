@@ -21,6 +21,8 @@
 。</p>
 <p>接下来介绍如何开发一个github action</p>
 <h3 id="1-克隆官方提供的template">1. 克隆官方提供的template</h3>
+<p>官方主要对typescript的支持比较好，提供了一系列的&nbsp;<a href="https://github.com/actions/toolkit" target="_blank" rel="noopener">工具包</a>
+，没办法只能同ts来进行开发，</p>
 <p>&nbsp;<a href="https://github.com/actions/typescript-action" target="_blank" rel="noopener">https://github.com/actions/typescript-action</a>
 </p>
 <h3 id="2-定义想要在运行时用户输入的参数">2. 定义想要在运行时用户输入的参数</h3>
@@ -371,21 +373,25 @@ remote procedure calls; a minority of low servers need not impact overall system
 </ul>
 </blockquote>
 <h3 id="the-raft-consensus-algorithm">The Raft consensus algorithm</h3>
-<p>Raft就是用于管理上一解描述的复制日志的算法。图2是对该算法的精简型式的总结，图3列出来该算法的关键属性，接下来对这些部分进行逐一讨论。</p>
+<p>Raft就是用于管理上一解描述的复制日志的算法。&nbsp;<a href="/posts/2022-10-10-raftkv/#figure-2">图2</a>
+
+是对该算法的精简型式的总结，&nbsp;<a href="/posts/2022-10-10-raftkv/#figure-3">图3</a>
+列出来该算法的关键属性，接下来对这些部分进行逐一讨论。</p>
 <blockquote>
-<p>Raft is an algorithm for managing a replicated log of he form described in Section 2. Figure 2 summarizes the
+<p>Raft is an algorithm for managing a replicated log of the form described in Section 2. Figure 2 summarizes the
 algorithm in condensed form for reference, and Figure 3 lists key properties of the algorithm; the elements of these
 figures are discussed piecewise over the rest of this section.</p>
 </blockquote>
-<p>// todo</p>
+<p>Raft首先通过选举出一位 <em>leader</em> 来实现共识，然后由leader完全管理日志复制。 // todo</p>
 <blockquote>
 <p>Raft implements consensus by first electing a distinguished leader, then giving the leader complete responsibility for
 managing the replicated log. The leader accepts log entries from clients, replicates them on other servers, and tells
 servers when it is safe to apply log entries to their state machines. Having a leader simplifies the management of the
 replicated log. For example, the leader can decide where to place new entries in the log without consulting other
 servers, and data flows in a simple fashion from the leader to other servers. A leader can fail or become disconnected
-from the other servers, in which casea new leader is elected.</p>
+from the other servers, in which case a new leader is elected.</p>
 </blockquote>
+<h4 id="figure-2">Figure 2</h4>
 <p><figure class="align-center">
     <img src="/images/raftp2.png" alt="Figure 2: Raft共识算法的精简摘要(不包括成员更改以及日志压缩)。左上角的服务器行为被描述为一组独立且重复触发的规则。"  />
     
@@ -394,6 +400,139 @@ from the other servers, in which casea new leader is elected.</p>
     </figcaption>
     
 </figure></p>
+<p><strong>state</strong>:</p>
+<blockquote>
+<p>在所有服务器上持久化(在响应RPCs之前进行更新)</p>
+</blockquote>
+<ul>
+<li><code>currentTerm</code>: 服务器知道的最后的任期号(初始0，单调递增)</li>
+<li><code>votedFor</code>: 当前服务器投给哪个服务器？</li>
+<li><code>log[]</code>: 日志，包含要执行的命令以及收到该日志的时间。</li>
+</ul>
+<blockquote>
+<p>在所有服务器上不稳定存在</p>
+</blockquote>
+<ul>
+<li><code>commitIndex</code>: 已知的提交的日志中的最大索引(初始0，单调递增)</li>
+<li><code>lastApplied</code>: 状态机执行的日志中的最大索引(初始0，单调递增)</li>
+</ul>
+<blockquote>
+<p>在leader上不稳定存在(在每次重新选举后初始化)</p>
+</blockquote>
+<ul>
+<li><code>nextIndex[]</code>: 对于每一个服务器，记录需要发给它的下一个日志条目的索引(初始为leader的最后一条日志索引+1)</li>
+<li><code>matchIndex[]</code>: 对于每一个服务器，记录已经复制到该服务器的日志的最高索引值(初始0，单调递增)</li>
+</ul>
+<p><strong>AppendEntries RPC</strong></p>
+<blockquote>
+<p>由leader发起调用来复制日志，同时也用于心跳检测</p>
+</blockquote>
+<ul>
+<li>Arguments:
+<ul>
+<li><code>term</code>: leader的任期</li>
+<li><code>leaderId</code>: 用于follower找到leader</li>
+<li><code>prevLogIndex</code>: 前一个日志的索引</li>
+<li><code>prevLogTerm</code>: 前一个日志的<code>term</code></li>
+<li><code>entries[]</code>: 用于存放日志(为空时是心跳检测，可能一次会发送多条来提升效率)</li>
+<li><code>leaderCommit</code>: leader的<code>commitIndex</code></li>
+</ul>
+</li>
+<li>Results:
+<ul>
+<li><code>term</code>: <code>currentTerm</code>，用于leader更新自己的<code>term</code></li>
+<li><code>success</code>: 如果follower的<code>pervLogIndex</code>以及<code>prevLogTerm</code>能够匹配上则为true</li>
+</ul>
+</li>
+<li>Receiver implementation:
+<ul>
+<li><code>if term &lt; currentTerm then return false</code>(如果 term &lt; currentTerm返回 false)</li>
+<li><code>if log[prevLogIndex].term != prevLogTerm then return false</code>(如果在prevLogIndex处的日志的任期号与prevLogTerm不匹配时，返回
+false)</li>
+<li><code>if log[oldIndex].term != log[newIndex].term then remove log[oldIndex,lastIndex]</code>(
+如果一个已经存在的日志与新的日志冲突(<em><code>index</code>相同但是<code>term</code>不同</em>)，则删除该索引处以及之后的所有日志)</li>
+<li>添加在日志列表中不存在的新日志</li>
+<li><code>if leaderCommit &gt; commitIndex then commitIndex = min(leaderCommit,log[].last.commitIndex)</code>(如果leaderCommit &gt;
+commitIndex，将commitIndex设置为leaderCommit和最新日志条目索引号中较小的一个)</li>
+</ul>
+</li>
+</ul>
+<p><strong>RequestVote RPC</strong></p>
+<blockquote>
+<p>候选人调用，收集选票</p>
+</blockquote>
+<ul>
+<li>Arguments:
+<ul>
+<li><code>term</code>: candidate的任期号</li>
+<li><code>candidateId</code>: 发起请求的candidate的id</li>
+<li><code>lastLogIndex</code>: candidate的最后一条日志的索引</li>
+<li><code>lastLogTerm</code>: candidate最后一条日志对应的任期号</li>
+</ul>
+</li>
+<li>Results:
+<ul>
+<li>term: <code>currentTerm</code>，用于candidate更新自己的<code>term</code></li>
+<li>voteGranted: true表示候选人获得了选票</li>
+</ul>
+</li>
+<li>Receiver implementation:
+<ul>
+<li><code>if term &lt; currentTerm then return false</code>(如果term &lt; currentTerm返回 false)</li>
+<li><code>if (votedFor is null or votedFor == candidateId) and (lastLogIndex,lastLogTerm) == log[].last then return true</code>
+(如果votedFor为空或者与candidateId相同，并且候选人的日志和自己的日志一样新，则给该候选人投票)</li>
+</ul>
+</li>
+</ul>
+<p><strong>Rules for Servers</strong></p>
+<ul>
+<li>All Servers:
+<ul>
+<li><code>if commitIndex &gt; lastApplied then incr lastApplied and exec log[lastApplied]</code>（如果commitIndex &gt;
+lastApplied，lastApplied自增，将log[lastApplied]应用到状态机）</li>
+<li><code>if appendEntries.logs exist (log.term &gt; currentTerm) then currentTerm = log.term and set status = follower</code>(如果
+RPC 的请求或者响应中包含一个 term T 大于 currentTerm，则currentTerm赋值为 T，并切换状态为追随者follower)</li>
+</ul>
+</li>
+<li>Followers:
+<ul>
+<li>不会发出任何请求，只会对来自candidates以及leader的请求做出响应</li>
+<li>选举超时后，如果未收到当前leader的<code>AppendEntries RPC</code>或没有收到其他candidates的投票请求:则转换为candidate</li>
+</ul>
+</li>
+<li>Candidates:
+<ul>
+<li>转换成candidate之后开始选举
+<ul>
+<li>incr <code>currentTerm</code></li>
+<li>投票给自己</li>
+<li>reset election timer</li>
+<li>发送<code>RequestVote RPC</code>给其他所有服务器</li>
+</ul>
+</li>
+<li>如果收到了多数的选票则成为leader</li>
+<li>如果收到new leader的<code>AppendEntries RPC</code>则成为follower</li>
+<li>如果选举超时则开始新一轮的选举</li>
+</ul>
+</li>
+<li>Leaders:
+<ul>
+<li>选举时: 向其他服务器发送空的<code>AppendEntries RPC</code>，在空闲时重复发送以防止选举超时</li>
+<li>如果收到来自客户端的命令: 添加到本地日志，在执行并作用到状态机后作出响应</li>
+<li>对于follower<code>if last log index  &gt;= nextIndex</code>(如果上一次收到的日志的索引大于这次要发送给它的日志的索引(
+nextIndex)):
+则通过<code>AppendEntries RPC</code>将nextIndex之后的所有日志都发送发送出去
+<ul>
+<li>如果成功: 将该follower的<code>nextIndex</code>以及<code>matchIndex</code>更新</li>
+<li>如果因为日志不一致导致失败: <code>nextIndex</code>递减并重新发送</li>
+</ul>
+</li>
+<li>如果存在一个数N，满足<code>N &gt; commitIndex</code>，大多数的<code>matchIndex[i] &gt;= N</code>
+以及<code>log[N].term == currentTerm</code>: <code>set commitIndex = N</code></li>
+</ul>
+</li>
+</ul>
+<h4 id="figure-3">Figure 3</h4>
 <p><figure class="align-center">
     <img src="/images/f3.png" alt="Figure 3: Raft保证这些属性在在任何时候都上正确的。"  />
     
@@ -402,11 +541,13 @@ from the other servers, in which casea new leader is elected.</p>
     </figcaption>
     
 </figure></p>
-<blockquote>
-<p>Raft is an algorithm for managing a replicated log of the form described in Section 2. Figure 2 summarizes the
-algorithm in condensed form for reference, and Figure 3 lists key properties of the algorithm; the elements of these
-figures are discussed piecewise over the rest of this section</p>
-</blockquote>
+<ul>
+<li><strong>Election Safety:</strong> 在给定term内只能选出一个leader</li>
+<li><strong>Leader Append-Only</strong>: leader永远不覆盖或删除日志，只会添加</li>
+<li><strong>Log Matching</strong>: 如果两个日志在包含相同的index以及term，那么就认定它们完全相同</li>
+<li><strong>Leader Completeness</strong>: 如果一条日志在给定的term内提交，那么它一定会出现在term更大的leader的日志中</li>
+<li><strong>State Machine Safety:</strong> 如果一个服务器已经将给定索引位置的日志条目应用到状态机之中，则其他所有服务器不会在相同索引处出现不同的日志</li>
+</ul>
 <h2 id="links">Links</h2>
 <ol>
 <li>项目地址: &nbsp;<a href="https://pdos.csail.mit.edu/6.824/labs/lab-raft.html" target="_blank" rel="noopener">https://pdos.csail.mit.edu/6.824/labs/lab-raft.html</a>

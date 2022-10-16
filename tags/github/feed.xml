@@ -21,6 +21,8 @@
 。</p>
 <p>接下来介绍如何开发一个github action</p>
 <h3 id="1-克隆官方提供的template">1. 克隆官方提供的template</h3>
+<p>官方主要对typescript的支持比较好，提供了一系列的&nbsp;<a href="https://github.com/actions/toolkit" target="_blank" rel="noopener">工具包</a>
+，没办法只能同ts来进行开发，</p>
 <p>&nbsp;<a href="https://github.com/actions/typescript-action" target="_blank" rel="noopener">https://github.com/actions/typescript-action</a>
 </p>
 <h3 id="2-定义想要在运行时用户输入的参数">2. 定义想要在运行时用户输入的参数</h3>
