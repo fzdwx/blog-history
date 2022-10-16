@@ -17,8 +17,9 @@
     font-family: 'f1Font', monospace !important;
 }
 
-.post-title {
+.post-title/* , .h1, h2, h3, h4, h5, h6 */{
     font-family: 'f1Font', monospace !important;
+    font-size: 50px;
 }
 
 .post-content {
@@ -194,8 +195,4 @@ strong {
 
 .dark .post-content code {
     color: #e770a6;
-}
-
-.nomargin{
-    margin: 0 !important
 }
