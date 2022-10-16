@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>Notes on fzdwx</title>
-    <link>https://fzdwx.github.io/notes/</link>
-    <description>Recent content in Notes on fzdwx</description>
+    <title>ics on fzdwx</title>
+    <link>https://fzdwx.github.io/categories/ics/</link>
+    <description>Recent content in ics on fzdwx</description>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright [fzdwx](https://github.com/fzdwx) since 2022</copyright>
-    <lastBuildDate>Sun, 16 Oct 2022 06:02:14 +0000</lastBuildDate><atom:link href="https://fzdwx.github.io/notes/feed.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 16 Oct 2022 06:02:14 +0000</lastBuildDate><atom:link href="https://fzdwx.github.io/categories/ics/feed.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>恶补计算机基础-jyy ics</title>
       <link>https://fzdwx.github.io/notes/6/</link>
@@ -36,30 +36,6 @@
 <ul>
 <li><input disabled="" type="checkbox"> pa1</li>
 </ul>
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>终端下好用的程序</title>
-      <link>https://fzdwx.github.io/notes/1/</link>
-      <pubDate>Sat, 01 Oct 2022 06:33:55 +0000</pubDate>
-      
-      <guid>https://fzdwx.github.io/notes/1/</guid>
-      <description> ranger 配置推荐 &amp;nbsp;https://zhuanlan.zhihu.com/p/105731111 &amp;nbsp;https://zhuanlan.zhihu.com/p/441083543 fzf &amp;nbsp;https://github.com/junegunn/fzf ranger &amp;nbsp;https://github.com/ranger/ranger </description>
-      <content:encoded><![CDATA[<ol>
-<li>ranger 配置推荐
-<ul>
-<li>&nbsp;<a href="https://zhuanlan.zhihu.com/p/105731111" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/105731111</a>
-</li>
-<li>&nbsp;<a href="https://zhuanlan.zhihu.com/p/441083543" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/441083543</a>
-</li>
-</ul>
-</li>
-<li>fzf &nbsp;<a href="https://github.com/junegunn/fzf" target="_blank" rel="noopener">https://github.com/junegunn/fzf</a>
-</li>
-<li>ranger &nbsp;<a href="https://github.com/ranger/ranger" target="_blank" rel="noopener">https://github.com/ranger/ranger</a>
-</li>
-</ol>
 ]]></content:encoded>
     </item>
     
