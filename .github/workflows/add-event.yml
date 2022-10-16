@@ -9,9 +9,9 @@ jobs:
     steps:
       - name: checkout
         uses: actions/checkout@v3
-        with:
-          submodules: true  # Fetch Hugo themes (true OR recursive)
-          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
+#        with:
+#          submodules: true  # Fetch Hugo themes (true OR recursive)
+#          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
       - name: add event to my blog
         uses: fzdwx/add-event-to-myblog@v2.3
         with:
