@@ -8,15 +8,6 @@
     src: url("https://cdn.jsdelivr.net/gh/fzdwx/fzdwx.github.io/static/font/f1.woff2") format("woff2");
 }
 
-@font-face {
-    font-family: fzdwxFont;
-    src: url("https://cdn.jsdelivr.net/gh/fzdwx/fzdwx.github.io/static/font/fzdwx.woff2") format("woff2");
-}
-
-.fzdwx {
-    font-family: 'fzdwxFont', monospace !important;
-}
-
 .jinkai {
     font-family: 'jinkaiFont', monospace !important;
 }
@@ -27,7 +18,7 @@
 }
 
 .post-title {
-    font-family: 'fzdwxFont', monospace !important;
+    font-family: 'f1Font', monospace !important;
 }
 
 .post-content {
@@ -126,7 +117,7 @@ strong {
     margin: 0 0 8px;
     font-weight: 700;
     font-size: 18px;
-    font-family: 'fzdwxFont', monospace !important;
+    font-family: 'f1Font', monospace !important;
 }
 
 .custom-block.tip {
@@ -203,4 +194,8 @@ strong {
 
 .dark .post-content code {
     color: #e770a6;
+}
+
+.nomargin{
+    margin: 0 !important
 }
