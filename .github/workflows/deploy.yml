@@ -25,7 +25,7 @@ jobs:
           extended: true
 
       - name: build
-        run: hugo --minify
+        run: hugo mod get -u && hugo --minify
 
       - name: deploy
         uses: peaceiris/actions-gh-pages@v3
