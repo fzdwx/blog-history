@@ -31,5 +31,29 @@
 ]]></content:encoded>
     </item>
     
+    <item>
+      <title>终端下好用的程序</title>
+      <link>https://fzdwx.github.io/notes/1/</link>
+      <pubDate>Sat, 01 Oct 2022 06:33:55 +0000</pubDate>
+      
+      <guid>https://fzdwx.github.io/notes/1/</guid>
+      <description> ranger 配置推荐 &amp;nbsp;https://zhuanlan.zhihu.com/p/105731111 &amp;nbsp;https://zhuanlan.zhihu.com/p/441083543 fzf &amp;nbsp;https://github.com/junegunn/fzf ranger &amp;nbsp;https://github.com/ranger/ranger </description>
+      <content:encoded><![CDATA[<ol>
+<li>ranger 配置推荐
+<ul>
+<li>&nbsp;<a href="https://zhuanlan.zhihu.com/p/105731111" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/105731111</a>
+</li>
+<li>&nbsp;<a href="https://zhuanlan.zhihu.com/p/441083543" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/441083543</a>
+</li>
+</ul>
+</li>
+<li>fzf &nbsp;<a href="https://github.com/junegunn/fzf" target="_blank" rel="noopener">https://github.com/junegunn/fzf</a>
+</li>
+<li>ranger &nbsp;<a href="https://github.com/ranger/ranger" target="_blank" rel="noopener">https://github.com/ranger/ranger</a>
+</li>
+</ol>
+]]></content:encoded>
+    </item>
+    
   </channel>
 </rss>
