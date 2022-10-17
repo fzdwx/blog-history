@@ -1,0 +1,17 @@
+<div class="toc side right">
+<details  open>
+<summary accesskey="c" title="(Alt + C)">
+    <span class="details">{{- i18n "toc" | default "Table of Contents" }}</span>
+</summary>
+<div class="inner">
+    <ul>
+        {{ range .Pages }}
+        <li>
+            <a href="#{{ urlize .Title }}">{{ .Title }}</a>
+            {{ .Params.wikipedia }}
+        </li>
+        {{ end }}
+    </ul>
+</div>
+</details>
+</div>

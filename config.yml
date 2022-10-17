@@ -40,10 +40,10 @@ params:
   defaultTheme: auto # dark, light
   disableThemeToggle: false
 
-  ShowReadingTime: true
+  ShowReadingTime: false
   ShowPostNavLinks: true
   ShowBreadCrumbs: true
-  ShowWordCount: true
+  ShowWordCount: false
   ShowCodeCopyButtons: true
   Email: likelovec@gmail.com
   disableSpecial1stPost: false
