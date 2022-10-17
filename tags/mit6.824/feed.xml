@@ -89,7 +89,10 @@ Raft将客户端的请求组织成一个序列，被成为log，并且确保所�
 </span></span><span class="line"><span class="cl"><span class="c1">// each time a new entry is committed to the log, each Raft peer
 </span></span></span><span class="line"><span class="cl"><span class="c1">// should send an ApplyMsg to the service (or tester).
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">type</span> <span class="nx">ApplyMsg</span>
-</span></span></code></pre></div><h4 id="makepeers-labrpcclientend-me-intpersister-persister-applych-chan-applymsg">Make(peers []*labrpc.ClientEnd, me int,persister *Persister, applyCh chan ApplyMsg)</h4>
+</span></span></code></pre></div><h4 id="make">Make</h4>
+<blockquote>
+<p>Make(peers []*labrpc.ClientEnd, me int,persister *Persister, applyCh chan ApplyMsg)</p>
+</blockquote>
 <p>用于创建 raft server。</p>
 <ol>
 <li>所有的 raft server 的端口都在<code>peers[]</code>存放(包括当前的服务)，当前服务的端口可以通过<code>peers[me]</code>来获取。</li>
@@ -98,7 +101,10 @@ Raft将客户端的请求组织成一个序列，被成为log，并且确保所�
 <li><code>applyCh</code>是 service 或 tester 发送消息给 raft 的通道。<code>Make()</code>
 必须快速返回，所以它应该为一些长时间运行的任务启动<code>goruntines</code>。</li>
 </ol>
-<h4 id="startcommand-interface-int-int-bool">Start(command interface{}) (int, int, bool)</h4>
+<h4 id="start">Start</h4>
+<blockquote>
+<p>Start(command interface{}) (int, int, bool)</p>
+</blockquote>
 <p>使用Raft的服务(e.g a k/v server)希望就下一个要追加到raft日志的命令达成一致(就是追加到 raft
 日志的下一条命令是相同的？)。如果当前raft server不是leader则返回false。
 否则启动协议并<strong>立即返回</strong>，无需等待日志追加完成。

@@ -10,9 +10,12 @@
     --bBlack: #4d4d4d;
     --bCyna: #73BC83;
     --selection: #3d375e7f;
-    --main-width:50%;
-    --post-width:50%;
-    --nav-width:60%;
+    --gap:20px;
+    --main-width: 850px;
+    --post-width: 850px;
+    --nav-width: 1000px;
+    --code-bg: var(--vp-c-white-mute);
+    
 
     --link-color: var(--primary);
     --link-hover-color: var(--bCyna);
