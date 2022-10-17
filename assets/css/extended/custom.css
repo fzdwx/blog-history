@@ -164,10 +164,10 @@ strong {
     top: 0;
 }
 
-.header-bar{
+.header-bar {
     width: 100% !important;
     border-top: 4px solid;
-    border-image-source: linear-gradient(100deg, var(--a2),var(--bCyna) 50%, #8ed6fb);
+    border-image-source: linear-gradient(100deg, var(--a2), var(--bCyna) 50%, #8ed6fb);
     border-image-slice: 1;
 }
 
@@ -228,6 +228,10 @@ strong {
     -webkit-box-shadow: 0 1px 0 0 var(--vp-c-divider-light);
 }
 
-html{
+html {
     scroll-padding-top: 60px;
+}
+
+.toc li a.active {
+    background-color: transparent;
 }
