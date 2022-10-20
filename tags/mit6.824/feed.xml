@@ -517,9 +517,10 @@ nextIndex)):
 <ul>
 <li>follower 是被动的: 它们不会自己发出请求，而只是响应来自 leader 和 candidate 的请求。</li>
 <li>leader 处理所有 client 的请求（如果 client 联系到 follower，则 follower 重定向到 leader)。</li>
-<li>candidate 用于选举出一个新的 leader(可以看&nbsp;<a href="/posts/2022-10-10-raftkv/#figure-3">图4</a>
+<li>candidate 用于选举出一个新的 leader(可以看&nbsp;<a href="/posts/2022-10-10-raftkv/#figure-4">图4</a>
 )。</li>
 </ul>
+<h4 id="figure-4">Figure 4</h4>
 <p><figure class="align-center">
     <img src="/images/9.png" alt="Figure 4: Server states。follow 之响应其他服务的请求，如果 follow 没有手段任何通信，就会变成 candidate 并发起选举。获得整个集群
 中大多数人投票的 candidate 成为候选人。leader 通常运行到它们失败为止。"  />
@@ -550,6 +551,7 @@ below.
 尝试成为 leader。如果一个 candidate 赢得了选举，那么它将在剩下的 term 内担任 leader。</p>
 <p>在某些特殊情况下选举的结果是 split vote。在这种情况下，term 将会结束并且没有 leader。一个新的 term(伴随新一轮的选举)将很快开始。
 Raft保证在给定的 term 内最多只有一个 leader。</p>
+<h4 id="figure-5">Figure 5</h4>
 <p><figure class="align-center">
     <img src="/images/10.png" alt="Figure 5: 将时间划分为 terms，每个 term 都以选举开始。选举成功后，一个 leader管理集群直到 term 结束。在一些选举失败的情况下，
 任期结束时都不会选择 leader。可以在不同的服务器上，可以在不同的时间观察到 term 之间的过渡情况。"  />
@@ -615,9 +617,9 @@ manner, and they issue RPCs in parallel for best performance.
 
 
 <h3 id="leader-election">Leader election</h3>
-<p>Raft 使用心跳机制来触发 leader 选举。当服务器启动时，它们开始是 follower 。只要服务器收到来自 leader 或 candidate 的有效RPC，
+<p>Raft 使用心跳机制来触发 leader 选举。当服务器启动时，初始状态都是 follower 。只要服务器收到来自 leader 或 candidate 的有效RPC，
 它就一直处于 follower 状态。 leader 定期向所有 follower 发送心跳（<code>AppendEntries RPCs</code>，不携带日志条目），以保持他们的权威。
-如果 follower 在一段被称为 <em>election timeout</em> 的时间内没有收到任何通信，那么它就认为没有可行的 leader ，
+如果 follower 在一段时间内没有收到任何通信(<em>election timeout</em>)，那么它就认为没有可行的 leader ，
 并开始选举以选择一个新的 leader。</p>
 
 
@@ -630,6 +632,92 @@ heartbeats (AppendEntries RPCs that carry no log entries) to all followers in or
 follower receives no communication over a period of time called the election timeout, then it assumes there is no
 viable
 leader and begins an election to choose a new leader.
+</details>
+
+
+
+<p>为了开始选举，follower 增加它的当前 term 并过转换到 candidate 状态。
+然后，它为自己投票，并行的向集群中的每个其他服务器发出<code>RequestVote RPCs</code>。
+candidate 将一直处于这种状态，直到发生以下三种情况之一:</p>
+<ol>
+<li>它赢得了选举</li>
+<li>另一个服务器确立了自己的领导地位</li>
+<li>一段时间内没有赢家。</li>
+</ol>
+<p>接下来就对这些结果进行讨论:</p>
+
+
+
+<details class="details custom-block">
+    <summary> 原文</summary>
+    To begin an election, a follower increments its current term and transitions to candidate state. It then votes for
+itself and issues RequestVote RPCs in parallel to each of the other servers in the cluster. A candidate continues in
+this state until one of three things happens: (a) it wins the election, (b) another server establishes itself as leader,
+or (c) a period of time goes by with no winner. These outcomes are discussed separately in the paragraphs below
+</details>
+
+
+
+<blockquote>
+<p>它赢得了选举</p>
+</blockquote>
+<p>如果一个 candidate 在同一任期( term )内获得了整个集群中大多数服务器的投票，那么它就赢得了选举。
+每台服务器在给定的 term 内最多为一名 candidate 投票，以先来后到为原则。</p>
+<p>少数服从多数的原则保证了最多只有一名 candidate能够在某一 term 内赢得选举
+(&nbsp;<a href="/posts/2022-10-10-raftkv/#figure-3">图3</a>
+中的选举 Safety 属性)。
+一旦一个 candidate 在选举中获胜，它就成为 leader。然后，它向所有其他服务器发送心跳信息(不携带日志的<code>AppendEntries RPC</code>)，
+以建立其权威并防止新的选举。</p>
+
+
+
+<details class="details custom-block">
+    <summary> 原文</summary>
+    A candidate wins an election if it receives votes from a majority of the servers in the full cluster for the same term.
+Each server will vote for at most one candidate in a given term, on a first-come-first-served basis (note: Section 5.4
+adds an additional restriction on votes). The majority rule ensures that at most one candidate can win the election for
+a particular term (the Election Safety Property in Figure 3). Once a candidate wins an election, it becomes leader. It
+then sends heartbeat messages to all of the other servers to establish its authority and prevent new elections.
+</details>
+
+
+
+<blockquote>
+<p>另一个服务器确立了自己的领导地位</p>
+</blockquote>
+<p>在等待投票的过程中，candidate 可能会收到另一个服务器的<code>AppendEntries RPC</code>，声称自己是领导者。
+如果这个 leader 的term(会携带在 RPC 中)至少与 candidate 的当前 term 一样大，
+那么 candidate 就会承认 leader 是合法的并返回到 follower 状态。
+如果 RPC 中的 term 比 candidate 当前的 term 小，那么候选者拒绝 RPC，继续处于 candidate 状态。</p>
+
+
+
+<details class="details custom-block">
+    <summary> 原文</summary>
+    While waiting for votes, a candidate may receive an AppendEntries RPC from another server claiming to be leader. If the
+leader’s term (included in its RPC) is at least as large as the candidate’s current term, then the candidate recognizes
+the leader as legitimate and returns to follower state. If the term in the RPC is smaller than the candidate’s current
+term, then the candidate rejects the RPC and continues in candidate state.
+</details>
+
+
+
+<blockquote>
+<p>一段时间内没有赢家</p>
+</blockquote>
+<p>第三个可能的结果是，一个候选人既没有赢得选举，也没有输掉选举: 如果许多 follower 同时成为 candidate，票数可能被分割，
+因此没有 candidate 获得足够的投票。
+当这种情况发生时，每个 candidate 都会超时，并通过增加其 term 和启动新一轮的<code>RequestVote RPC</code>来开始新的选举。
+然而，如果没有额外的措施，<code>split vote</code> 可能会无限期地重复。</p>
+
+
+
+<details class="details custom-block">
+    <summary> 原文</summary>
+    The third possible outcome is that a candidate neither wins nor loses the election: if many followers become candidates
+at the same time, votes could be split so that no candidate obtains a majority. When this happens, each candidate will
+time out and start a new election by incrementing its term and initiating another round of RequestVote RPCs. However,
+without extra measures split votes could repeat indefinitely.
 </details>
 
 
