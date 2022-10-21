@@ -87,7 +87,7 @@
       <pubDate>Sat, 01 Oct 2022 06:33:55 +0000</pubDate>
       
       <guid>https://fzdwx.github.io/notes/1/</guid>
-      <description> ranger 配置推荐 &amp;nbsp;https://zhuanlan.zhihu.com/p/105731111 &amp;nbsp;https://zhuanlan.zhihu.com/p/441083543 fzf &amp;nbsp;https://github.com/junegunn/fzf ranger &amp;nbsp;https://github.com/ranger/ranger </description>
+      <description> ranger 配置推荐 &amp;nbsp;https://zhuanlan.zhihu.com/p/105731111 &amp;nbsp;https://zhuanlan.zhihu.com/p/441083543 fzf &amp;nbsp;https://github.com/junegunn/fzf ranger &amp;nbsp;https://github.com/ranger/ranger 压测工具 &amp;nbsp;https://github.com/link1st/go-stress-testing </description>
       <content:encoded><![CDATA[<ol>
 <li>ranger 配置推荐
 <ul>
@@ -100,6 +100,8 @@
 <li>fzf &nbsp;<a href="https://github.com/junegunn/fzf" target="_blank" rel="noopener">https://github.com/junegunn/fzf</a>
 </li>
 <li>ranger &nbsp;<a href="https://github.com/ranger/ranger" target="_blank" rel="noopener">https://github.com/ranger/ranger</a>
+</li>
+<li>压测工具 &nbsp;<a href="https://github.com/link1st/go-stress-testing" target="_blank" rel="noopener">https://github.com/link1st/go-stress-testing</a>
 </li>
 </ol>
 ]]></content:encoded>
