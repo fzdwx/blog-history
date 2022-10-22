@@ -7,7 +7,7 @@
 ```markdown
 {{< figure align=center src="/images/2022092801.png" title="asdasd">}}
 
-or
+orasd
 
 ![阿萨德](/images/2.png)
 ```
