@@ -870,7 +870,7 @@ const defaultOptions = {
     kind: OptionKind.VIEWER + OptionKind.PREFERENCE
   };
   defaultOptions.sandboxBundleSrc = {
-    value: "../build/pdf.sandbox.js",
+    value: "/pdfjs/js/pdf.sandbox.js",
     kind: OptionKind.VIEWER
   };
 }
