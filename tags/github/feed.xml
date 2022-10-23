@@ -80,7 +80,7 @@ git提交不了，由于我用的 lazygit ，它的提示不明显，我以为�
 </ol>
 <h3 id="4-发布到marketplace">4. 发布到marketplace</h3>
 <p>需要勾选<strong>Publish this Action to the GitHub Marketplace</strong>，可能需要2fa认证，找一个github支持就ok了。</p>
-<p><figure class="align-center">
+<p><figure id="a-/images/8.png" class="align-center">
     <img src="/images/8.png" alt="Figure 1"  />
     
     <figcaption>

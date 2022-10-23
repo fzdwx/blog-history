@@ -80,7 +80,7 @@ git提交不了，由于我用的 lazygit ，它的提示不明显，我以为�
 </ol>
 <h3 id="4-发布到marketplace">4. 发布到marketplace</h3>
 <p>需要勾选<strong>Publish this Action to the GitHub Marketplace</strong>，可能需要2fa认证，找一个github支持就ok了。</p>
-<p><figure class="align-center">
+<p><figure id="a-/images/8.png" class="align-center">
     <img src="/images/8.png" alt="Figure 1"  />
     
     <figcaption>
@@ -382,7 +382,7 @@ to continue operating normally during configuration changes.</li>
 <h2 id="replicated-state-machine">Replicated State Machine</h2>
 <p><code>复制状态机(Replicated State Machine)</code>在分布式系统中被用于解决各种容错问题。例如GFS,HDFS,RAMCloud等单leader的大型集群系统，通常使用独立
 的复制状态机来管理领导选举和存储配置信息来保证在leader崩溃会存活下来，复制状态机的例子包括Chubby以及Zookeeper。</p>
-<p><figure class="align-center">
+<p><figure id="a-/images/7.png" class="align-center">
     <img src="/images/7.png" alt="Figure 1: 复制状态机架构。共识算法管理来自客户端的包含状态机命令的复制日志，状态机按照相同的顺序来处理它们，所以它们产生相同的输出。"  />
     
     <figcaption>
@@ -536,7 +536,7 @@ election mechanism described in Section 5.2.</li>
 
 
 <h3 id="figure-2">Figure 2</h3>
-<p><figure class="align-center">
+<p><figure id="a-/images/raftp2.png" class="align-center">
     <img src="/images/raftp2.png" alt="Figure 2: Raft共识算法的精简摘要(不包括成员更改以及日志压缩)。左上角的服务器行为被描述为一组独立且重复触发的规则。"  />
     
     <figcaption>
@@ -676,7 +676,7 @@ nextIndex)):
 </li>
 </ul>
 <h3 id="figure-3">Figure 3</h3>
-<p><figure class="align-center">
+<p><figure id="a-/images/f3.png" class="align-center">
     <img src="/images/f3.png" alt="Figure 3: Raft保证这些属性在在任何时候都上正确的。"  />
     
     <figcaption>
@@ -702,7 +702,7 @@ nextIndex)):
 )。</li>
 </ul>
 <h4 id="figure-4">Figure 4</h4>
-<p><figure class="align-center">
+<p><figure id="a-/images/9.png" class="align-center">
     <img src="/images/9.png" alt="Figure 4: Server states。follow 之响应其他服务的请求，如果 follow 没有手段任何通信，就会变成 candidate 并发起选举。获得整个集群
 中大多数人投票的 candidate 成为候选人。leader 通常运行到它们失败为止。"  />
     
@@ -733,7 +733,7 @@ below.
 <p>在某些特殊情况下选举的结果是 split vote。在这种情况下，term 将会结束并且没有 leader。一个新的 term(伴随新一轮的选举)将很快开始。
 Raft保证在给定的 term 内最多只有一个 leader。</p>
 <h4 id="figure-5">Figure 5</h4>
-<p><figure class="align-center">
+<p><figure id="a-/images/10.png" class="align-center">
     <img src="/images/10.png" alt="Figure 5: 将时间划分为 terms，每个 term 都以选举开始。选举成功后，一个 leader管理集群直到 term 结束。在一些选举失败的情况下，
 任期结束时都不会选择 leader。可以在不同的服务器上，可以在不同的时间观察到 term 之间的过渡情况。"  />
     
@@ -903,6 +903,317 @@ without extra measures split votes could repeat indefinitely.
 
 
 
+<p>Raft使用随机的选举超时时间，以确保 split vote 很少发生，并能迅速解决。为了从一开始就防止 split vote，
+选举超时时间是从一个固定的时间间隔中随机选择的(例如，150-300ms)。 这样每个服务器的选举超时时间就不同了，所以在大多数情况下，只有一个服务器会超时。</p>
+<p>如果一个服务赢得了选举，就在其他服务超时之前发送心跳，split vote 也使用同样的机制来处理。
+每个候选人在选举开始时重新启动其随机选举超时(重新计时？)，并等待超时过后再开始下一次选举；这减少了在新的选举中再次出现分裂票的可能性。</p>
+
+
+
+<details class="details custom-block">
+    <summary> 原文</summary>
+    Raft uses randomized election timeouts to ensure that split votes are rare and that they are resolved quickly. To
+prevent split votes in the first place, election timeouts are chosen randomly from a fixed interval (e.g., 150–300ms).
+This spreads out the servers so that in most cases only a single server will time out; it wins the election and sends
+heartbeats before any other servers time out. The same mechanism is used to handle split votes. Each candidate restarts
+its randomized election timeout at the start of an election, and it waits for that timeout to elapse before starting the
+next election; this reduces the likelihood of another split vote in the new election. Section 9.3 shows that this
+approach elects a leader rapidly
+</details>
+
+
+
+<p>选举是一个用于说明可理解性是如何指导我们在设计方案做权衡的例子。
+最初我们计划使用一个排名系统: 每个 candidate 被分配一个唯一的排名，
+用来在竞争的 candidate 之间进行选择。如果一个候选人发现了另一个排名更高的候选人，
+它就会回到 follower 的状态，这样排名更高的候选人就能更容易地赢得下一次选举。
+我们发现这种方法在可用性方面产生了一些微妙的问题(如果一个排名较高的服务失败了，一个排名较低的服务器可能需超时并再次成为
+candidate ，但如果它过早地这样做，它可能会重置选举 leader 的进展)。我们对算法进行了多次调整，但每次调整后都会出现新的角落案例。
+最终我们得出结论，随机重试的方法更明显，更容易理解。</p>
+
+
+
+<details class="details custom-block">
+    <summary> 原文</summary>
+    Elections are an example of how understandability guided our choice between design alternatives.
+Initially we planned to use a ranking system: each candidate was assigned a unique rank,
+which was used to select between competing candidates. If a candidate discovered another candidate with higher rank,
+it would return to follower state so that the higher ranking candidate could more easily win the next election.
+We found that this approach created subtle issues around availability (a lower-ranked server might need to time out and
+become a candidate again if a higher-ranked server fails, but if it does so too soon, it can reset progress towards
+electing a leader). We made adjustments to the algorithm several times, but after each adjustment new corner cases
+appeared. Eventually we concluded that the randomized retry approach is more obvious and understandable.
+</details>
+
+
+
+<h3 id="log-replication">Log replication</h3>
+<p>一旦一个领导者被选出，它就开始为 client 的请求提供服务。每个 client request 都包含一个要由复制的状态机执行的 command。
+leader 将该 command 作为一个新的条目附加到它的日志中，然后并行地将<code>AppendEntries RPCs</code>发送给其他每个服务器以复制该条目。
+当条目被安全复制后(如下所述)，leader 将条目应用于其状态机，并将执行结果返回给 client 。
+如果 follower 崩溃或运行缓慢，或者网络数据包丢失，领导者会无限期地重试<code>AppendEntries RPCs</code>(甚至在它回应了客户端之后)，
+直到所有 follower 最终存储所有日志条目。</p>
+
+
+
+<details class="details custom-block">
+    <summary> 原文</summary>
+    Once a leader has been elected, it begins servicing client requests. Each client request contains a command to be
+executed by the replicated state machines. The leader appends the command to its log as a new entry, then is- sues
+AppendEntries RPCs in parallel to each of the other servers to replicate the entry. When the entry has been safely
+replicated (as described below), the leader applies the entry to its state machine and returns the result of that
+execution to the client. If followers crash or run slowly, or if network packets are lost, the leader retries Append-
+Entries RPCs indefinitely (even after it has responded to the client) until all followers eventually store all log en-
+tries.
+</details>
+
+
+
+<p><figure id="a-/images/f6.png" class="align-center">
+    <img src="/images/f6.png" alt="Figure 6: 日志是由条目组成的，这些条目按顺序编号。每个条目都包含创建它的 term(每个框中的数字)和状态机的命令。如果一个条目可以安全地应用于状态机，那么该条目就被认为是 committed 的"  />
+    
+    <figcaption>
+       Figure 6: 日志是由条目组成的，这些条目按顺序编号。每个条目都包含创建它的 term(每个框中的数字)和状态机的命令。如果一个条目可以安全地应用于状态机，那么该条目就被认为是 committed 的
+    </figcaption>
+    
+</figure></p>
+<p>日志的组织方式如&nbsp;<a href="/posts/2022-10-10-raftkv/#a-/images/f6.png">图6</a>
+所示。每个日志条目都存储了一个状态机命令，
+以及 leader 收到该条目时的 term 编号。日志条目中的 term 编号被用来检测日志之间的不一致，
+并确保&nbsp;<a href="/posts/2022-10-10-raftkv/#figure-3">图3</a>
+中的一些属性。每个日志条目也有一个整数的索引来标识它在日志中的位置。</p>
+
+
+
+<details class="details custom-block">
+    <summary> 原文</summary>
+    Logs are organized as shown in Figure 6. Each log entry stores a state machine command along with the term number when
+the entry was received by the leader. The term numbers in log entries are used to detect inconsistencies between logs
+and to ensure some of the properties in Figure 3. Each log entry also has an integer index identifying its position in
+the log.
+</details>
+
+
+
+<p>leader 决定何时将日志条目应用于状态机是安全的,这样的条目被称为 <em>committed</em> 。
+Raft 保证所提交的条目是持久的，最终会被所有可用的状态机执行。一旦创建该条目的 leader 将其复制到大多数服务器上，
+该日志条目就会被提交(例如，图6中的条目7)。这也会提交 leader 日志中所有之前的条目，包括之前领导者创建的条目。
+第5.4节讨论了在 leader 变更后应用这一规则时的一些微妙之处，它还表明这种承诺的定义是安全的。
+leader 会跟踪它所知道的已承诺的最高索引，并且它在未来的<code>AppendEntries RPC</code>(包括心跳)中包括该索引，以便其他服务器最终发现。
+一旦 follower 得知一个日志条目被提交，它就会将该条目应用于其本地状态机(按日志顺序)。</p>
+
+
+
+<details class="details custom-block">
+    <summary> 原文</summary>
+    The leader decides when it is safe to apply a log entry to the state machines; such an entry is called committed.
+Raft guarantees that committed entries are durable and will eventually be executed by all of the available state
+machines. A log entry is committed once the leader that created the entry has replicated it on a majority of the
+servers (e.g., entry 7 in Figure 6). This also commits all preceding entries in the leader’s log, including entries
+created by previous leaders. Section 5.4 discusses some subtleties when applying this rule after leader changes, and it
+also shows that this definition of commitment is safe. The leader keeps track of the highest index it knows to be
+committed, and it includes that index in future AppendEntries RPCs (including heartbeats) so that the other servers
+eventually find out. Once a follower learns that a log entry is committed, it applies the entry to its local state
+machine (in log order)
+</details>
+
+
+
+<p>我们设计的 Raft 日志机制在不同服务器上的日志之间保持高度的一致性。这不仅简化了系统的行为，使其更具可预测性，而且是确保安全的重要组成部分。
+Raft 维护了以下特性，它们共同构成了&nbsp;<a href="/posts/2022-10-10-raftkv/#figure-3">图3</a>
+中的 Log Matching 特性:</p>
+<blockquote>
+<p>如果不同的两个日志具有相同的 index 以及 term</p>
+</blockquote>
+<ul>
+<li>那么就认为它们存储的是同一个 command</li>
+<li>那么就认为它们之前的所有日志也是相同的</li>
+</ul>
+
+
+
+<details class="details custom-block">
+    <summary> 原文</summary>
+    <p>We designed the Raft log mechanism to maintain a high level of coherency between the logs on different servers. Not only
+does this simplify the system’s behavior and make it more predictable, but it is an important component of ensuring
+safety. Raft maintains the following properties, which together constitute the Log Matching Property in Figure 3:</p>
+<ul>
+<li>If two entries in different logs have the same index
+and term, then they store the same command.</li>
+<li>If two entries in different logs have the same index
+and term, then the logs are identical in all preceding
+entries</li>
+</ul>
+
+</details>
+
+
+
+<p>第一个属性来自于这样一个事实，即一个 leader 在一个给定的 term 中最多创建一个具有给定的日志 index 的条目，
+并且日志条目永远不会改变它们在日志中的位置。
+第二个属性由<code>AppendEntries</code>执行的简单一致性检查来保证。当发送<code>AppendEntries RPC</code>时，
+leader 会包含其日志中紧接新条目之前的条目的 index 和 term 。
+如果 follower 在其日志中没有找到具有相同 index 和 term 的条目，那么它将拒绝新条目。
+一致性检查作为一个归纳步骤: 日志的初始空状态满足了 Log Matching 属性，并且每当日志被扩展时，一致性检查都会保留 Log
+Matching 属性。
+因此，每当<code>AppendEntries</code>成功返回时，leader 知道 follower 的日志与自己的日志在新条目之前是相同的</p>
+
+
+
+<details class="details custom-block">
+    <summary> 原文</summary>
+    The first property follows from the fact that a leader creates at most one entry with a given log index in a given term,
+and log entries never change their position in the log.
+The second property is guaranteed by a simple consistency check performed by AppendEntries.
+When sending an AppendEntries RPC, the leader includes the index and term of the
+entry in its log that immediately precedes the new entries. If the follower does not find an entry in its log with the
+same index and term, then it refuses the new entries. The consistency check acts as an induction step: the initial empty
+state of the logs satisfies the Log Matching Property, and the consistency check preserves the Log Matching Property
+whenever logs are extended. As a result, whenever AppendEntries returns successfully, the leader knows that the
+follower’s log is identical to its own log up through the new entries
+</details>
+
+
+
+<p>在正常运行期间，leader 和 follower 的日志保持一致，所以<code>AppendEntries</code>一致性检查不会失败。
+然而，leader 崩溃会使日志不一致(old leader 可能没有完全复制其日志中的所有条目)。
+这些不一致会在一系列 leader 和 follower 的崩溃中加剧。图7说明了 follower 的日志可能与new leader 的日志不同的方式。</p>
+<ul>
+<li>follower 可能会丢失 leader 的条目</li>
+<li>follower 可能会有 leader 没有的额外条目</li>
+<li>或者两者都有</li>
+</ul>
+<p>日志中缺失和多余的条目可能跨越多个 term 。</p>
+<p><figure id="a-/images/f7.png" class="align-center">
+    <img src="/images/f7.png" alt="Figure 7: 当顶端的 leader 掌权时，在 follower 的日志中可能会出现(a-f)中的任何一种情况。
+每个盒子代表一个日志条目；盒子里的数字是其 term 。 一个 follower 可能缺少条目(a-b)，可能有额外的未承诺的条目(c-d)，或者两者都有(e-f)。
+例如，如果该服务器是第2期的 leader ，在其日志中增加了几个条目，然后在提交任何条目之前就崩溃了；它很快重新启动，成为第3期的 leader，
+并在其日志中增加了几个条目；在第2期或第3期的任何条目被提交之前，该服务器又崩溃了，并持续了几个任期。"  />
+    
+    <figcaption>
+       Figure 7: 当顶端的 leader 掌权时，在 follower 的日志中可能会出现(a-f)中的任何一种情况。
+每个盒子代表一个日志条目；盒子里的数字是其 term 。 一个 follower 可能缺少条目(a-b)，可能有额外的未承诺的条目(c-d)，或者两者都有(e-f)。
+例如，如果该服务器是第2期的 leader ，在其日志中增加了几个条目，然后在提交任何条目之前就崩溃了；它很快重新启动，成为第3期的 leader，
+并在其日志中增加了几个条目；在第2期或第3期的任何条目被提交之前，该服务器又崩溃了，并持续了几个任期。
+    </figcaption>
+    
+</figure></p>
+
+
+
+<details class="details custom-block">
+    <summary> 原文</summary>
+    During normal operation, the logs of the leader and followers stay consistent, so the AppendEntries consistency check
+never fails. However, leader crashes can leave the logs inconsistent (the old leader may not have fully replicated all
+of the entries in its log). These inconsistencies can compound over a series of leader and follower crashes. Figure 7
+illustrates the ways in which followers’ logs may differ from that of a new leader. A follower may be missing entries
+that are present on the leader, it may have extra entries that are not present on the leader, or both. Missing and
+extraneous entries in a log may span multiple terms.
+</details>
+
+
+
+<p>在 Raft 中，leader 通过强迫 follower 的日志重复自己的日志来处理不一致的情况。这意味着 follower 日志中的冲突条目将被 leader
+日志中的条目覆盖。在下一节将表明，如果再加上一个限制，这就是安全的。</p>
+
+
+
+<details class="details custom-block">
+    <summary> 原文</summary>
+    In Raft, the leader handles inconsistencies by forcing the followers’ logs to duplicate its own. This means that
+conflicting entries in follower logs will be overwritten with entries from the leader’s log. Section 5.4 will show that
+this is safe when coupled with one more restriction.
+</details>
+
+
+
+<p>为了使 follower 的日志与自己的日志保持一致，leader 必须找到两个日志一致的最新日志条目，删除该点之后 follower 日志中的所有条目，
+并将该点之后的所有 leader 条目发送给 follower。所有这些操作都是为了响应<code>AppendEntries RPC</code>执行的一致性检查而发生的。
+leader 为每个 follower 维护一个 nextIndex ，这是 leader 将发送给该 follower 的下一个日志条目的 index 。
+当 leader 首次上台时，它会将所有 nextIndex 值初始化为其日志中最后一个值之后的索引(图 7 中的 11)。
+如果 follower 的日志与 leader 的日志不一致，则<code>AppendEntries</code>一致性检查将在下一个<code>AppendEntries RPC</code>中失败。
+拒绝后，leader 减少 nextIndex 并重试<code>AppendEntries RPC</code>。最终<code>nextIndex</code>将达到 leader 和 follower 日志匹配的点。
+发生这种情况时，<code>AppendEntries</code>将成功，这将删除 follower 日志中的任何冲突条目，并从 leader 日志中添加条目(如果有)。
+一旦<code>AppendEntries</code>成功，follower 的 log 就会和 leader 的一致，并且在接下来的任期内保持这种状态。</p>
+
+
+
+<details class="details custom-block">
+    <summary> 原文</summary>
+    To bring a follower’s log into consistency with its own, the leader must find the latest log entry where the two logs
+agree, delete any entries in the follower’s log after that point, and send the follower all of the leader’s entries
+after that point. All of these actions happen in response to the consistency check performed by AppendEntries RPCs. The
+leader maintains a nextIndex for each follower, which is the index of the next log entry the leader will send to that
+follower. When a leader first comes to power, it initializes all nextIndex values to the index just after the last one
+in its log (11 in Figure 7). If a follower’s log is inconsistent with the leader’s, the AppendEntries consis- tency
+check will fail in the next AppendEntries RPC. Af- ter a rejection, the leader decrements nextIndex and retries the
+AppendEntries RPC. Eventually nextIndex will reach a point where the leader and follower logs match. When this happens,
+AppendEntries will succeed, which removes any conflicting entries in the follower’s log and appends entries from the
+leader’s log (if any). Once AppendEntries succeeds, the follower’s log is consistent with the leader’s, and it will
+remain that way for the rest of the term
+</details>
+
+
+
+<blockquote>
+<p>如果需要，可以优化协议以减少被拒绝的<code>AppendEntries RPC</code>的数量。例如，当拒绝<code>AppendEntries</code>请求时，
+follower 可以包含冲突条目的 term 以它在 term 中存储的第一个索引。
+有了这些信息，leader 可以减少 nextIndex 以绕过该 term 中的所有冲突条目；
+每个有日志冲突的 term 都只需要一个<code>AppendEntries RPC</code>，而不是每个日志条目一个 RPC。
+在实践中，我们怀疑这种优化是否必要，因为失败很少发生，而且不太可能有很多不一致的条目。</p>
+</blockquote>
+
+
+
+<details class="details custom-block">
+    <summary> 原文</summary>
+    If desired, the protocol can be optimized to reduce the number of rejected AppendEntries RPCs. For example, when
+rejecting an AppendEntries request, the follower can include the term of the conflicting entry and the first index it
+stores for that term. With this information, the leader can decrement nextIndex to bypass all of the conflicting
+entries in that term; one AppendEntries RPC will be required for each term with conflicting entries, rather than one RPC
+per entry. In practice, we doubt this optimization is necessary, since failures happen infrequently and it is unlikely
+that there will be many inconsistent en- tries
+</details>
+
+
+
+<p>通过这种机制，leader 在上台时无需采取任何特殊措施来恢复日志一致性。它刚刚开始正常运行，
+并且日志会自动收敛以响应<code>AppendEntries</code>一致性检查的失败。
+leader 永远不会覆盖或删除自己日志中的条目(&nbsp;<a href="/posts/2022-10-10-raftkv/#figure-3">图3</a>
+中的 Leader Append-Only )。</p>
+
+
+
+<details class="details custom-block">
+    <summary> 原文</summary>
+    With this mechanism, a leader does not need to take any special actions to restore log consistency when it comes to
+power. It just begins normal operation, and the logs automatically converge in response to failures of the Append-
+Entries consistency check. A leader never overwrites or deletes entries in its own log (the Leader Append-Only Property
+in Figure 3).
+</details>
+
+
+
+<p>理想的 Raft:</p>
+<ul>
+<li>只要大多数服务器启动，Raft 就可以接受、复制和应用新的日志条目</li>
+<li>可以通过单轮 RPC 将新条目复制到集群的大部分；</li>
+<li>并且单个慢速 follower 不会影响性能。</li>
+</ul>
+
+
+
+<details class="details custom-block">
+    <summary> 原文</summary>
+    This log replication mechanism exhibits the desirable consensus properties described in Section 2: Raft can ac- cept,
+replicate, and apply new log entries as long as a ma- jority of the servers are up; in the normal case a new entry can
+be replicated with a single round of RPCs to a ma- jority of the cluster; and a single slow follower will not impact
+performance.
+</details>
+
+
+
+<h3 id="safety">Safety</h3>
 <h1 id="links">Links</h1>
 <ol>
 <li>项目地址: &nbsp;<a href="https://pdos.csail.mit.edu/6.824/labs/lab-raft.html" target="_blank" rel="noopener">https://pdos.csail.mit.edu/6.824/labs/lab-raft.html</a>
@@ -949,7 +1260,7 @@ serial不正确 修改nemu/src/device/serial.c#init_serial，每个人的不同�
 的时候提
 到一个运行红白机游戏的&nbsp;<a href="https://github.com/NJU-ProjectN/fceux-am" target="_blank" rel="noopener"> 项目 </a>
 </p>
-<p><figure class="align-center">
+<p><figure id="a-/images/4.png" class="align-center">
     <img src="/images/4.png" alt="运行起来的效果"  />
     
     <figcaption>
@@ -959,7 +1270,7 @@ serial不正确 修改nemu/src/device/serial.c#init_serial，每个人的不同�
 </figure></p>
 <p>遇到的坑:</p>
 <p>1.SIGSTKSZ 参数找不到</p>
-<p><figure class="align-center">
+<p><figure id="a-/images/5.png" class="align-center">
     <img src="/images/5.png" alt="SIGSTKSZ参数找不到"  />
     
     <figcaption>
@@ -971,7 +1282,7 @@ serial不正确 修改nemu/src/device/serial.c#init_serial，每个人的不同�
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">//uint8_t sigstack[SIGSTKSZ];
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">uint8_t</span> <span class="n">sigstack</span><span class="p">[</span><span class="mi">8192</span><span class="p">];</span>
 </span></span></code></pre></div><p>2.serial 不正确</p>
-<p><figure class="align-center">
+<p><figure id="a-/images/6.png" class="align-center">
     <img src="/images/6.png" alt="serial不正确"  />
     
     <figcaption>
@@ -1628,7 +1939,7 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
 <p>&nbsp;<a href="/images/1.png">HTTP通讯简图</a>
 </p>
 <p>在HTTP/1.1中是有<code>Start Line</code> + <code>header</code> + <code>body</code> 组成的，而在H2中是由一个<code>HEADER Frame</code>以及多个<code>DATA Frame</code>组成的。</p>
-<p><figure class="align-center">
+<p><figure id="a-/images/2.png" class="align-center">
     <img src="/images/2.png" alt="HTTP/1.1与H2报文组成的区别"  />
     
     <figcaption>

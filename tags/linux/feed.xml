@@ -73,7 +73,7 @@ serial不正确 修改nemu/src/device/serial.c#init_serial，每个人的不同�
 的时候提
 到一个运行红白机游戏的&nbsp;<a href="https://github.com/NJU-ProjectN/fceux-am" target="_blank" rel="noopener"> 项目 </a>
 </p>
-<p><figure class="align-center">
+<p><figure id="a-/images/4.png" class="align-center">
     <img src="/images/4.png" alt="运行起来的效果"  />
     
     <figcaption>
@@ -83,7 +83,7 @@ serial不正确 修改nemu/src/device/serial.c#init_serial，每个人的不同�
 </figure></p>
 <p>遇到的坑:</p>
 <p>1.SIGSTKSZ 参数找不到</p>
-<p><figure class="align-center">
+<p><figure id="a-/images/5.png" class="align-center">
     <img src="/images/5.png" alt="SIGSTKSZ参数找不到"  />
     
     <figcaption>
@@ -95,7 +95,7 @@ serial不正确 修改nemu/src/device/serial.c#init_serial，每个人的不同�
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">//uint8_t sigstack[SIGSTKSZ];
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">uint8_t</span> <span class="n">sigstack</span><span class="p">[</span><span class="mi">8192</span><span class="p">];</span>
 </span></span></code></pre></div><p>2.serial 不正确</p>
-<p><figure class="align-center">
+<p><figure id="a-/images/6.png" class="align-center">
     <img src="/images/6.png" alt="serial不正确"  />
     
     <figcaption>

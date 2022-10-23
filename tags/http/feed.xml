@@ -77,7 +77,7 @@
 <p>&nbsp;<a href="/images/1.png">HTTP通讯简图</a>
 </p>
 <p>在HTTP/1.1中是有<code>Start Line</code> + <code>header</code> + <code>body</code> 组成的，而在H2中是由一个<code>HEADER Frame</code>以及多个<code>DATA Frame</code>组成的。</p>
-<p><figure class="align-center">
+<p><figure id="a-/images/2.png" class="align-center">
     <img src="/images/2.png" alt="HTTP/1.1与H2报文组成的区别"  />
     
     <figcaption>
