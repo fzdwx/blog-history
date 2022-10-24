@@ -54,7 +54,12 @@ figcaption {
 }
 
 strong {
-    color: #73BC83 !important;
+    /*color: #73BC83 !important;*/
+}
+
+.post-content a {
+    color: var(--c1);
+    box-shadow:  0 1px 0 var(--bCyna);
 }
 
 .responsive-video {

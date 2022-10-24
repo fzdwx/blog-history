@@ -73,6 +73,7 @@
 }
 
 .chroma .nx {
+    color: var(--tertiary-bg);
 }
 
 .chroma .py {
@@ -272,6 +273,7 @@
 }
 
 .dark .chroma .nx {
+    color: var(--tertiary-bg);
 }
 
 .dark .chroma .py {

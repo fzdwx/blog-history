@@ -9,16 +9,16 @@
     --yellow: #ffca85;
     --bBlack: #4d4d4d;
     --bCyna: #73BC83;
+    --c1: #57BF7D;
     --selection: #3d375e7f;
-    --gap:20px;
+    --gap: 20px;
     --main-width: 850px;
     --post-width: 850px;
     --nav-width: 1000px;
     --code-bg: var(--vp-c-white-mute);
-    
 
     --link-color: var(--primary);
-    --link-hover-color: var(--bCyna);
+    --link-hover-color: var(--c1);
     --link-underline-shadow: 0 1px 0 var(--link-color);
     --link-hover-underline-color: var(--a1);
     --link-hover-underline-shadow: 0 2px 0 var(--link-hover-underline-color);
