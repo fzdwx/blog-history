@@ -6,7 +6,48 @@
     <description>Recent content in cs on fzdwx</description>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright [fzdwx](https://github.com/fzdwx) since 2022</copyright>
-    <lastBuildDate>Sun, 16 Oct 2022 06:02:14 +0000</lastBuildDate><atom:link href="https://fzdwx.github.io/categories/cs/feed.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 24 Oct 2022 07:43:57 +0000</lastBuildDate><atom:link href="https://fzdwx.github.io/categories/cs/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>6.824</title>
+      <link>https://fzdwx.github.io/notes/9/</link>
+      <pubDate>Mon, 24 Oct 2022 07:43:57 +0000</pubDate>
+      
+      <guid>https://fzdwx.github.io/notes/9/</guid>
+      <description>课程主页 &amp;nbsp;https://pdos.csail.mit.edu/6.824/schedule.html cs diy 主页: &amp;nbsp;https://csdiy.wiki/ 并行与分布式系统/MIT6.824/
+视频资源 &amp;nbsp;第4和5集 &amp;nbsp;第6和7集 &amp;nbsp;缺了看这个 &amp;nbsp;有一些 &amp;nbsp;2021 版本 &amp;nbsp;中文翻译 个人记录 我做 lab 时积累的一些相关的 blog
+Map Reduce &amp;nbsp;https://fzdwx.github.io/posts/2022-09-27-mit6.824-lab1/ Raft KV &amp;nbsp;https://fzdwx.github.io/posts/2022-10-10-raftkv/ </description>
+      <content:encoded><![CDATA[<p>课程主页 &nbsp;<a href="https://pdos.csail.mit.edu/6.824/schedule.html" target="_blank" rel="noopener">https://pdos.csail.mit.edu/6.824/schedule.html</a>
+
+cs diy 主页: &nbsp;<a href="https://csdiy.wiki/" target="_blank" rel="noopener">https://csdiy.wiki/</a>
+并行与分布式系统/MIT6.824/</p>
+<h2 id="视频资源">视频资源</h2>
+<ol>
+<li>&nbsp;<a href="https://www.bilibili.com/video/BV1x7411M7Sf/?p=13&amp;spm_id_from=333.1007.top_right_bar_window_history.content.click&amp;vd_source=98f230be6561d2fc7450e7ce05876f68" target="_blank" rel="noopener">第4和5集</a>
+</li>
+<li>&nbsp;<a href="https://www.bilibili.com/video/BV1R7411t71W?p=6&amp;vd_source=98f230be6561d2fc7450e7ce05876f68" target="_blank" rel="noopener">第6和7集</a>
+</li>
+<li>&nbsp;<a href="https://www.bilibili.com/video/BV1qk4y197bB/?p=4&amp;vd_source=98f230be6561d2fc7450e7ce05876f68" target="_blank" rel="noopener">缺了看这个</a>
+</li>
+<li>&nbsp;<a href="https://space.bilibili.com/20572351/channel/seriesdetail?sid=2348784" target="_blank" rel="noopener">有一些</a>
+</li>
+<li>&nbsp;<a href="https://www.bilibili.com/video/BV16f4y1z7kn/?vd_source=98f230be6561d2fc7450e7ce05876f68" target="_blank" rel="noopener">2021 版本</a>
+</li>
+<li>&nbsp;<a href="https://mit-public-courses-cn-translatio.gitbook.io/mit6-824/" target="_blank" rel="noopener">中文翻译 </a>
+</li>
+</ol>
+<h2 id="个人记录">个人记录</h2>
+<blockquote>
+<p>我做 lab 时积累的一些相关的 blog</p>
+</blockquote>
+<ol>
+<li>Map Reduce &nbsp;<a href="https://fzdwx.github.io/posts/2022-09-27-mit6.824-lab1/" target="_blank" rel="noopener">https://fzdwx.github.io/posts/2022-09-27-mit6.824-lab1/</a>
+</li>
+<li>Raft KV &nbsp;<a href="https://fzdwx.github.io/posts/2022-10-10-raftkv/" target="_blank" rel="noopener">https://fzdwx.github.io/posts/2022-10-10-raftkv/</a>
+</li>
+</ol>
+]]></content:encoded>
+    </item>
+    
     <item>
       <title>恶补计算机基础-jyy ics</title>
       <link>https://fzdwx.github.io/notes/6/</link>
