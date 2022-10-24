@@ -13,13 +13,16 @@
       <pubDate>Mon, 24 Oct 2022 07:43:57 +0000</pubDate>
       
       <guid>https://fzdwx.github.io/notes/9/</guid>
-      <description>课程主页 &amp;nbsp;https://pdos.csail.mit.edu/6.824/schedule.html cs diy 主页 &amp;nbsp;https://csdiy.wiki/ 并行与分布式系统/MIT6.824/
-视频资源 &amp;nbsp;第4和5集 &amp;nbsp;第6和7集 &amp;nbsp;缺了看这个 &amp;nbsp;有一些 &amp;nbsp;2021 版本 &amp;nbsp;中文翻译 个人记录 我做 lab 时积累的一些相关的 blog
+      <description>主页:
+&amp;nbsp;课程主页 &amp;nbsp;cs diy 主页 视频资源 &amp;nbsp;第4和5集 &amp;nbsp;第6和7集 &amp;nbsp;缺了看这个 &amp;nbsp;有一些 &amp;nbsp;2021 版本 &amp;nbsp;中文翻译 个人记录 我做 lab 时积累的一些相关的 blog
 Map Reduce &amp;nbsp;https://fzdwx.github.io/posts/2022-09-27-mit6.824-lab1/ Raft KV &amp;nbsp;https://fzdwx.github.io/posts/2022-10-10-raftkv/ </description>
-      <content:encoded><![CDATA[<p>课程主页 &nbsp;<a href="https://pdos.csail.mit.edu/6.824/schedule.html" target="_blank" rel="noopener">https://pdos.csail.mit.edu/6.824/schedule.html</a>
-</p>
-<p>cs diy 主页 &nbsp;<a href="https://csdiy.wiki/" target="_blank" rel="noopener">https://csdiy.wiki/</a>
-并行与分布式系统/MIT6.824/</p>
+      <content:encoded><![CDATA[<p>主页:</p>
+<ol>
+<li>&nbsp;<a href="https://pdos.csail.mit.edu/6.824/schedule.html" target="_blank" rel="noopener">课程主页</a>
+</li>
+<li>&nbsp;<a href="https://csdiy.wiki/%e5%b9%b6%e8%a1%8c%e4%b8%8e%e5%88%86%e5%b8%83%e5%bc%8f%e7%b3%bb%e7%bb%9f/MIT6.824/" target="_blank" rel="noopener">cs diy 主页</a>
+</li>
+</ol>
 <h2 id="视频资源">视频资源</h2>
 <ol>
 <li>&nbsp;<a href="https://www.bilibili.com/video/BV1x7411M7Sf/?p=13&amp;spm_id_from=333.1007.top_right_bar_window_history.content.click&amp;vd_source=98f230be6561d2fc7450e7ce05876f68" target="_blank" rel="noopener">第4和5集</a>
