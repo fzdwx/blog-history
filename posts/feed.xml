@@ -282,20 +282,25 @@ Raft 将客户端的请求组织成一个序列，被称为 log ，并且确保�
 必须快速返回，所以它应该为一些长时间运行的任务启动<code>goruntines</code>。</li>
 </ol>
 <h3 id="start">Start</h3>
+<p>使用 Raft 的服务（例如 kv 服务器）希望就下一个要附加到 Raft 日志的命令开始协议。如果此服务器不是领导者，则返回
+false。否则启动协议并立即返回。无法保证此命令将永远提交到 Raft 日志，因为领导者可能会失败或失去选举。即使 Raft
+实例被杀死，这个函数也应该优雅地返回。第一个返回值是该命令在提交时将出现的索引。第二个返回值是当前术语。如果此服务器认为它是领导者，则第三个返回值为
+true。</p>
 <blockquote>
 <p>Start(command interface{}) (int, int, bool)</p>
 </blockquote>
-<p>使用Raft的服务(e.g a k/v server)希望就下一个要追加到raft日志的命令达成一致(就是追加到 raft
-日志的下一条命令是相同的？)。如果当前raft server不是leader则返回false。
-否则启动协议并<strong>立即返回</strong>，无需等待日志追加完成。
-<strong>所以无法保证次命令将一定会被提交到raft日志中，因为leader可能会失败或者在选举中失败</strong>。
-即使raft实例被kill这个函数也应该return gracefully。</p>
-<p>第一个返回值是该命令出现的索引，如果它曾经被提交的话。第二个返回值是当前的术语(???)。如果这个服务器认为它是领导者，第三个返回值是真。</p>
-<p>每个新提交的<code>raft log entity</code>都应该发送一个<code>AppliMsg</code>到<code>Make()</code>的<code>applyCh</code>中。</p>
+<p>使用 Raft 的服务(e.g k/v server)希望就下一个要追加到 Raft 日志的命令开始协议。
+如果当前 Raft server 不是 leader 则返回<code>false</code>。否则启动协议并立即返回，无需等待日志追加完成。
+所以无法保证此命令将一定会被提交到 Raft 日志中，因为 leader 可能会失败或者在输掉选举。
+即使 Raft 实例被 kill 这个函数也应该 return gracefully(优雅返回)。</p>
+<p>第一个返回值是该命令在 commit 时将被设置的 index。第二个返回值是当前的 term(任期)。如果此服务器认为自己是 leader
+则第三个返回值是<code>true</code>。</p>
+<p>每个新提交的<code>Raft log entity</code>都应该发送一个<code>AppliMsg</code>到<code>Make()</code>的<code>applyCh</code>中。</p>
 <h2 id="2a">2A</h2>
-<p>实现Raft leader election以及heartbeats(<code>AppendEntries</code>RPCs没有log entries。空的的意思?)。</p>
-<p>2A的目标是: 选出一个leader，如果没有失败，它仍然是leader，如果old leader失败或者与old leader之间的数据包发生丢失则由new
-leader接管。</p>
+<p>实现 Raft leader election 以及 heartbeats(<code>AppendEntries RPCs</code>中不附带 log entries)。</p>
+<p>2A的目标是: 选出一个 leader，如果没有 failure，它仍然是 leader，如果 old leader 失败或者与 old leader 之间的数据包发生丢失则由
+new
+leader 接管。</p>
 
 
 
@@ -314,31 +319,40 @@ leader接管。</p>
 <p>要点:</p>
 <ol>
 <li>通过运行<code>go test -run 2A</code>来进行测试你的实现。</li>
-<li>按照论文的图 2，主要关系发送和接收<code>RequestVote RPCs</code>，与<code>the Rules for Servers that relate to elections</code>
+<li>按照论文的&nbsp;<a href="/posts/2022-10-10-raftkv/#figure-2">图2</a>
+，主要关心发送和接收<code>RequestVote RPCs</code>
+，与<code>the Rules for Servers that relate to elections</code>
 以及<code>the State related to leader election</code>。</li>
-<li>添加图 2 中与 leader election 相关的状态到<code>Raft</code>这个结构体中，且还需要定义一个结构来保存每个日志的信息。</li>
+<li>添加&nbsp;<a href="/posts/2022-10-10-raftkv/#figure-2">图2</a>
+中与 leader election 相关的状态到<code>Raft</code>这个结构体中，且还需要定义一个结构来保存每个日志的信息。</li>
 <li>实现<code>RequestVote()</code>，这样 raft 服务们就能互相投票了。添加<code>RequestVOteArgs</code>和<code>RequestVoteReply</code>者两个结构体。修改<code>Make()</code>
-，创建一个 goroutine，用于检查心跳消息，如果有一段时间没有收到 peer 的消息时将发送<code>RequestVote</code>RPCs 来定期发起领导者选举。这样，如果有
+，创建一个 goroutine，用于检查心跳消息，如果有一段时间没有收到 peer 的消息时将发送<code>RequestVote RPCs</code>来定期发起领导者选举。这样，如果有
 leader 了，peer 将知道谁是 leader，或者自己成为 leader。</li>
-<li>实现心跳，需要定义一个<code>AppendEntries</code>RPC 结构(尽管你可能还不需要所有参数)，
-并且让leader定期发送它。编写一个<code>AppendEntries</code>RPC 的 handle method，用于重置选举超时，
-这样当有一个人已经当选时，其他服务器不会又成为leader。</li>
-<li>确保不同peer的选举超时不在同一时间发生，否则所有peer将只为自己投票，这样就没有人会成为leader了。</li>
-<li>在测试时，leader每秒发送的RPC请求不能超过 10 次。</li>
-<li>在测试时，要求raft在old leader失败后5秒内选举new leader(如果大多数节点仍然能继续通讯)。但是请记住，如果出现<code>split vote( 如果数据包丢失或者候选人选择了相同的随机退避时间就有可能发生)</code>，leader选举可能需要多轮。所以必须设置足够短的选举超时(
-也就是心跳间隔)，即使会选举多轮，也有可能在5秒内完成。</li>
-<li>论文的第5.2节提到的选举超时范围是150到300毫秒。只有当leader发送心跳的频率大大高于150毫秒一次时，上面论文提到的范围才有意义。
-由于在测试时限制每秒10次心跳，所以必须使用比论文中更大的选举超时时间，但是不能太大，因为可能会无法在5秒内完成选举。</li>
-<li>如果您的代码无法通过测试，请再次阅读论文中的图2，leader选举的全部逻辑分布在图中多个部分。</li>
+<li>实现心跳，需要定义一个<code>AppendEntries RPC</code>结构(尽管你可能还不需要所有参数)，
+并且让 leader 定期发送它。编写一个<code>AppendEntries RPC</code>的 handle method，用于重置选举超时，
+这样当有一个人已经当选时，其他服务器不会又成为 leader。</li>
+<li>确保不同 peer 的选举超时不在同一时间发生，否则所有peer将只为自己投票，这样就没有人会成为leader了。</li>
+<li>在测试时，leader 每秒发送的RPC请求不能超过 10 次。</li>
+<li>在测试时，要求 Raft 在 old leader 失败后5秒内选举 new leader(如果大多数节点仍然能继续通讯)。
+但是请记住，如果出现<code>split vote</code>(如果数据包丢失或者候选人选择了相同的随机退避时间就有可能发生)，leader 选举可能需要多轮。
+所以必须设置足够短的选举超时(也就是心跳间隔)，即使会选举多轮，也有可能在5秒内完成。</li>
+<li>论文的&nbsp;<a href="/posts/2022-10-10-raftkv/#leader-election">Leader election</a>
+这一节中提到的选举超时范围是150到300毫秒。
+只有当 leader 发送心跳的频率大大高于150毫秒一次时，上面提到的范围才有意义。由于在测试时限制每秒10次心跳，
+所以必须使用比论文中更大的选举超时时间，但是不能太大，因为可能会无法在5秒内完成选举。</li>
+<li>如果您的代码无法通过测试，请再次阅读论文中的&nbsp;<a href="/posts/2022-10-10-raftkv/#figure-2">图2</a>
+，leader 选举的全部逻辑分布在图中多个部分。</li>
 <li>不要忘记实现<code>GetState()</code>。</li>
 <li>在测试时，如果要关闭一个raft实例，会调用<code>rf.kill()</code>。我们可以调用<code>rf.killed</code>来检查是否被调用了<code>kill()</code>。您可能希望在所有的循环中都这样
 做，以避免死亡的Raft实例打印混乱的信息。</li>
-<li><code>GO RPC</code>只发送名称以大写字母开头的结构体字段。子结构体也必须拥有大写的字段名。</li>
+<li><code>go RPC</code>只发送名称以大写字母开头的结构体字段。子结构体也必须拥有大写的字段名。</li>
 </ol>
 <h1 id="raft论文翻译">Raft论文翻译</h1>
 <blockquote>
 <p>选取一些重要的片段进行翻译</p>
 </blockquote>
+<p>原文地址: &nbsp;<a href="https://pdos.csail.mit.edu/6.824/papers/raft-extended.pdf" target="_blank" rel="noopener">https://pdos.csail.mit.edu/6.824/papers/raft-extended.pdf</a>
+</p>
 <h2 id="introduction-1">Introduction</h2>
 <p>Raft 算法和已经存在的共识算法在某些地方很相似(主要是 Oki 以及 Liskov&rsquo;s Viewstamped Replication)，但是它有以下新特性:</p>
 
@@ -353,8 +367,10 @@ Replication), but it has several novel features:
 
 
 <ul>
-<li>强领导者: Raft 使用一种比其他共识算法更强的领导形式。例如，日志只从 leader 发送给其他服务器。这简化了对复制日志的管理，使的 Raft 更容易理解。</li>
-<li>领导选举: Raft 使用随机的计时器来选取 leader。这种方式仅仅是在所有共识算法都需要改进的心跳机制上有些许改进，然而这使得 Raft 在解决冲突时更简单和快速。</li>
+<li>强领导者: Raft 使用一种比其他共识算法更强的领导形式。例如，日志只从 leader 发送给其他服务器。这简化了对复制日志的管理，使的
+Raft 更容易理解。</li>
+<li>领导选举: Raft 使用随机的计时器来选取 leader。这种方式仅仅是在所有共识算法都需要改进的心跳机制上有些许改进，然而这使得
+Raft 在解决冲突时更简单和快速。</li>
 <li>成员调整: 集群中更改 server 时，Raft 使用了新的联合共识(join consensus)算法，
 两种不同的配置的majorities在变更期间重叠(overlap)， 允许集群在配置变更的时候，持续正常运行。</li>
 </ul>
@@ -903,7 +919,7 @@ without extra measures split votes could repeat indefinitely.
 
 
 <p>Raft使用随机的选举超时时间，以确保 split vote 很少发生，并能迅速解决。为了从一开始就防止 split vote，
-选举超时时间是从一个固定的时间间隔中随机选择的(例如，150-300ms)。 这样每个服务器的选举超时时间就不同了，所以在大多数情况下，只有一个服务器会超时。</p>
+选举超时时间是从一个固定的时间间隔中随机选择的(例如150-300ms)。这样每个服务器的选举超时时间就不同了，所以在大多数情况下，只有一个服务器会超时。</p>
 <p>如果一个服务赢得了选举，就在其他服务超时之前发送心跳，split vote 也使用同样的机制来处理。
 每个候选人在选举开始时重新启动其随机选举超时(重新计时？)，并等待超时过后再开始下一次选举；这减少了在新的选举中再次出现分裂票的可能性。</p>
 
