@@ -10,42 +10,47 @@
     /*src: url("https://cdn.jsdelivr.net/gh/fzdwx/fzdwx.github.io/static/font/f1.woff2") format("woff2");*/
 }
 
+:root {
+    --fjinkai: 'jinkaiFont', sans-serif !important;
+    --f1: 'f1Font', sans-serif !important;
+    --fjet: 'Jetbrains Mono', monospace !important;
+}
+
 .jinkai {
-    font-family: 'jinkaiFont', monospace !important;
+    font-family: var(--fjinkai);
 }
 
 
 .logo {
-    font-family: 'f1Font', monospace !important;
+    font-family: var(--f1);
 }
 
 .post-title /* , .h1, h2, h3, h4, h5, h6 */
 {
-    font-family: 'jinkaiFont', monospace !important;
+    font-family: var(--fjinkai);
 }
 
 .post-content {
     font-size: 20px;
-    font-family: 'jinkaiFont', monospace !important;
-    /*font-family: 'LXGW WenKai', monospace !important;*/
+    font-family: var(--fjinkai);
 }
 
 .entry-header {
-    font-family: 'jinkaiFont', monospace !important;
+    font-family: var(--fjinkai);
 }
 
 .entry-content {
     font-size: 17px;
-    font-family: 'jinkaiFont', monospace !important;
+    font-family: var(--fjinkai);
 }
 
 #menu {
-    font-family: 'ffFont', monospace !important;
+    font-family: monospace !important;
 }
 
 code {
     font-size: 15px !important;
-    font-family: 'Jetbrains Mono', monospace !important;
+    font-family: var(--fjet);
 }
 
 figcaption {
@@ -59,7 +64,7 @@ strong {
 
 .post-content a {
     color: var(--c1);
-    box-shadow:  0 1px 0 var(--bCyna);
+    box-shadow: 0 1px 0 var(--bCyna);
 }
 
 .responsive-video {
