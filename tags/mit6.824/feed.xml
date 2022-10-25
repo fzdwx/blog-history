@@ -1048,6 +1048,18 @@ performance.
 
 
 <h3 id="safety">Safety</h3>
+<h1 id="代码实现思路">代码实现思路</h1>
+<h2 id="2a-1">2A</h2>
+<ol>
+<li>根据图2中的 state 这一节添加对应的属性</li>
+<li>添加<code>RaftRole</code>属性，代表当前的角色: leader，candidate，follower</li>
+<li>实现<code>ticker</code>这个函数:
+<ul>
+<li>判断是否很久没有收到心跳，来发起选举</li>
+<li>判断是否需要发送心跳，来维持自己的权威</li>
+</ul>
+</li>
+</ol>
 <h1 id="links">Links</h1>
 <ol>
 <li>项目地址: &nbsp;<a href="https://pdos.csail.mit.edu/6.824/labs/lab-raft.html" target="_blank" rel="noopener">https://pdos.csail.mit.edu/6.824/labs/lab-raft.html</a>
