@@ -241,11 +241,12 @@ h6:hover .anchor {
 .post-content code {
     /* inline code */
     background-color: var(--code-bg);
-    margin: 0 3px;
-    padding: 4px 5px;
-    border-radius: 3px;
-    font-size: .95em;
-    font-family: var(--monospace);
+    border: 0.1rem solid rgba(0,0,0,.1);
+    border-radius: var(--ifm-global-radius);
+    padding: var(--ifm-code-padding-vertical) var(--ifm-code-padding-horizontal);
+    font-size: 90%;
+    margin: 0 2px;
+    font-family: var(--ifm-font-family-monospace);
 }
 .post-content pre code {
     /* reset inline code */

@@ -32,8 +32,13 @@
     --main-width: 850px;
     --post-width: 850px;
     --nav-width: 1000px;
+    --ifm-global-radius: 0.4rem;
+    --ifm-code-padding-horizontal: 0.1rem;
+    --ifm-code-padding-vertical: 0.1rem;
+    --ifm-code-background: #f6f7f8;
     --code-bg: var(--vp-c-white-mute);
     --link-hover-color: var(--c1);
+    --ifm-font-family-monospace: ui-monospace, "SFMono-Regular", Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
     --link-hover-underline-color: var(--a1);
     --vp-nav-height-desktop: 72px;
     --docsearch-primary-color: #5468ff;
@@ -169,7 +174,7 @@
     /* for type pages theming */
     --signature: var(--c2);
     --signature-bg: var(--secondary);
-    
+
 }
 
 .light {
@@ -258,7 +263,7 @@
     --link-color: var(--primary);
     --link-underline-shadow: 0 1px 0 var(--link-color);
     --link-hover-underline-shadow: 0 2px 0 var(--link-hover-underline-color);
-    
+
     --link-hover-color: var(--c2);
     --link-hover-underline-color: #a277ff;
 
@@ -312,7 +317,7 @@
 
     --bule-shadow-1: 0px 1px 0px var(--a2);
     --white-shadow-1: 0px 0px 3px var(--a2);
-    
+
     --signature: var(--a2);
 }
 

@@ -60,9 +60,6 @@ figcaption {
 
 .post-content code {
     color: var(--vp-c-text-code);
-    transition: color .5s, background-color .5s;
-    padding: 3px 6px;
-    border-radius: 4px;
 }
 
 .meta-item .post-tags a:before {
