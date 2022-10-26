@@ -429,7 +429,7 @@ false)</li>
 <li><code>if log[oldIndex].term != log[newIndex].term then remove log[oldIndex,lastIndex]</code>(
 如果一个已经存在的日志与新的日志冲突(<em><code>index</code>相同但是<code>term</code>不同</em>)，则删除该索引处以及之后的所有日志)</li>
 <li>添加在日志列表中不存在的新日志</li>
-<li><code>if leaderCommit &gt; commitIndex then commitIndex = min(leaderCommit,log[].last.commitIndex)</code>(如果leaderCommit &gt;
+<li><code>if leaderCommit &gt; commitIndex then commitIndex=min(leaderCommit,log[].last.commitIndex)</code>(如果leaderCommit &gt;
 commitIndex，将commitIndex设置为leaderCommit和最新日志条目索引号中较小的一个)</li>
 </ul>
 </li>
@@ -456,7 +456,7 @@ commitIndex，将commitIndex设置为leaderCommit和最新日志条目索引号�
 <li>Receiver implementation:
 <ul>
 <li><code>if term &lt; currentTerm then return false</code>(如果term &lt; currentTerm返回 false)</li>
-<li><code>if (votedFor is null or votedFor == candidateId) and (lastLogIndex,lastLogTerm) == log[].last then return true</code>
+<li><code>if (votedFor==null||votedFor==candidateId)&amp;&amp;(lastLogIndex,lastLogTerm)==log[].last then return true</code>
 (如果votedFor为空或者与candidateId相同，并且候选人的日志和自己的日志一样新，则给该候选人投票)</li>
 </ul>
 </li>
