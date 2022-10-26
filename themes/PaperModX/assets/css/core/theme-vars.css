@@ -167,7 +167,7 @@
     --line-yellow: url("data:image/svg+xml;charset=utf-8,%3Csvg preserveAspectRatio='none' width='120' height='6' viewBox='0 0 120 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M119 0.8C60 4 50-0.5 1 1.5' stroke='%23fc0' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
 
     /* for type pages theming */
-    --signature: var(--primary);
+    --signature: var(--c2);
     --signature-bg: var(--secondary);
     
 }
@@ -244,7 +244,6 @@
 }
 
 .dark {
-
     --theme: rgb(29, 30, 32);
     --entry: rgb(46, 46, 51);
     --primary: rgb(218, 218, 219);
@@ -313,4 +312,31 @@
 
     --bule-shadow-1: 0px 1px 0px var(--a2);
     --white-shadow-1: 0px 0px 3px var(--a2);
+    
+    --signature: var(--a2);
+}
+
+
+::selection {
+    background: var(--a2);
+}
+
+::-moz-selection {
+    background: var(--a2);
+}
+
+::-webkit-selection {
+    background: var(--a2);
+}
+
+.dark ::selection {
+    background: var(--vp-c-text-dark-3);
+}
+
+.dark ::-moz-selection {
+    background: var(--vp-c-text-dark-3);
+}
+
+.dark ::-webkit-selection {
+    background: var(--vp-c-text-dark-3);
 }

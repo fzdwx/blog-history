@@ -91,5 +91,5 @@ figcaption {
 .archive-year-header,
 .archive-month,
 .archive-count {
-    font-family: "LXGW WenKai SCREEN", sans-serif;
+    font-family: "LXGW WenKai SCREEN" !important;
 }
