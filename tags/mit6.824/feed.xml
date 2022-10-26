@@ -1068,6 +1068,8 @@ performance.
 </li>
 <li>Raft paper: &nbsp;<a href="https://pdos.csail.mit.edu/6.824/papers/raft-extended.pdf" target="_blank" rel="noopener">https://pdos.csail.mit.edu/6.824/papers/raft-extended.pdf</a>
 </li>
+<li>Raft paper 中文翻译: &nbsp;<a href="https://github.com/maemual/raft-zh_cn/blob/master/raft-zh_cn.md" target="_blank" rel="noopener">https://github.com/maemual/raft-zh_cn/blob/master/raft-zh_cn.md</a>
+</li>
 <li>Diagram of Raft interactions： &nbsp;<a href="https://pdos.csail.mit.edu/6.824/notes/raft_diagram.pdf" target="_blank" rel="noopener">https://pdos.csail.mit.edu/6.824/notes/raft_diagram.pdf</a>
 </li>
 <li>Students guid to Raft: &nbsp;<a href="https://thesquareplanet.com/blog/students-guide-to-raft/" target="_blank" rel="noopener">https://thesquareplanet.com/blog/students-guide-to-raft/</a>
