@@ -44,24 +44,24 @@
   </div>
   {{- end }}
 
-  <footer class="post-footer">
-    {{- if (.Param "socialLinks") }}
-    {{- partial "social_links.html" . }}
-    {{- end }}
+<!--  <footer class="post-footer">-->
+<!--    {{- if (.Param "socialLinks") }}-->
+<!--    {{- partial "social_links.html" . }}-->
+<!--    {{- end }}-->
 
-    {{- if (.Param "ShowPostNavLinks") }}
-    {{- partial "post_nav_links.html" . }}
-    {{- end }}
+<!--    {{- if (.Param "ShowPostNavLinks") }}-->
+<!--    {{- partial "post_nav_links.html" . }}-->
+<!--    {{- end }}-->
 
-    {{- if $isNewsletter }}
-      <div class="newsletter-sub">
-        <div class="notice">
-          感谢你能读到这里，如果觉得有趣的话，欢迎在下方输入邮箱进行订阅。
-        </div>
-        {{- partial "newsletter_sub_form.html"}}
-      </div>
-    {{- end }}
-  </footer>
+<!--    {{- if $isNewsletter }}-->
+<!--      <div class="newsletter-sub">-->
+<!--        <div class="notice">-->
+<!--          感谢你能读到这里，如果觉得有趣的话，欢迎在下方输入邮箱进行订阅。-->
+<!--        </div>-->
+<!--        {{- partial "newsletter_sub_form.html"}}-->
+<!--      </div>-->
+<!--    {{- end }}-->
+<!--  </footer>-->
 
   {{- if not (.Param "noComments") }}
     {{- partial "comments.html" . }}

@@ -1,0 +1,7 @@
+.medium-zoom-image--opened {
+    z-index: 3;
+}
+
+.dark .medium-zoom-overlay {
+    background: var(--theme) !important;
+}

@@ -1,0 +1,17 @@
+@font-face {
+    font-family: jinkaiFont;
+    /*src: url("https://cdn.jsdelivr.net/gh/fzdwx/fzdwx.github.io/static/font/jinkai.woff2") format("woff2");*/
+    src: url("/font/jinkai.woff2") format("woff2");
+}
+
+@font-face {
+    font-family: f1Font;
+    src: url("/font/f1.woff2") format("woff2");
+    /*src: url("https://cdn.jsdelivr.net/gh/fzdwx/fzdwx.github.io/static/font/f1.woff2") format("woff2");*/
+}
+
+:root{
+    --fjinkai: 'jinkaiFont', sans-serif !important;
+    --f1: 'f1Font', sans-serif !important;
+    --fjet: 'Jetbrains Mono', monospace !important;
+}
