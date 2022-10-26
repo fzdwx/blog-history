@@ -243,9 +243,7 @@ h6:hover .anchor {
     background-color: var(--code-bg);
     border: 0.1rem solid rgba(0,0,0,.2);
     border-radius: var(--ifm-global-radius);
-    /*padding: var(--ifm-code-padding-vertical) var(--ifm-code-padding-horizontal);*/
-    /*padding: 0.2rem;*/
-    padding: 0.2rem 0.1rem;
+    padding: var(--ifm-code-padding-vertical) var(--ifm-code-padding-horizontal);
     margin: 0 2px;
     font-size: 90%;
     font-family: var(--ifm-font-family-monospace);
