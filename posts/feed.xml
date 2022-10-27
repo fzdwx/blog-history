@@ -205,7 +205,7 @@ Raft 将客户端的请求组织成一个序列，被称为 log ，并且确保�
 </p>
 <h2 id="introduction">Introduction</h2>
 <p>这是一系列实验中的第一个，我们将构建一个 <em>fault-tolerant key/value storage system</em> 。
-在本实验中我们将实现 <em>Raft (一种复制的状态机协议)</em>。在下一个实验中，我们将在 Raft 上构建一个 key/value service 。
+在本实验中我们将实现 <em>Raft</em> (一种复制的状态机协议)。在下一个实验中，我们将在 Raft 上构建一个 key/value service 。
 然后，您将在有多个副本的状态机上进行 shard(分片？根据 key 进行 hash 来决定路由到哪个副本上) 来提高性能。</p>
 <p>复制(replication)通过在多个复制服务器上存储其状态(即数据)的完整副本来实现 <em>fault tolerance</em> 。
 即使有一些服务器出现 failure (崩溃或网络断开和抖动) replication 也允许它们继续运行。 挑战在于 failures 可能导致副本存在不同的数据。</p>
@@ -353,13 +353,33 @@ leader 了，peer 将知道谁是 leader，或者自己成为 leader。</li>
 </blockquote>
 <p>原文地址: &nbsp;<a href="https://pdos.csail.mit.edu/6.824/papers/raft-extended.pdf" target="_blank" rel="noopener">https://pdos.csail.mit.edu/6.824/papers/raft-extended.pdf</a>
 </p>
+<h2 id="abstract">Abstract</h2>
+<p>Raft 是一种为了管理复制日志的共识算法。它提供了和 Paxos 算法相同的功能和性能，但它的算法结构和 Paxos 不同，
+Raft 更容易理解并且更容易构建实际的系统。为了提升可理解性，Raft 将共识算法分成了几个关键的模块，例如领导人选举，日志复制和安全性。
+同时它通过实施一个更强的一致性来减少需要考虑的状态的数量。Raft 还包括一个机制来允许集群成员的动态改变，它利用重叠的大多数来保证安全性。</p>
+
+
+
+<details class="details custom-block">
+    <summary> <span>原文</span> </summary>
+    Raft is a consensus algorithm for managing a replicated log. It produces a result equivalent to (multi-)Paxos, and it is
+as efficient as Paxos, but its structure is different from Paxos; this makes Raft more understandable than Paxos and
+also provides a better foundation for building practical systems. In order to enhance understandability, Raft separates
+the key elements of consensus, such as leader election, log replication, and safety, and it enforces a stronger degree
+of coherency to reduce the number of states that must be considered. Results from a user study demonstrate that Raft is
+easier for students to learn than Paxos. Raft also includes a new mechanism for changing the cluster membership, which
+uses overlapping majorities to guarantee safety.
+</details>
+
+
+
 <h2 id="introduction-1">Introduction</h2>
 <p>Raft 算法和已经存在的共识算法在某些地方很相似(主要是 Oki 以及 Liskov&rsquo;s Viewstamped Replication)，但是它有以下新特性:</p>
 
 
 
 <details class="details custom-block">
-    <summary> 原文</summary>
+    <summary> <span>原文</span> </summary>
     raft is similar in many ways to existing consensus algorithms (most notably, Oki and Liskov’s Viewstamped
 Replication), but it has several novel features:
 </details>
@@ -367,18 +387,18 @@ Replication), but it has several novel features:
 
 
 <ul>
-<li>强领导者: Raft 使用一种比其他共识算法更强的领导形式。例如，日志只从 leader 发送给其他服务器。这简化了对复制日志的管理，使的
-Raft 更容易理解。</li>
+<li>强领导者: Raft 使用一种比其他共识算法更强的领导形式。例如，日志只从 leader 发送给其他服务器。
+这简化了对复制日志的管理并使得 Raft 更容易理解。</li>
 <li>领导选举: Raft 使用随机的计时器来选取 leader。这种方式仅仅是在所有共识算法都需要改进的心跳机制上有些许改进，然而这使得
 Raft 在解决冲突时更简单和快速。</li>
-<li>成员调整: 集群中更改 server 时，Raft 使用了新的联合共识(join consensus)算法，
-两种不同的配置的majorities在变更期间重叠(overlap)， 允许集群在配置变更的时候，持续正常运行。</li>
+<li>成员调整: Raft 使用了新的联合共识(join consensus)算法来处理集群成员变换的问，
+在处于调整过程中的两种不同的配置的大多数集群会有重叠(overlap)，这就允许集群在成员变更的时候，持续正常运行。</li>
 </ul>
 
 
 
 <details class="details custom-block">
-    <summary> 原文</summary>
+    <summary> <span>原文</span> </summary>
     <ul>
 <li>Strong leader: Raft uses a stronger form of leadership than other consensus algorithms. For example,log entries
 only flow from the leader to other servers. This simplifies the management of the replicated log and makes Raft
@@ -395,8 +415,9 @@ to continue operating normally during configuration changes.</li>
 
 
 <h2 id="replicated-state-machine">Replicated State Machine</h2>
-<p><code>复制状态机(Replicated State Machine)</code>在分布式系统中被用于解决各种容错问题。例如GFS,HDFS,RAMCloud等单leader的大型集群系统，通常使用独立
-的复制状态机来管理领导选举和存储配置信息来保证在leader崩溃会存活下来，复制状态机的例子包括Chubby以及Zookeeper。</p>
+<p><code>Replicated State Machine</code>(复制状态机)在分布式系统中被用于解决各种容错问题。例如 GFS、HDFS、RAMCloud 等单 leader 的大型集群系统，
+通常使用独立的复制状态机来管理领导选举和存储配置信息来保证在 leader 崩溃的情况下也要存活下来，复制状态机的例子包括 Chubby
+以及 Zookeeper。</p>
 <p><figure id="a-/images/7.png" class="align-center">
     <img src="/images/7.png" alt="Figure 1: 复制状态机架构。共识算法管理来自客户端的包含状态机命令的复制日志，状态机按照相同的顺序来处理它们，所以它们产生相同的输出。"  />
     
@@ -405,12 +426,12 @@ to continue operating normally during configuration changes.</li>
     </figcaption>
     
 </figure></p>
-<p>共识算法通常出现在复制状态机的上下文中，在这种方法中，在一组server上的状态机对同一个的状态会计算出相同的副本，即使一些server宕机也可以继续运行。</p>
+<p>共识算法是在复制状态机的背景下提出的，在这种方法中，在一组服务器上的状态机对同一个的状态会计算出相同的副本，并且在一些服务器宕机的情况下也可以继续运行。</p>
 
 
 
 <details class="details custom-block">
-    <summary> 原文</summary>
+    <summary> <span>原文</span> </summary>
     Replicated state machines are used to solve a variety of fault tolerance problems in distributed systems. For example,
 large-scale systems that have a single cluster leader, such as GFS, HDFS, and RAMCloud, typically use a separate
 replicated state machine to manage leader election and store configuration information that must survive leader
@@ -421,14 +442,13 @@ copies of the same state and can continue operating even if some of the servers 
 
 
 
-<p>复制状态机通过<strong>复制日志实现</strong>，如图一所示。每个服务保存包含一系列命令的日志，其状态机按照顺序来执行它们。
-每个<strong>日志包含相同顺序的相同命令</strong>，所以每个状态机处理相同的命令序列。因为<strong>状态机是确定的</strong>，
-所以每个状态机<strong>会计算出相同的状态</strong>和<strong>相同顺序的输出</strong>。</p>
+<p>如图一所示，复制状态机是通过复制日志实现的。每个服务器保存者一个包含一系列命令的日志，其状态机按照顺序来执行它们。
+每个日志包含相同顺序的相同命令，所以每个状态机都执行相同的命令序列。因为状态机是确定的，所以每个状态机会计算出相同的状态和相同顺序的输出。</p>
 
 
 
 <details class="details custom-block">
-    <summary> 原文</summary>
+    <summary> <span>原文</span> </summary>
     Replicated state machines are typically implemented using a replicated log, as shown in Figure 1. Each server stores a
 log containing a series of commands, which its state machine executes in order. Each log contains the same commands in
 the same order, so each state machine processes the same sequence of commands. Since the state machines are
@@ -437,15 +457,15 @@ deterministic, each computes the same state and the same sequence of outputs.
 
 
 
-<p>共识算法的任务是<strong>保证复制日志的一致性</strong>。服务器上的共识模块接收来自客户端的命令并把它们添加到日志中，
-并与其他服务器上的共识模块进行通讯以确保它们的每一条日志最终都相同(相同的请求有相同的顺序)， 即使有一些服务失败了。一旦命令被正确的复制，
-每一个服务的状态机会按照日志的顺序去处理它们，然后将结果返回给客户端。</p>
+<p>共识算法的任务是 保证复制日志的一致性 。服务器上的共识模块接收来自客户端的命令并把它们添加到日志中，
+并与其他服务器上的共识模块进行通讯以确保它们的每一条日志最终都相同(相同的请求有相同的顺序)，即使有一些服务发生故障。
+一旦命令被正确的复制，每一个服务的状态机会按照日志的顺序去处理它们，然后将结果返回给客户端。</p>
 <p>因此，这些服务似乎成为了一个单一的，高度可靠的状态机。</p>
 
 
 
 <details class="details custom-block">
-    <summary> 原文</summary>
+    <summary> <span>原文</span> </summary>
     Keeping the replicated log consistent is the job of the consensus algorithm. The consensus module on a server receives
 commands from clients and adds them to its log. It communicates with the consensus modules on other servers to ensure
 that every log eventually contains the same requests in the same order, even if some servers fail. Once commands are
@@ -459,15 +479,15 @@ As a result, the servers appear to form a single, highly reliable state machine.
 <ul>
 <li>确保非拜占庭(non-Byzantine)条件下的<em>安全性</em>(永远不返回错误的结果)，包括网络延迟，分区以及网络数据包丢失、冗余、乱序。</li>
 <li>只要大多数的服务都在运行并能相互通信且和客户端通信，它们就能发挥出全部的功能(<em>可用性</em>)。因此，一个5台服务的集群能容忍2台服务出现故障。
-假定服务应为停机而出现故障，它们可能稍后会从stable storage`中恢复状态并从新加入集群。</li>
-<li>不依赖与timing来保证日志的一致性: 错误的时钟和极端的信息延迟延迟在最坏的情况下会导致可用性问题。</li>
-<li>在一般情况下，一个命令的完成在于集群中的大多数对单轮远程调用作出响应，少数低水平的服务不会影响系统的整体性能。</li>
+假定服务应为停机而出现故障，它们可能稍后会从<code>stable storage</code>中恢复状态并从新加入集群。</li>
+<li>不依赖与时序来保证日志的一致性: 错误的时钟和极端的信息延迟延迟在最坏的情况下会导致可用性问题。</li>
+<li>在一般情况下，一个命令的完成在于集群中的大多数对单轮远程调用作出响应，少数比较慢的服务不会影响系统的整体性能。</li>
 </ul>
 
 
 
 <details class="details custom-block">
-    <summary> 原文</summary>
+    <summary> <span>原文</span> </summary>
     <p>Consensus algorithms for practical systems typically have the following properties:</p>
 <ul>
 <li>They ensure <em>safety</em> (never returning an incorrect result) under all non-Byzantine conditions,
@@ -495,7 +515,7 @@ remote procedure calls; a minority of low servers need not impact overall system
 
 
 <details class="details custom-block">
-    <summary> 原文</summary>
+    <summary> <span>原文</span> </summary>
     Raft is an algorithm for managing a replicated log of the form described in Section 2. Figure 2 summarizes the
 algorithm in condensed form for reference, and Figure 3 lists key properties of the algorithm; the elements of these
 figures are discussed piecewise over the rest of this section.
@@ -503,14 +523,14 @@ figures are discussed piecewise over the rest of this section.
 
 
 
-<p>Raft首先通过选举出一位 <em>leader</em> 来实现共识，然后由leader完全管理日志复制。leader接收来自客户端的日志，然后复制给其他服务，并且通知在何时
-它们可以安全的消费(作用到状态机上)这些日志。leader简化了日志复制的管理。例如: leader可以自主确定新日志存放在哪个位置而不用询问其他服务，
-数据以一种简单的方式从leader流向其他服务。leader可以失败以及断开连接，这个时候需要重新选举leader。</p>
+<p>Raft 通过选出一位 <em>leader</em> 然后给予它完全管理日志复制的责任来实现共识。leader 接收来自客户端的日志，然后复制给其他服务，并且通知在何时
+它们可以安全的消费(作用到状态机上)这些日志。leader 简化了日志复制的管理。例如: leader 可以自主确定新日志存放在哪个位置而不用询问其他服务，
+并且数据都从 leader 流向其他服务器。leader 可能会发生故障，或者和其他服务器失去连接，这个时候需要重新选举 leader。</p>
 
 
 
 <details class="details custom-block">
-    <summary> 原文</summary>
+    <summary> <span>原文</span> </summary>
     Raft implements consensus by first electing a distinguished leader, then giving the leader complete responsibility for
 managing the replicated log. The leader accepts log entries from clients, replicates them on other servers, and tells
 servers when it is safe to apply log entries to their state machines. Having a leader simplifies the management of the
@@ -521,11 +541,11 @@ from the other servers, in which case a new leader is elected.
 
 
 
-<p>基于leader的方法，Raft将一致性问题为了三个子过程来解决:</p>
+<p>基于 leader 的方法，Raft 将一致性问题为了三个子过程来解决:</p>
 <ul>
-<li>leader选举: 当leader失败(宕机)时需要选举新leader</li>
-<li>日志复制: leader接收来自客户端的日志，并复制给集群中的其他机器，强制其他服务器与自己的一致</li>
-<li>安全: Raft的安全就在于&nbsp;<a href="/posts/2022-10-10-raftkv/#figure-3">图3</a>
+<li>leader 选举: 当 leader 失败(宕机)时需要选举新 leader</li>
+<li>日志复制: leader 接收来自客户端的日志，并复制给集群中的其他机器，强制其他服务器与自己的一致</li>
+<li>安全: Raft 的安全就在于&nbsp;<a href="/posts/2022-10-10-raftkv/#figure-3">图3</a>
 中的安全属性: 如果任何服务器消费了一个日志，那么其他任何服务器就不
 能在相同的日志索引消费不同的日志</li>
 </ul>
@@ -533,7 +553,7 @@ from the other servers, in which case a new leader is elected.
 
 
 <details class="details custom-block">
-    <summary> 原文</summary>
+    <summary> <span>原文</span> </summary>
     <p>Given the leader approach, Raft decomposes the consensus problem into three relatively independent subproblems, which
 are discussed in the subsections that follow:</p>
 <ul>
@@ -561,23 +581,23 @@ election mechanism described in Section 5.2.</li>
 </figure></p>
 <p><strong>state</strong>:</p>
 <ul>
-<li>在所有服务器上持久化(在响应RPCs之前进行更新)
+<li>在所有服务器上持久化(在响应 RPC 请求之前，已经更新到了稳定的存储设备)
 <ul>
-<li><code>currentTerm</code>: 服务器知道的最后的任期号(初始0，单调递增)</li>
-<li><code>votedFor</code>: 当前服务器投给哪个服务器？</li>
-<li><code>log[]</code>: 日志，包含要执行的命令以及收到该日志的时间。</li>
+<li><code>currentTerm</code>: 服务器已知最新的任期（在服务器首次启动时初始化为0，单调递增）</li>
+<li><code>votedFor</code>: 当前任期内收到选票的 candidate Id，如果没有投给任何候选人则为空</li>
+<li><code>log[]</code>: 日志条目,每个条目包含了用于状态机的命令，以及领导人接收到该条目时的任期(初始索引为1)</li>
 </ul>
 </li>
-<li>在所有服务器上不稳定存在
+<li>所有服务器上的易失性状态
 <ul>
 <li><code>commitIndex</code>: 已知的提交的日志中的最大索引(初始0，单调递增)</li>
-<li><code>lastApplied</code>: 状态机执行的日志中的最大索引(初始0，单调递增)</li>
+<li><code>lastApplied</code>: 状态机已经执行的日志中的最大索引(初始0，单调递增)</li>
 </ul>
 </li>
-<li>在leader上不稳定存在(在每次重新选举后初始化)
+<li>在 leader 上不稳定存在(在每次重新选举后初始化)
 <ul>
-<li><code>nextIndex[]</code>: 对于每一个服务器，记录需要发给它的下一个日志条目的索引(初始为leader的最后一条日志索引+1)</li>
-<li><code>matchIndex[]</code>: 对于每一个服务器，记录已经复制到该服务器的日志的最高索引值(初始0，单调递增)</li>
+<li><code>nextIndex[]</code>: 对于每一个服务器，发送到该服务器的下一个日志条目的索引(初始为leader的最后一条日志索引+1)</li>
+<li><code>matchIndex[]</code>: 对于每一个服务器，已知的已经复制到该服务器的最高日志条目的索引(初始0，单调递增)</li>
 </ul>
 </li>
 </ul>
@@ -588,30 +608,32 @@ election mechanism described in Section 5.2.</li>
 <ul>
 <li>Arguments:
 <ul>
-<li><code>term</code>: leader的任期</li>
-<li><code>leaderId</code>: 用于follower找到leader</li>
-<li><code>prevLogIndex</code>: 前一个日志的索引</li>
-<li><code>prevLogTerm</code>: 前一个日志的<code>term</code></li>
-<li><code>entries[]</code>: 用于存放日志(为空时是心跳检测，可能一次会发送多条来提升效率)</li>
-<li><code>leaderCommit</code>: leader的<code>commitIndex</code></li>
+<li><code>term</code>: leader 的任期</li>
+<li><code>leaderId</code>: 用于 follower 找到 leader(有时 client 把请求发送给了 follower)</li>
+<li><code>prevLogIndex</code>: 紧邻新日志条目之前的那个日志条目的索引</li>
+<li><code>prevLogTerm</code>: 紧邻新日志条目之前的那个日志条目的任期</li>
+<li><code>entries[]</code>: 需要被保存的日志(为空时是心跳检测，可能一次会发送多条来提升效率)</li>
+<li><code>leaderCommit</code>: leader 已知的该 follower 的<code>commitIndex</code></li>
 </ul>
 </li>
 <li>Results:
 <ul>
-<li><code>term</code>: <code>currentTerm</code>，用于leader更新自己的<code>term</code></li>
+<li><code>term</code>: <code>currentTerm</code>，用于 leader 更新自己的<code>term</code></li>
 <li><code>success</code>: 如果follower的<code>pervLogIndex</code>以及<code>prevLogTerm</code>能够匹配上则为true</li>
 </ul>
 </li>
 <li>Receiver implementation:
 <ul>
-<li><code>if term &lt; currentTerm then return false</code>(如果 term &lt; currentTerm返回 false)</li>
-<li><code>if log[prevLogIndex].term != prevLogTerm then return false</code>(如果在prevLogIndex处的日志的任期号与prevLogTerm不匹配时，返回
-false)</li>
+<li><code>if term &lt; currentTerm then return false</code>(如果 leader 的任期小于接收者的当前任期，接收者可以是 follower 以及
+candidate)</li>
+<li><code>if log[prevLogIndex].term != prevLogTerm then return false</code>(在接收者日志中 如果能找到一个和 prevLogIndex 以及
+prevLogTerm 一样的索引和任期的日志条目则继续执行下面的步骤否则返回假)</li>
 <li><code>if log[oldIndex].term != log[newIndex].term then remove log[oldIndex,lastIndex]</code>(
-如果一个已经存在的日志与新的日志冲突(<em><code>index</code>相同但是<code>term</code>不同</em>)，则删除该索引处以及之后的所有日志)</li>
+如果一个已经存在的日志与新的日志(请求中的日志条目)冲突(索引相同，任期不同)，则删除该索引处以及之后的所有日志)</li>
 <li>添加在日志列表中不存在的新日志</li>
-<li><code>if leaderCommit &gt; commitIndex then commitIndex=min(leaderCommit,log[].last.commitIndex)</code>(如果leaderCommit &gt;
-commitIndex，将commitIndex设置为leaderCommit和最新日志条目索引号中较小的一个)</li>
+<li><code>if leaderCommit &gt; commitIndex then commitIndex=min(leaderCommit,log[].last.commitIndex)</code>(
+如果 leader 的已知已提交的最高日志条目的索引大于接收者的已知已提交最高日志条目的索引，则把接收者的已知已经提交的最高的日志条目的索引commitIndex
+重置为 leader 的已知已经提交的最高的日志条目的索引 leaderCommit 或者是 上一个新条目的索引 取两者的最小值)</li>
 </ul>
 </li>
 </ul>
@@ -622,15 +644,15 @@ commitIndex，将commitIndex设置为leaderCommit和最新日志条目索引号�
 <ul>
 <li>Arguments:
 <ul>
-<li><code>term</code>: candidate的任期号</li>
-<li><code>candidateId</code>: 发起请求的candidate的id</li>
-<li><code>lastLogIndex</code>: candidate的最后一条日志的索引</li>
-<li><code>lastLogTerm</code>: candidate最后一条日志对应的任期号</li>
+<li><code>term</code>: candidate 的任期号</li>
+<li><code>candidateId</code>: 发起请求的 candidate 的 id</li>
+<li><code>lastLogIndex</code>: candidate 的最后一条日志的索引</li>
+<li><code>lastLogTerm</code>: candidate 最后一条日志对应的任期号</li>
 </ul>
 </li>
 <li>Results:
 <ul>
-<li>term: <code>currentTerm</code>，用于candidate更新自己的<code>term</code></li>
+<li>term: 当前任期号，用于candidate更新自己的<code>term</code></li>
 <li>voteGranted: true表示候选人获得了选票</li>
 </ul>
 </li>
@@ -638,7 +660,7 @@ commitIndex，将commitIndex设置为leaderCommit和最新日志条目索引号�
 <ul>
 <li><code>if term &lt; currentTerm then return false</code>(如果term &lt; currentTerm返回 false)</li>
 <li><code>if (votedFor==null||votedFor==candidateId)&amp;&amp;(lastLogIndex,lastLogTerm)==log[].last then return true</code>
-(如果votedFor为空或者与candidateId相同，并且候选人的日志和自己的日志一样新，则给该候选人投票)</li>
+(如果 votedFor 为空或者与 candidateId 相同，并且候选人的日志和自己的日志一样新，则给该候选人投票)</li>
 </ul>
 </li>
 </ul>
@@ -649,13 +671,13 @@ commitIndex，将commitIndex设置为leaderCommit和最新日志条目索引号�
 <li><code>if commitIndex &gt; lastApplied then incr lastApplied and exec log[lastApplied]</code>（如果commitIndex &gt;
 lastApplied，lastApplied自增，将log[lastApplied]应用到状态机）</li>
 <li><code>if appendEntries.logs exist (log.term &gt; currentTerm) then currentTerm = log.term and set status = follower</code>(如果
-RPC 的请求或者响应中包含一个 term T 大于 currentTerm，则currentTerm赋值为 T，并切换状态为追随者follower)</li>
+RPC 的请求或者响应中包含一个 term T 大于 currentTerm，则 currentTerm 赋值为 T，并切换状态为追随者 follower)</li>
 </ul>
 </li>
 <li>Followers:
 <ul>
-<li>不会发出任何请求，只会对来自candidates以及leader的请求做出响应</li>
-<li>选举超时后，如果未收到当前leader的<code>AppendEntries RPC</code>或没有收到其他candidates的投票请求:则转换为candidate</li>
+<li>不会发出任何请求，只会对来自 candidates 以及 leader 的请求做出响应</li>
+<li>选举超时后，如果未收到当前 leader(term 相同)的<code>AppendEntries RPC</code>或投票给了 candidate，则转换为 candidate</li>
 </ul>
 </li>
 <li>Candidates:
@@ -668,20 +690,19 @@ RPC 的请求或者响应中包含一个 term T 大于 currentTerm，则currentT
 <li>发送<code>RequestVote RPC</code>给其他所有服务器</li>
 </ul>
 </li>
-<li>如果收到了多数的选票则成为leader</li>
+<li>如果收到了多数的选票则成为 leader</li>
 <li>如果收到 new leader 的<code>AppendEntries RPC</code>则成为 follower</li>
 <li>如果选举超时则开始新一轮的选举</li>
 </ul>
 </li>
 <li>Leaders:
 <ul>
-<li>选举时: 向其他服务器发送空的<code>AppendEntries RPC</code>，在空闲时重复发送以防止选举超时</li>
-<li>如果收到来自客户端的命令: 添加到本地日志，在执行并作用到状态机后作出响应</li>
-<li>对于follower<code>if last log index  &gt;= nextIndex</code>(如果上一次收到的日志的索引大于这次要发送给它的日志的索引(
-nextIndex)):
-则通过<code>AppendEntries RPC</code>将nextIndex之后的所有日志都发送发送出去
+<li>一旦成为 leader 则向其他服务器发送空的<code>AppendEntries RPC</code>，在空闲时重复发送以防止选举超时</li>
+<li>如果收到来自 client 的命令: 添加到本地日志，在执行并作用到状态机后作出响应给 client</li>
+<li>对于 follower <code>if last log index  &gt;= nextIndex</code>(如果上一次收到的日志的索引大于这次要发送给它的日志的索引(
+nextIndex)): 则通过<code>AppendEntries RPC</code>将nextIndex之后的所有日志都发送发送出去
 <ul>
-<li>如果成功: 将该follower的<code>nextIndex</code>以及<code>matchIndex</code>更新</li>
+<li>如果成功: 将该 follower 的<code>nextIndex</code>以及<code>matchIndex</code>更新</li>
 <li>如果因为日志不一致导致失败: <code>nextIndex</code>递减并重新发送</li>
 </ul>
 </li>
@@ -700,29 +721,29 @@ nextIndex)):
     
 </figure></p>
 <ul>
-<li><strong>Election Safety:</strong> 在给定term内只能选出一个leader</li>
-<li><strong>Leader Append-Only</strong>: leader永远不覆盖或删除日志，只会添加</li>
-<li><strong>Log Matching</strong>: 如果两个日志在包含相同的index以及term，那么就认定它们完全相同</li>
-<li><strong>Leader Completeness</strong>: 如果一条日志在给定的term内提交，那么它一定会出现在term更大的leader的日志中</li>
+<li><strong>Election Safety:</strong> 在给定 term 内只能选出一个 leader</li>
+<li><strong>Leader Append-Only</strong>: leader 永远不覆盖或删除日志，只会添加</li>
+<li><strong>Log Matching</strong>: 如果两个日志在包含相同的 index 以及 term，那么就认定它们完全相同</li>
+<li><strong>Leader Completeness</strong>: 如果一条日志在给定的 term 内提交，那么它一定会出现在 term 更大的 leader 的日志中</li>
 <li><strong>State Machine Safety:</strong> 如果一个服务器已经将给定索引位置的日志条目应用到状态机之中，则其他所有服务器不会在相同索引处出现不同的日志</li>
 </ul>
 <h3 id="raft-basics">Raft basics</h3>
-<p>一个 Raft 集群可以包含多个服务器；5是一个典型的数量，它允许系统容忍2次故障(有两台服务宕机)。
+<p>一个 Raft 集群可以包含多个服务器；5 是一个典型的数量，它允许系统容忍2次故障(有两台服务宕机)。
 在给定的时间中每个服务都处在以下三种状态之一:
-<em>leader</em>, <em>follower</em>, <em>candidate</em>。 正常情况下，恰好只有一个leader，所有其他服务器都是 follower。</p>
+<em>leader</em>, <em>follower</em>, <em>candidate</em>。 正常情况下，恰好只有一个 leader，所有其他服务器都是 follower。</p>
 <ul>
 <li>follower 是被动的: 它们不会自己发出请求，而只是响应来自 leader 和 candidate 的请求。</li>
-<li>leader 处理所有 client 的请求（如果 client 联系到 follower，则 follower 重定向到 leader)。</li>
+<li>leader 处理所有 client 的请求(如果 client 联系到 follower，则 follower 重定向到 leader)。</li>
 <li>candidate 用于选举出一个新的 leader(可以看&nbsp;<a href="/posts/2022-10-10-raftkv/#figure-4">图4</a>
 )。</li>
 </ul>
 <h4 id="figure-4">Figure 4</h4>
 <p><figure id="a-/images/9.png" class="align-center">
-    <img src="/images/9.png" alt="Figure 4: Server states。follow 之响应其他服务的请求，如果 follow 没有手段任何通信，就会变成 candidate 并发起选举。获得整个集群
+    <img src="/images/9.png" alt="Figure 4: Server states。follow 只响应其他服务的请求，如果 follow 接收不到任何消息，就会变成 candidate 并发起选举。获得整个集群
 中大多数人投票的 candidate 成为候选人。leader 通常运行到它们失败为止。"  />
     
     <figcaption>
-       Figure 4: Server states。follow 之响应其他服务的请求，如果 follow 没有手段任何通信，就会变成 candidate 并发起选举。获得整个集群
+       Figure 4: Server states。follow 只响应其他服务的请求，如果 follow 接收不到任何消息，就会变成 candidate 并发起选举。获得整个集群
 中大多数人投票的 candidate 成为候选人。leader 通常运行到它们失败为止。
     </figcaption>
     
@@ -731,7 +752,7 @@ nextIndex)):
 
 
 <details class="details custom-block">
-    <summary> 原文</summary>
+    <summary> <span>原文</span> </summary>
     A Raft cluster contains several servers; five is a typical number, which allows the system to tolerate two failures.
 At any given time each server is in one of three states: leader, follower, or candidate. In normal operation there is
 exactly one leader and all of the other servers are followers. Followers are passive: they issue no requests on their
@@ -749,12 +770,12 @@ below.
 Raft保证在给定的 term 内最多只有一个 leader。</p>
 <h4 id="figure-5">Figure 5</h4>
 <p><figure id="a-/images/10.png" class="align-center">
-    <img src="/images/10.png" alt="Figure 5: 将时间划分为 terms，每个 term 都以选举开始。选举成功后，一个 leader管理集群直到 term 结束。在一些选举失败的情况下，
-任期结束时都不会选择 leader。可以在不同的服务器上，可以在不同的时间观察到 term 之间的过渡情况。"  />
+    <img src="/images/10.png" alt="Figure 5: 将时间划分为 terms，每个 term 都以选举开始。选举成功后，一个 leader 管理集群直到 term 结束。
+有时候选举会失败，那么这个 term 就会没有 leader 而结束。 term 之间的切换可以在不同的时间不同的服务器上观察到"  />
     
     <figcaption>
-       Figure 5: 将时间划分为 terms，每个 term 都以选举开始。选举成功后，一个 leader管理集群直到 term 结束。在一些选举失败的情况下，
-任期结束时都不会选择 leader。可以在不同的服务器上，可以在不同的时间观察到 term 之间的过渡情况。
+       Figure 5: 将时间划分为 terms，每个 term 都以选举开始。选举成功后，一个 leader 管理集群直到 term 结束。
+有时候选举会失败，那么这个 term 就会没有 leader 而结束。 term 之间的切换可以在不同的时间不同的服务器上观察到
     </figcaption>
     
 </figure></p>
@@ -762,7 +783,7 @@ Raft保证在给定的 term 内最多只有一个 leader。</p>
 
 
 <details class="details custom-block">
-    <summary> 原文</summary>
+    <summary> <span>原文</span> </summary>
     Raft divides time into terms of arbitrary length, as shown in Figure 5. Terms are numbered with consecutive integers.
 Each term begins with an election, in which one or more candidates attempt to become leader as described in Section
 5.2. If a candidate wins the election, then it serves as leader for the rest of the term.
@@ -773,8 +794,8 @@ shortly. Raft ensures that there is at most one leader in a given term.
 
 
 
-<p>不同的服务器可能会在不同的时间观察到 terms 之间的转换，在某些情况下，一个服务器可能不会观察到选举甚至整个 terms。
-terms 在 Raft 中充当了逻辑时钟， 它们允许服务器检测过时的信息，如过时的 leader。</p>
+<p>不同的服务器可能会在不同的时间观察到 term 之间的转换，在某些情况下，一个服务器可能不会观察到选举甚至整个 term 的全程。
+term 在 Raft 中充当了逻辑时钟，term 使得可以服务器检测过时的信息: 如过时的 leader。</p>
 <p>每个服务器都存储一个当前的 term 编号，该编号随时间单调地增加。每当服务器进行通信时，就会交换当前 term；
 如果一个服务器的当前 term 比另一个服务器的小，那么它就会将其当前 term 更新为较大的值。</p>
 <p>如果一个 candidate 或 leader 发现它的 term 已经过时，它将立即恢复到 follower 的状态。</p>
@@ -783,7 +804,7 @@ terms 在 Raft 中充当了逻辑时钟， 它们允许服务器检测过时的�
 
 
 <details class="details custom-block">
-    <summary> 原文</summary>
+    <summary> <span>原文</span> </summary>
     Different servers may observe the transitions between terms at different times, and in some situations a server may
 not observe an election or even entire terms. Terms act as a logical clock [14] in Raft, and they allow servers to
 detect obsolete information such as stale leaders. Each server stores a current term number, which increases
@@ -795,14 +816,14 @@ number, it rejects the request.
 
 
 
-<p>Raft 服务器使用 RPC 进行通信，而基本的共识算法只需要两种类型的RPC。<code>RequestVote RPCs</code> 由 candidate 在选举期间发起；
-<code>AppendEntries RPCs</code>由 leader 发起，用于复制日志条目并提供一种心跳形式。在下面的章节还增加了第三个RPC，用于在服务器之间传输快照。
+<p>Raft 服务器使用 RPC 进行通信，而基本的共识算法只需要两种类型的RPC。<code>RequestVote RPCs</code>由 candidate 在选举期间发起；
+<code>AppendEntries RPCs</code>由 leader 发起，用于复制日志条目并提供一种心跳机制。在下面的章节还增加了第三个RPC，用于在服务器之间传输快照。
 如果服务器没有及时收到响应，它们会重试 RPC，并且为了获得最佳性能，它们会并行地发出 RPC。</p>
 
 
 
 <details class="details custom-block">
-    <summary> 原文</summary>
+    <summary> <span>原文</span> </summary>
     Raft servers communicate using remote procedure calls (RPCs), and the basic consensus algorithm requires only two
 types of RPCs. RequestVote RPCs are initiated by candidates during elections (Section 5.2), and AppendEntries RPCs are
 initiated by leaders to replicate log entries and to provide a form of heartbeat (Section 5.3). Section 7 adds a third
@@ -815,13 +836,12 @@ manner, and they issue RPCs in parallel for best performance.
 <h3 id="leader-election">Leader election</h3>
 <p>Raft 使用心跳机制来触发 leader 选举。当服务器启动时，初始状态都是 follower 。只要服务器收到来自 leader 或 candidate 的有效RPC，
 它就一直处于 follower 状态。 leader 定期向所有 follower 发送心跳（<code>AppendEntries RPCs</code>，不携带日志条目），以保持他们的权威。
-如果 follower 在一段时间内没有收到任何通信(<em>election timeout</em>)，那么它就认为没有可行的 leader ，
-并开始选举以选择一个新的 leader。</p>
+如果 follower 在一段时间内没有收到任何通信(<em>election timeout</em>)，那么它就认为没有可用的 leader，并开始选举以选择一个新的 leader。</p>
 
 
 
 <details class="details custom-block">
-    <summary> 原文</summary>
+    <summary> <span>原文</span> </summary>
     Raft uses a heartbeat mechanism to trigger leader election. When servers start up, they begin as followers. A server
 remains in follower state as long as it receives validRPCs from a leader or candidate. Leaders send periodic
 heartbeats (AppendEntries RPCs that carry no log entries) to all followers in order to maintain their authority. If a
@@ -832,20 +852,20 @@ leader and begins an election to choose a new leader.
 
 
 
-<p>为了开始选举，follower 增加它的当前 term 并过转换到 candidate 状态。
+<p>要开始一场选举，follower 要增加它的当前 term 并过转换到 candidate 状态。
 然后，它为自己投票，并行的向集群中的每个其他服务器发出<code>RequestVote RPCs</code>。
 candidate 将一直处于这种状态，直到发生以下三种情况之一:</p>
 <ol>
 <li>它赢得了选举</li>
 <li>另一个服务器确立了自己的领导地位</li>
-<li>一段时间内没有赢家。</li>
+<li>一段时间之后没有任何人获胜。</li>
 </ol>
 <p>接下来就对这些结果进行讨论:</p>
 
 
 
 <details class="details custom-block">
-    <summary> 原文</summary>
+    <summary> <span>原文</span> </summary>
     To begin an election, a follower increments its current term and transitions to candidate state. It then votes for
 itself and issues RequestVote RPCs in parallel to each of the other servers in the cluster. A candidate continues in
 this state until one of three things happens: (a) it wins the election, (b) another server establishes itself as leader,
@@ -863,12 +883,12 @@ or (c) a period of time goes by with no winner. These outcomes are discussed sep
 (&nbsp;<a href="/posts/2022-10-10-raftkv/#figure-3">图3</a>
 中的选举 Safety 属性)。
 一旦一个 candidate 在选举中获胜，它就成为 leader。然后，它向所有其他服务器发送心跳信息(不携带日志的<code>AppendEntries RPC</code>)，
-以建立其权威并防止新的选举。</p>
+以建立其权威并防止新的选举发生。</p>
 
 
 
 <details class="details custom-block">
-    <summary> 原文</summary>
+    <summary> <span>原文</span> </summary>
     A candidate wins an election if it receives votes from a majority of the servers in the full cluster for the same term.
 Each server will vote for at most one candidate in a given term, on a first-come-first-served basis (note: Section 5.4
 adds an additional restriction on votes). The majority rule ensures that at most one candidate can win the election for
@@ -889,7 +909,7 @@ then sends heartbeat messages to all of the other servers to establish its autho
 
 
 <details class="details custom-block">
-    <summary> 原文</summary>
+    <summary> <span>原文</span> </summary>
     While waiting for votes, a candidate may receive an AppendEntries RPC from another server claiming to be leader. If the
 leader’s term (included in its RPC) is at least as large as the candidate’s current term, then the candidate recognizes
 the leader as legitimate and returns to follower state. If the term in the RPC is smaller than the candidate’s current
@@ -899,7 +919,7 @@ term, then the candidate rejects the RPC and continues in candidate state.
 
 
 <blockquote>
-<p>一段时间内没有赢家</p>
+<p>一段时间之后没有任何人获胜</p>
 </blockquote>
 <p>第三个可能的结果是，一个候选人既没有赢得选举，也没有输掉选举: 如果许多 follower 同时成为 candidate，票数可能被分割，
 因此没有 candidate 获得足够的投票。
@@ -909,7 +929,7 @@ term, then the candidate rejects the RPC and continues in candidate state.
 
 
 <details class="details custom-block">
-    <summary> 原文</summary>
+    <summary> <span>原文</span> </summary>
     The third possible outcome is that a candidate neither wins nor loses the election: if many followers become candidates
 at the same time, votes could be split so that no candidate obtains a majority. When this happens, each candidate will
 time out and start a new election by incrementing its term and initiating another round of RequestVote RPCs. However,
@@ -926,7 +946,7 @@ without extra measures split votes could repeat indefinitely.
 
 
 <details class="details custom-block">
-    <summary> 原文</summary>
+    <summary> <span>原文</span> </summary>
     Raft uses randomized election timeouts to ensure that split votes are rare and that they are resolved quickly. To
 prevent split votes in the first place, election timeouts are chosen randomly from a fixed interval (e.g., 150–300ms).
 This spreads out the servers so that in most cases only a single server will time out; it wins the election and sends
@@ -949,7 +969,7 @@ candidate ，但如果它过早地这样做，它可能会重置选举 leader �
 
 
 <details class="details custom-block">
-    <summary> 原文</summary>
+    <summary> <span>原文</span> </summary>
     Elections are an example of how understandability guided our choice between design alternatives.
 Initially we planned to use a ranking system: each candidate was assigned a unique rank,
 which was used to select between competing candidates. If a candidate discovered another candidate with higher rank,
@@ -972,7 +992,7 @@ leader 将该 command 作为一个新的条目附加到它的日志中，然后�
 
 
 <details class="details custom-block">
-    <summary> 原文</summary>
+    <summary> <span>原文</span> </summary>
     Once a leader has been elected, it begins servicing client requests. Each client request contains a command to be
 executed by the replicated state machines. The leader appends the command to its log as a new entry, then is- sues
 AppendEntries RPCs in parallel to each of the other servers to replicate the entry. When the entry has been safely
@@ -1001,7 +1021,7 @@ tries.
 
 
 <details class="details custom-block">
-    <summary> 原文</summary>
+    <summary> <span>原文</span> </summary>
     Logs are organized as shown in Figure 6. Each log entry stores a state machine command along with the term number when
 the entry was received by the leader. The term numbers in log entries are used to detect inconsistencies between logs
 and to ensure some of the properties in Figure 3. Each log entry also has an integer index identifying its position in
@@ -1020,7 +1040,7 @@ leader 会跟踪它所知道的已承诺的最高索引，并且它在未来的<
 
 
 <details class="details custom-block">
-    <summary> 原文</summary>
+    <summary> <span>原文</span> </summary>
     The leader decides when it is safe to apply a log entry to the state machines; such an entry is called committed.
 Raft guarantees that committed entries are durable and will eventually be executed by all of the available state
 machines. A log entry is committed once the leader that created the entry has replicated it on a majority of the
@@ -1048,7 +1068,7 @@ Raft 维护了以下特性，它们共同构成了&nbsp;<a href="/posts/2022-10-
 
 
 <details class="details custom-block">
-    <summary> 原文</summary>
+    <summary> <span>原文</span> </summary>
     <p>We designed the Raft log mechanism to maintain a high level of coherency between the logs on different servers. Not only
 does this simplify the system’s behavior and make it more predictable, but it is an important component of ensuring
 safety. Raft maintains the following properties, which together constitute the Log Matching Property in Figure 3:</p>
@@ -1076,7 +1096,7 @@ Matching 属性。
 
 
 <details class="details custom-block">
-    <summary> 原文</summary>
+    <summary> <span>原文</span> </summary>
     The first property follows from the fact that a leader creates at most one entry with a given log index in a given term,
 and log entries never change their position in the log.
 The second property is guaranteed by a simple consistency check performed by AppendEntries.
@@ -1117,7 +1137,7 @@ follower’s log is identical to its own log up through the new entries
 
 
 <details class="details custom-block">
-    <summary> 原文</summary>
+    <summary> <span>原文</span> </summary>
     During normal operation, the logs of the leader and followers stay consistent, so the AppendEntries consistency check
 never fails. However, leader crashes can leave the logs inconsistent (the old leader may not have fully replicated all
 of the entries in its log). These inconsistencies can compound over a series of leader and follower crashes. Figure 7
@@ -1134,7 +1154,7 @@ extraneous entries in a log may span multiple terms.
 
 
 <details class="details custom-block">
-    <summary> 原文</summary>
+    <summary> <span>原文</span> </summary>
     In Raft, the leader handles inconsistencies by forcing the followers’ logs to duplicate its own. This means that
 conflicting entries in follower logs will be overwritten with entries from the leader’s log. Section 5.4 will show that
 this is safe when coupled with one more restriction.
@@ -1154,7 +1174,7 @@ leader 为每个 follower 维护一个 nextIndex ，这是 leader 将发送给�
 
 
 <details class="details custom-block">
-    <summary> 原文</summary>
+    <summary> <span>原文</span> </summary>
     To bring a follower’s log into consistency with its own, the leader must find the latest log entry where the two logs
 agree, delete any entries in the follower’s log after that point, and send the follower all of the leader’s entries
 after that point. All of these actions happen in response to the consistency check performed by AppendEntries RPCs. The
@@ -1181,7 +1201,7 @@ follower 可以包含冲突条目的 term 以它在 term 中存储的第一个�
 
 
 <details class="details custom-block">
-    <summary> 原文</summary>
+    <summary> <span>原文</span> </summary>
     If desired, the protocol can be optimized to reduce the number of rejected AppendEntries RPCs. For example, when
 rejecting an AppendEntries request, the follower can include the term of the conflicting entry and the first index it
 stores for that term. With this information, the leader can decrement nextIndex to bypass all of the conflicting
@@ -1200,7 +1220,7 @@ leader 永远不会覆盖或删除自己日志中的条目(&nbsp;<a href="/posts
 
 
 <details class="details custom-block">
-    <summary> 原文</summary>
+    <summary> <span>原文</span> </summary>
     With this mechanism, a leader does not need to take any special actions to restore log consistency when it comes to
 power. It just begins normal operation, and the logs automatically converge in response to failures of the Append-
 Entries consistency check. A leader never overwrites or deletes entries in its own log (the Leader Append-Only Property
@@ -1219,7 +1239,7 @@ in Figure 3).
 
 
 <details class="details custom-block">
-    <summary> 原文</summary>
+    <summary> <span>原文</span> </summary>
     This log replication mechanism exhibits the desirable consensus properties described in Section 2: Raft can ac- cept,
 replicate, and apply new log entries as long as a ma- jority of the servers are up; in the normal case a new entry can
 be replicated with a single round of RPCs to a ma- jority of the cluster; and a single slow follower will not impact
