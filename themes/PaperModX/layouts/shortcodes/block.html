@@ -2,7 +2,7 @@
 
 {{ if eq $type "details" }}
 <details class="details custom-block">
-    <summary> {{.Get "title"}}</summary>
+    <summary> <span>{{.Get "title"}}</span> </summary>
     {{ .Inner | markdownify }}
 </details>
 {{end}}
