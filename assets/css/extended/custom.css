@@ -90,3 +90,7 @@ figcaption {
 .archive-count {
     font-family: "LXGW WenKai SCREEN" !important;
 }
+
+.post-content .chroma code{
+    font-family: var(--fjet);
+}
