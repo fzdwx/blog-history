@@ -836,7 +836,8 @@ manner, and they issue RPCs in parallel for best performance.
 <h3 id="leader-election">Leader election</h3>
 <p>Raft 使用心跳机制来触发 leader 选举。当服务器启动时，初始状态都是 follower 。只要服务器收到来自 leader 或 candidate 的有效RPC，
 它就一直处于 follower 状态。 leader 定期向所有 follower 发送心跳（<code>AppendEntries RPCs</code>，不携带日志条目），以保持他们的权威。
-如果 follower 在一段时间内没有收到任何通信(<em>election timeout</em>)，那么它就认为没有可用的 leader，并开始选举以选择一个新的 leader。</p>
+如果 follower 在一段时间内没有收到任何通信(<em>election timeout</em>)，那么它就认为没有可用的 leader，并开始选举以选择一个新的
+leader。</p>
 
 
 
@@ -902,9 +903,9 @@ then sends heartbeat messages to all of the other servers to establish its autho
 <p>另一个服务器确立了自己的领导地位</p>
 </blockquote>
 <p>在等待投票的过程中，candidate 可能会收到另一个服务器的<code>AppendEntries RPC</code>，声称自己是领导者。
-如果这个 leader 的term(会携带在 RPC 中)至少与 candidate 的当前 term 一样大，
+如果这个 leader 的term(会携带在 RPC 中)不小于 candidate 当前的 term，
 那么 candidate 就会承认 leader 是合法的并返回到 follower 状态。
-如果 RPC 中的 term 比 candidate 当前的 term 小，那么候选者拒绝 RPC，继续处于 candidate 状态。</p>
+如果 RPC 中的 term 比 candidate 当前的 term 小，那么候选者会拒绝 RPC，并继续处于 candidate 状态。</p>
 
 
 
@@ -921,10 +922,10 @@ term, then the candidate rejects the RPC and continues in candidate state.
 <blockquote>
 <p>一段时间之后没有任何人获胜</p>
 </blockquote>
-<p>第三个可能的结果是，一个候选人既没有赢得选举，也没有输掉选举: 如果许多 follower 同时成为 candidate，票数可能被分割，
-因此没有 candidate 获得足够的投票。
-当这种情况发生时，每个 candidate 都会超时，并通过增加其 term 和启动新一轮的<code>RequestVote RPC</code>来开始新的选举。
-然而，如果没有额外的措施，<code>split vote</code> 可能会无限期地重复。</p>
+<p>第三个可能的结果是 candidate 既没有赢得选举，也没有输掉选举: 如果许多 follower 同时成为 candidate，那么票数可能被分割，
+因此没有 candidate 能获得足够的投票。
+当这种情况发生时，每个 candidate 都会超时，然后通过增加其 term 和发起新一轮的<code>RequestVote RPC</code>来开始新的选举。
+然而，如果没有额外的措施，<code>split vote</code>可能会无限期地重复。</p>
 
 
 
@@ -938,10 +939,12 @@ without extra measures split votes could repeat indefinitely.
 
 
 
-<p>Raft使用随机的选举超时时间，以确保 split vote 很少发生，并能迅速解决。为了从一开始就防止 split vote，
-选举超时时间是从一个固定的时间间隔中随机选择的(例如150-300ms)。这样每个服务器的选举超时时间就不同了，所以在大多数情况下，只有一个服务器会超时。</p>
-<p>如果一个服务赢得了选举，就在其他服务超时之前发送心跳，split vote 也使用同样的机制来处理。
-每个候选人在选举开始时重新启动其随机选举超时(重新计时？)，并等待超时过后再开始下一次选举；这减少了在新的选举中再次出现分裂票的可能性。</p>
+<p>Raft 使用随机的选举超时时间，以确保 split vote 很少发生，并能迅速解决。
+为了从一开始就防止 split vote，选举超时时间是从一个固定的时间间隔(例如150-300ms)中随机选择的。
+这样每个服务器的选举超时时间就不同了，所以在大多数情况下，只有一个服务器会超时。</p>
+<p>如果一个服务赢得了选举，就在其他服务超时之前发送心跳，<code>split vote</code>就是使用这样的机制来处理。
+每个 candidate 在选举开始时重新启动其随机选举超时(重新计时？)，并等待超时过后再开始下一次选举；
+这减少了在新的选举中再次出现分裂票的可能性。</p>
 
 
 
@@ -959,10 +962,9 @@ approach elects a leader rapidly
 
 
 <p>选举是一个用于说明可理解性是如何指导我们在设计方案做权衡的例子。
-最初我们计划使用一个排名系统: 每个 candidate 被分配一个唯一的排名，
-用来在竞争的 candidate 之间进行选择。如果一个候选人发现了另一个排名更高的候选人，
-它就会回到 follower 的状态，这样排名更高的候选人就能更容易地赢得下一次选举。
-我们发现这种方法在可用性方面产生了一些微妙的问题(如果一个排名较高的服务失败了，一个排名较低的服务器可能需超时并再次成为
+最初我们计划使用一个排名系统: 每个 candidate 被分配一个唯一的排名，用来在竞争的 candidate 之间进行选择。
+如果一个候选人发现了另一个排名更高的候选人，它就会回到 follower 的状态，这样排名更高的候选人就能更容易地赢得下一次选举。
+我们发现这种方法在可用性方面产生了一些微妙的问题(如果一个排名较高的服务发生故障了，一个排名较低的服务器可能需超时并再次成为
 candidate ，但如果它过早地这样做，它可能会重置选举 leader 的进展)。我们对算法进行了多次调整，但每次调整后都会出现新的角落案例。
 最终我们得出结论，随机重试的方法更明显，更容易理解。</p>
 
@@ -983,10 +985,10 @@ appeared. Eventually we concluded that the randomized retry approach is more obv
 
 
 <h3 id="log-replication">Log replication</h3>
-<p>一旦一个领导者被选出，它就开始为 client 的请求提供服务。每个 client request 都包含一个要由复制的状态机执行的 command。
-leader 将该 command 作为一个新的条目附加到它的日志中，然后并行地将<code>AppendEntries RPCs</code>发送给其他每个服务器以复制该条目。
-当条目被安全复制后(如下所述)，leader 将条目应用于其状态机，并将执行结果返回给 client 。
-如果 follower 崩溃或运行缓慢，或者网络数据包丢失，领导者会无限期地重试<code>AppendEntries RPCs</code>(甚至在它回应了客户端之后)，
+<p>一旦一个领导者被选出，它就开始为 client 的请求提供服务。每个 client 的请求都包含一个要由复制的状态机执行的 command。
+leader 将该 command 作为一个新的条目附加到它的日志中，然后并行发起<code>AppendEntries RPC</code>给其他每个服务器以复制该条日志。
+当条目被安全复制后(如下所述)，leader 将这条日志应用于其状态机，并将执行结果返回给 client。
+如果 follower 崩溃或运行缓慢，又或者网络数据包丢失，leader 会无限期地重试<code>AppendEntries RPC</code>(甚至在它回应了客户端之后)，
 直到所有 follower 最终存储所有日志条目。</p>
 
 
@@ -1005,10 +1007,12 @@ tries.
 
 
 <p><figure id="a-/images/f6.png" class="align-center">
-    <img src="/images/f6.png" alt="Figure 6: 日志是由条目组成的，这些条目按顺序编号。每个条目都包含创建它的 term(每个框中的数字)和状态机的命令。如果一个条目可以安全地应用于状态机，那么该条目就被认为是 committed 的"  />
+    <img src="/images/f6.png" alt="Figure 6: 日志由有序序号标记的条目组成。每个条目都包含创建它的 term(每个框中的数字)和一个状态机需要执行的命令。
+如果一个条目可以安全地应用于状态机，那么该条目就被认为是 committed 的"  />
     
     <figcaption>
-       Figure 6: 日志是由条目组成的，这些条目按顺序编号。每个条目都包含创建它的 term(每个框中的数字)和状态机的命令。如果一个条目可以安全地应用于状态机，那么该条目就被认为是 committed 的
+       Figure 6: 日志由有序序号标记的条目组成。每个条目都包含创建它的 term(每个框中的数字)和一个状态机需要执行的命令。
+如果一个条目可以安全地应用于状态机，那么该条目就被认为是 committed 的
     </figcaption>
     
 </figure></p>
@@ -1030,11 +1034,11 @@ the log.
 
 
 
-<p>leader 决定何时将日志条目应用于状态机是安全的,这样的条目被称为 <em>committed</em> 。
-Raft 保证所提交的条目是持久的，最终会被所有可用的状态机执行。一旦创建该条目的 leader 将其复制到大多数服务器上，
+<p>leader 决定何时将日志条目应用于状态机是安全的，这样的条目被称为 <em>committed</em> 。
+Raft 保证所提交的条目是持久化的并且最终会被所有可用的状态机执行。一旦创建该条目的 leader 将其复制到大多数服务器上，
 该日志条目就会被提交(例如，图6中的条目7)。这也会提交 leader 日志中所有之前的条目，包括之前领导者创建的条目。
 第5.4节讨论了在 leader 变更后应用这一规则时的一些微妙之处，它还表明这种承诺的定义是安全的。
-leader 会跟踪它所知道的已承诺的最高索引，并且它在未来的<code>AppendEntries RPC</code>(包括心跳)中包括该索引，以便其他服务器最终发现。
+leader 会跟踪它所知道的已提交的最大索引，并且它在未来的<code>AppendEntries RPC</code>(包括心跳)中包括该索引，以便其他服务器最终发现。
 一旦 follower 得知一个日志条目被提交，它就会将该条目应用于其本地状态机(按日志顺序)。</p>
 
 
@@ -1056,7 +1060,7 @@ machine (in log order)
 
 <p>我们设计的 Raft 日志机制在不同服务器上的日志之间保持高度的一致性。这不仅简化了系统的行为，使其更具可预测性，而且是确保安全的重要组成部分。
 Raft 维护了以下特性，它们共同构成了&nbsp;<a href="/posts/2022-10-10-raftkv/#figure-3">图3</a>
-中的 Log Matching 特性:</p>
+中的<code>Log Matching</code>特性:</p>
 <blockquote>
 <p>如果不同的两个日志具有相同的 index 以及 term</p>
 </blockquote>
@@ -1084,13 +1088,12 @@ entries</li>
 
 
 
-<p>第一个属性来自于这样一个事实，即一个 leader 在一个给定的 term 中最多创建一个具有给定的日志 index 的条目，
-并且日志条目永远不会改变它们在日志中的位置。
-第二个属性由<code>AppendEntries</code>执行的简单一致性检查来保证。当发送<code>AppendEntries RPC</code>时，
-leader 会包含其日志中紧接新条目之前的条目的 index 和 term 。
+<p>第一个属性来自于这样一个事实，即一个 leader 在一个 term 内只能在一个 index 上创建一个日志条目，并且日志条目永远不会改变它们在日志中的位置。
+第二个属性由<code>AppendEntries RPC</code>执行的简单一致性检查来保证。
+当发送<code>AppendEntries RPC</code>时，leader 会包含其日志中紧接新条目之前的条目的 index 和 term 。
 如果 follower 在其日志中没有找到具有相同 index 和 term 的条目，那么它将拒绝新条目。
-一致性检查作为一个归纳步骤: 日志的初始空状态满足了 Log Matching 属性，并且每当日志被扩展时，一致性检查都会保留 Log
-Matching 属性。
+一致性检查就像一个归纳步骤: 日志的初始状态是肯定满足<code>Log Matching</code>属性的，
+并且每当日志被扩展时，一致性检查都会保留<code>Log Matching</code>属性。
 因此，每当<code>AppendEntries</code>成功返回时，leader 知道 follower 的日志与自己的日志在新条目之前是相同的</p>
 
 
@@ -1120,16 +1123,16 @@ follower’s log is identical to its own log up through the new entries
 </ul>
 <p>日志中缺失和多余的条目可能跨越多个 term 。</p>
 <p><figure id="a-/images/f7.png" class="align-center">
-    <img src="/images/f7.png" alt="Figure 7: 当顶端的 leader 掌权时，在 follower 的日志中可能会出现(a-f)中的任何一种情况。
-每个盒子代表一个日志条目；盒子里的数字是其 term 。 一个 follower 可能缺少条目(a-b)，可能有额外的未承诺的条目(c-d)，或者两者都有(e-f)。
-例如，如果该服务器是第2期的 leader ，在其日志中增加了几个条目，然后在提交任何条目之前就崩溃了；它很快重新启动，成为第3期的 leader，
-并在其日志中增加了几个条目；在第2期或第3期的任何条目被提交之前，该服务器又崩溃了，并持续了几个任期。"  />
+    <img src="/images/f7.png" alt="Figure 7: 当一个 leader 成功掌权时，follower 可能是(a-f)中的任何一种情况。
+每个盒子代表一个日志条目；盒子里的数字是其 term。一个 follower 可能缺少条目(a-b)，可能有额外的未承诺的条目(c-d)，或者两者都有(e-f)。
+例如f的发生条件: 如果该服务器是第2期的 leader ，在其日志中中已经增加了几个条目，然后在提交条目之前就崩溃了；它很快重新启动，成为第3期的 leader，
+并在其日志中增加了几个条目；在第2期或第3期的条目被提交之前，该服务器又崩溃了，并持续了几个任期。"  />
     
     <figcaption>
-       Figure 7: 当顶端的 leader 掌权时，在 follower 的日志中可能会出现(a-f)中的任何一种情况。
-每个盒子代表一个日志条目；盒子里的数字是其 term 。 一个 follower 可能缺少条目(a-b)，可能有额外的未承诺的条目(c-d)，或者两者都有(e-f)。
-例如，如果该服务器是第2期的 leader ，在其日志中增加了几个条目，然后在提交任何条目之前就崩溃了；它很快重新启动，成为第3期的 leader，
-并在其日志中增加了几个条目；在第2期或第3期的任何条目被提交之前，该服务器又崩溃了，并持续了几个任期。
+       Figure 7: 当一个 leader 成功掌权时，follower 可能是(a-f)中的任何一种情况。
+每个盒子代表一个日志条目；盒子里的数字是其 term。一个 follower 可能缺少条目(a-b)，可能有额外的未承诺的条目(c-d)，或者两者都有(e-f)。
+例如f的发生条件: 如果该服务器是第2期的 leader ，在其日志中中已经增加了几个条目，然后在提交条目之前就崩溃了；它很快重新启动，成为第3期的 leader，
+并在其日志中增加了几个条目；在第2期或第3期的条目被提交之前，该服务器又崩溃了，并持续了几个任期。
     </figcaption>
     
 </figure></p>
@@ -1165,9 +1168,10 @@ this is safe when coupled with one more restriction.
 <p>为了使 follower 的日志与自己的日志保持一致，leader 必须找到两个日志一致的最新日志条目，删除该点之后 follower 日志中的所有条目，
 并将该点之后的所有 leader 条目发送给 follower。所有这些操作都是为了响应<code>AppendEntries RPC</code>执行的一致性检查而发生的。
 leader 为每个 follower 维护一个 nextIndex ，这是 leader 将发送给该 follower 的下一个日志条目的 index 。
-当 leader 首次上台时，它会将所有 nextIndex 值初始化为其日志中最后一个值之后的索引(图 7 中的 11)。
+当 leader 当选时，它会初始化所有 nextIndex 的值为自己最后一条日志的 index + 1(图 7 中的 11)。
 如果 follower 的日志与 leader 的日志不一致，则<code>AppendEntries</code>一致性检查将在下一个<code>AppendEntries RPC</code>中失败。
-拒绝后，leader 减少 nextIndex 并重试<code>AppendEntries RPC</code>。最终<code>nextIndex</code>将达到 leader 和 follower 日志匹配的点。
+follower 拒绝后，leader 会减少 nextIndex 的值并重试<code>AppendEntries RPC</code>。
+最终<code>nextIndex</code>将达到 leader 和 follower 日志匹配的点。
 发生这种情况时，<code>AppendEntries</code>将成功，这将删除 follower 日志中的任何冲突条目，并从 leader 日志中添加条目(如果有)。
 一旦<code>AppendEntries</code>成功，follower 的 log 就会和 leader 的一致，并且在接下来的任期内保持这种状态。</p>
 
@@ -1215,7 +1219,7 @@ that there will be many inconsistent en- tries
 <p>通过这种机制，leader 在上台时无需采取任何特殊措施来恢复日志一致性。它刚刚开始正常运行，
 并且日志会自动收敛以响应<code>AppendEntries</code>一致性检查的失败。
 leader 永远不会覆盖或删除自己日志中的条目(&nbsp;<a href="/posts/2022-10-10-raftkv/#figure-3">图3</a>
-中的 Leader Append-Only )。</p>
+中的<code>Leader Append-Only</code>)。</p>
 
 
 
@@ -1249,6 +1253,198 @@ performance.
 
 
 <h3 id="safety">Safety</h3>
+<p>在前面的章节里面介绍了 Raft 怎样选举领导以及复制日志。
+然而，这些机制还远不够来保证每个状态机以相同的顺序来执行相同的 command。
+例如，一个 follower 可能是不可用状态(unavailable)而 leader 提交了若干个日志，然后它可能会被选为 leader 然后覆盖这些日志；
+结果就是不同的状态机可能执行了不同的 command sequence。</p>
+
+
+
+<details class="details custom-block">
+    <summary> <span>原文</span> </summary>
+    The previous sections described how Raft elects leaders and replicates log entries. However, the mechanisms described so
+far are not quite sufficient to ensure that each state machine executes exactly the same commands in the same order. For
+example, a follower might be unavailable while the leader commits several log entries, then it could be elected leader
+and overwrite these entries with new ones; as a result, different state machines might execute different command
+sequences.
+</details>
+
+
+
+<p>在这一节通过添加对哪些服务器可以被选举为 leader的限制来完善 Raft。
+这个限制确保 leader 在任意给定 term 内，包含了之前任职期间的所有被提交的日志(&nbsp;<a href="/posts/2022-10-10-raftkv/#figure-3">图3</a>
+中的<code>Leader Completeness Property</code>)
+增加这个选举限制，让我们使提交时的规则更加准确。
+最后，我们会展示一个简要的证明为<code>Leader Completeness Property</code>并且说明是怎样引导出正确行为的复制状态机。</p>
+
+
+
+<details class="details custom-block">
+    <summary> <span>原文</span> </summary>
+    This section completes the Raft algorithm by adding a restriction on which servers may be elected leader. The
+restriction ensures that the leader for any given term contains all of the entries committed in previous terms (the
+Leader Completeness Property from Figure 3). Given the election restriction, we then make the rules for commitment more
+precise. Finally, we present a proof sketch for the Leader Completeness Property and show how it leads to correct
+behavior of the replicated state machine.
+</details>
+
+
+
+<h4 id="election-restriction">Election restriction</h4>
+<p>在任何基于 leader 的共识算法中，leader 必须将已提交的日志存储。在一些共识算法中，比如<code>Viewstamped Replication</code>，
+一个节点能当选 leader，即使它一开始没有包含所有已提交的日志。
+这些算法都有额外的机制来识别丢失的日志并发送给 new leader，要么在选举的过程中或者在选举之后不久。
+不幸的是，这种方法会导致相当大的额外的机制和复杂性。</p>
+<p>Raft 使用了一种更加简单的方法，它可以保证在选举的时候新的 leader 拥有所有之前任期中已经提交的日志条目，
+而不需要传送这些日志条目给 leader 。这意味着日志条目的传送是单向的，只从 leader 传给 follower，
+并且 leader 从不会覆盖自身本地日志中已经存在的条目。</p>
+
+
+
+<details class="details custom-block">
+    <summary> <span>原文</span> </summary>
+    In any leader-based consensus algorithm, the leader must eventually store all of the committed log entries. In some
+consensus algorithms, such as Viewstamped Replication [22], a leader can be elected even if it doesn’t initially contain
+all of the committed entries. These algorithms contain additional mechanisms to identify the missing entries and
+transmit them to the new leader, either during the election process or shortly afterwards. Unfortunately, this results
+in considerable additional mechanism and complexity. Raft uses a simpler approach where it guarantees that all the
+committed entries from previous terms are present on each new leader from the moment of its election, without the need
+to transfer those entries to the leader. This means that log entries only flow in one direction, from leaders to
+followers, and leaders never overwrite existing entries in their logs
+</details>
+
+
+
+<p>Raft 使用投票的过程来阻止 candidate 赢得选举，除非它的日志包含所有已经提交的条目。cand-
+idate 为了被选举必须联系集群中的大部分节点，这意味着每个被提交的日志在这些服务上至少存在一个节点上。
+如果 candidate 的日志至少与大多数日志中的任何其他日志一样最新(“最新”的定义在下面)，那么它一定保存了所有已提交的日志。</p>
+<p><code>RequestVote RPC</code>实现的限制: RPC 会包含关于 candidate 的日志信息，如果 voter 自己的日志比 candidate 的日志更新，
+那么 vote 会拒绝投票。</p>
+
+
+
+<details class="details custom-block">
+    <summary> <span>原文</span> </summary>
+    Raft uses the voting process to prevent a candidate from winning an election unless its log contains all committed
+entries. A candidate must contact a majority of the cluster in order to be elected, which means that every committed
+entry must be present in at least one of those servers. If the candidate’s log is at least as up-to-date as any other
+log in that majority (where “up-to-date” is defined precisely below), then it will hold all the committed entries. The
+RequestVote RPC implements this restriction: the RPC includes information about the candidate’s log, and the voter
+denies its vote if its own log is more up-to-date than that of the candidate.
+</details>
+
+
+
+<p>Raft 通过比较最后一个日志的 index 以及 term来决定两个日志中的那个是最新的。
+如果最后一条日志的 term 不同，则更大的那份就是更新的。
+如果日志有相同的 term，那么哪个日志长(日志数组的长度？还是 index 的大小？)，哪个就是最新的。</p>
+
+
+
+<details class="details custom-block">
+    <summary> <span>原文</span> </summary>
+    Raft determines which of two logs is more up-to-date by comparing the index and term of the last entries in the logs. If
+the logs have last entries with different terms, then the log with the later term is more up-to-date. If the logs end
+with the same term, then whichever log is longer is more up-to-date.
+</details>
+
+
+
+<h4 id="committing-entries-from-previous-terms">Committing entries from previous terms</h4>
+<p>如&nbsp;<a href="/posts/2022-10-10-raftkv/#log-replication">Log replication</a>
+介绍的那样，只要日志被存储到大多数节点中，leader 就知道这条日志是可以
+在当前 term 内被提交的。
+如果 leader 在提交日志之前崩溃了，未来的 leader 将会尝试完成这条日志的复制。
+然而，leader 不能立即推断出在前一个 term 的日志在保存到大多数服务器上时就一定被提交了。
+图8说明了一条已经被存储到大多数节点上的老日志条目，也可能被未来的 leader 覆盖掉。</p>
+<p><figure id="a-/images/f8.png" class="align-center">
+    <img src="/images/f8.png" alt="Figure 8: 如图的时间序列展示了为什么领导人无法决定对老任期号的日志条目进行提交。在 (a) 中，S1 是领导人，部分的(跟随者)复制了索引位置 2 的日志条目。在 (b) 中，S1 崩溃了，然后 S5 在任期 3 里通过 S3、S4 和自己的选票赢得选举，然后从客户端接收了一条不一样的日志条目放在了索引 2 处。然后到 (c)，S5 又崩溃了；S1 重新启动，选举成功，开始复制日志。在这时，来自任期 2 的那条日志已经被复制到了集群中的大多数机器上，但是还没有被提交。如果 S1 在 (d) 中又崩溃了，S5 可以重新被选举成功（通过来自 S2，S3 和 S4 的选票），然后覆盖了他们在索引 2 处的日志。反之，如果在崩溃之前，S1 把自己主导的新任期里产生的日志条目复制到了大多数机器上，就如 (e) 中那样，那么在后面任期里面这些新的日志条目就会被提交（因为 S5 就不可能选举成功）。 这样在同一时刻就同时保证了，之前的所有老的日志条目就会被提交。"  />
+    
+    <figcaption>
+       Figure 8: 如图的时间序列展示了为什么领导人无法决定对老任期号的日志条目进行提交。在 (a) 中，S1 是领导人，部分的(跟随者)复制了索引位置 2 的日志条目。在 (b) 中，S1 崩溃了，然后 S5 在任期 3 里通过 S3、S4 和自己的选票赢得选举，然后从客户端接收了一条不一样的日志条目放在了索引 2 处。然后到 (c)，S5 又崩溃了；S1 重新启动，选举成功，开始复制日志。在这时，来自任期 2 的那条日志已经被复制到了集群中的大多数机器上，但是还没有被提交。如果 S1 在 (d) 中又崩溃了，S5 可以重新被选举成功（通过来自 S2，S3 和 S4 的选票），然后覆盖了他们在索引 2 处的日志。反之，如果在崩溃之前，S1 把自己主导的新任期里产生的日志条目复制到了大多数机器上，就如 (e) 中那样，那么在后面任期里面这些新的日志条目就会被提交（因为 S5 就不可能选举成功）。 这样在同一时刻就同时保证了，之前的所有老的日志条目就会被提交。
+    </figcaption>
+    
+</figure></p>
+
+
+
+<details class="details custom-block">
+    <summary> <span>原文</span> </summary>
+    As described in Section 5.3, a leader knows that an entry from its current term is committed once that entry is stored
+on a majority of the servers. If a leader crashes before committing an entry, future leaders will attempt to finish
+replicating the entry. However, a leader cannot immediately conclude that an entry from a previous term is committed
+once it is stored on a majority of servers. Figure 8 illustrates a situation where an old log entry is stored on a
+majority of servers, yet can still be overwritten by a future leader.
+</details>
+
+
+
+<p>为了消除图8中的问题，Raft 永远不使用通过计算副本数量的方式去提交前一个 term 的日志。
+只有 leader 当前 term 内的日志条目才会通过计算副本数量的方式来提交；
+一旦当前 term 的日志以这种方式提交，那么由于<code>Log Matching</code>则之前的所有日志条目也被被提交。
+在某些情况下，leader能安全的知道一个老的日志是否已经被提交(例如，该日志是否存储到服务器上)，
+但是 Raft 为了简化问题使用了一种更加保守的方法。</p>
+
+
+
+<details class="details custom-block">
+    <summary> <span>原文</span> </summary>
+    To eliminate problems like the one in Figure 8, Raft never commits log entries from previous terms by counting replicas.
+Only log entries from the leader’s current term are committed by counting replicas; once an entry from the current term
+has been committed in this way, then all prior entries are committed indirectly because of the Log Matching Property.
+There are some situations where a leader could safely conclude that an older log entry is committed (for example, if
+that entry is stored on every server), but Raft takes a more conservative approach for simplicity
+</details>
+
+
+
+<p>当 leader 复制之前任期里的日志时，Raft 会为所有日志保留原始的任期号，这在提交规则上产生了额外的复杂性。
+在其他的共识算法中，如果一个新的 leader 要重新复制之前的任期里的日志时，它必须使用当前新的任期号。
+Raft 使用的方法更加容易辨别出日志，因为它可以随着时间和日志的变化对日志维护着同一个任期编号。
+另外，和其他的算法相比，Raft 中的new leader 只需要发送更少日志条目(
+其他算法中必须在他们被提交之前发送更多的冗余日志条目来为他们重新编号)。</p>
+
+
+
+<details class="details custom-block">
+    <summary> <span>原文</span> </summary>
+    Raft incurs this extra complexity in the commitment rules because log entries retain their original term numbers when a
+leader replicates entries from previous terms. In other consensus algorithms, if a new leader rereplicates entries from
+prior “terms,” it must do so with its new “term number.” Raft’s approach makes it easier to reason about log entries,
+since they maintain the same term number over time and across logs. In addition, new leaders in Raft send fewer log
+entries from previous terms than in other algorithms (other algorithms must send redundant log entries to renumber them
+before they can be committed)
+</details>
+
+
+
+<h4 id="safety-argument">Safety argument</h4>
+<p>在定义了完整的 Raft 算法后，我们现在可以更精确的说<code>Leader Completeness</code>完全成立。
+我们假设<code>Leader Completeness</code>不成立，然后我们推出一个矛盾来。
+假设任期T的 leader(leader T)在任期内提交了一条日志，但是这条日志没有存储到某个未来的 term 的 leader 的日志中。
+设大于 T 最小任期 U，U 的 leader 没有这条日志。</p>
+<p><figure id="a-/images/f9.png" class="align-center">
+    <img src="/images/f9.png" alt="Figure 9: asd"  />
+    
+    <figcaption>
+       Figure 9: asd
+    </figcaption>
+    
+</figure></p>
+
+
+
+<details class="details custom-block">
+    <summary> <span>原文</span> </summary>
+    Given the complete Raft algorithm, we can now argue more precisely that the Leader Completeness Property holds (this
+argument is based on the safety proof; see Section 9.2). We assume that the Leader Completeness Property does not hold,
+then we prove a contradiction. Suppose the leader for term T (leaderT) commits a log entry from its term, but that log
+entry is not stored by the leader of some future term.
+Consider the smallest term U &gt; T whose leader (leaderU) does not store the entry.
+</details>
+
+
+
 <h1 id="代码实现思路">代码实现思路</h1>
 <h2 id="2a-1">2A</h2>
 <ol>
