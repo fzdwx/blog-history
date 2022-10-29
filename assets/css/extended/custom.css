@@ -66,6 +66,18 @@ figcaption {
     content: none;
 }
 
+.post-tag {
+    background-color: var(--c4);
+    border-radius: 9999px;
+    padding-left: 0.75rem;
+    padding-right: 0.75rem;
+    margin-right: 10px;
+}
+
+.dark .post-tag{
+    background-color: var(--vp-c-indigo-dark);
+}
+
 .meta-item.data {
     bottom: 2px;
 }
@@ -91,6 +103,6 @@ figcaption {
     font-family: "LXGW WenKai SCREEN" !important;
 }
 
-.post-content .chroma code{
+.post-content .chroma code {
     font-family: var(--fjet);
 }
