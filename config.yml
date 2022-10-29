@@ -86,6 +86,10 @@ params:
       url: "/posts/feed.xml"
 
   links:
+    - name: deno playground
+      url: https://dash.deno.com/projects
+      description: 一个类似云函数的环境(免费)
+      favicon: https://dash.deno.com/assets/logo.svg
     - name: 美团技术团队
       url: https://tech.meituan.com/
       favicon: https://awps-assets.meituan.net/mit/blog/v20190629/asset/icon/favicon.ico?v=Whistle&t=20181017-1r
