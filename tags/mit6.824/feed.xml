@@ -1237,33 +1237,31 @@ before they can be committed)
 
 
 
-<h4 id="safety-argument">Safety argument</h4>
-<p>在定义了完整的 Raft 算法后，我们现在可以更精确的说<code>Leader Completeness</code>完全成立。
-我们假设<code>Leader Completeness</code>不成立，然后我们推出一个矛盾来。
-假设任期T的 leader(leader T)在任期内提交了一条日志，但是这条日志没有存储到某个未来的 term 的 leader 的日志中。
-设大于 T 最小任期 U，U 的 leader 没有这条日志。</p>
-<p><figure id="a-/images/f9.png" class="align-center">
-    <img src="/images/f9.png" alt="Figure 9: asd"  />
-    
-    <figcaption>
-       Figure 9: asd
-    </figcaption>
-    
-</figure></p>
-
-
-
-<details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    Given the complete Raft algorithm, we can now argue more precisely that the Leader Completeness Property holds (this
-argument is based on the safety proof; see Section 9.2). We assume that the Leader Completeness Property does not hold,
-then we prove a contradiction. Suppose the leader for term T (leaderT) commits a log entry from its term, but that log
-entry is not stored by the leader of some future term.
-Consider the smallest term U &gt; T whose leader (leaderU) does not store the entry.
-</details>
-
-
-
+<h3 id="follower-and-candidate-crashes">Follower and candidate crashes</h3>
+<p>如果 follower 或者 candidate 崩溃了，那么后续发给他们的 RPC 都会失败。
+Raft 的处理方式就是无限重试，如果后续它们恢复了，这些请求就会成功。
+如果一个节点在接收了一个 RPC 请求后，但是还没有响应的时候崩溃了，那么它在恢复的时候会再次收到同样的请求。
+Raft 的 RPC 都是幂等的，所以重试不会造成任何问题。
+如果一个 follower 收到<code>AppendEntires RPC</code>中包含已经存在的日志，那么它会直接忽略这个新的请求。</p>
+<h3 id="timing-and-availability">Timing and availability</h3>
+<p>Raft 的要求之一就是安全性不能依赖时间：整个系统不能因为某些事件运行的比预期快一点或者慢一点就产生了错误的结果。
+但是，可用性（系统可以及时的响应客户端）不可避免的要依赖于时间。
+例如，如果消息交换比服务器故障间隔时间长，候选人将没有足够长的时间来赢得选举；没有一个稳定的领导人，Raft 将无法工作。</p>
+<p>领导人选举是 Raft 中对时间要求最为关键的方面。Raft 可以选举并维持一个稳定的领导人,只要系统满足下面的时间要求：</p>
+<pre tabindex="0"><code>broadcastTime ≪ electionTimeout ≪ MTBF(平均故障时间)
+</code></pre><ol>
+<li>broadcastTime: 从一个服务器并行的发送 RPC 给集群中的其他服务器并接收响应的平均时间</li>
+<li>electionTimeout: 选举超时时间</li>
+<li>MTBF: 对一台服务器而言，两次故障之间的平均时间</li>
+</ol>
+<p>broadcastTime 必须比 electionTimeout 小一个数量级才能够发送稳定的心跳消息来阻止 follower 进入选举状态。
+通过随机生成的 electionTimeout，这个不等式使得 split vote 的情况变为不可能。
+electionTimeout 应该比 MTBF 小上几个数量级，这样系统才能稳定的运行。
+当 leader 崩溃后，整个系统会在一个 electionTimeout 内不可用，我们希望这种情况在整个系统的运行中很少出现。</p>
+<p>broadcastTime 和 MTBF 是由系统决定的，但是 electionTimeout 是我们自己选择的。Raft 的 RPCs 需要接收方将信息持久化的保存到稳定存储中去，
+所以 broadcastTime 大约是 0.5 毫秒到 20 毫秒，取决于存储的技术。
+因此，electionTimeout 可能需要在 10 毫秒到 500 毫秒之间。大多数的服务器的 MTBF 都在几个月甚至更长，很容易满足时间的需求。</p>
+<h2 id="cluster-membership-changes">Cluster membership changes</h2>
 <h1 id="代码实现思路">代码实现思路</h1>
 <h2 id="2a-1">2A</h2>
 <ol>
