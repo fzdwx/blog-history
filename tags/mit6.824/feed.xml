@@ -490,7 +490,7 @@ prevLogTerm 一样的索引和任期的日志条目则继续执行下面的步�
 <li><code>if commitIndex &gt; lastApplied then incr lastApplied and exec log[lastApplied]</code>（如果commitIndex &gt;
 lastApplied，lastApplied自增，将log[lastApplied]应用到状态机）</li>
 <li><code>if appendEntries.logs exist (log.term &gt; currentTerm) then currentTerm = log.term and set status = follower</code>(如果
-RPC 的请求或者响应中包含一个 term T 大于 currentTerm，则 currentTerm 赋值为 T，并切换状态为追随者 follower)</li>
+RPC 的请求或者响应中包含一个 term T 大于 currentTerm，则 currentTerm 赋值为 T，并切换状态为 follower)</li>
 </ul>
 </li>
 <li>Followers:
@@ -1269,11 +1269,37 @@ electionTimeout 应该比 MTBF 小上几个数量级，这样系统才能稳定�
 <li>添加<code>RaftRole</code>属性，代表当前的角色: leader，candidate，follower</li>
 <li>实现<code>ticker</code>这个函数:
 <ul>
+<li>可以使用两个<code>time.timer</code>来作为触发器</li>
 <li>判断是否很久没有收到心跳，来发起选举</li>
 <li>判断是否需要发送心跳，来维持自己的权威</li>
 </ul>
 </li>
+<li>这个时候要注意这条规则: <strong>如果 RPC 的请求或者响应中包含一个 term T 大于 currentTerm，则 currentTerm 赋值为 T，
+并切换状态为 follower。</strong></li>
+<li>实现发起选举的流程
+<ul>
+<li>根据图2中的<code>Rules for Servers</code>的<code>candaidte</code>流程一步一步实现</li>
+<li>并行发起<code>RequestVote RPC</code>，如果票数大于 1/2 则转换为 leader(可能需要广播心跳)。</li>
+</ul>
+</li>
+<li>实现<code>RequestVote</code>
+<ul>
+<li>根据图2中的<code>RequestVote RPC</code>一步一步实现就好</li>
+</ul>
+</li>
+<li>实现<code>AppendEntries</code>
+<ul>
+<li>只需要简单的实现转换为 follower 以及刷新选举超时时间即可。</li>
+</ul>
+</li>
+<li>所有节点收到响应后刷新选举超时时间(具体情况具体判断)</li>
+<li>成为 leader 后开始刷新心跳超时时间(来刷新 follower 的选举超时时间)</li>
 </ol>
+<p>遇到的问题:</p>
+<p>1.第一个测试会有<code>warning: Term changed even though there were no failures</code>出现</p>
+<p>就是在有一个 leader 的时候其他 follower 还是发起了选举。猜测原因是<code>election timeout</code>和<code>AppendEntries</code>的时间点很邻近，这个只能调试
+两种超时时间，我的选举超时时间是 200~350ms，心跳固定在 125ms。</p>
+<p>2.在响应或请求时要第一时间处理第4条。</p>
 <h1 id="links">Links</h1>
 <ol>
 <li>项目地址: &nbsp;<a href="https://pdos.csail.mit.edu/6.824/labs/lab-raft.html" target="_blank" rel="noopener">https://pdos.csail.mit.edu/6.824/labs/lab-raft.html</a>
