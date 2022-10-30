@@ -136,9 +136,10 @@ Map Reduce &amp;nbsp;https://fzdwx.github.io/posts/2022-09-27-mit6.824-lab1/ Raf
       <pubDate>Sat, 01 Oct 2022 06:33:55 +0000</pubDate>
       
       <guid>https://fzdwx.github.io/notes/1/</guid>
-      <description> ranger 配置推荐 &amp;nbsp;https://zhuanlan.zhihu.com/p/105731111 &amp;nbsp;https://zhuanlan.zhihu.com/p/441083543 fzf &amp;nbsp;https://github.com/junegunn/fzf ranger &amp;nbsp;https://github.com/ranger/ranger 压测工具 &amp;nbsp;https://github.com/link1st/go-stress-testing </description>
+      <description> ranger &amp;nbsp;https://github.com/ranger/ranger 配置推荐 &amp;nbsp;https://zhuanlan.zhihu.com/p/105731111 &amp;nbsp;https://zhuanlan.zhihu.com/p/441083543 fzf(模糊搜索) &amp;nbsp;https://github.com/junegunn/fzf 压测工具 &amp;nbsp;https://github.com/link1st/go-stress-testing vhs(根据预定义的命令，调用bash，然后将输出结果记录为gif等) &amp;nbsp;https://github.com/charmbracelet/vhs </description>
       <content:encoded><![CDATA[<ol>
-<li>ranger 配置推荐
+<li>ranger &nbsp;<a href="https://github.com/ranger/ranger" target="_blank" rel="noopener">https://github.com/ranger/ranger</a>
+  配置推荐
 <ul>
 <li>&nbsp;<a href="https://zhuanlan.zhihu.com/p/105731111" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/105731111</a>
 </li>
@@ -146,11 +147,11 @@ Map Reduce &amp;nbsp;https://fzdwx.github.io/posts/2022-09-27-mit6.824-lab1/ Raf
 </li>
 </ul>
 </li>
-<li>fzf &nbsp;<a href="https://github.com/junegunn/fzf" target="_blank" rel="noopener">https://github.com/junegunn/fzf</a>
-</li>
-<li>ranger &nbsp;<a href="https://github.com/ranger/ranger" target="_blank" rel="noopener">https://github.com/ranger/ranger</a>
+<li>fzf(模糊搜索) &nbsp;<a href="https://github.com/junegunn/fzf" target="_blank" rel="noopener">https://github.com/junegunn/fzf</a>
 </li>
 <li>压测工具 &nbsp;<a href="https://github.com/link1st/go-stress-testing" target="_blank" rel="noopener">https://github.com/link1st/go-stress-testing</a>
+</li>
+<li>vhs(根据预定义的命令，调用bash，然后将输出结果记录为gif等) &nbsp;<a href="https://github.com/charmbracelet/vhs" target="_blank" rel="noopener">https://github.com/charmbracelet/vhs</a>
 </li>
 </ol>
 ]]></content:encoded>
