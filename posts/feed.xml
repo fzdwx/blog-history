@@ -1480,6 +1480,7 @@ electionTimeout 应该比 MTBF 小上几个数量级，这样系统才能稳定�
 <p>1.第一个测试会有<code>warning: Term changed even though there were no failures</code>出现</p>
 <p>就是在有一个 leader 的时候其他 follower 还是发起了选举。猜测原因是<code>election timeout</code>和<code>AppendEntries</code>的时间点很邻近，这个只能调试
 两种超时时间，我的选举超时时间是 200~350ms，心跳固定在 125ms。</p>
+<p>然后我在转换角色的时候加了一个<code>if new role == old role then return</code>的判断，这里导致<code>election  timeout</code>没有刷新。</p>
 <p>2.在响应或请求时要第一时间处理第4条。</p>
 <h1 id="links">Links</h1>
 <ol>
