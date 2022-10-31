@@ -58,10 +58,6 @@ figcaption {
     color: #e770a6;
 }
 
-.post-content code {
-    color: var(--vp-c-text-code);
-}
-
 .meta-item .post-tags a:before {
     content: none;
 }

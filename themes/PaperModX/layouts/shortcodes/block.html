@@ -2,8 +2,18 @@
 
 {{ if eq $type "details" }}
 <details class="details custom-block">
-    <summary> <span>{{.Get "title"}}</span> </summary>
-    {{ .Inner | markdownify }}
+    <summary>
+        <span> {{ $title := .Get "title"}}
+        {{ if $title }}
+            {{ $title }}
+        {{else}}
+            Details
+        {{end}}
+        </span>
+    </summary>
+    <p>
+        {{ .Inner | markdownify }}
+    </p>
 </details>
 {{end}}
 
@@ -12,9 +22,51 @@
     <p class="custom-block-title">
         {{ $title := .Get "title"}}
         {{ if $title }}
-            {{ $title }}
+        {{ $title }}
         {{else}}
-            TIP
+        TIP
+        {{end}}
+    </p>
+    <p> {{ .Inner | markdownify }} </p>
+</div>
+{{end}}
+
+{{ if eq $type "info" }}
+<div class="info custom-block">
+    <p class="custom-block-title">
+        {{ $title := .Get "title"}}
+        {{ if $title }}
+        {{ $title }}
+        {{else}}
+        INFO
+        {{end}}
+    </p>
+    <p> {{ .Inner | markdownify }} </p>
+</div>
+{{end}}
+
+{{ if eq $type "warning" }}
+<div class="warning custom-block">
+    <p class="custom-block-title">
+        {{ $title := .Get "title"}}
+        {{ if $title }}
+        {{ $title }}
+        {{else}}
+        WARNING
+        {{end}}
+    </p>
+    <p> {{ .Inner | markdownify }} </p>
+</div>
+{{end}}
+
+{{ if eq $type "danger" }}
+<div class="danger custom-block">
+    <p class="custom-block-title">
+        {{ $title := .Get "title"}}
+        {{ if $title }}
+        {{ $title }}
+        {{else}}
+        DANGER
         {{end}}
     </p>
     <p> {{ .Inner | markdownify }} </p>

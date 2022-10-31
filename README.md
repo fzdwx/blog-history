@@ -80,6 +80,9 @@ func main() {
 
 - details
 - tip
+- warning
+- danger
+- info
 
 使用模板:
 
@@ -89,16 +92,4 @@ func main() {
 {{< /block >}}
 ```
 
-## StartPage
-
-```yaml
-params:
-  startpages:
-    - name: 123
-      url: https://cubox.pro/my/inbox
-      favicon: https://cubox.pro/my/favicon.ico
-    - name: github
-      url: https://github.com/
-      # https://lucide.dev/
-      icon: github
-```
+> title 不是必须的
