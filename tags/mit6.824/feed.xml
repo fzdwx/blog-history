@@ -70,11 +70,18 @@ Raft 将客户端的请求组织成一个序列，被称为 log ，并且确保�
     <p class="custom-block-title">
         
         
-            TIP
+        TIP
         
     </p>
     <p> Raft 实例只能通过 rpc 进行通信且必须使用<code>labrpc</code>这个包(例如不能使用文件以及共享变量)。 </p>
 </div>
+
+
+
+
+
+
+
 
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// create a new Raft server instance:
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">rf</span> <span class="o">:=</span> <span class="nf">Make</span><span class="p">(</span><span class="nx">peers</span><span class="p">,</span> <span class="nx">me</span><span class="p">,</span> <span class="nx">persister</span><span class="p">,</span> <span class="nx">applyCh</span><span class="p">)</span>
@@ -129,11 +136,18 @@ leader 接管。</p>
     <p class="custom-block-title">
         
         
-            TIP
+        TIP
         
     </p>
     <p> 这个失败是 leader 出现故障的意思？就是说只要它没出现运行故障或者网络问题就永远是leader？ </p>
 </div>
+
+
+
+
+
+
+
 
 <p>要点:</p>
 <ol>
@@ -180,15 +194,30 @@ Raft 更容易理解并且更容易构建实际的系统。为了提升可理解
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    Raft is a consensus algorithm for managing a replicated log. It produces a result equivalent to (multi-)Paxos, and it is
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        Raft is a consensus algorithm for managing a replicated log. It produces a result equivalent to (multi-)Paxos, and it is
 as efficient as Paxos, but its structure is different from Paxos; this makes Raft more understandable than Paxos and
 also provides a better foundation for building practical systems. In order to enhance understandability, Raft separates
 the key elements of consensus, such as leader election, log replication, and safety, and it enforces a stronger degree
 of coherency to reduce the number of states that must be considered. Results from a user study demonstrate that Raft is
 easier for students to learn than Paxos. Raft also includes a new mechanism for changing the cluster membership, which
 uses overlapping majorities to guarantee safety.
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -198,10 +227,25 @@ uses overlapping majorities to guarantee safety.
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    raft is similar in many ways to existing consensus algorithms (most notably, Oki and Liskov’s Viewstamped
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        raft is similar in many ways to existing consensus algorithms (most notably, Oki and Liskov’s Viewstamped
 Replication), but it has several novel features:
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -217,8 +261,15 @@ Raft 在解决冲突时更简单和快速。</li>
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    <ul>
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        <ul>
 <li>Strong leader: Raft uses a stronger form of leadership than other consensus algorithms. For example,log entries
 only flow from the leader to other servers. This simplifies the management of the replicated log and makes Raft
 easier to understand.</li>
@@ -229,7 +280,15 @@ approach where the majorities of two different configurations overlap during tra
 to continue operating normally during configuration changes.</li>
 </ul>
 
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -250,14 +309,29 @@ to continue operating normally during configuration changes.</li>
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    Replicated state machines are used to solve a variety of fault tolerance problems in distributed systems. For example,
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        Replicated state machines are used to solve a variety of fault tolerance problems in distributed systems. For example,
 large-scale systems that have a single cluster leader, such as GFS, HDFS, and RAMCloud, typically use a separate
 replicated state machine to manage leader election and store configuration information that must survive leader
 crashes. Examples of replicated state machines include Chubby and ZooKeeper. Consensus algorithms typically arise in
 the context of replicated state machines.In this approach, state machines on a collection of servers compute identical
 copies of the same state and can continue operating even if some of the servers are down.
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -267,12 +341,27 @@ copies of the same state and can continue operating even if some of the servers 
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    Replicated state machines are typically implemented using a replicated log, as shown in Figure 1. Each server stores a
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        Replicated state machines are typically implemented using a replicated log, as shown in Figure 1. Each server stores a
 log containing a series of commands, which its state machine executes in order. Each log contains the same commands in
 the same order, so each state machine processes the same sequence of commands. Since the state machines are
 deterministic, each computes the same state and the same sequence of outputs.
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -284,13 +373,28 @@ deterministic, each computes the same state and the same sequence of outputs.
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    Keeping the replicated log consistent is the job of the consensus algorithm. The consensus module on a server receives
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        Keeping the replicated log consistent is the job of the consensus algorithm. The consensus module on a server receives
 commands from clients and adds them to its log. It communicates with the consensus modules on other servers to ensure
 that every log eventually contains the same requests in the same order, even if some servers fail. Once commands are
 properly replicated, each server’s state machine processes them in log order, and the outputs are returned to clients.
 As a result, the servers appear to form a single, highly reliable state machine.
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -306,8 +410,15 @@ As a result, the servers appear to form a single, highly reliable state machine.
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    <p>Consensus algorithms for practical systems typically have the following properties:</p>
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        <p>Consensus algorithms for practical systems typically have the following properties:</p>
 <ul>
 <li>They ensure <em>safety</em> (never returning an incorrect result) under all non-Byzantine conditions,
 including network delays, partitions, and packet loss, duplication, and reordering.</li>
@@ -321,7 +432,15 @@ delays can, at worst, cause availability problems.</li>
 remote procedure calls; a minority of low servers need not impact overall system performance.</li>
 </ul>
 
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -334,11 +453,26 @@ remote procedure calls; a minority of low servers need not impact overall system
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    Raft is an algorithm for managing a replicated log of the form described in Section 2. Figure 2 summarizes the
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        Raft is an algorithm for managing a replicated log of the form described in Section 2. Figure 2 summarizes the
 algorithm in condensed form for reference, and Figure 3 lists key properties of the algorithm; the elements of these
 figures are discussed piecewise over the rest of this section.
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -349,14 +483,29 @@ figures are discussed piecewise over the rest of this section.
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    Raft implements consensus by first electing a distinguished leader, then giving the leader complete responsibility for
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        Raft implements consensus by first electing a distinguished leader, then giving the leader complete responsibility for
 managing the replicated log. The leader accepts log entries from clients, replicates them on other servers, and tells
 servers when it is safe to apply log entries to their state machines. Having a leader simplifies the management of the
 replicated log. For example, the leader can decide where to place new entries in the log without consulting other
 servers, and data flows in a simple fashion from the leader to other servers. A leader can fail or become disconnected
 from the other servers, in which case a new leader is elected.
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -372,8 +521,15 @@ from the other servers, in which case a new leader is elected.
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    <p>Given the leader approach, Raft decomposes the consensus problem into three relatively independent subproblems, which
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        <p>Given the leader approach, Raft decomposes the consensus problem into three relatively independent subproblems, which
 are discussed in the subsections that follow:</p>
 <ul>
 <li>Leader election: a new leader must be chosen when an existing leader fails</li>
@@ -385,7 +541,15 @@ index. Section 5.4 describes how Raft ensures this property; the solution involv
 election mechanism described in Section 5.2.</li>
 </ul>
 
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -571,15 +735,30 @@ nextIndex)): 则通过<code>AppendEntries RPC</code>将nextIndex之后的所有�
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    A Raft cluster contains several servers; five is a typical number, which allows the system to tolerate two failures.
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        A Raft cluster contains several servers; five is a typical number, which allows the system to tolerate two failures.
 At any given time each server is in one of three states: leader, follower, or candidate. In normal operation there is
 exactly one leader and all of the other servers are followers. Followers are passive: they issue no requests on their
 own but simply respond to requests from leaders and candidates. The leader handles all client requests (if a client
 contacts a follower, the follower redirects it to the leader). The third state, candidate, is used to elect a new
 leader as described in Section 5.2. Figure 4 shows the states and their transitions; the transitions are discussed
 below.
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -602,14 +781,29 @@ Raft保证在给定的 term 内最多只有一个 leader。</p>
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    Raft divides time into terms of arbitrary length, as shown in Figure 5. Terms are numbered with consecutive integers.
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        Raft divides time into terms of arbitrary length, as shown in Figure 5. Terms are numbered with consecutive integers.
 Each term begins with an election, in which one or more candidates attempt to become leader as described in Section
 5.2. If a candidate wins the election, then it serves as leader for the rest of the term.
 In some situations an election will result in a split vote.
 In this case the term will end with no leader; a new term (with a new election) will begin
 shortly. Raft ensures that there is at most one leader in a given term.
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -623,15 +817,30 @@ term 在 Raft 中充当了逻辑时钟，term 使得可以服务器检测过时�
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    Different servers may observe the transitions between terms at different times, and in some situations a server may
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        Different servers may observe the transitions between terms at different times, and in some situations a server may
 not observe an election or even entire terms. Terms act as a logical clock [14] in Raft, and they allow servers to
 detect obsolete information such as stale leaders. Each server stores a current term number, which increases
 monotonically over time. Current terms are exchanged whenever servers communicate; if one server’s current term is
 smaller than the other’s, then it updates its current term to the larger value. If a candidate or leader discovers
 that its term is out of date, it immediately reverts to follower state. If a server receives a request with a stale term
 number, it rejects the request.
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -642,13 +851,28 @@ number, it rejects the request.
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    Raft servers communicate using remote procedure calls (RPCs), and the basic consensus algorithm requires only two
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        Raft servers communicate using remote procedure calls (RPCs), and the basic consensus algorithm requires only two
 types of RPCs. RequestVote RPCs are initiated by candidates during elections (Section 5.2), and AppendEntries RPCs are
 initiated by leaders to replicate log entries and to provide a form of heartbeat (Section 5.3). Section 7 adds a third
 RPC for transferring snapshots between servers. Servers retry RPCs if they do not receive a response in a timely
 manner, and they issue RPCs in parallel for best performance.
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -661,14 +885,29 @@ leader。</p>
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    Raft uses a heartbeat mechanism to trigger leader election. When servers start up, they begin as followers. A server
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        Raft uses a heartbeat mechanism to trigger leader election. When servers start up, they begin as followers. A server
 remains in follower state as long as it receives validRPCs from a leader or candidate. Leaders send periodic
 heartbeats (AppendEntries RPCs that carry no log entries) to all followers in order to maintain their authority. If a
 follower receives no communication over a period of time called the election timeout, then it assumes there is no
 viable
 leader and begins an election to choose a new leader.
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -685,12 +924,27 @@ candidate 将一直处于这种状态，直到发生以下三种情况之一:</p
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    To begin an election, a follower increments its current term and transitions to candidate state. It then votes for
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        To begin an election, a follower increments its current term and transitions to candidate state. It then votes for
 itself and issues RequestVote RPCs in parallel to each of the other servers in the cluster. A candidate continues in
 this state until one of three things happens: (a) it wins the election, (b) another server establishes itself as leader,
 or (c) a period of time goes by with no winner. These outcomes are discussed separately in the paragraphs below
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -708,13 +962,28 @@ or (c) a period of time goes by with no winner. These outcomes are discussed sep
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    A candidate wins an election if it receives votes from a majority of the servers in the full cluster for the same term.
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        A candidate wins an election if it receives votes from a majority of the servers in the full cluster for the same term.
 Each server will vote for at most one candidate in a given term, on a first-come-first-served basis (note: Section 5.4
 adds an additional restriction on votes). The majority rule ensures that at most one candidate can win the election for
 a particular term (the Election Safety Property in Figure 3). Once a candidate wins an election, it becomes leader. It
 then sends heartbeat messages to all of the other servers to establish its authority and prevent new elections.
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -729,12 +998,27 @@ then sends heartbeat messages to all of the other servers to establish its autho
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    While waiting for votes, a candidate may receive an AppendEntries RPC from another server claiming to be leader. If the
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        While waiting for votes, a candidate may receive an AppendEntries RPC from another server claiming to be leader. If the
 leader’s term (included in its RPC) is at least as large as the candidate’s current term, then the candidate recognizes
 the leader as legitimate and returns to follower state. If the term in the RPC is smaller than the candidate’s current
 term, then the candidate rejects the RPC and continues in candidate state.
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -749,12 +1033,27 @@ term, then the candidate rejects the RPC and continues in candidate state.
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    The third possible outcome is that a candidate neither wins nor loses the election: if many followers become candidates
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        The third possible outcome is that a candidate neither wins nor loses the election: if many followers become candidates
 at the same time, votes could be split so that no candidate obtains a majority. When this happens, each candidate will
 time out and start a new election by incrementing its term and initiating another round of RequestVote RPCs. However,
 without extra measures split votes could repeat indefinitely.
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -768,15 +1067,30 @@ without extra measures split votes could repeat indefinitely.
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    Raft uses randomized election timeouts to ensure that split votes are rare and that they are resolved quickly. To
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        Raft uses randomized election timeouts to ensure that split votes are rare and that they are resolved quickly. To
 prevent split votes in the first place, election timeouts are chosen randomly from a fixed interval (e.g., 150–300ms).
 This spreads out the servers so that in most cases only a single server will time out; it wins the election and sends
 heartbeats before any other servers time out. The same mechanism is used to handle split votes. Each candidate restarts
 its randomized election timeout at the start of an election, and it waits for that timeout to elapse before starting the
 next election; this reduces the likelihood of another split vote in the new election. Section 9.3 shows that this
 approach elects a leader rapidly
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -790,8 +1104,15 @@ candidate ，但如果它过早地这样做，它可能会重置选举 leader �
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    Elections are an example of how understandability guided our choice between design alternatives.
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        Elections are an example of how understandability guided our choice between design alternatives.
 Initially we planned to use a ranking system: each candidate was assigned a unique rank,
 which was used to select between competing candidates. If a candidate discovered another candidate with higher rank,
 it would return to follower state so that the higher ranking candidate could more easily win the next election.
@@ -799,7 +1120,15 @@ We found that this approach created subtle issues around availability (a lower-r
 become a candidate again if a higher-ranked server fails, but if it does so too soon, it can reset progress towards
 electing a leader). We made adjustments to the algorithm several times, but after each adjustment new corner cases
 appeared. Eventually we concluded that the randomized retry approach is more obvious and understandable.
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -813,15 +1142,30 @@ leader 将该 command 作为一个新的条目附加到它的日志中，然后�
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    Once a leader has been elected, it begins servicing client requests. Each client request contains a command to be
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        Once a leader has been elected, it begins servicing client requests. Each client request contains a command to be
 executed by the replicated state machines. The leader appends the command to its log as a new entry, then is- sues
 AppendEntries RPCs in parallel to each of the other servers to replicate the entry. When the entry has been safely
 replicated (as described below), the leader applies the entry to its state machine and returns the result of that
 execution to the client. If followers crash or run slowly, or if network packets are lost, the leader retries Append-
 Entries RPCs indefinitely (even after it has responded to the client) until all followers eventually store all log en-
 tries.
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -844,12 +1188,27 @@ tries.
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    Logs are organized as shown in Figure 6. Each log entry stores a state machine command along with the term number when
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        Logs are organized as shown in Figure 6. Each log entry stores a state machine command along with the term number when
 the entry was received by the leader. The term numbers in log entries are used to detect inconsistencies between logs
 and to ensure some of the properties in Figure 3. Each log entry also has an integer index identifying its position in
 the log.
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -863,8 +1222,15 @@ leader 会跟踪它所知道的已提交的最大索引，并且它在未来的<
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    The leader decides when it is safe to apply a log entry to the state machines; such an entry is called committed.
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        The leader decides when it is safe to apply a log entry to the state machines; such an entry is called committed.
 Raft guarantees that committed entries are durable and will eventually be executed by all of the available state
 machines. A log entry is committed once the leader that created the entry has replicated it on a majority of the
 servers (e.g., entry 7 in Figure 6). This also commits all preceding entries in the leader’s log, including entries
@@ -873,7 +1239,15 @@ also shows that this definition of commitment is safe. The leader keeps track of
 committed, and it includes that index in future AppendEntries RPCs (including heartbeats) so that the other servers
 eventually find out. Once a follower learns that a log entry is committed, it applies the entry to its local state
 machine (in log order)
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -891,8 +1265,15 @@ Raft 维护了以下特性，它们共同构成了&nbsp;<a href="/posts/2022-10-
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    <p>We designed the Raft log mechanism to maintain a high level of coherency between the logs on different servers. Not only
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        <p>We designed the Raft log mechanism to maintain a high level of coherency between the logs on different servers. Not only
 does this simplify the system’s behavior and make it more predictable, but it is an important component of ensuring
 safety. Raft maintains the following properties, which together constitute the Log Matching Property in Figure 3:</p>
 <ul>
@@ -903,7 +1284,15 @@ and term, then the logs are identical in all preceding
 entries</li>
 </ul>
 
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -918,8 +1307,15 @@ entries</li>
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    The first property follows from the fact that a leader creates at most one entry with a given log index in a given term,
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        The first property follows from the fact that a leader creates at most one entry with a given log index in a given term,
 and log entries never change their position in the log.
 The second property is guaranteed by a simple consistency check performed by AppendEntries.
 When sending an AppendEntries RPC, the leader includes the index and term of the
@@ -928,7 +1324,15 @@ same index and term, then it refuses the new entries. The consistency check acts
 state of the logs satisfies the Log Matching Property, and the consistency check preserves the Log Matching Property
 whenever logs are extended. As a result, whenever AppendEntries returns successfully, the leader knows that the
 follower’s log is identical to its own log up through the new entries
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -959,14 +1363,29 @@ follower’s log is identical to its own log up through the new entries
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    During normal operation, the logs of the leader and followers stay consistent, so the AppendEntries consistency check
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        During normal operation, the logs of the leader and followers stay consistent, so the AppendEntries consistency check
 never fails. However, leader crashes can leave the logs inconsistent (the old leader may not have fully replicated all
 of the entries in its log). These inconsistencies can compound over a series of leader and follower crashes. Figure 7
 illustrates the ways in which followers’ logs may differ from that of a new leader. A follower may be missing entries
 that are present on the leader, it may have extra entries that are not present on the leader, or both. Missing and
 extraneous entries in a log may span multiple terms.
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -976,11 +1395,26 @@ extraneous entries in a log may span multiple terms.
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    In Raft, the leader handles inconsistencies by forcing the followers’ logs to duplicate its own. This means that
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        In Raft, the leader handles inconsistencies by forcing the followers’ logs to duplicate its own. This means that
 conflicting entries in follower logs will be overwritten with entries from the leader’s log. Section 5.4 will show that
 this is safe when coupled with one more restriction.
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -997,8 +1431,15 @@ follower 拒绝后，leader 会减少 nextIndex 的值并重试<code>AppendEntri
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    To bring a follower’s log into consistency with its own, the leader must find the latest log entry where the two logs
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        To bring a follower’s log into consistency with its own, the leader must find the latest log entry where the two logs
 agree, delete any entries in the follower’s log after that point, and send the follower all of the leader’s entries
 after that point. All of these actions happen in response to the consistency check performed by AppendEntries RPCs. The
 leader maintains a nextIndex for each follower, which is the index of the next log entry the leader will send to that
@@ -1009,7 +1450,15 @@ AppendEntries RPC. Eventually nextIndex will reach a point where the leader and 
 AppendEntries will succeed, which removes any conflicting entries in the follower’s log and appends entries from the
 leader’s log (if any). Once AppendEntries succeeds, the follower’s log is consistent with the leader’s, and it will
 remain that way for the rest of the term
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -1024,14 +1473,29 @@ follower 可以包含冲突条目的 term 以它在 term 中存储的第一个�
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    If desired, the protocol can be optimized to reduce the number of rejected AppendEntries RPCs. For example, when
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        If desired, the protocol can be optimized to reduce the number of rejected AppendEntries RPCs. For example, when
 rejecting an AppendEntries request, the follower can include the term of the conflicting entry and the first index it
 stores for that term. With this information, the leader can decrement nextIndex to bypass all of the conflicting
 entries in that term; one AppendEntries RPC will be required for each term with conflicting entries, rather than one RPC
 per entry. In practice, we doubt this optimization is necessary, since failures happen infrequently and it is unlikely
 that there will be many inconsistent en- tries
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -1043,12 +1507,27 @@ leader 永远不会覆盖或删除自己日志中的条目(&nbsp;<a href="/posts
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    With this mechanism, a leader does not need to take any special actions to restore log consistency when it comes to
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        With this mechanism, a leader does not need to take any special actions to restore log consistency when it comes to
 power. It just begins normal operation, and the logs automatically converge in response to failures of the Append-
 Entries consistency check. A leader never overwrites or deletes entries in its own log (the Leader Append-Only Property
 in Figure 3).
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -1062,12 +1541,27 @@ in Figure 3).
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    This log replication mechanism exhibits the desirable consensus properties described in Section 2: Raft can ac- cept,
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        This log replication mechanism exhibits the desirable consensus properties described in Section 2: Raft can ac- cept,
 replicate, and apply new log entries as long as a ma- jority of the servers are up; in the normal case a new entry can
 be replicated with a single round of RPCs to a ma- jority of the cluster; and a single slow follower will not impact
 performance.
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -1080,13 +1574,28 @@ performance.
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    The previous sections described how Raft elects leaders and replicates log entries. However, the mechanisms described so
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        The previous sections described how Raft elects leaders and replicates log entries. However, the mechanisms described so
 far are not quite sufficient to ensure that each state machine executes exactly the same commands in the same order. For
 example, a follower might be unavailable while the leader commits several log entries, then it could be elected leader
 and overwrite these entries with new ones; as a result, different state machines might execute different command
 sequences.
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -1099,13 +1608,28 @@ sequences.
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    This section completes the Raft algorithm by adding a restriction on which servers may be elected leader. The
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        This section completes the Raft algorithm by adding a restriction on which servers may be elected leader. The
 restriction ensures that the leader for any given term contains all of the entries committed in previous terms (the
 Leader Completeness Property from Figure 3). Given the election restriction, we then make the rules for commitment more
 precise. Finally, we present a proof sketch for the Leader Completeness Property and show how it leads to correct
 behavior of the replicated state machine.
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -1121,8 +1645,15 @@ behavior of the replicated state machine.
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    In any leader-based consensus algorithm, the leader must eventually store all of the committed log entries. In some
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        In any leader-based consensus algorithm, the leader must eventually store all of the committed log entries. In some
 consensus algorithms, such as Viewstamped Replication [22], a leader can be elected even if it doesn’t initially contain
 all of the committed entries. These algorithms contain additional mechanisms to identify the missing entries and
 transmit them to the new leader, either during the election process or shortly afterwards. Unfortunately, this results
@@ -1130,7 +1661,15 @@ in considerable additional mechanism and complexity. Raft uses a simpler approac
 committed entries from previous terms are present on each new leader from the moment of its election, without the need
 to transfer those entries to the leader. This means that log entries only flow in one direction, from leaders to
 followers, and leaders never overwrite existing entries in their logs
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -1143,14 +1682,29 @@ idate 为了被选举必须联系集群中的大部分节点，这意味着每�
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    Raft uses the voting process to prevent a candidate from winning an election unless its log contains all committed
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        Raft uses the voting process to prevent a candidate from winning an election unless its log contains all committed
 entries. A candidate must contact a majority of the cluster in order to be elected, which means that every committed
 entry must be present in at least one of those servers. If the candidate’s log is at least as up-to-date as any other
 log in that majority (where “up-to-date” is defined precisely below), then it will hold all the committed entries. The
 RequestVote RPC implements this restriction: the RPC includes information about the candidate’s log, and the voter
 denies its vote if its own log is more up-to-date than that of the candidate.
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -1161,11 +1715,26 @@ denies its vote if its own log is more up-to-date than that of the candidate.
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    Raft determines which of two logs is more up-to-date by comparing the index and term of the last entries in the logs. If
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        Raft determines which of two logs is more up-to-date by comparing the index and term of the last entries in the logs. If
 the logs have last entries with different terms, then the log with the later term is more up-to-date. If the logs end
 with the same term, then whichever log is longer is more up-to-date.
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -1188,13 +1757,28 @@ with the same term, then whichever log is longer is more up-to-date.
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    As described in Section 5.3, a leader knows that an entry from its current term is committed once that entry is stored
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        As described in Section 5.3, a leader knows that an entry from its current term is committed once that entry is stored
 on a majority of the servers. If a leader crashes before committing an entry, future leaders will attempt to finish
 replicating the entry. However, a leader cannot immediately conclude that an entry from a previous term is committed
 once it is stored on a majority of servers. Figure 8 illustrates a situation where an old log entry is stored on a
 majority of servers, yet can still be overwritten by a future leader.
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -1207,13 +1791,28 @@ majority of servers, yet can still be overwritten by a future leader.
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    To eliminate problems like the one in Figure 8, Raft never commits log entries from previous terms by counting replicas.
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        To eliminate problems like the one in Figure 8, Raft never commits log entries from previous terms by counting replicas.
 Only log entries from the leader’s current term are committed by counting replicas; once an entry from the current term
 has been committed in this way, then all prior entries are committed indirectly because of the Log Matching Property.
 There are some situations where a leader could safely conclude that an older log entry is committed (for example, if
 that entry is stored on every server), but Raft takes a more conservative approach for simplicity
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
@@ -1226,14 +1825,29 @@ Raft 使用的方法更加容易辨别出日志，因为它可以随着时间和
 
 
 <details class="details custom-block">
-    <summary> <span>原文</span> </summary>
-    Raft incurs this extra complexity in the commitment rules because log entries retain their original term numbers when a
+    <summary>
+        <span> 
+        
+            原文
+        
+        </span>
+    </summary>
+    <p>
+        Raft incurs this extra complexity in the commitment rules because log entries retain their original term numbers when a
 leader replicates entries from previous terms. In other consensus algorithms, if a new leader rereplicates entries from
 prior “terms,” it must do so with its new “term number.” Raft’s approach makes it easier to reason about log entries,
 since they maintain the same term number over time and across logs. In addition, new leaders in Raft send fewer log
 entries from previous terms than in other algorithms (other algorithms must send redundant log entries to renumber them
 before they can be committed)
+    </p>
 </details>
+
+
+
+
+
+
+
 
 
 
