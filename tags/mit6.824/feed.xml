@@ -14,13 +14,13 @@
       
       <guid>https://fzdwx.github.io/posts/2022-10-10-raftkv/</guid>
       <description>Lab2文档翻译 由于我的英文不是很好，所以使用翻译软件进行翻译，然后人工进行校对进行理解。
-原文地址: &amp;nbsp;https://pdos.csail.mit.edu/6.824/labs/lab-raft.html Introduction 这是一系列实验中的第一个，我们将构建一个 fault-tolerant key/value storage system 。 在本实验中我们将实现 Raft (一种复制的状态机协议)。在下一个实验中，我们将在 Raft 上构建一个 key/value service 。 然后，您将在有多个副本的状态机上进行 shard(分片？根据 key 进行 hash 来决定路由到哪个副本上) 来提高性能。
+original地址: &amp;nbsp;https://pdos.csail.mit.edu/6.824/labs/lab-raft.html Introduction 这是一系列实验中的第一个，我们将构建一个 fault-tolerant key/value storage system 。 在本实验中我们将实现 Raft (一种复制的状态机协议)。在下一个实验中，我们将在 Raft 上构建一个 key/value service 。 然后，您将在有多个副本的状态机上进行 shard(分片？根据 key 进行 hash 来决定路由到哪个副本上) 来提高性能。
 复制(replication)通过在多个复制服务器上存储其状态(即数据)的完整副本来实现 fault tolerance 。 即使有一些服务器出现 failure (崩溃或网络断开和抖动) replication 也允许它们继续运行。 挑战在于 failures 可能导致副本存在不同的数据。
 Raft 将客户端的请求组织成一个序列，被称为 log ，并且确保所有 replica servers 看到相同的 log 。 每个 replica 按照日志的顺序来执行客户端的请求，将它们应用于其本地的服务状态副本(就是运行来自客户端的命令)。 由于所有存活的副本读取的日志内容都是相同的，所以都以相同的顺序来执行请求，因此它们都有相同的服务状态。 如果一个服务器发生了 failure 但是后来又 recovery (恢复) 了，Raft 会负责将它的 log 更新到最新状态。只要至少大多数的服务器还活着，并且能够继续通信， 那么 Raft 将持续运行。如果没有到达这个数量，那么 Raft 将会停止运行，直到达到这个数量才会重新开始运行。
 在本 lab 中，你将把 Raft 实现为一个带有相关方法的 GO 的对象类型，目的是为了能在更大的模块中使用。 一组 Raft 实例通过 RPC 来维护 replicated logs。你的 Raft 实例将支持一连串不确定编号的 command， 也可以叫 log entries。 这些 entity 通过 index(索引)来进行编号。具有给定索引的 log entry 将被 commit， 此时，您的 Raft 应该将这条 log 发送到 larger service 上执行。</description>
       <content:encoded><![CDATA[<h1 id="lab2文档翻译">Lab2文档翻译</h1>
 <p>由于我的英文不是很好，所以使用翻译软件进行翻译，然后人工进行校对进行理解。</p>
-<p>原文地址: &nbsp;<a href="https://pdos.csail.mit.edu/6.824/labs/lab-raft.html" target="_blank" rel="noopener">https://pdos.csail.mit.edu/6.824/labs/lab-raft.html</a>
+<p>original地址: &nbsp;<a href="https://pdos.csail.mit.edu/6.824/labs/lab-raft.html" target="_blank" rel="noopener">https://pdos.csail.mit.edu/6.824/labs/lab-raft.html</a>
 </p>
 <h2 id="introduction">Introduction</h2>
 <p>这是一系列实验中的第一个，我们将构建一个 <em>fault-tolerant key/value storage system</em> 。
@@ -180,11 +180,51 @@ leader 了，peer 将知道谁是 leader，或者自己成为 leader。</li>
 做，以避免死亡的Raft实例打印混乱的信息。</li>
 <li><code>go RPC</code>只发送名称以大写字母开头的结构体字段。子结构体也必须拥有大写的字段名。</li>
 </ol>
+<h1 id="代码实现思路">代码实现思路</h1>
+<p>大概记录一下代码的实现思路以及遇到的问题。</p>
+<h2 id="2a-1">2A</h2>
+<ol>
+<li>根据图2中的 state 这一节添加对应的属性</li>
+<li>添加<code>RaftRole</code>属性，代表当前的角色: leader，candidate，follower</li>
+<li>实现<code>ticker</code>这个函数:
+<ul>
+<li>可以使用两个<code>time.timer</code>来作为触发器</li>
+<li>判断是否很久没有收到心跳，来发起选举</li>
+<li>判断是否需要发送心跳，来维持自己的权威</li>
+</ul>
+</li>
+<li>这个时候要注意这条规则: <strong>如果 RPC 的请求或者响应中包含一个 term T 大于 currentTerm，则 currentTerm 赋值为 T，
+并切换状态为 follower。</strong></li>
+<li>实现发起选举的流程
+<ul>
+<li>根据图2中的<code>Rules for Servers</code>的<code>candaidte</code>流程一步一步实现</li>
+<li>并行发起<code>RequestVote RPC</code>，如果票数大于 1/2 则转换为 leader(可能需要广播心跳)。</li>
+</ul>
+</li>
+<li>实现<code>RequestVote</code>
+<ul>
+<li>根据图2中的<code>RequestVote RPC</code>一步一步实现就好</li>
+</ul>
+</li>
+<li>实现<code>AppendEntries</code>
+<ul>
+<li>只需要简单的实现转换为 follower 以及刷新选举超时时间即可。</li>
+</ul>
+</li>
+<li>所有节点收到响应后刷新选举超时时间(具体情况具体判断)</li>
+<li>成为 leader 后开始刷新心跳超时时间(来刷新 follower 的选举超时时间)</li>
+</ol>
+<p>遇到的问题:</p>
+<p>1.第一个测试会有<code>warning: Term changed even though there were no failures</code>出现</p>
+<p>就是在有一个 leader 的时候其他 follower 还是发起了选举。猜测原因是<code>election timeout</code>和<code>AppendEntries</code>的时间点很邻近，这个只能调试
+两种超时时间，我的选举超时时间是 200~350ms，心跳固定在 125ms。</p>
+<p>然后我在转换角色的时候加了一个<code>if new role == old role then return</code>的判断，这里导致<code>election  timeout</code>没有刷新。</p>
+<p>2.在响应或请求时要第一时间处理第4条。</p>
 <h1 id="raft论文翻译">Raft论文翻译</h1>
 <blockquote>
 <p>选取一些重要的片段进行翻译</p>
 </blockquote>
-<p>原文地址: &nbsp;<a href="https://pdos.csail.mit.edu/6.824/papers/raft-extended.pdf" target="_blank" rel="noopener">https://pdos.csail.mit.edu/6.824/papers/raft-extended.pdf</a>
+<p>original地址: &nbsp;<a href="https://pdos.csail.mit.edu/6.824/papers/raft-extended.pdf" target="_blank" rel="noopener">https://pdos.csail.mit.edu/6.824/papers/raft-extended.pdf</a>
 </p>
 <h2 id="abstract">Abstract</h2>
 <p>Raft 是一种为了管理复制日志的共识算法。它提供了和 Paxos 算法相同的功能和性能，但它的算法结构和 Paxos 不同，
@@ -197,7 +237,7 @@ Raft 更容易理解并且更容易构建实际的系统。为了提升可理解
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -230,7 +270,7 @@ uses overlapping majorities to guarantee safety.
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -264,7 +304,7 @@ Raft 在解决冲突时更简单和快速。</li>
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -312,7 +352,7 @@ to continue operating normally during configuration changes.</li>
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -344,7 +384,7 @@ copies of the same state and can continue operating even if some of the servers 
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -376,7 +416,7 @@ deterministic, each computes the same state and the same sequence of outputs.
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -413,7 +453,7 @@ As a result, the servers appear to form a single, highly reliable state machine.
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -456,7 +496,7 @@ remote procedure calls; a minority of low servers need not impact overall system
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -486,7 +526,7 @@ figures are discussed piecewise over the rest of this section.
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -524,7 +564,7 @@ from the other servers, in which case a new leader is elected.
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -738,7 +778,7 @@ nextIndex)): 则通过<code>AppendEntries RPC</code>将nextIndex之后的所有�
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -784,7 +824,7 @@ Raft保证在给定的 term 内最多只有一个 leader。</p>
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -820,7 +860,7 @@ term 在 Raft 中充当了逻辑时钟，term 使得可以服务器检测过时�
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -854,7 +894,7 @@ number, it rejects the request.
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -888,7 +928,7 @@ leader。</p>
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -927,7 +967,7 @@ candidate 将一直处于这种状态，直到发生以下三种情况之一:</p
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -965,7 +1005,7 @@ or (c) a period of time goes by with no winner. These outcomes are discussed sep
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -1001,7 +1041,7 @@ then sends heartbeat messages to all of the other servers to establish its autho
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -1036,7 +1076,7 @@ term, then the candidate rejects the RPC and continues in candidate state.
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -1070,7 +1110,7 @@ without extra measures split votes could repeat indefinitely.
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -1107,7 +1147,7 @@ candidate ，但如果它过早地这样做，它可能会重置选举 leader �
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -1145,7 +1185,7 @@ leader 将该 command 作为一个新的条目附加到它的日志中，然后�
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -1191,7 +1231,7 @@ tries.
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -1225,7 +1265,7 @@ leader 会跟踪它所知道的已提交的最大索引，并且它在未来的<
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -1268,7 +1308,7 @@ Raft 维护了以下特性，它们共同构成了&nbsp;<a href="/posts/2022-10-
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -1310,7 +1350,7 @@ entries</li>
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -1366,7 +1406,7 @@ follower’s log is identical to its own log up through the new entries
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -1398,7 +1438,7 @@ extraneous entries in a log may span multiple terms.
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -1434,7 +1474,7 @@ follower 拒绝后，leader 会减少 nextIndex 的值并重试<code>AppendEntri
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -1476,7 +1516,7 @@ follower 可以包含冲突条目的 term 以它在 term 中存储的第一个�
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -1510,7 +1550,7 @@ leader 永远不会覆盖或删除自己日志中的条目(&nbsp;<a href="/posts
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -1544,7 +1584,7 @@ in Figure 3).
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -1577,7 +1617,7 @@ performance.
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -1611,7 +1651,7 @@ sequences.
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -1648,7 +1688,7 @@ behavior of the replicated state machine.
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -1685,7 +1725,7 @@ idate 为了被选举必须联系集群中的大部分节点，这意味着每�
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -1718,7 +1758,7 @@ denies its vote if its own log is more up-to-date than that of the candidate.
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -1760,7 +1800,7 @@ with the same term, then whichever log is longer is more up-to-date.
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -1794,7 +1834,7 @@ majority of servers, yet can still be overwritten by a future leader.
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -1828,7 +1868,7 @@ Raft 使用的方法更加容易辨别出日志，因为它可以随着时间和
     <summary>
         <span> 
         
-            原文
+            original
         
         </span>
     </summary>
@@ -1862,8 +1902,10 @@ Raft 的 RPC 都是幂等的，所以重试不会造成任何问题。
 但是，可用性（系统可以及时的响应客户端）不可避免的要依赖于时间。
 例如，如果消息交换比服务器故障间隔时间长，候选人将没有足够长的时间来赢得选举；没有一个稳定的领导人，Raft 将无法工作。</p>
 <p>领导人选举是 Raft 中对时间要求最为关键的方面。Raft 可以选举并维持一个稳定的领导人,只要系统满足下面的时间要求：</p>
-<pre tabindex="0"><code>broadcastTime ≪ electionTimeout ≪ MTBF(平均故障时间)
-</code></pre><ol>
+<div class="center">
+    <em>broadcastTime ≪ electionTimeout ≪ MTBF(平均故障时间)</em>
+</div>
+<ol>
 <li>broadcastTime: 从一个服务器并行的发送 RPC 给集群中的其他服务器并接收响应的平均时间</li>
 <li>electionTimeout: 选举超时时间</li>
 <li>MTBF: 对一台服务器而言，两次故障之间的平均时间</li>
@@ -1876,45 +1918,40 @@ electionTimeout 应该比 MTBF 小上几个数量级，这样系统才能稳定�
 所以 broadcastTime 大约是 0.5 毫秒到 20 毫秒，取决于存储的技术。
 因此，electionTimeout 可能需要在 10 毫秒到 500 毫秒之间。大多数的服务器的 MTBF 都在几个月甚至更长，很容易满足时间的需求。</p>
 <h2 id="cluster-membership-changes">Cluster membership changes</h2>
-<h1 id="代码实现思路">代码实现思路</h1>
-<h2 id="2a-1">2A</h2>
-<ol>
-<li>根据图2中的 state 这一节添加对应的属性</li>
-<li>添加<code>RaftRole</code>属性，代表当前的角色: leader，candidate，follower</li>
-<li>实现<code>ticker</code>这个函数:
-<ul>
-<li>可以使用两个<code>time.timer</code>来作为触发器</li>
-<li>判断是否很久没有收到心跳，来发起选举</li>
-<li>判断是否需要发送心跳，来维持自己的权威</li>
-</ul>
-</li>
-<li>这个时候要注意这条规则: <strong>如果 RPC 的请求或者响应中包含一个 term T 大于 currentTerm，则 currentTerm 赋值为 T，
-并切换状态为 follower。</strong></li>
-<li>实现发起选举的流程
-<ul>
-<li>根据图2中的<code>Rules for Servers</code>的<code>candaidte</code>流程一步一步实现</li>
-<li>并行发起<code>RequestVote RPC</code>，如果票数大于 1/2 则转换为 leader(可能需要广播心跳)。</li>
-</ul>
-</li>
-<li>实现<code>RequestVote</code>
-<ul>
-<li>根据图2中的<code>RequestVote RPC</code>一步一步实现就好</li>
-</ul>
-</li>
-<li>实现<code>AppendEntries</code>
-<ul>
-<li>只需要简单的实现转换为 follower 以及刷新选举超时时间即可。</li>
-</ul>
-</li>
-<li>所有节点收到响应后刷新选举超时时间(具体情况具体判断)</li>
-<li>成为 leader 后开始刷新心跳超时时间(来刷新 follower 的选举超时时间)</li>
-</ol>
-<p>遇到的问题:</p>
-<p>1.第一个测试会有<code>warning: Term changed even though there were no failures</code>出现</p>
-<p>就是在有一个 leader 的时候其他 follower 还是发起了选举。猜测原因是<code>election timeout</code>和<code>AppendEntries</code>的时间点很邻近，这个只能调试
-两种超时时间，我的选举超时时间是 200~350ms，心跳固定在 125ms。</p>
-<p>然后我在转换角色的时候加了一个<code>if new role == old role then return</code>的判断，这里导致<code>election  timeout</code>没有刷新。</p>
-<p>2.在响应或请求时要第一时间处理第4条。</p>
+<p>直到现在我们都假设集群的配置(参与共识算法的服务器集合)是固定的。
+实际上，有时候会有必要修改配置，例如在服务器发生故障时替换服务器或者更换复制级别。
+尽管这可以通过让整个集群 offline 来实现，更新配置文件，重启集群，这样一来集群将在转换期间不可用。</p>
+
+
+
+<details class="details custom-block">
+    <summary>
+        <span> 
+        
+            original
+        
+        </span>
+    </summary>
+    <p>
+        Up until now we have assumed that the cluster configuration (the set of servers participating in the consensus
+algorithm) is fixed. In practice, it will occasionally be necessary to change the configuration, for example to
+replace servers when they fail or to change the degree of replication. Although this can be done by taking the entire
+cluster offline, updating configuration files, and then restarting the cluster, this would leave the cluster
+unavailable during the changeover. In addition, if there are any manual steps, they risk operator error. In order to
+avoid these issues, we decided to automate configuration changes and incorporate them into the Raft consensus
+algorithm.
+    </p>
+</details>
+
+
+
+
+
+
+
+
+
+
 <h1 id="links">Links</h1>
 <ol>
 <li>项目地址: &nbsp;<a href="https://pdos.csail.mit.edu/6.824/labs/lab-raft.html" target="_blank" rel="noopener">https://pdos.csail.mit.edu/6.824/labs/lab-raft.html</a>
