@@ -70,7 +70,7 @@ figcaption {
     margin-right: 5px;
 }
 
-.dark .post-tag{
+.dark .post-tag {
     /*background-color: var(--vp-c-indigo-dark);*/
 }
 
@@ -90,15 +90,6 @@ figcaption {
 .archive-entry {
     font-family: "LXGW WenKai", sans-serif;
 }
-
-#menu,
-.page-header h1,
-.archive-year-header,
-.archive-month,
-.archive-count {
-    font-family: "LXGW WenKai SCREEN" !important;
-}
-
 .post-content .chroma code {
     font-family: var(--fjet);
 }
