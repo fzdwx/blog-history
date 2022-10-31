@@ -359,3 +359,8 @@ h1, h2, h3, h4, h5, h6, p {
 .archive-count {
     font-family: "LXGW WenKai SCREEN", serif !important;
 }
+
+.center{
+    display: flex;
+    justify-content: center;
+}
