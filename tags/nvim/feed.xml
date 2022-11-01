@@ -4,6 +4,10 @@
     <title>nvim on fzdwx</title>
     <link>https://fzdwx.github.io/tags/nvim/</link>
     <description>Recent content in nvim on fzdwx</description>
+    <image>
+      <url>https://fzdwx.github.io/images/party_parrot.gif</url>
+      <link>https://fzdwx.github.io/images/party_parrot.gif</link>
+    </image>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright [fzdwx](https://github.com/fzdwx) since 2022</copyright>
     <lastBuildDate>Wed, 28 Sep 2022 15:59:37 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/tags/nvim/feed.xml" rel="self" type="application/rss+xml" />

@@ -4,6 +4,10 @@
     <title>rust on fzdwx</title>
     <link>https://fzdwx.github.io/categories/rust/</link>
     <description>Recent content in rust on fzdwx</description>
+    <image>
+      <url>https://fzdwx.github.io/images/party_parrot.gif</url>
+      <link>https://fzdwx.github.io/images/party_parrot.gif</link>
+    </image>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright [fzdwx](https://github.com/fzdwx) since 2022</copyright>
     <lastBuildDate>Mon, 17 Oct 2022 07:04:04 +0000</lastBuildDate><atom:link href="https://fzdwx.github.io/categories/rust/feed.xml" rel="self" type="application/rss+xml" />

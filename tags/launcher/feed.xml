@@ -4,6 +4,10 @@
     <title>launcher on fzdwx</title>
     <link>https://fzdwx.github.io/tags/launcher/</link>
     <description>Recent content in launcher on fzdwx</description>
+    <image>
+      <url>https://fzdwx.github.io/images/party_parrot.gif</url>
+      <link>https://fzdwx.github.io/images/party_parrot.gif</link>
+    </image>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright [fzdwx](https://github.com/fzdwx) since 2022</copyright>
     <lastBuildDate>Sun, 18 Sep 2022 22:15:39 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/tags/launcher/feed.xml" rel="self" type="application/rss+xml" />
