@@ -27,6 +27,8 @@ languages:
 
 
 params:
+  logo:
+    icon: /images/party_parrot.gif
   EnableImageZoom: true
   EnableInstantClick: true
   env: production # to enable google analytics, opengraph, twitter-cards and schema.
@@ -60,8 +62,8 @@ params:
   #    favicon: "/favicon.ico"
   #    favicon16x16: "/favicon.ico"
   #    favicon32x32: "/favicon.ico"
-  #    apple_touch_icon: "<link / abs url>"
-  #    safari_pinned_tab: "<link / abs url>"
+      apple_touch_icon: "/images/party_parrot.gif"
+      safari_pinned_tab: "/images/party_parrot.gif"
 
   #  label:
   #    text: "Home"

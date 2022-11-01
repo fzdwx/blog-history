@@ -95,30 +95,6 @@
                 {{- $label_text := (site.Params.logo.text | default site.Title) }}
                 {{- if site.Title }}
                 <a href="{{ "" | absURL }}" accesskey="h" title="{{ $label_text }} (Alt + H)">
-                {{- if site.Params.logo.icon }}
-                {{- $img := resources.Get site.Params.logo.icon }}
-                {{- if $img }}
-                {{- $processableFormats := (slice "jpg" "jpeg" "png" "tif" "bmp" "gif") -}}
-                {{- if hugo.IsExtended -}}
-                {{- $processableFormats = $processableFormats | append "webp" -}}
-                {{- end -}}
-                {{- $prod := (hugo.IsProduction | or (eq site.Params.env "production")) }}
-                {{- if and (in $processableFormats $img.MediaType.SubType) (eq $prod true)}}
-                {{- if site.Params.logo.iconHeight }}
-                {{- $img = $img.Resize (printf "x%d" site.Params.logo.iconHeight) }}
-                {{ else }}
-                {{- $img = $img.Resize "x30" }}
-                {{- end }}
-                {{- end }}
-                <img src="{{ $img.Permalink }}" alt="logo" aria-label="logo"
-                     height="{{- site.Params.logo.iconHeight | default " 30" -}}" width="{{- site.Params.logo.iconWidth
-                | default "30" -}}">
-                {{- else }}
-                <img src="{{ $img.Permalink }}" alt="logo" aria-label="logo"
-                     height="{{- site.Params.logo.iconHeight | default " 30" -}}" width="{{- site.Params.logo.iconWidth
-                | default "30" -}}">
-                {{- end -}}
-                {{- end -}}
                 {{- $label_text -}}
                 </a>
                 {{- end }}
@@ -149,6 +125,12 @@
             </div>
             {{- $currentPage := . }}
             <ul id="menu">
+                {{- if site.Params.logo.icon }}
+                {{- $img := site.Params.logo.icon }}
+                <li>
+                    <img class="logo-img" src="{{ $img }}" alt="logo" aria-label="logo" height="30" width="30">
+                </li>
+                {{- end -}}
                 {{- range site.Menus.main }}
                 {{- $menu_item_url := (cond (strings.HasSuffix .URL "/") .URL (printf "%s/" .URL)) | absURL }}
                 {{- $page_url:= $currentPage.Permalink }}
