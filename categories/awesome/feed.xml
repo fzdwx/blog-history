@@ -62,7 +62,7 @@
       <pubDate>Mon, 17 Oct 2022 07:04:04 +0000</pubDate>
       
       <guid>https://fzdwx.github.io/notes/7/</guid>
-      <description>资料 &amp;nbsp;Rust官方文档翻译项目组 ，内含一系列相关文档 &amp;nbsp;Rust语言圣经 &amp;nbsp;Rust resource 项目 &amp;nbsp;pingcap推出的project ，以 Talent Plan 开源数据库开发课程为依托，帮助学习者掌握数据库开发的理论知识，进行实际数据库开发锻炼 </description>
+      <description>资料 &amp;nbsp;Rust官方文档翻译项目组 ，内含一系列相关文档 &amp;nbsp;Rust语言圣经 &amp;nbsp;Rust resource 项目 &amp;nbsp;pingcap推出的project ，以 Talent Plan 开源数据库开发课程为依托，帮助学习者掌握数据库开发的理论知识，进行实际数据库开发锻炼。(&amp;nbsp;github 地址 ) </description>
       <content:encoded><![CDATA[<h2 id="资料">资料</h2>
 <ol>
 <li>&nbsp;<a href="https://www.rustwiki.org.cn/" target="_blank" rel="noopener">Rust官方文档翻译项目组</a>
@@ -75,7 +75,8 @@
 <h2 id="项目">项目</h2>
 <ol>
 <li>&nbsp;<a href="https://tidb.net/talent-plan" target="_blank" rel="noopener">pingcap推出的project</a>
-，以 Talent Plan 开源数据库开发课程为依托，帮助学习者掌握数据库开发的理论知识，进行实际数据库开发锻炼</li>
+，以 Talent Plan 开源数据库开发课程为依托，帮助学习者掌握数据库开发的理论知识，进行实际数据库开发锻炼。(&nbsp;<a href="https://github.com/talent-plan" target="_blank" rel="noopener">github 地址</a>
+)</li>
 </ol>
 ]]></content:encoded>
     </item>
