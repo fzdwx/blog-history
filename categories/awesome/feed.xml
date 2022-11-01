@@ -166,10 +166,9 @@
             margin-left: 10px;
         }
     </style>
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js"
-            integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
     <script type="text/javascript">
-        $(document).ready(function () {
+        function parse() {
+            console.log("123123")
             $('.douban_item').each(function () {
                 var _this = $(this);
                 var strs = _this.attr('urlstring').toString();
@@ -186,11 +185,11 @@
                             $.ajax({
                                 url: url, type: 'GET', dataType: "json", success: function (data) {
                                     localStorage.setItem(ls_item, JSON.stringify(data));
-                                    movieShow(_this, ls_item, strs,to)
+                                    movieShow(_this, ls_item, strs, to)
                                 }
                             })
                         } else {
-                            movieShow(_this, ls_item, strs,to)
+                            movieShow(_this, ls_item, strs, to)
                         }
                     } else if (db_type === 'book') {
                         var ls_item = 'book' + db_id;
@@ -199,18 +198,18 @@
                             $.ajax({
                                 url: url, type: 'GET', dataType: 'json', success: function (data) {
                                     localStorage.setItem('book' + db_id, JSON.stringify(data));
-                                    bookShow(_this, ls_item, strs,to)
+                                    bookShow(_this, ls_item, strs, to)
                                 }
                             })
                         } else {
-                            bookShow(_this, ls_item, strs,to)
+                            bookShow(_this, ls_item, strs, to)
                         }
                     }
                 }
             });
-        });
+        }
 
-        function movieShow(_this, ls_item, str,to) {
+        function movieShow(_this, ls_item, str, to) {
             var storage = localStorage.getItem(ls_item);
             var data = JSON.parse(storage);
             var db_star = Math.ceil(data.rating);
@@ -220,7 +219,7 @@
             $("<div class='post-preview'><div class='post-preview--meta'><div class='post-preview--middle'><div class='post-preview--title'><a target='_blank' style='box-shadow: none; font-weight: bolder;' href='" + str + "'>" + data.name + "</a></div><div class='rating'><div class='rating-star allstar" + db_star + "'></div><div class='rating-average'>" + data.rating + "</div></div><time class='post-preview--date'>导演：" + data.director + " / 类型：" + data.genre + " / " + data.year + "</time><section style='max-height:75px;overflow:hidden;' class='post-preview--excerpt'>" + data.intro.replace(/\s*/g, "") + "</section></div></div><img referrerpolicy='no-referrer' loading='lazy' class='post-preview--image' src=" + data.img + "></div>").replaceAll(_this);
         }
 
-        function bookShow(_this, ls_item, str,to) {
+        function bookShow(_this, ls_item, str, to) {
             var storage = localStorage.getItem(ls_item);
             var data = JSON.parse(storage);
             var db_star = Math.ceil(data.rating.average);
@@ -229,11 +228,16 @@
             }
             $("<div class='post-preview'><div class='post-preview--meta'><div class='post-preview--middle'><div class='post-preview--title'><a target='_blank' style='box-shadow: none; font-weight: bolder;' href='" + str + "'>" + data.title + "</a></div><div class='rating'><div class='rating-star allstar" + db_star + "'></div><div class='rating-average'>" + data.rating.average + "</div></div><time class='post-preview--date'>作者：" + data.author + " / 出版：" + data.pubdate + " / " + data.publisher + " </time><section style='max-height:75px;overflow:hidden;' class='post-preview--excerpt'>" + data.summary.replace(/\s*/g, "") + "</section></div></div><img referrerpolicy='no-referrer' loading='lazy' class='post-preview--image' src=" + data.images.medium + "></div>").replaceAll(_this)
         }
+        
+        parse()
     </script>
 </head>
 <body>
 <div class="douban_show">
-    <div id="db" urlstring="https://movie.douban.com/subject/35604677/" to="https://ddys.tv/the-witch-from-mercury/" class="douban_item post-preview">
+    <div id="dbhttps://movie.douban.com/subject/35604677/"
+    urlstring="https://movie.douban.com/subject/35604677/"
+    to="https://ddys.tv/the-witch-from-mercury/"
+    class="douban_item post-preview">
 </div>
 </div>
 </body>
@@ -388,10 +392,9 @@
             margin-left: 10px;
         }
     </style>
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js"
-            integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
     <script type="text/javascript">
-        $(document).ready(function () {
+        function parse() {
+            console.log("123123")
             $('.douban_item').each(function () {
                 var _this = $(this);
                 var strs = _this.attr('urlstring').toString();
@@ -408,11 +411,11 @@
                             $.ajax({
                                 url: url, type: 'GET', dataType: "json", success: function (data) {
                                     localStorage.setItem(ls_item, JSON.stringify(data));
-                                    movieShow(_this, ls_item, strs,to)
+                                    movieShow(_this, ls_item, strs, to)
                                 }
                             })
                         } else {
-                            movieShow(_this, ls_item, strs,to)
+                            movieShow(_this, ls_item, strs, to)
                         }
                     } else if (db_type === 'book') {
                         var ls_item = 'book' + db_id;
@@ -421,18 +424,18 @@
                             $.ajax({
                                 url: url, type: 'GET', dataType: 'json', success: function (data) {
                                     localStorage.setItem('book' + db_id, JSON.stringify(data));
-                                    bookShow(_this, ls_item, strs,to)
+                                    bookShow(_this, ls_item, strs, to)
                                 }
                             })
                         } else {
-                            bookShow(_this, ls_item, strs,to)
+                            bookShow(_this, ls_item, strs, to)
                         }
                     }
                 }
             });
-        });
+        }
 
-        function movieShow(_this, ls_item, str,to) {
+        function movieShow(_this, ls_item, str, to) {
             var storage = localStorage.getItem(ls_item);
             var data = JSON.parse(storage);
             var db_star = Math.ceil(data.rating);
@@ -442,7 +445,7 @@
             $("<div class='post-preview'><div class='post-preview--meta'><div class='post-preview--middle'><div class='post-preview--title'><a target='_blank' style='box-shadow: none; font-weight: bolder;' href='" + str + "'>" + data.name + "</a></div><div class='rating'><div class='rating-star allstar" + db_star + "'></div><div class='rating-average'>" + data.rating + "</div></div><time class='post-preview--date'>导演：" + data.director + " / 类型：" + data.genre + " / " + data.year + "</time><section style='max-height:75px;overflow:hidden;' class='post-preview--excerpt'>" + data.intro.replace(/\s*/g, "") + "</section></div></div><img referrerpolicy='no-referrer' loading='lazy' class='post-preview--image' src=" + data.img + "></div>").replaceAll(_this);
         }
 
-        function bookShow(_this, ls_item, str,to) {
+        function bookShow(_this, ls_item, str, to) {
             var storage = localStorage.getItem(ls_item);
             var data = JSON.parse(storage);
             var db_star = Math.ceil(data.rating.average);
@@ -451,11 +454,16 @@
             }
             $("<div class='post-preview'><div class='post-preview--meta'><div class='post-preview--middle'><div class='post-preview--title'><a target='_blank' style='box-shadow: none; font-weight: bolder;' href='" + str + "'>" + data.title + "</a></div><div class='rating'><div class='rating-star allstar" + db_star + "'></div><div class='rating-average'>" + data.rating.average + "</div></div><time class='post-preview--date'>作者：" + data.author + " / 出版：" + data.pubdate + " / " + data.publisher + " </time><section style='max-height:75px;overflow:hidden;' class='post-preview--excerpt'>" + data.summary.replace(/\s*/g, "") + "</section></div></div><img referrerpolicy='no-referrer' loading='lazy' class='post-preview--image' src=" + data.images.medium + "></div>").replaceAll(_this)
         }
+        
+        parse()
     </script>
 </head>
 <body>
 <div class="douban_show">
-    <div id="db" urlstring="https://movie.douban.com/subject/35256195/" to="https://ddys.tv/chainsaw-man" class="douban_item post-preview">
+    <div id="dbhttps://movie.douban.com/subject/35256195/"
+    urlstring="https://movie.douban.com/subject/35256195/"
+    to="https://ddys.tv/chainsaw-man"
+    class="douban_item post-preview">
 </div>
 </div>
 </body>
@@ -610,10 +618,9 @@
             margin-left: 10px;
         }
     </style>
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js"
-            integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
     <script type="text/javascript">
-        $(document).ready(function () {
+        function parse() {
+            console.log("123123")
             $('.douban_item').each(function () {
                 var _this = $(this);
                 var strs = _this.attr('urlstring').toString();
@@ -630,11 +637,11 @@
                             $.ajax({
                                 url: url, type: 'GET', dataType: "json", success: function (data) {
                                     localStorage.setItem(ls_item, JSON.stringify(data));
-                                    movieShow(_this, ls_item, strs,to)
+                                    movieShow(_this, ls_item, strs, to)
                                 }
                             })
                         } else {
-                            movieShow(_this, ls_item, strs,to)
+                            movieShow(_this, ls_item, strs, to)
                         }
                     } else if (db_type === 'book') {
                         var ls_item = 'book' + db_id;
@@ -643,18 +650,18 @@
                             $.ajax({
                                 url: url, type: 'GET', dataType: 'json', success: function (data) {
                                     localStorage.setItem('book' + db_id, JSON.stringify(data));
-                                    bookShow(_this, ls_item, strs,to)
+                                    bookShow(_this, ls_item, strs, to)
                                 }
                             })
                         } else {
-                            bookShow(_this, ls_item, strs,to)
+                            bookShow(_this, ls_item, strs, to)
                         }
                     }
                 }
             });
-        });
+        }
 
-        function movieShow(_this, ls_item, str,to) {
+        function movieShow(_this, ls_item, str, to) {
             var storage = localStorage.getItem(ls_item);
             var data = JSON.parse(storage);
             var db_star = Math.ceil(data.rating);
@@ -664,7 +671,7 @@
             $("<div class='post-preview'><div class='post-preview--meta'><div class='post-preview--middle'><div class='post-preview--title'><a target='_blank' style='box-shadow: none; font-weight: bolder;' href='" + str + "'>" + data.name + "</a></div><div class='rating'><div class='rating-star allstar" + db_star + "'></div><div class='rating-average'>" + data.rating + "</div></div><time class='post-preview--date'>导演：" + data.director + " / 类型：" + data.genre + " / " + data.year + "</time><section style='max-height:75px;overflow:hidden;' class='post-preview--excerpt'>" + data.intro.replace(/\s*/g, "") + "</section></div></div><img referrerpolicy='no-referrer' loading='lazy' class='post-preview--image' src=" + data.img + "></div>").replaceAll(_this);
         }
 
-        function bookShow(_this, ls_item, str,to) {
+        function bookShow(_this, ls_item, str, to) {
             var storage = localStorage.getItem(ls_item);
             var data = JSON.parse(storage);
             var db_star = Math.ceil(data.rating.average);
@@ -673,11 +680,16 @@
             }
             $("<div class='post-preview'><div class='post-preview--meta'><div class='post-preview--middle'><div class='post-preview--title'><a target='_blank' style='box-shadow: none; font-weight: bolder;' href='" + str + "'>" + data.title + "</a></div><div class='rating'><div class='rating-star allstar" + db_star + "'></div><div class='rating-average'>" + data.rating.average + "</div></div><time class='post-preview--date'>作者：" + data.author + " / 出版：" + data.pubdate + " / " + data.publisher + " </time><section style='max-height:75px;overflow:hidden;' class='post-preview--excerpt'>" + data.summary.replace(/\s*/g, "") + "</section></div></div><img referrerpolicy='no-referrer' loading='lazy' class='post-preview--image' src=" + data.images.medium + "></div>").replaceAll(_this)
         }
+        
+        parse()
     </script>
 </head>
 <body>
 <div class="douban_show">
-    <div id="db" urlstring="https://movie.douban.com/subject/35679830/" to="https://www.bilibili.com/bangumi/play/ss39696" class="douban_item post-preview">
+    <div id="dbhttps://movie.douban.com/subject/35679830/"
+    urlstring="https://movie.douban.com/subject/35679830/"
+    to="https://www.bilibili.com/bangumi/play/ss39696"
+    class="douban_item post-preview">
 </div>
 </div>
 </body>
@@ -833,10 +845,9 @@
             margin-left: 10px;
         }
     </style>
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js"
-            integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
     <script type="text/javascript">
-        $(document).ready(function () {
+        function parse() {
+            console.log("123123")
             $('.douban_item').each(function () {
                 var _this = $(this);
                 var strs = _this.attr('urlstring').toString();
@@ -853,11 +864,11 @@
                             $.ajax({
                                 url: url, type: 'GET', dataType: "json", success: function (data) {
                                     localStorage.setItem(ls_item, JSON.stringify(data));
-                                    movieShow(_this, ls_item, strs,to)
+                                    movieShow(_this, ls_item, strs, to)
                                 }
                             })
                         } else {
-                            movieShow(_this, ls_item, strs,to)
+                            movieShow(_this, ls_item, strs, to)
                         }
                     } else if (db_type === 'book') {
                         var ls_item = 'book' + db_id;
@@ -866,18 +877,18 @@
                             $.ajax({
                                 url: url, type: 'GET', dataType: 'json', success: function (data) {
                                     localStorage.setItem('book' + db_id, JSON.stringify(data));
-                                    bookShow(_this, ls_item, strs,to)
+                                    bookShow(_this, ls_item, strs, to)
                                 }
                             })
                         } else {
-                            bookShow(_this, ls_item, strs,to)
+                            bookShow(_this, ls_item, strs, to)
                         }
                     }
                 }
             });
-        });
+        }
 
-        function movieShow(_this, ls_item, str,to) {
+        function movieShow(_this, ls_item, str, to) {
             var storage = localStorage.getItem(ls_item);
             var data = JSON.parse(storage);
             var db_star = Math.ceil(data.rating);
@@ -887,7 +898,7 @@
             $("<div class='post-preview'><div class='post-preview--meta'><div class='post-preview--middle'><div class='post-preview--title'><a target='_blank' style='box-shadow: none; font-weight: bolder;' href='" + str + "'>" + data.name + "</a></div><div class='rating'><div class='rating-star allstar" + db_star + "'></div><div class='rating-average'>" + data.rating + "</div></div><time class='post-preview--date'>导演：" + data.director + " / 类型：" + data.genre + " / " + data.year + "</time><section style='max-height:75px;overflow:hidden;' class='post-preview--excerpt'>" + data.intro.replace(/\s*/g, "") + "</section></div></div><img referrerpolicy='no-referrer' loading='lazy' class='post-preview--image' src=" + data.img + "></div>").replaceAll(_this);
         }
 
-        function bookShow(_this, ls_item, str,to) {
+        function bookShow(_this, ls_item, str, to) {
             var storage = localStorage.getItem(ls_item);
             var data = JSON.parse(storage);
             var db_star = Math.ceil(data.rating.average);
@@ -896,11 +907,16 @@
             }
             $("<div class='post-preview'><div class='post-preview--meta'><div class='post-preview--middle'><div class='post-preview--title'><a target='_blank' style='box-shadow: none; font-weight: bolder;' href='" + str + "'>" + data.title + "</a></div><div class='rating'><div class='rating-star allstar" + db_star + "'></div><div class='rating-average'>" + data.rating.average + "</div></div><time class='post-preview--date'>作者：" + data.author + " / 出版：" + data.pubdate + " / " + data.publisher + " </time><section style='max-height:75px;overflow:hidden;' class='post-preview--excerpt'>" + data.summary.replace(/\s*/g, "") + "</section></div></div><img referrerpolicy='no-referrer' loading='lazy' class='post-preview--image' src=" + data.images.medium + "></div>").replaceAll(_this)
         }
+        
+        parse()
     </script>
 </head>
 <body>
 <div class="douban_show">
-    <div id="db" urlstring="https://movie.douban.com/subject/30198955/" to="https://ddys.tv/the-peripheral/" class="douban_item post-preview">
+    <div id="dbhttps://movie.douban.com/subject/30198955/"
+    urlstring="https://movie.douban.com/subject/30198955/"
+    to="https://ddys.tv/the-peripheral/"
+    class="douban_item post-preview">
 </div>
 </div>
 </body>
@@ -1056,10 +1072,9 @@
             margin-left: 10px;
         }
     </style>
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js"
-            integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ=" crossorigin="anonymous"></script>
     <script type="text/javascript">
-        $(document).ready(function () {
+        function parse() {
+            console.log("123123")
             $('.douban_item').each(function () {
                 var _this = $(this);
                 var strs = _this.attr('urlstring').toString();
@@ -1076,11 +1091,11 @@
                             $.ajax({
                                 url: url, type: 'GET', dataType: "json", success: function (data) {
                                     localStorage.setItem(ls_item, JSON.stringify(data));
-                                    movieShow(_this, ls_item, strs,to)
+                                    movieShow(_this, ls_item, strs, to)
                                 }
                             })
                         } else {
-                            movieShow(_this, ls_item, strs,to)
+                            movieShow(_this, ls_item, strs, to)
                         }
                     } else if (db_type === 'book') {
                         var ls_item = 'book' + db_id;
@@ -1089,18 +1104,18 @@
                             $.ajax({
                                 url: url, type: 'GET', dataType: 'json', success: function (data) {
                                     localStorage.setItem('book' + db_id, JSON.stringify(data));
-                                    bookShow(_this, ls_item, strs,to)
+                                    bookShow(_this, ls_item, strs, to)
                                 }
                             })
                         } else {
-                            bookShow(_this, ls_item, strs,to)
+                            bookShow(_this, ls_item, strs, to)
                         }
                     }
                 }
             });
-        });
+        }
 
-        function movieShow(_this, ls_item, str,to) {
+        function movieShow(_this, ls_item, str, to) {
             var storage = localStorage.getItem(ls_item);
             var data = JSON.parse(storage);
             var db_star = Math.ceil(data.rating);
@@ -1110,7 +1125,7 @@
             $("<div class='post-preview'><div class='post-preview--meta'><div class='post-preview--middle'><div class='post-preview--title'><a target='_blank' style='box-shadow: none; font-weight: bolder;' href='" + str + "'>" + data.name + "</a></div><div class='rating'><div class='rating-star allstar" + db_star + "'></div><div class='rating-average'>" + data.rating + "</div></div><time class='post-preview--date'>导演：" + data.director + " / 类型：" + data.genre + " / " + data.year + "</time><section style='max-height:75px;overflow:hidden;' class='post-preview--excerpt'>" + data.intro.replace(/\s*/g, "") + "</section></div></div><img referrerpolicy='no-referrer' loading='lazy' class='post-preview--image' src=" + data.img + "></div>").replaceAll(_this);
         }
 
-        function bookShow(_this, ls_item, str,to) {
+        function bookShow(_this, ls_item, str, to) {
             var storage = localStorage.getItem(ls_item);
             var data = JSON.parse(storage);
             var db_star = Math.ceil(data.rating.average);
@@ -1119,11 +1134,16 @@
             }
             $("<div class='post-preview'><div class='post-preview--meta'><div class='post-preview--middle'><div class='post-preview--title'><a target='_blank' style='box-shadow: none; font-weight: bolder;' href='" + str + "'>" + data.title + "</a></div><div class='rating'><div class='rating-star allstar" + db_star + "'></div><div class='rating-average'>" + data.rating.average + "</div></div><time class='post-preview--date'>作者：" + data.author + " / 出版：" + data.pubdate + " / " + data.publisher + " </time><section style='max-height:75px;overflow:hidden;' class='post-preview--excerpt'>" + data.summary.replace(/\s*/g, "") + "</section></div></div><img referrerpolicy='no-referrer' loading='lazy' class='post-preview--image' src=" + data.images.medium + "></div>").replaceAll(_this)
         }
+        
+        parse()
     </script>
 </head>
 <body>
 <div class="douban_show">
-    <div id="db" urlstring="https://movie.douban.com/subject/35351365/" to="" class="douban_item post-preview">
+    <div id="dbhttps://movie.douban.com/subject/35351365/"
+    urlstring="https://movie.douban.com/subject/35351365/"
+    to=""
+    class="douban_item post-preview">
 </div>
 </div>
 </body>
