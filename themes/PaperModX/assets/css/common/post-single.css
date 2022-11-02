@@ -700,7 +700,6 @@ h6:hover .anchor {
 }
 
 .toc details summary {
-    cursor: zoom-in;
     margin-inline-start: 20px;
     padding: 12px 0;
 }
@@ -711,11 +710,6 @@ h6:hover .anchor {
 
 .toc-container.wide .toc .inner {
     margin: 0;
-}
-
-
-.toc ul {
-    list-style-type: circle;
 }
 
 .toc .inner {
@@ -736,15 +730,18 @@ h6:hover .anchor {
 
 .toc li ul {
     margin-inline-start: calc(var(--gap) * 0.5);
-    list-style-type: none;
 }
 
 .toc li {
-    list-style: none;
     font-size: 0.95rem;
     padding-bottom: 5px;
 }
 
 .toc li a:hover {
     color: var(--secondary);
+}
+
+.toc-summary {
+    position: relative;
+    left: -20px;
 }
