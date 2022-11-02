@@ -356,6 +356,7 @@ h1, h2, h3, h4, h5, h6, p {
 .page-header h1,
 .archive-year-header,
 .archive-month,
+.toc,
 .archive-count {
     font-family: "LXGW WenKai SCREEN", serif !important;
 }

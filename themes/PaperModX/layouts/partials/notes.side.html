@@ -7,8 +7,7 @@
     <ul>
         {{ range .Pages }}
         <li>
-            <a href="#{{ urlize .Title }}">{{ .Title }}</a>
-            {{ .Params.wikipedia }}
+            <a href="#{{ urlize .Title }}"> {{- .File.BaseFileName }}.{{ .Title }}</a>
         </li>
         {{ end }}
     </ul>
