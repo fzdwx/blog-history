@@ -57,7 +57,7 @@ default: 默认值
 
 ### 4. 发布到marketplace
 
-需要勾选**Publish this Action to the GitHub Marketplace**，可能需要2fa认证，找一个github支持就ok了。
+需要勾选**Publish this Action to the GitHub Marketplace**，可能需要2fa认证，找一个github支持(我用的是 authy，防止后面忘记了)就ok了。
 
 ![Figure 1](/images/8.png)
 
