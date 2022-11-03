@@ -525,7 +525,7 @@ Raft 在解决冲突时更简单和快速。</li>
 <li><code>prevLogIndex</code>: 紧邻新日志条目之前的那个日志条目的索引</li>
 <li><code>prevLogTerm</code>: 紧邻新日志条目之前的那个日志条目的任期</li>
 <li><code>entries[]</code>: 需要被保存的日志(为空时是心跳检测，可能一次会发送多条来提升效率)</li>
-<li><code>leaderCommit</code>: leader 已知的该 follower 的<code>commitIndex</code></li>
+<li><code>leaderCommit</code>: leader 已提交的最高的日志条目的索引</li>
 </ul>
 </li>
 <li>Results:
