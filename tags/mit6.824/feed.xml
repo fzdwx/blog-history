@@ -430,8 +430,8 @@ RPC 的请求或者响应中包含一个 term T 大于 currentTerm，则 current
 <ul>
 <li>一旦成为 leader 则向其他服务器发送空的<code>AppendEntries RPC</code>，在空闲时重复发送以防止选举超时</li>
 <li>如果收到来自 client 的命令: 添加到本地日志，在执行并作用到状态机后作出响应给 client</li>
-<li>对于 follower <code>if last log index  &gt;= nextIndex</code>(如果上一次收到的日志的索引大于这次要发送给它的日志的索引(
-nextIndex)): 则通过<code>AppendEntries RPC</code>将nextIndex之后的所有日志都发送发送出去
+<li>对于 follower <code>if last log index  &gt;= nextIndex</code>(最后日志条目的索引值大于等于 nextIndex):
+则通过<code>AppendEntries RPC</code>将nextIndex之后的所有日志都发送发送出去
 <ul>
 <li>如果成功: 将该 follower 的<code>nextIndex</code>以及<code>matchIndex</code>更新</li>
 <li>如果因为日志不一致导致失败: <code>nextIndex</code>递减并重新发送</li>
