@@ -10,7 +10,7 @@
     </image>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright [fzdwx](https://github.com/fzdwx) since 2022</copyright>
-    <lastBuildDate>Fri, 04 Nov 2022 10:29:41 +0000</lastBuildDate><atom:link href="https://fzdwx.github.io/feed.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 04 Nov 2022 14:20:23 +0000</lastBuildDate><atom:link href="https://fzdwx.github.io/feed.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>关于 git 游离分支</title>
       <link>https://fzdwx.github.io/posts/2022-10-23-about-git-detached-head/</link>

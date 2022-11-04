@@ -10,7 +10,26 @@
     </image>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright [fzdwx](https://github.com/fzdwx) since 2022</copyright>
-    <lastBuildDate>Fri, 04 Nov 2022 10:29:41 +0000</lastBuildDate><atom:link href="https://fzdwx.github.io/notes/feed.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Fri, 04 Nov 2022 14:20:23 +0000</lastBuildDate><atom:link href="https://fzdwx.github.io/notes/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>just file template</title>
+      <link>https://fzdwx.github.io/notes/13/</link>
+      <pubDate>Fri, 04 Nov 2022 14:20:23 +0000</pubDate>
+      
+      <guid>https://fzdwx.github.io/notes/13/</guid>
+      <description>#!/usr/bin/env just --justfile# defaultdefault:@just --choose# start wezterm on $PWDterm:wezterm start --class float --cwd={{ invocation_directory() }} </description>
+      <content:encoded><![CDATA[<pre tabindex="0"><code class="language-just" data-lang="just">#!/usr/bin/env just --justfile
+
+# default
+default:
+  @just --choose
+
+# start wezterm on $PWD
+term:
+    wezterm start --class float --cwd={{ invocation_directory() }}
+</code></pre>]]></content:encoded>
+    </item>
+    
     <item>
       <title>idea</title>
       <link>https://fzdwx.github.io/notes/12/</link>
