@@ -184,7 +184,7 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
 </tr>
 </tbody>
 </table>
-<p>| <code>MOD + SHIFT + f</code>  | 开启/关闭 状态栏       |</p>
+<p>| <code>MOD + SHIFT + f</code>  | 开启/关闭 状态栏 |</p>
 <h3 id="切换屏幕">切换屏幕</h3>
 <table>
 <thead>
@@ -204,6 +204,16 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
 </tr>
 </tbody>
 </table>
+<h2 id="更新">更新</h2>
+<h3 id="click-status-bar">click status bar</h3>
+<p>最近跟进了大佬的配置&nbsp;<a href="https://github.com/yaocccc/dwm" target="_blank" rel="noopener">yaocccc</a>
+, 可点击的 status bar.</p>
+<p>主要原理就是根据预定义的格式解析出<code>signal</code>
+,然后调用预定义的脚本文件(&nbsp;<a href="https://github.com/fzdwx/dwm/commit/b30b5bedb1661e70acf6830f924857650831b441#diff-62eebf5eaf0e6a76a21dfed9da6556ee5413ddb49f06013bd83403cc1a485d98" target="_blank" rel="noopener">commit</a>
+)</p>
+<p>也很容易扩展，可以参考我的&nbsp;<a href="https://github.com/fzdwx/dwm/blob/main/statusbar/packages/fm.sh" target="_blank" rel="noopener">fm</a>
+, <code>update</code>是构造要返回的内容,
+<code>click</code>就是点击时调用的方法,<code>wezterm start --class float ranger</code>我这一段就是启动 wezterm 并调用 ranger.</p>
 <h2 id="links">Links</h2>
 <ul>
 <li>&nbsp;<a href="https://wiki.archlinux.org/title/Dwm_%28%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%29" target="_blank" rel="noopener">ArchWiki Dwm</a>
