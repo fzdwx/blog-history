@@ -1509,6 +1509,14 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
 <p>也很容易扩展，可以参考我的&nbsp;<a href="https://github.com/fzdwx/dwm/blob/main/statusbar/packages/fm.sh" target="_blank" rel="noopener">fm</a>
 , <code>update</code>是构造要返回的内容,
 <code>click</code>就是点击时调用的方法,<code>wezterm start --class float ranger</code>我这一段就是启动 wezterm 并调用 ranger.</p>
+<p><figure id="a-/images/11.png" class="align-center">
+    <img src="/images/11.png" alt="img.png"  />
+    
+    <figcaption>
+       img.png
+    </figcaption>
+    
+</figure></p>
 <h2 id="links">Links</h2>
 <ul>
 <li>&nbsp;<a href="https://wiki.archlinux.org/title/Dwm_%28%E7%AE%80%E4%BD%93%E4%B8%AD%E6%96%87%29" target="_blank" rel="noopener">ArchWiki Dwm</a>
