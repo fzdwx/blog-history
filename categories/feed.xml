@@ -61,15 +61,5 @@
       <content:encoded><![CDATA[]]></content:encoded>
     </item>
     
-    <item>
-      <title>ics</title>
-      <link>https://fzdwx.github.io/categories/ics/</link>
-      <pubDate>Sun, 16 Oct 2022 06:02:14 +0000</pubDate>
-      
-      <guid>https://fzdwx.github.io/categories/ics/</guid>
-      <description></description>
-      <content:encoded><![CDATA[]]></content:encoded>
-    </item>
-    
   </channel>
 </rss>
