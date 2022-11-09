@@ -13,7 +13,7 @@ taxonomies:
   category: categories
   tag: tags
 
-googleAnalytics: G-DGKZ9K6GHW
+#googleAnalytics: G-DGKZ9K6GHW
 Copyright: "Copyright [fzdwx](https://github.com/fzdwx) since 2022"
 
 minify:
