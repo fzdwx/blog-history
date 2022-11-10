@@ -59,10 +59,13 @@ Map Reduce &amp;nbsp;https://fzdwx.github.io/posts/2022-09-27-mit6.824-lab1/ Raf
       <pubDate>Sun, 16 Oct 2022 06:02:14 +0000</pubDate>
       
       <guid>https://fzdwx.github.io/notes/6/</guid>
-      <description>jyy ics 关于jyy的计算机系统基础课
+      <description>Roadmap &amp;nbsp;https://github.com/izackwu/TeachYourselfCS-CN/blob/master/TeachYourselfCS-CN.md jyy ics 关于jyy的计算机系统基础课
 主要资料 pa地址: &amp;nbsp;https://nju-projectn.github.io/ics-pa-gitbook/ics2021/ 课程视频地址: &amp;nbsp;https://www.bilibili.com/video/BV1qa4y1j7xk 课程主页: &amp;nbsp;http://jyywiki.cn/ICS/2021/ NEMU ISA相关的API: &amp;nbsp;https://nju-projectn.github.io/ics-pa-gitbook/ics2021/nemu-isa-api.html 扩展资料 Linux C编程一站式学习: &amp;nbsp;https://docs.huihoo.com/c/linux-c-programming/ 计算机教育中缺失的一课: &amp;nbsp;https://missing-semester-cn.github.io/ TODO pa1: &amp;nbsp;https://nju-projectn.github.io/ics-pa-gitbook/ics2021/PA1.html cs61c Great Ideas in Computer Architecture
 主要资料 课程主页: &amp;nbsp;https://cs61c.org/sp22/ 视频: &amp;nbsp;https://www.bilibili.com/video/BV1uS4y187Vi </description>
-      <content:encoded><![CDATA[<h1 id="jyy-ics">jyy ics</h1>
+      <content:encoded><![CDATA[<h1 id="roadmap">Roadmap</h1>
+<p>&nbsp;<a href="https://github.com/izackwu/TeachYourselfCS-CN/blob/master/TeachYourselfCS-CN.md" target="_blank" rel="noopener">https://github.com/izackwu/TeachYourselfCS-CN/blob/master/TeachYourselfCS-CN.md</a>
+</p>
+<h1 id="jyy-ics">jyy ics</h1>
 <p>关于jyy的计算机系统基础课</p>
 <h2 id="主要资料">主要资料</h2>
 <ol>
