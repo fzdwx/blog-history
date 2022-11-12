@@ -15,7 +15,7 @@ git提交不了，由于我用的 lazygit ，它的提示不明显，我以为�
 1. 查看`git log`，只能显示当前分支的修改 commit 记录。 **无效**
 2. 利用 idea 的 local history 功能，只能找到文件，文件里面的内容是空白的。 **无效**
 3. 搜索 detached head 的解决方案，只能搜到没切换分支前的解决方案，不适用与我的现象。 **无效**
-4. 最后搜索 git 查看所有 commit ，找到了:`git reflog`，它能显示可引用的历史版本记录，最后找到我要的那个 commit
+4. 最后搜索 git 查看所有 commit ，找到了`git reflog`，它能显示可引用的历史版本记录，最后找到我要的那个 commit
    之后直接`git rest --hard xxx`完美解决。
 
 
