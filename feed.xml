@@ -27,7 +27,7 @@ git提交不了，由于我用的 lazygit ，它的提示不明显，我以为�
 <li>查看<code>git log</code>，只能显示当前分支的修改 commit 记录。 <strong>无效</strong></li>
 <li>利用 idea 的 local history 功能，只能找到文件，文件里面的内容是空白的。 <strong>无效</strong></li>
 <li>搜索 detached head 的解决方案，只能搜到没切换分支前的解决方案，不适用与我的现象。 <strong>无效</strong></li>
-<li>最后搜索 git 查看所有 commit ，找到了:<code>git reflog</code>，它能显示可引用的历史版本记录，最后找到我要的那个 commit
+<li>最后搜索 git 查看所有 commit ，找到了<code>git reflog</code>，它能显示可引用的历史版本记录，最后找到我要的那个 commit
 之后直接<code>git rest --hard xxx</code>完美解决。</li>
 </ol>
 <p>说实话，有点慌也有点烦，如果找不回来我可能会弃坑 nvim 了。</p>
