@@ -34,8 +34,8 @@ figcaption {
 }
 
 .post-content a {
-    color: var(--c1);
-    box-shadow: 0 1px 0 var(--c0);
+    color: var(--vp-c-green-light);
+    box-shadow: 0 1px 0 var(--c2);
 }
 
 .paginav a:hover {

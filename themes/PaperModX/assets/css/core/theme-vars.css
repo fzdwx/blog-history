@@ -266,7 +266,7 @@
     --link-underline-shadow: 0 1px 0 var(--link-color);
     --link-hover-underline-shadow: 0 2px 0 var(--link-hover-underline-color);
 
-    --link-hover-color: var(--c2);
+    --link-hover-color: var(--c0);
     --link-hover-underline-color: #a277ff;
 
     --vp-custom-block-info-border: var(--vp-c-divider-light);
