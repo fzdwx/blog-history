@@ -1730,8 +1730,7 @@ Map Reduce &amp;nbsp;https://fzdwx.github.io/posts/2022-09-27-mit6.824-lab1/ Raf
       <description>Roadmap &amp;nbsp;https://github.com/izackwu/TeachYourselfCS-CN/blob/master/TeachYourselfCS-CN.md jyy ics 关于jyy的计算机系统基础课
 主要资料 pa地址: &amp;nbsp;https://nju-projectn.github.io/ics-pa-gitbook/ics2021/ 课程视频地址: &amp;nbsp;https://www.bilibili.com/video/BV1qa4y1j7xk 课程主页: &amp;nbsp;http://jyywiki.cn/ICS/2021/ NEMU ISA相关的API: &amp;nbsp;https://nju-projectn.github.io/ics-pa-gitbook/ics2021/nemu-isa-api.html 扩展资料 Linux C编程一站式学习: &amp;nbsp;https://docs.huihoo.com/c/linux-c-programming/ 计算机教育中缺失的一课: &amp;nbsp;https://missing-semester-cn.github.io/ TODO pa1: &amp;nbsp;https://nju-projectn.github.io/ics-pa-gitbook/ics2021/PA1.html cs61a Structure and Interpretation of Computer Programs(SICP)
 主要资料 &amp;nbsp;pdf 课程主页: &amp;nbsp;https://cs61a.org/ cs61c Great Ideas in Computer Architecture
-主要资料 课程主页: &amp;nbsp;https://cs61c.org/sp22/ 视频: &amp;nbsp;https://www.bilibili.com/video/BV1uS4y187Vi--- title: &amp;ldquo;恶补计算机基础&amp;rdquo; date: &amp;ldquo;2022-10-16T06:02:14Z&amp;rdquo; updated: 2022-11-16T11:42:49Z categories: [] Roadmap &amp;nbsp;https://github.com/izackwu/TeachYourselfCS-CN/blob/master/TeachYourselfCS-CN.md jyy ics 关于jyy的计算机系统基础课
-主要资料 pa地址: &amp;nbsp;https://nju-projectn.github.io/ics-pa-gitbook/ics2021/ 课程视频地址: &amp;nbsp;https://www.bilibili.com/video/BV1qa4y1j7xk 课程主页: &amp;nbsp;http://jyywiki.cn/ICS/2021/ NEMU ISA相关的API: &amp;nbsp;https://nju-projectn.github.io/ics-pa-gitbook/ics2021/nemu-isa-api.html 扩展资料 Linux C编程一站式学习: &amp;nbsp;https://docs.</description>
+主要资料 课程主页: &amp;nbsp;https://cs61c.org/sp22/ 视频: &amp;nbsp;https://www.bilibili.com/video/BV1uS4y187Vi </description>
       <content:encoded><![CDATA[<h1 id="roadmap">Roadmap</h1>
 <p>&nbsp;<a href="https://github.com/izackwu/TeachYourselfCS-CN/blob/master/TeachYourselfCS-CN.md" target="_blank" rel="noopener">https://github.com/izackwu/TeachYourselfCS-CN/blob/master/TeachYourselfCS-CN.md</a>
 </p>
@@ -1772,57 +1771,6 @@ Map Reduce &amp;nbsp;https://fzdwx.github.io/posts/2022-09-27-mit6.824-lab1/ Raf
 <h1 id="cs61c">cs61c</h1>
 <p>Great Ideas in Computer Architecture</p>
 <h2 id="主要资料-2">主要资料</h2>
-<ol>
-<li>课程主页: &nbsp;<a href="https://cs61c.org/sp22/" target="_blank" rel="noopener">https://cs61c.org/sp22/</a>
-</li>
-<li>视频: &nbsp;<a href="https://www.bilibili.com/video/BV1uS4y187Vi---" target="_blank" rel="noopener">https://www.bilibili.com/video/BV1uS4y187Vi---</a>
-
-title: &ldquo;恶补计算机基础&rdquo;
-date: &ldquo;2022-10-16T06:02:14Z&rdquo;
-updated: 2022-11-16T11:42:49Z
-categories: []</li>
-</ol>
-<hr>
-<h1 id="roadmap-1">Roadmap</h1>
-<p>&nbsp;<a href="https://github.com/izackwu/TeachYourselfCS-CN/blob/master/TeachYourselfCS-CN.md" target="_blank" rel="noopener">https://github.com/izackwu/TeachYourselfCS-CN/blob/master/TeachYourselfCS-CN.md</a>
-</p>
-<h1 id="jyy-ics-1">jyy ics</h1>
-<p>关于jyy的计算机系统基础课</p>
-<h2 id="主要资料-3">主要资料</h2>
-<ol>
-<li>pa地址: &nbsp;<a href="https://nju-projectn.github.io/ics-pa-gitbook/ics2021/" target="_blank" rel="noopener">https://nju-projectn.github.io/ics-pa-gitbook/ics2021/</a>
-</li>
-<li>课程视频地址: &nbsp;<a href="https://www.bilibili.com/video/BV1qa4y1j7xk" target="_blank" rel="noopener">https://www.bilibili.com/video/BV1qa4y1j7xk</a>
-</li>
-<li>课程主页: &nbsp;<a href="http://jyywiki.cn/ICS/2021/" target="_blank" rel="noopener">http://jyywiki.cn/ICS/2021/</a>
-</li>
-<li>NEMU ISA相关的API: &nbsp;<a href="https://nju-projectn.github.io/ics-pa-gitbook/ics2021/nemu-isa-api.html" target="_blank" rel="noopener">https://nju-projectn.github.io/ics-pa-gitbook/ics2021/nemu-isa-api.html</a>
-</li>
-</ol>
-<h2 id="扩展资料-1">扩展资料</h2>
-<ol>
-<li>Linux C编程一站式学习: &nbsp;<a href="https://docs.huihoo.com/c/linux-c-programming/" target="_blank" rel="noopener">https://docs.huihoo.com/c/linux-c-programming/</a>
-</li>
-<li>计算机教育中缺失的一课: &nbsp;<a href="https://missing-semester-cn.github.io/" target="_blank" rel="noopener">https://missing-semester-cn.github.io/</a>
-</li>
-</ol>
-<h2 id="todo-1">TODO</h2>
-<ul>
-<li><input disabled="" type="checkbox"> pa1: &nbsp;<a href="https://nju-projectn.github.io/ics-pa-gitbook/ics2021/PA1.html" target="_blank" rel="noopener">https://nju-projectn.github.io/ics-pa-gitbook/ics2021/PA1.html</a>
-</li>
-</ul>
-<h1 id="cs61a-1">cs61a</h1>
-<p>Structure and Interpretation of Computer Programs(SICP)</p>
-<h2 id="主要资料-4">主要资料</h2>
-<ol>
-<li>&nbsp;<a href="https%3A%2F%2Fraw.githubusercontent.com%2Fhuyubing%2Fbooks-pdf%2Fmaster%2F%25E8%25AE%25A1%25E7%25AE%2597%25E6%259C%25BA%25E7%25A8%258B%25E5%25BA%258F%25E7%259A%2584%25E6%259E%2584%25E9%2580%25A0%25E5%2592%258C%25E8%25A7%25A3%25E9%2587%258A%25EF%25BC%2588SICP%25E4%25B8%25AD%25E6%2596%2587%25E7%25AC%25AC2%25E7%2589%2588%25EF%25BC%2589.pdf" target="_blank" rel="noopener">pdf</a>
-</li>
-<li>课程主页: &nbsp;<a href="https://cs61a.org/" target="_blank" rel="noopener">https://cs61a.org/</a>
-</li>
-</ol>
-<h1 id="cs61c-1">cs61c</h1>
-<p>Great Ideas in Computer Architecture</p>
-<h2 id="主要资料-5">主要资料</h2>
 <ol>
 <li>课程主页: &nbsp;<a href="https://cs61c.org/sp22/" target="_blank" rel="noopener">https://cs61c.org/sp22/</a>
 </li>
