@@ -13,7 +13,9 @@ jobs:
 #          submodules: true  # Fetch Hugo themes (true OR recursive)
 #          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
       - name: add event to my blog
-        uses: fzdwx/add-event-to-myblog@v2.5
+        uses: fzdwx/add-event-to-myblog@v2.6
+        username: github.action
+        email: action@github.com
         with:
           # the repo PAT or GITHUB_TOKEN
           token: ${{ secrets.TOKEN }}
