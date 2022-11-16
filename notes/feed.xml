@@ -10,7 +10,18 @@
     </image>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright [fzdwx](https://github.com/fzdwx) since 2022</copyright>
-    <lastBuildDate>Wed, 16 Nov 2022 04:04:10 +0000</lastBuildDate><atom:link href="https://fzdwx.github.io/notes/feed.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 16 Nov 2022 09:36:18 +0000</lastBuildDate><atom:link href="https://fzdwx.github.io/notes/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>test</title>
+      <link>https://fzdwx.github.io/notes/15/</link>
+      <pubDate>Wed, 16 Nov 2022 09:36:18 +0000</pubDate>
+      
+      <guid>https://fzdwx.github.io/notes/15/</guid>
+      <description>test</description>
+      <content:encoded><![CDATA[<p>test</p>
+]]></content:encoded>
+    </item>
+    
     <item>
       <title>正则速查</title>
       <link>https://fzdwx.github.io/notes/14/</link>
