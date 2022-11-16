@@ -14,12 +14,13 @@ jobs:
 #          fetch-depth: 0    # Fetch all history for .GitInfo and .Lastmod
       - name: add event to my blog
         uses: fzdwx/add-event-to-myblog@v2.6
-        username: github.action
-        email: action@github.com
+
         with:
           # the repo PAT or GITHUB_TOKEN
           token: ${{ secrets.TOKEN }}
           issueNumber: ${{ github.event.issue.number }}
+          username: github.action
+          email: action@github.com
       - name: setup hugo
         uses: peaceiris/actions-hugo@v2
         with:
