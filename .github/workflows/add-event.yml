@@ -27,9 +27,10 @@ jobs:
           extended: true
       - name: build
         run: hugo --minify
-
       - name: deploy
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.TOKEN }}
           publish_dir: ./public
+          user_name: github.action
+          user_email: action@github.com
