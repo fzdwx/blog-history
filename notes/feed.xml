@@ -1682,7 +1682,7 @@ Map Reduce &amp;nbsp;https://fzdwx.github.io/posts/2022-09-27-mit6.824-lab1/ Raf
       <pubDate>Tue, 18 Oct 2022 06:15:27 +0000</pubDate>
       
       <guid>https://fzdwx.github.io/notes/8/</guid>
-      <description>教程 &amp;nbsp;mdn css 书籍 &amp;nbsp;css in depth </description>
+      <description>教程 &amp;nbsp;mdn css 书籍 &amp;nbsp;css in depth CSS lib &amp;nbsp;hyperui-Tailwind CSS Components </description>
       <content:encoded><![CDATA[<h2 id="教程">教程</h2>
 <ol>
 <li>&nbsp;<a href="https://developer.mozilla.org/zh-CN/docs/Learn/Getting_started_with_the_web/CSS_basics" target="_blank" rel="noopener">mdn css</a>
@@ -1691,6 +1691,11 @@ Map Reduce &amp;nbsp;https://fzdwx.github.io/posts/2022-09-27-mit6.824-lab1/ Raf
 <h2 id="书籍">书籍</h2>
 <ol>
 <li>&nbsp;<a href="https://github.com/fzdwx/fzdwx.github.io/releases/download/v1.0/css-in-depth.pdf" target="_blank" rel="noopener">css in depth</a>
+</li>
+</ol>
+<h2 id="css-lib">CSS lib</h2>
+<ol>
+<li>&nbsp;<a href="https://www.hyperui.dev/" target="_blank" rel="noopener">hyperui-Tailwind CSS Components</a>
 </li>
 </ol>
 ]]></content:encoded>
