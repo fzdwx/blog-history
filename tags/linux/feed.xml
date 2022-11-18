@@ -26,7 +26,9 @@ alias cdf=&amp;#34;cd $(fd --type d | fzf)&amp;#34; 结果是直接不能运行�
 解决 最后我搜索到可以使用source xxx或者. xxx来解决，最后是alias+shell脚本来完成这个操作的:
 alias cdf=&amp;#34;source /path/to/cdf&amp;#34; 同时它也解决我上面提到的两个问题。
 source为什么能解决？ 之所以直接用shell脚本直接运行会不行，是因为它不是在当前shell环境中运行的，而是一个子shell，所以结果就不能改变当前的文件目录了。
-而source或者.就代表着在当前的shell环境中执行，所以就能成功。</description>
+而source或者.就代表着在当前的shell环境中执行，所以就能成功。
+更新 2022/11/18 今天发现一种更容易解决的办法,就是在写一个 shell 方法:
+function cd() { cd &amp;#34;$(fzf)&amp;#34; } 把它加入到.</description>
       <content:encoded><![CDATA[<h2 id="起因">起因</h2>
 <p>昨天晚上想用fzf与cd联动，就是fzf的结果传递给cd来执行于是有了这么一条命令:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">cd</span> <span class="k">$(</span>fd --type d <span class="p">|</span> fzf<span class="k">)</span>
@@ -57,6 +59,13 @@ source为什么能解决？ 之所以直接用shell脚本直接运行会不行�
 <h2 id="source为什么能解决">source为什么能解决？</h2>
 <p>之所以直接用shell脚本直接运行会不行，是因为它不是在当前shell环境中运行的，而是一个子shell，所以结果就不能改变当前的文件目录了。</p>
 <p>而<code>source</code>或者<code>.</code>就代表着在当前的shell环境中执行，所以就能成功。</p>
+<h2 id="更新">更新</h2>
+<h3 id="20221118">2022/11/18</h3>
+<p>今天发现一种更容易解决的办法,就是在写一个 shell 方法:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="k">function</span> cd<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">cd</span> <span class="s2">&#34;</span><span class="k">$(</span>fzf<span class="k">)</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></div><p>把它加入到<code>.zshrc</code>(我用的是 zsh)中，然后在命令行中输入 <code>cd</code> 就好了。</p>
 ]]></content:encoded>
     </item>
     
