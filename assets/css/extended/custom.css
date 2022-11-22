@@ -88,8 +88,9 @@ figcaption {
 }
 
 .archive-entry {
-    font-family: "LXGW WenKai", sans-serif;
+    font-family: var(--smf)
 }
+
 .post-content .chroma code {
     font-family: var(--fjet);
 }

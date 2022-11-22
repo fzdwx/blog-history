@@ -10,7 +10,15 @@
     /*src: url("https://cdn.jsdelivr.net/gh/fzdwx/fzdwx.github.io/static/font/f1.woff2") format("woff2");*/
 }
 
-:root{
+@font-face {
+    font-family: smf;
+    src: url("/font/smf.woff2") format("woff2");
+    /*src: url("https://cdn.jsdelivr.net/gh/fzdwx/fzdwx.github.io/static/font/f1.woff2") format("woff2");*/
+}
+
+
+:root {
+    --smf: 'smf';
     --fjinkai: 'jinkaiFont', sans-serif !important;
     --f1: 'f1Font', sans-serif !important;
     --fjet: 'Jetbrains Mono', monospace !important;
