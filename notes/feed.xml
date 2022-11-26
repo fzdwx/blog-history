@@ -10,7 +10,40 @@
     </image>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright [fzdwx](https://github.com/fzdwx) since 2022</copyright>
-    <lastBuildDate>Wed, 16 Nov 2022 04:04:10 +0000</lastBuildDate><atom:link href="https://fzdwx.github.io/notes/feed.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 26 Nov 2022 09:42:10 +0000</lastBuildDate><atom:link href="https://fzdwx.github.io/notes/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>📑  书单</title>
+      <link>https://fzdwx.github.io/notes/16/</link>
+      <pubDate>Sat, 26 Nov 2022 09:42:10 +0000</pubDate>
+      
+      <guid>https://fzdwx.github.io/notes/16/</guid>
+      <description> &amp;nbsp;《深入解析CSS》 &amp;nbsp;《计算机网络：自顶向下》 &amp;nbsp;《CSAPP》 &amp;nbsp;《图解HThe.C.Programming.Language.pdfTTP》 &amp;nbsp;《高性能MySQL》 &amp;nbsp;《计算机组成与设计：硬件_软件接口》(P&amp;amp;H) &amp;nbsp;《C程序设计语言》(K&amp;amp;R) &amp;nbsp;https://www.aliyundrive.com/s/AECNXPqn8WA dBeJ &amp;nbsp;https://xmsoushu.com/#/ </description>
+      <content:encoded><![CDATA[<ol>
+<li>&nbsp;<a href="https://github.com/fzdwx/fzdwx.github.io/releases/download/v1.0/css-in-depth.pdf" target="_blank" rel="noopener">《深入解析CSS》 </a>
+</li>
+<li>&nbsp;<a href="https://github.com/fzdwx/fzdwx.github.io/releases/download/v1.0/jiSuanJiWangluo-zdxx.pdf" target="_blank" rel="noopener">《计算机网络：自顶向下》</a>
+</li>
+<li>&nbsp;<a href="https://github.com/fzdwx/fzdwx.github.io/releases/download/v1.0/csapp.pdf" target="_blank" rel="noopener">《CSAPP》</a>
+</li>
+<li>&nbsp;<a href="https://github.com/fzdwx/fzdwx.github.io/releases/download/v1.0/HTTP&#43;.pdf" target="_blank" rel="noopener">《图解HThe.C.Programming.Language.pdfTTP》</a>
+</li>
+<li>&nbsp;<a href="https://github.com/fzdwx/fzdwx.github.io/releases/download/v1.0/mysql.pdf" target="_blank" rel="noopener">《高性能MySQL》</a>
+</li>
+<li>&nbsp;<a href="https://github.com/fzdwx/fzdwx.github.io/releases/download/v1.0/p.h.pdf" target="_blank" rel="noopener">《计算机组成与设计：硬件_软件接口》(P&amp;H)</a>
+</li>
+<li>&nbsp;<a href="https://github.com/fzdwx/fzdwx.github.io/releases/download/v1.0/k.r.pdf" target="_blank" rel="noopener">《C程序设计语言》(K&amp;R)</a>
+</li>
+</ol>
+<hr>
+<ol>
+<li>&nbsp;<a href="https://www.aliyundrive.com/s/AECNXPqn8WA" target="_blank" rel="noopener">https://www.aliyundrive.com/s/AECNXPqn8WA</a>
+ dBeJ</li>
+<li>&nbsp;<a href="https://xmsoushu.com/#/" target="_blank" rel="noopener">https://xmsoushu.com/#/</a>
+</li>
+</ol>
+]]></content:encoded>
+    </item>
+    
     <item>
       <title>正则速查</title>
       <link>https://fzdwx.github.io/notes/14/</link>
