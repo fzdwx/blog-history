@@ -68,14 +68,23 @@ serial不正确 修改nemu/src/device/serial.c#init_serial，每个人的不同�
       <pubDate>Sun, 09 Oct 2022 14:10:36 +0800</pubDate>
       
       <guid>https://fzdwx.github.io/posts/2022-10-09-c-compile/</guid>
-      <description>宏定义与展开 宏展开: 通过 复制/粘贴 改变代码的形态
+      <description>C编译概述 可以用gcc -save-temps xx.c保存编译的中间文件
+宏定义与展开 宏展开: 通过 复制/粘贴 改变代码的形态
 一个include的例子 a.c:
 #include &amp;lt;stdio.h&amp;gt; int main(){ printf( #include &amp;lt;qwe&amp;gt; ); } qwe:
 &amp;#34;hello world\n&amp;#34; 通过运行gcc a.c &amp;amp;&amp;amp; a.out得到
 ❯ gcc a.c &amp;amp;&amp;amp; a.out hello world 一个define的例子 a.c:
-#define A &amp;#34;aaaaaaaaaaaa&amp;#34; #define TEN(A) A A A A A A A A A #define B TEN(A) #define C TEN(B) int main(int argc, char const *argv[]) { puts(C); return 0; } 可以通过gcc a.c -E来查看预编译的结
-❯ gcc a.c -E # 0 &amp;#34;a.</description>
-      <content:encoded><![CDATA[<h2 id="宏定义与展开">宏定义与展开</h2>
+#define A &amp;#34;aaaaaaaaaaaa&amp;#34; #define TEN(A) A A A A A A A A A #define B TEN(A) #define C TEN(B) int main(int argc, char const *argv[]) { puts(C); return 0; } 可以通过gcc a.c -E来查看预编译的结</description>
+      <content:encoded><![CDATA[<p><figure id="a-/images/img_9.png" class="align-center">
+    <img src="/images/img_9.png" alt="C编译概述"  />
+    
+    <figcaption>
+       C编译概述
+    </figcaption>
+    
+</figure></p>
+<p>可以用<code>gcc -save-temps xx.c</code>保存编译的中间文件</p>
+<h2 id="宏定义与展开">宏定义与展开</h2>
 <p>宏展开: 通过 复制/粘贴 改变代码的形态</p>
 <h3 id="一个include的例子">一个include的例子</h3>
 <p>a.c:</p>
