@@ -58,12 +58,12 @@ params:
   TocSide: right
 
   assets:
-  # disableFingerprinting: true
-  #    favicon: "/favicon.ico"
-  #    favicon16x16: "/favicon.ico"
-  #    favicon32x32: "/favicon.ico"
-      apple_touch_icon: "/images/party_parrot.gif"
-      safari_pinned_tab: "/images/party_parrot.gif"
+    # disableFingerprinting: true
+    #    favicon: "/favicon.ico"
+    #    favicon16x16: "/favicon.ico"
+    #    favicon32x32: "/favicon.ico"
+    apple_touch_icon: "/images/party_parrot.gif"
+    safari_pinned_tab: "/images/party_parrot.gif"
 
   #  label:
   #    text: "Home"
@@ -92,6 +92,10 @@ params:
       url: https://dash.deno.com/projects
       description: 一个类似云函数的环境(免费)
       favicon: https://dash.deno.com/assets/logo.svg
+    - name: linux-china
+      url: https://linux-china.davao.page/
+      description: A 100% Java developer with half FullStack experience
+      favicon: https://linux-china.davao.page/assets/avatar.png
     - name: 美团技术团队
       url: https://tech.meituan.com/
       favicon: https://awps-assets.meituan.net/mit/blog/v20190629/asset/icon/favicon.ico?v=Whistle&t=20181017-1r
@@ -179,8 +183,8 @@ markup:
     renderer:
       unsafe: true
     highlight:
-        # anchorLineNos: true
-        codeFences: true
-        guessSyntax: true
-        lineNos: true
+      # anchorLineNos: true
+      codeFences: true
+      guessSyntax: true
+      lineNos: true
 #        style: monokai
