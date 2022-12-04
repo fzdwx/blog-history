@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>obsidian on fzdwx</title>
+    <link>https://fzdwx.github.io/tags/obsidian/</link>
+    <description>Recent content in obsidian on fzdwx</description>
+    <image>
+      <url>https://fzdwx.github.io/images/party_parrot.gif</url>
+      <link>https://fzdwx.github.io/images/party_parrot.gif</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Copyright [fzdwx](https://github.com/fzdwx) since 2022</copyright>
+    <lastBuildDate>Sun, 04 Dec 2022 22:45:02 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/tags/obsidian/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>在 Obsidian 中预览 hugo </title>
+      <link>https://fzdwx.github.io/posts/2022-12-04-2245-hugo-preview-obsidian/</link>
+      <pubDate>Sun, 04 Dec 2022 22:45:02 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/posts/2022-12-04-2245-hugo-preview-obsidian/</guid>
+      <description>前段时间玩过几天的 obsidian，由于太费神了所以转向了 hugo ,然后直接用文本编辑器写 md ，体验还是不太好，然后我想起还有 obsidian 这个软件，所以就有了这个插件。</description>
+      <content:encoded><![CDATA[<blockquote>
+<p>前段时间玩过几天的 obsidian，由于太费神了所以转向了 hugo ,然后直接用文本编辑器写 md ，体验还是不太好，然后我想起还有 obsidian 这个软件，所以就有了这个插件。</p>
+</blockquote>
+<p><strong>当前主要功能</strong>：</p>
+<ol>
+<li>开一个 <code>custome iframe</code> 预览 hugo (via &nbsp;<a href="https://github.com/Ellpeck/ObsidianCustomFrames" target="_blank" rel="noopener">https://github.com/Ellpeck/ObsidianCustomFrames</a>
+)</li>
+<li>后台启动<code>hugo server</code>
+<ol>
+<li>当前还有一点问题，子进程( hugo 进程)在程序推出时不会关闭。</li>
+</ol>
+</li>
+</ol>
+<p><strong>遇到的问题</strong>:</p>
+<ol>
+<li>获取 obsidian 打开的目录不知道 api( cwd ),后提 issue 知道了获取方法。</li>
+</ol>
+<hr>
+<p>仓库: &nbsp;<a href="https://github.com/fzdwx/hugo-preview-obsidian" target="_blank" rel="noopener">https://github.com/fzdwx/hugo-preview-obsidian</a>
+</p>
+<p><figure id="a-/images/12.png" class="align-center">
+    <img src="/images/12.png" alt="运行图例，左编辑区域，右预览区域"  />
+    
+    <figcaption>
+       运行图例，左编辑区域，右预览区域
+    </figcaption>
+    
+</figure></p>
+]]></content:encoded>
+    </item>
+    
+  </channel>
+</rss>
