@@ -10,7 +10,7 @@ tags: [obsidian,plugin]
 
 **当前主要功能**：
 1. 开一个 `custome iframe` 预览 hugo (via https://github.com/Ellpeck/ObsidianCustomFrames)
-2. 后台启动`hugo server`
+2. 后台启动 `hugo server`![](static/images/Pasted%20image%2020221205140050.png)
 	1. 当前还有一点问题，子进程( hugo 进程)在程序推出时不会关闭。
 
 
@@ -24,3 +24,12 @@ tags: [obsidian,plugin]
 
 ![运行图例，左编辑区域，右预览区域](/images/12.png)
 
+
+
+## 更新
+
+1. 支持自定义 exec command, 例如可以用来启动终端。 使用 `ALT+F12` 唤起。
+	1. 我使用 git 进行同步，所以需要一快速启动终端在当前的目录下： `wezterm start --class float --cwd ${cwd}`。
+	2. 目前只提供了 cwd 这个变量，它会替换为当前笔记的路径。
+
+![自定义 command 配置示例](/images/13.png)
