@@ -1,4 +1,5 @@
 .idea
+**/Excalidraw/
 public
 .hugo_build.lock
 .obsidian

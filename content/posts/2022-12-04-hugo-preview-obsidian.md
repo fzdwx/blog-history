@@ -29,7 +29,7 @@ tags: [obsidian,plugin]
 ## 更新
 
 1. 支持自定义 exec command, 例如可以用来启动终端。 使用 `ALT+F12` 唤起。
-	1. 我使用 git 进行同步，所以需要一快速启动终端在当前的目录下： `wezterm start --class float --cwd ${cwd}`。
+	1. 由于我使用 git 进行同步，时常需要打开终端并且进入到具体的目录，所以需要一个快速启动终端在当前的目录下的命令： `wezterm start --class float --cwd ${cwd}`。
 	2. 目前只提供了 cwd 这个变量，它会替换为当前笔记的路径。
 
 ![自定义 command 配置示例](/images/13.png)
