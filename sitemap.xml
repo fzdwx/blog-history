@@ -3,7 +3,13 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://fzdwx.github.io/</loc>
-    <lastmod>2022-12-04T22:45:02+08:00</lastmod>
+    <lastmod>2022-12-07T21:37:59+08:00</lastmod>
+  </url><url>
+    <loc>https://fzdwx.github.io/posts/</loc>
+    <lastmod>2022-12-07T21:37:59+08:00</lastmod>
+  </url><url>
+    <loc>https://fzdwx.github.io/posts/2022-12-07-steganography/</loc>
+    <lastmod>2022-12-07T21:37:59+08:00</lastmod>
   </url><url>
     <loc>https://fzdwx.github.io/tags/obsidian/</loc>
     <lastmod>2022-12-04T22:45:02+08:00</lastmod>
@@ -11,13 +17,10 @@
     <loc>https://fzdwx.github.io/tags/plugin/</loc>
     <lastmod>2022-12-04T22:45:02+08:00</lastmod>
   </url><url>
-    <loc>https://fzdwx.github.io/posts/</loc>
-    <lastmod>2022-12-04T22:45:02+08:00</lastmod>
-  </url><url>
     <loc>https://fzdwx.github.io/tags/</loc>
     <lastmod>2022-12-04T22:45:02+08:00</lastmod>
   </url><url>
-    <loc>https://fzdwx.github.io/posts/2022-12-04-2245-hugo-preview-obsidian/</loc>
+    <loc>https://fzdwx.github.io/posts/2022-12-04-hugo-preview-obsidian/</loc>
     <lastmod>2022-12-04T22:45:02+08:00</lastmod>
   </url><url>
     <loc>https://fzdwx.github.io/notes/16/</loc>
@@ -26,7 +29,7 @@
     <loc>https://fzdwx.github.io/notes/</loc>
     <lastmod>2022-11-26T09:42:10+00:00</lastmod>
   </url><url>
-    <loc>https://fzdwx.github.io/posts/2022-11-22-1601-number/</loc>
+    <loc>https://fzdwx.github.io/posts/2022-11-22-number/</loc>
     <lastmod>2022-11-22T16:01:52+08:00</lastmod>
   </url><url>
     <loc>https://fzdwx.github.io/categories/</loc>

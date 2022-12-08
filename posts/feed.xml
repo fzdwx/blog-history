@@ -10,13 +10,48 @@
     </image>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright [fzdwx](https://github.com/fzdwx) since 2022</copyright>
-    <lastBuildDate>Sun, 04 Dec 2022 22:45:02 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/posts/feed.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 07 Dec 2022 21:37:59 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/posts/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>隐写术</title>
+      <link>https://fzdwx.github.io/posts/2022-12-07-steganography/</link>
+      <pubDate>Wed, 07 Dec 2022 21:37:59 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/posts/2022-12-07-steganography/</guid>
+      <description>最近在跟 cs61c，第一个 project 中介绍了隐写术，大意可以理解为一个文件的内容是&lt;code&gt;123&lt;/code&gt;,在经过特定的编码转换后成了&lt;code&gt;456&lt;/code&gt;。</description>
+      <content:encoded><![CDATA[<p>在这个项目中是用的图片来作为案例的，首先通过介绍了一种图片的编码形式, ppm:</p>
+<ul>
+<li>第一行表示是什么格式的 ppm 文件</li>
+<li>第二行表示宽和高</li>
+<li>第三行表示颜色范围</li>
+<li>后面的就是各个像素的RGB值</li>
+</ul>
+<pre tabindex="0"><code class="language-ppm" data-lang="ppm">P3
+2 2
+255
+ 29  83  36      45  64  57   
+188 229 201     123 162 184   
+</code></pre><p>他是这么介绍的:</p>
+<blockquote>
+<p>我们将探索一种隐藏消息的方法。虽然大多数图像的每个 RGB 通道都有 8 位数据，但人眼无法轻易看出后 4 位的差异。因此，我们可以将信息隐藏在图像的底部位中。我们通过修改每个像素 B 值的最低有效位, 如果最后一位是 0，则把整个像素转换为黑色(255,255,255),如果最后一位是 1,则转换为白色(0,0,0)。</p>
+</blockquote>
+<p>关键就是： <strong>每个 RGB 通道都有 8 位数据，但人眼无法轻易看出后 4 位的差异</strong>，所以这就给了我们操作的空间。</p>
+<p><figure id="a-/images/14.png" class="align-center">
+    <img src="/images/14.png" alt="项目的结果"  />
+    
+    <figcaption>
+       项目的结果
+    </figcaption>
+    
+</figure></p>
+]]></content:encoded>
+    </item>
+    
     <item>
       <title>在 Obsidian 中预览 hugo </title>
-      <link>https://fzdwx.github.io/posts/2022-12-04-2245-hugo-preview-obsidian/</link>
+      <link>https://fzdwx.github.io/posts/2022-12-04-hugo-preview-obsidian/</link>
       <pubDate>Sun, 04 Dec 2022 22:45:02 +0800</pubDate>
       
-      <guid>https://fzdwx.github.io/posts/2022-12-04-2245-hugo-preview-obsidian/</guid>
+      <guid>https://fzdwx.github.io/posts/2022-12-04-hugo-preview-obsidian/</guid>
       <description>前段时间玩过几天的 obsidian，由于太费神了所以转向了 hugo ,然后直接用文本编辑器写 md ，体验还是不太好，然后我想起还有 obsidian 这个软件，所以就有了这个插件。</description>
       <content:encoded><![CDATA[<blockquote>
 <p>前段时间玩过几天的 obsidian，由于太费神了所以转向了 hugo ,然后直接用文本编辑器写 md ，体验还是不太好，然后我想起还有 obsidian 这个软件，所以就有了这个插件。</p>
@@ -53,7 +88,7 @@
 <ol>
 <li>支持自定义 exec command, 例如可以用来启动终端。 使用 <code>ALT+F12</code> 唤起。
 <ol>
-<li>我使用 git 进行同步，所以需要一快速启动终端在当前的目录下： <code>wezterm start --class float --cwd ${cwd}</code>。</li>
+<li>由于我使用 git 进行同步，时常需要打开终端并且进入到具体的目录，所以需要一个快速启动终端在当前的目录下的命令： <code>wezterm start --class float --cwd ${cwd}</code>。</li>
 <li>目前只提供了 cwd 这个变量，它会替换为当前笔记的路径。</li>
 </ol>
 </li>
@@ -71,10 +106,10 @@
     
     <item>
       <title>Number Representation</title>
-      <link>https://fzdwx.github.io/posts/2022-11-22-1601-number/</link>
+      <link>https://fzdwx.github.io/posts/2022-11-22-number/</link>
       <pubDate>Tue, 22 Nov 2022 16:01:52 +0800</pubDate>
       
-      <guid>https://fzdwx.github.io/posts/2022-11-22-1601-number/</guid>
+      <guid>https://fzdwx.github.io/posts/2022-11-22-number/</guid>
       <description>bit 可以表示任何事物
 例如表示26个字符: 5 bits(2^5 = 32)
 Binary,Decimal,Hex Decimal 十进制简单的介绍以及组成 Binary (to Decimal) 二进制的介绍以及转换到十进制 Hexadecimal (to Decimal) 十六至进制的介绍以及转换到十进制 Convert 进制转换
