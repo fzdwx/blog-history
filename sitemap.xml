@@ -3,10 +3,22 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://fzdwx.github.io/</loc>
-    <lastmod>2022-12-07T21:37:59+08:00</lastmod>
+    <lastmod>2022-12-10T20:41:41+08:00</lastmod>
   </url><url>
     <loc>https://fzdwx.github.io/posts/</loc>
-    <lastmod>2022-12-07T21:37:59+08:00</lastmod>
+    <lastmod>2022-12-10T20:41:41+08:00</lastmod>
+  </url><url>
+    <loc>https://fzdwx.github.io/tags/risc-v/</loc>
+    <lastmod>2022-12-10T20:41:41+08:00</lastmod>
+  </url><url>
+    <loc>https://fzdwx.github.io/posts/2022-12-10-risc-v/</loc>
+    <lastmod>2022-12-10T20:41:41+08:00</lastmod>
+  </url><url>
+    <loc>https://fzdwx.github.io/tags/</loc>
+    <lastmod>2022-12-10T20:41:41+08:00</lastmod>
+  </url><url>
+    <loc>https://fzdwx.github.io/posts/2022-12-09-float-rep/</loc>
+    <lastmod>2022-12-09T19:02:32+08:00</lastmod>
   </url><url>
     <loc>https://fzdwx.github.io/posts/2022-12-07-steganography/</loc>
     <lastmod>2022-12-07T21:37:59+08:00</lastmod>
@@ -15,9 +27,6 @@
     <lastmod>2022-12-04T22:45:02+08:00</lastmod>
   </url><url>
     <loc>https://fzdwx.github.io/tags/plugin/</loc>
-    <lastmod>2022-12-04T22:45:02+08:00</lastmod>
-  </url><url>
-    <loc>https://fzdwx.github.io/tags/</loc>
     <lastmod>2022-12-04T22:45:02+08:00</lastmod>
   </url><url>
     <loc>https://fzdwx.github.io/posts/2022-12-04-hugo-preview-obsidian/</loc>
