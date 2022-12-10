@@ -1,3 +1,9 @@
-<div class="center">
+<figure class="align-center">
     {{ .Inner | markdownify }}
-</div>
+
+    {{ if .Get "desc" }}
+    <figcaption>
+        {{ .Get "desc" }}
+    </figcaption>
+    {{end}}
+</figure>

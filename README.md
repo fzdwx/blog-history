@@ -93,3 +93,13 @@ func main() {
 ```
 
 > title 不是必须的
+
+## 居中
+
+```
+{{< center >}}
+{{< /center >}}
+
+{{< center desc="">}}
+{{< /center >}}
+```
