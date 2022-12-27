@@ -1,0 +1,11 @@
+{
+	"nodes":[
+		{"id":"27460bcb46c36d66","x":-112,"y":-231,"width":681,"height":512,"type":"file","file":"content/posts/2022-12-16-os-concurrent.md"},
+		{"id":"e462f1996bf19e85","x":884,"y":-71,"width":399,"height":352,"type":"file","file":"static/images/Pasted image 20221227091245.png"},
+		{"id":"dfa5b94099e18184","x":1034,"y":-313,"width":250,"height":60,"color":"3","type":"text","text":"我草"},
+		{"id":"a6cca6e62cbde3f7","x":-65,"y":533,"width":1259,"height":606,"type":"link","url":"https://baidu.com"}
+	],
+	"edges":[
+		{"id":"e1d225d972e69e96","fromNode":"27460bcb46c36d66","fromSide":"right","toNode":"e462f1996bf19e85","toSide":"left"}
+	]
+}

@@ -72,3 +72,108 @@ draft: false
 		4. 乱序执行，按序提交
 	3. 实现顺序一致性： 使用`mfence`指令或使用原子指令(lock),让它每次都到内存中去读取，而不读取缓存
   
+
+## 自旋锁 spin lock
+
+假如硬件能提供一条“瞬间完成” 的读 + 写的指令
+- 其他所有人暂停，load + store
+	- 如果有人同时请求，硬件选出一个胜利者
+	- 败者等胜利者完成后继续
+
+### X86提供的 lock 前缀
+
+```c
+long sum = 0;
+
+void sum(){
+	for(;;){
+		asm volatile("lock addq $1, %0": "+m"(sum));
+	}
+}
+```
+
+atomic exchange(load + store)
+
+```c
+int xchg(volatile int *addr, int newval) {
+	int result; 
+	asm volatile ("lock xchg %0, %1" 
+		: "+m"(*addr), "=a"(result) : "1"(newval)); 
+	return result; 
+}
+```
+
+实现自旋锁:
+
+```c
+int locked = 0; 
+void lock() { while (xchg(&locked, 1)) ; } 
+void unlock() { xchg(&locked, 0); }
+```
+
+
+### lock 指令的现代实现
+
+在 L1 cache 层保持一致性
+- 所有 cpu 的L1缓存都用总线连起来
+- 对某个内存 M 执行 lock，则其他所有缓存的 M 都无效（这个代价非常大）
+
+## RISC-V 的原子操作
+
+原子操作的目的：
+1. `a = load(x); if (a == xx){ store(x,y) }`
+2. `a = load(x); store(x,y)`
+3. `a = load(x); a++; store(x,a)`
+它们的本质都是 load -> exec(进行运算) -> store
+
+### Load reserved / Store Conditional
+
+LR: 在读取时会对这个内存加上一个标记，中断、其他处理器的写入都会导致标记消除
+```asm
+lr.w rd (rs1)
+	rd = M[rs1]
+	reserve M[rs1]
+```
+
+SC: 如果那片内存还存在标记则继续写入
+```asm
+sc.w rd rs2 (rs1)
+	if still reserved:
+		M[rs1] = rs2
+		rd = 0
+	else:
+		rd = nonzero
+```
+
+### 实现 cas
+
+```c
+int cas(int *addr, int cmp_val, int new_val){
+	int old_val = *addr;
+	if (old_val == cmp_val){
+		*addr = new_val;
+		return 0;
+	}else{
+		return 1;
+	}
+}
+```
+
+```asm
+cas:
+	lr.w t0 (a0)
+	bne t0 a1 fail
+	sc.w t0 a2 (a0)
+	bnez t0 cas
+	li a0 0
+	jr ra
+fail:
+	li a0 1
+	ja ra
+```
+
+
+## 互斥锁
+
+自旋锁的问题:
+1.
