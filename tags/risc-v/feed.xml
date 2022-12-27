@@ -412,10 +412,87 @@ ld x9, 8(x22) // x9 = A[8] add x21, x20, x9; // x21 = x20 + x9 存放基址的�
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">lw</span> <span class="no">ra</span><span class="p">,</span> <span class="mi">4</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>             <span class="c1">// get retrun address from sp
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">addi</span> <span class="no">sp</span><span class="p">,</span> <span class="no">sp</span><span class="p">,</span> <span class="mi">8</span>
 </span></span><span class="line"><span class="cl">	<span class="nf">jr</span> <span class="no">ra</span>
-</span></span><span class="line"><span class="cl">	
 </span></span></code></pre></div><h2 id="risc-v-寄存器名称">RISC-V 寄存器名称</h2>
 <p><figure id="a-/images/Pasted%20image%2020221213192858.png" class="align-center">
     <img src="/images/Pasted%20image%2020221213192858.png" alt=""  />
+    
+</figure></p>
+<h2 id="risc-v-方法调用套路">RISC-V 方法调用套路</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nl">matmul:</span>  
+</span></span><span class="line"><span class="cl">    <span class="c1"># 压栈，腾出空间保存我们要使用的几个 s 寄存器
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">addi</span> <span class="no">sp</span> <span class="no">sp</span> <span class="p">-</span><span class="mi">36</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">sw</span> <span class="no">ra</span> <span class="mi">0</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">sw</span> <span class="no">s0</span> <span class="mi">4</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">sw</span> <span class="no">s1</span> <span class="mi">8</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">sw</span> <span class="no">s2</span> <span class="mi">12</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">sw</span> <span class="no">s3</span> <span class="mi">16</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">sw</span> <span class="no">s4</span> <span class="mi">20</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">sw</span> <span class="no">s5</span> <span class="mi">24</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">sw</span> <span class="no">s6</span> <span class="mi">28</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">sw</span> <span class="no">s7</span> <span class="mi">32</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl"><span class="no">body</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># xxx xxx
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="nl">end:</span>  
+</span></span><span class="line"><span class="cl">    <span class="c1"># 恢复寄存器的值  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">lw</span> <span class="no">ra</span> <span class="mi">0</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">lw</span> <span class="no">s0</span> <span class="mi">4</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">lw</span> <span class="no">s1</span> <span class="mi">8</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">lw</span> <span class="no">s2</span> <span class="mi">12</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">lw</span> <span class="no">s3</span> <span class="mi">16</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">lw</span> <span class="no">s4</span> <span class="mi">20</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">lw</span> <span class="no">s5</span> <span class="mi">24</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">lw</span> <span class="no">s6</span> <span class="mi">28</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">lw</span> <span class="no">s7</span> <span class="mi">32</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">addi</span> <span class="no">sp</span> <span class="no">sp</span> <span class="mi">36</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">ret</span>  
+</span></span></code></pre></div><h1 id="risc-v-指令二进制的表示">RISC-V 指令二进制的表示</h1>
+<h2 id="r-格式布局">R 格式布局</h2>
+<p>用于算术和逻辑运算的指令</p>
+<p><figure id="a-/images/Pasted%20image%2020221224214056.png" class="align-center">
+    <img src="/images/Pasted%20image%2020221224214056.png" alt=""  />
+    
+</figure></p>
+<ol>
+<li>opcode，funct3, funct7 : 将告诉我们是否要执行加，减，左移，异或等操作。
+<ol>
+<li>R-format 的 opcode 固定为 0110011</li>
+</ol>
+</li>
+<li>一个 add 操作： <code>add x18 x19 x10</code> =&gt; <code>x18 = x19 + x10</code></li>
+<li><code>0000000 01010 10011 000 10010 0110011</code></li>
+<li><code>rs2 = x19</code>, <code>rs1 = x10</code>, <code>rd = x18</code></li>
+</ol>
+<h2 id="i-格式布局">I 格式布局</h2>
+<p>处理立即数，比如<code>addi rd rs1, imm</code> =&gt; <code>addi a0 a0 1</code></p>
+<p><figure id="a-/images/Pasted%20image%2020221224220039.png" class="align-center">
+    <img src="/images/Pasted%20image%2020221224220039.png" alt=""  />
+    
+</figure></p>
+<ol>
+<li>imm 的范围是 -2084 ～ 2047</li>
+</ol>
+<p><figure id="a-/images/Pasted%20image%2020221224220349.png" class="align-center">
+    <img src="/images/Pasted%20image%2020221224220349.png" alt="addi x15 x1 -50"  />
+    
+    <figcaption>
+       addi x15 x1 -50
+    </figcaption>
+    
+</figure></p>
+<h2 id="risc-v-loads">RISC-V Loads</h2>
+<p>load 指令也是 I 类型的。</p>
+<p><figure id="a-/images/Pasted%20image%2020221224221104.png" class="align-center">
+    <img src="/images/Pasted%20image%2020221224221104.png" alt="lw x14 8(x2)"  />
+    
+    <figcaption>
+       lw x14 8(x2)
+    </figcaption>
+    
+</figure></p>
+<h2 id="s-格式布局">S 格式布局</h2>
+<p><figure id="a-/images/Pasted%20image%2020221224221434.png" class="align-center">
+    <img src="/images/Pasted%20image%2020221224221434.png" alt=""  />
     
 </figure></p>
 ]]></content:encoded>
