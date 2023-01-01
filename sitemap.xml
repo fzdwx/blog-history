@@ -3,21 +3,30 @@
   xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
     <loc>https://fzdwx.github.io/</loc>
-    <lastmod>2022-12-16T20:54:45+08:00</lastmod>
+    <lastmod>2022-12-30T13:54:36+08:00</lastmod>
+  </url><url>
+    <loc>https://fzdwx.github.io/tags/note/</loc>
+    <lastmod>2022-12-30T13:54:36+08:00</lastmod>
+  </url><url>
+    <loc>https://fzdwx.github.io/tags/os/</loc>
+    <lastmod>2022-12-30T13:54:36+08:00</lastmod>
   </url><url>
     <loc>https://fzdwx.github.io/posts/</loc>
-    <lastmod>2022-12-16T20:54:45+08:00</lastmod>
+    <lastmod>2022-12-30T13:54:36+08:00</lastmod>
+  </url><url>
+    <loc>https://fzdwx.github.io/tags/risc-v/</loc>
+    <lastmod>2022-12-30T13:54:36+08:00</lastmod>
+  </url><url>
+    <loc>https://fzdwx.github.io/tags/</loc>
+    <lastmod>2022-12-30T13:54:36+08:00</lastmod>
+  </url><url>
+    <loc>https://fzdwx.github.io/posts/2022-12-30-os-privilege/</loc>
+    <lastmod>2022-12-30T13:54:36+08:00</lastmod>
   </url><url>
     <loc>https://fzdwx.github.io/posts/2022-12-16-os-concurrent/</loc>
     <lastmod>2022-12-16T20:54:45+08:00</lastmod>
   </url><url>
-    <loc>https://fzdwx.github.io/tags/risc-v/</loc>
-    <lastmod>2022-12-10T20:41:41+08:00</lastmod>
-  </url><url>
     <loc>https://fzdwx.github.io/posts/2022-12-10-risc-v/</loc>
-    <lastmod>2022-12-10T20:41:41+08:00</lastmod>
-  </url><url>
-    <loc>https://fzdwx.github.io/tags/</loc>
     <lastmod>2022-12-10T20:41:41+08:00</lastmod>
   </url><url>
     <loc>https://fzdwx.github.io/posts/2022-12-09-float-rep/</loc>
@@ -30,6 +39,9 @@
     <lastmod>2022-12-04T22:45:02+08:00</lastmod>
   </url><url>
     <loc>https://fzdwx.github.io/tags/plugin/</loc>
+    <lastmod>2022-12-04T22:45:02+08:00</lastmod>
+  </url><url>
+    <loc>https://fzdwx.github.io/tags/project/</loc>
     <lastmod>2022-12-04T22:45:02+08:00</lastmod>
   </url><url>
     <loc>https://fzdwx.github.io/posts/2022-12-04-hugo-preview-obsidian/</loc>
