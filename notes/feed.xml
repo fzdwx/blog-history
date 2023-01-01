@@ -1993,7 +1993,7 @@ Map Reduce &amp;nbsp;https://fzdwx.github.io/posts/2022-09-27-mit6.824-lab1/ Raf
       <pubDate>Sun, 16 Oct 2022 06:02:14 +0000</pubDate>
       
       <guid>https://fzdwx.github.io/notes/6/</guid>
-      <description>Roadmap &amp;nbsp;https://github.com/izackwu/TeachYourselfCS-CN/blob/master/TeachYourselfCS-CN.md cs61c Great Ideas in Computer Architecture
+      <description>Roadmap &amp;nbsp;https://github.com/izackwu/TeachYourselfCS-CN/blob/master/TeachYourselfCS-CN.md cs61c [finish] Great Ideas in Computer Architecture
 主要资料 课程主页: &amp;nbsp;https://inst.eecs.berkeley.edu/~cs61c/fa20/ 视频: &amp;nbsp;https://inst.eecs.berkeley.edu/~cs61c/fa20/#lectures discussion: &amp;nbsp;https://www.youtube.com/watch?v=4HC3VqyPU7o&amp;list=PLYKsAjQZdJD_aO22u9YREZWQUV8WOdAC8&amp;ab_channel=CarolineLiu jyy os
 操作系统
 主要资料 视频地址: &amp;nbsp;https://www.bilibili.com/video/BV1Cm4y1d7Ur 课程主页: &amp;nbsp;http://jyywiki.cn/OS/2022/ 阅读材料: 操作系统导论 &amp;nbsp;书首页 &amp;nbsp;书PDF 代码 &amp;nbsp;xv6-risc-v todo:
@@ -2002,7 +2002,7 @@ libco jyy ics 关于jyy的计算机系统基础课
       <content:encoded><![CDATA[<h1 id="roadmap">Roadmap</h1>
 <p>&nbsp;<a href="https://github.com/izackwu/TeachYourselfCS-CN/blob/master/TeachYourselfCS-CN.md" target="_blank" rel="noopener">https://github.com/izackwu/TeachYourselfCS-CN/blob/master/TeachYourselfCS-CN.md</a>
 </p>
-<h1 id="cs61c">cs61c</h1>
+<h1 id="cs61c-finish">cs61c [finish]</h1>
 <p>Great Ideas in Computer Architecture</p>
 <h2 id="主要资料">主要资料</h2>
 <ol>
