@@ -125,6 +125,7 @@ void unlock() { xchg(&locked, 0); }
 1. `a = load(x); if (a == xx){ store(x,y) }`
 2. `a = load(x); store(x,y)`
 3. `a = load(x); a++; store(x,a)`
+
 它们的本质都是 load -> exec(进行运算) -> store
 
 ### Load reserved / Store Conditional
@@ -172,3 +173,6 @@ fail:
 	li a0 1
 	ja ra
 ```
+
+
+## 线程同步
