@@ -2,7 +2,7 @@
 title: "操作系统的分时多任务"
 date: 2023-01-08T08:44:38+08:00
 draft: false
-tags: [os,note]
+tags: [os,note,risc-v]
 summary: 记录如何实现一个简单的支持运行多个程序的操作系统，比如如何暂停和恢复应用程序(换栈)，以及如何实现一个抢占式操作系统。
 ---
 
@@ -158,7 +158,7 @@ pub fn load_apps() {
     .section .data  
     .global _num_app  
 _num_app:  
-    .quad 4  
+    .quad 4  s
     .quad app_0_start  
     .quad app_1_start  
     .quad app_2_start  
@@ -485,5 +485,173 @@ fn run_next_task(&self) {
 6. 由于`sret` 会跳转到 `sepc` 的地址，即 `task.0` 的入口
 7. 在运行 `__restore` 的过程中，特权级会被切换到用户态
 
-
 这里也只是一个简单的协作式操作系统，需要每个应用显示的调用 `yeild` 才能共享 CPU。
+
+## 分时多任务系统与抢占式调度
+
+对 **任务** 的概念进行进一步扩展和延伸：
+- 分时多任务： 操作系统管理每个应用程序，以时间片为单位来分时占用处理器运行应用
+- 时间片轮转调度： 操作系统在一个程序用完其时间片后，就抢占当前程序并调用下一个程序执行，周而复始，形成对应用程序在任务级别上的时间片轮转调度
+
+{{< block type="tip">}}
+<mark style="background: #FFB8EBA6;">抢占式调度</mark>是应用程序 *随时* 都有被内核切换出去的可能。现代的任务调度算法基本都是抢占式的，它要求每个应用只能连续执行一段时间(一般是以<mark style="background: #ADCCFFA6;">时间片</mark>作为应用连续执行时长的度量单位)，然后内核就会将它强制性切换出去。
+
+算法需要考虑：
+1. 每次在换出之前给一个应用多少时间片去执行
+2. 要换入哪个应用
+
+从以下角度来评价调度算法：
+1. 性能(吞吐量和延迟)
+	1. 吞吐量: 某个时间点将一组应用放进去，在固定时间内执行完毕的应用最多
+2. 公平性(多个应用分到的时间片占比不能过大)
+{{< /block >}}
+
+这里使用<mark style="background: #ADCCFFA6;">时间片轮转算法</mark>进行调度：使用最原始的 RR 算法，维护一个任务队列，每次从队头去一个应用执行完一个时间片，然后丢入队尾，在继续去队头的应用执行。
+
+### RISC-V 中的中断
+时间片轮转调度的核心机制就在于计时，操作系统的计时功能是依靠硬件提供的时钟中断来实现的。而中断与 `ecall` 都是 `Trap`,但是中断是异步于当前的指令(即中断的原因与正在执行的指令无关)。
+
+RISC-V 的中断可以分成三类：
+-   **软件中断** (Software Interrupt)：由软件控制发出的中断
+-   **时钟中断** (Timer Interrupt)：由时钟电路发出的中断
+-   **外部中断** (External Interrupt)：由外设发出的中断
+
+在判断中断是否会被屏蔽的时候，有以下规则：
+-   如果中断的特权级低于 CPU 当前的特权级，则该中断会被屏蔽，不会被处理
+-   如果中断的特权级高于与 CPU 当前的特权级或相同，则需要通过相应的 CSR 判断该中断是否会被屏蔽
+
+中断产生后，硬件会完成如下事务：
+-   当中断发生时，`sstatus.sie` 字段会被保存在 `sstatus.spie` 字段中，同时把 `sstatus.sie` 字段置零，这样软件在进行后续的中断处理过程中，所有 S 特权级的中断都会被屏蔽
+-   当软件执行中断处理完毕后，会执行 `sret` 指令返回到被中断打断的地方继续执行，硬件会把 `sstatus.sie` 字段恢复为 `sstatus.spie` 字段内的值
+
+### 时钟中断与计时器
+
+由于软件需要一种计时机制，RISC-V 要求处理器有一个内置时钟：
+1. 频率一般低于 CPU 主频
+2. 还有一个计数器用来统计处理器自上电以来经过了多少个内置时钟的时钟周期
+3. 在 RISC-V 中一般保存在 64 位的 CSR `mtime` 中
+4. 还有一个 64 位的 CSR `mtimecmp` 的作用是：一旦计数器 `mtime` 的值超过了 `mtimecmp`，就会触发一次时钟中断。这使得我们可以方便的通过设置 `mtimecmp` 的值来决定下一次时钟中断何时触发
+5. 它们都是 M 级别的寄存器，只能通过 M 级别的 SEE 来访问(RustSBI)
+
+{{< block type="details" title="相关代码">}}
+1. `CLOCK_FREQ` 是不同平台的时钟频率，单位是赫兹，也就是一秒钟之内计数器的增量
+2. `set_next_trigger` 设置下一次打断的是时间
+3. `set_timer` 就是设置寄存器 `mtimecmp` 的值
+```rust
+use crate::config::CLOCK_FREQ;  
+use crate::sbi::set_timer;  
+use riscv::register::time;  
+  
+const TICKS_PER_SEC: usize = 100;  
+const MSEC_PER_SEC: usize = 1000;  
+  
+/// read the `mtime` registerpub 
+fn get_time() -> usize {  
+    time::read()  
+}  
+  
+/// get current time in milliseconds  
+pub fn get_time_ms() -> usize {  
+    time::read() / (CLOCK_FREQ / MSEC_PER_SEC)  
+}  
+  
+/// set the next timer interrupt  
+pub fn set_next_trigger() {  
+    set_timer(get_time() + CLOCK_FREQ / TICKS_PER_SEC);  
+}
+```
+{{< /block >}}
+
+### 抢占式调度
+
+在 `trap_handler` 放在中添加以下代码，即根据当原因是 S 级特权级时钟打断时，重新设置打断，并暂停当前应用然后运行下一个应用。
+```rust
+match scause.cause() {
+    Trap::Interrupt(Interrupt::SupervisorTimer) => {
+        set_next_trigger();
+        suspend_current_and_run_next();
+    }
+}
+```
+
+然后添加一些初始化代码：
+```rust 
+#[no_mangle]  
+pub fn rust_main() -> ! {  
+    // ...
+    trap::enable_timer_interrupt();  // 设置 `sie.stie` 使得 S 特权级时钟中断不会被屏蔽
+    timer::set_next_trigger();  // 设置第一个 10ms 的计时器
+    // ...
+}
+```
+
+
+1. 当第一个应用运行了 10ms 后，第一个 S 特权级时钟中断就会触发
+2. 由于应用运行在 U 特权级，且 `sie` 寄存器被正确设置，该中断不会被屏蔽，而是跳转到 S 特权级内的我们的 `trap_handler` 里面进行处理，并顺利切换到下一个应用
+
+现在的操作系统已经支持：
+1. 操作系统进行主动调度
+2. 程序可以主动出让时间片(`sys_yield`)
+
+
+## 练习
+
+### 1. 显示操作系统切换任务的过程
+
+包装 `__switch` 函数，然后打印切换任务的 id
+
+```rust
+/// switch 交换两个 task,替换执行流  
+pub fn switch__(current_task_cx_ptr: *mut TaskContext, next_task_cx_ptr: *const TaskContext) {  
+    unsafe {  
+        let current = current_task_cx_ptr.as_ref().unwrap();  
+        let next = next_task_cx_ptr.as_ref().unwrap();  
+        debug!(  
+            "switch from {:?} to {:?}",  
+            current.get_app_id(),  
+            next.get_app_id(),  
+        );  
+        __switch(current_task_cx_ptr, next_task_cx_ptr);  
+    }  
+}
+```
+
+### 2.统计每个应用执行后的完成时间：用户态完成时间和内核态完成时间
+
+1. 根据 `user/src/lib.rs` 中可得知，用户程序执行完毕后都会调用 `syscall` 这个系统调用
+```rust
+#[no_mangle]  
+#[link_section = ".text.entry"]  
+pub extern "C" fn _start() -> ! {  
+    clear_bss();  
+    exit(main());  
+    panic!("unreachable after sys_exit!");  
+}
+```
+2. 即操作系统处理这个 `syscall` 时就是用户态完成时间，处理完毕后就是内核态完成时间
+3. 调用 `mark_current_exited` 时是用户态结束时间
+4. 关于内核态结束时间
+	1. 调用 `__swich` 后会执行 `ret` 指令直接运行下一个程序
+	2. 想到一个简单的办法，在运行下一个程序的开头先调用一个自定义的 syscall: `mark_prev_kernel_end` 就可以标记上一个应用程序内核态完成时间
+	3. 发现了 bug, 这里能成功运行是因为这几个程序在一个时钟周期就运行完毕了，但是如果程序的执行时间大于几个时间周期，而 `mark_prev_kernel_end` 只在第一次运行时设置，这样就有问题，因为 `switch` 回来后程序不是从头开始的
+	4. 只能在汇编 `ret` 前加一个方法调用:
+		```rust
+		// ...
+		addi sp, sp, -8  
+		sd ra, 0(sp)  
+		call mark_prev_kernel_end  
+		ld ra, 0(sp)  
+		addi sp, sp, 8  
+  
+		# return to next task  
+		ret
+		```
+	5. 然后在应用程序的 `main` 结束后，调用标记用户态退出时间
+```text
+DEBUG - Task 0 user end time: 99257,kernel end time 102332 | switch cost: 3075
+DEBUG - Task 1 user end time: 123140,kernel end time 124516 | switch cost: 1376
+DEBUG - Task 2 user end time: 149108,kernel end time 150363 | switch cost: 1255
+DEBUG - Task 3 user end time: 37651703,kernel end time 37652583 | switch cost: 880
+DEBUG - Task 4 user end time: 56401809,kernel end time 56402745 | switch cost: 936
+```
+

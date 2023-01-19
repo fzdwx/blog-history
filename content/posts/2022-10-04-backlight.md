@@ -23,6 +23,5 @@ cat /sys/class/backlight/intel_backlight/max_brightness
 **修改亮度:**
 
 ```shell
-
 echo 5000 | sudo tee /sys/class/backlight/intel_backlight/brightness
 ```
