@@ -135,8 +135,7 @@ serial不正确 修改nemu/src/device/serial.c#init_serial，每个人的不同�
 </span></span></code></pre></div><p><strong>查看当前的亮度:</strong></p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">cat /sys/class/backlight/intel_backlight/max_brightness
 </span></span></code></pre></div><p><strong>修改亮度:</strong></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="nb">echo</span> <span class="m">5000</span> <span class="p">|</span> sudo tee /sys/class/backlight/intel_backlight/brightness
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">echo</span> <span class="m">5000</span> <span class="p">|</span> sudo tee /sys/class/backlight/intel_backlight/brightness
 </span></span></code></pre></div>]]></content:encoded>
     </item>
     
