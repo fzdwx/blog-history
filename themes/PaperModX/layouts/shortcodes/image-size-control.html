@@ -3,5 +3,5 @@
 {{- with (.Get "fixedWidth") }}width: {{ . }};{{ end -}}
 {{- with (.Get "height") }}height: {{ . }};{{ end -}}
 ">
-  {{ .Page.RenderString .Inner }}
+{{ .Page.RenderString .Inner }}
 </div>
