@@ -838,7 +838,22 @@ I/O 操作让处理器空闲或让处理器忙等，那其他需要处理器资�
 </span></span><span class="line"><span class="cl">DEBUG - Task 2 user end time: 149108,kernel end time 150363 | switch cost: 1255
 </span></span><span class="line"><span class="cl">DEBUG - Task 3 user end time: 37651703,kernel end time 37652583 | switch cost: 880
 </span></span><span class="line"><span class="cl">DEBUG - Task 4 user end time: 56401809,kernel end time 56402745 | switch cost: 936
-</span></span></code></pre></div>]]></content:encoded>
+</span></span></code></pre></div><h3 id="3-实现sys_task_info">3. 实现<code>sys_task_info</code></h3>
+<blockquote>
+<p>根据任务 ID 查询任务信息，任务信息包括任务 ID、任务控制块相关信息（任务状态）、任务使用的系统调用及调用次数、任务总运行时长。</p>
+</blockquote>
+<p>思路比较简单:</p>
+<ol>
+<li>在操作系统分发处理的时候添加次数</li>
+<li>在程序第一次运行时标记开始时间</li>
+<li>如果任务已经结束则直接用当前时间减去开始时间</li>
+<li>如果任务还在运行这用用户态结束时间减去开始时间</li>
+</ol>
+<p><figure id="a-/images/Pasted%20image%2020230121105945.png" class="align-center">
+    <img src="/images/Pasted%20image%2020230121105945.png" alt=""  />
+    
+</figure></p>
+]]></content:encoded>
     </item>
     
     <item>

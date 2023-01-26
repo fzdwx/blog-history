@@ -10,7 +10,311 @@
     </image>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright [fzdwx](https://github.com/fzdwx)   since 2022</copyright>
-    <lastBuildDate>Sun, 08 Jan 2023 08:44:38 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/posts/feed.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 26 Jan 2023 11:04:48 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/posts/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Wayland下的窗口管理器： Hyprland</title>
+      <link>https://fzdwx.github.io/posts/2023-01-26-hyprland/</link>
+      <pubDate>Thu, 26 Jan 2023 11:04:48 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/posts/2023-01-26-hyprland/</guid>
+      <description>今天简单尝试了一下 &amp;nbsp;Hyprland ,它的功能类似于 &amp;nbsp;DWM + picom 的组合。只是粗略的尝试了一下，发现还是有一些问题:
+分屏的时候，扩展屏幕的光标不显示 设置 WLR_NO_HARDWARE_CURSORS=1 即可解决 扩展屏幕不时有一些黑块闪烁 替换安装包为 hyprland-nvidia-git 即可解决 waybar 有一点用的不爽，它的 workspaces 不是每个屏幕都是独立的(DWM 中的 tag 功能) 当然它还是有一些好处的:
+不打任何补丁就有很好的可用性 自带了一些动画效果 配置文件热加载(即每次修改就会立即生效) 这一点好评，DWM 是每次修改了配置都要重新 make 但是我还是选择继续使用 DWM，因为它没有什么必须切换的理由，而且有一些我常用的功能在 Hyprland 中没有找到替代的，加上我的 DWM 的配置也趋于稳定了，也新增了可以点击的 status bar（Hyprland 下使用waybar 可以做到这个功能）。
+安装脚本:
+# 安装 hyperland yay -S hyprland-nvidia-git # 安装 waybar yay -S waybar-hyprland-git # 安装 hyprland share yay -S xdg-desktop-portal-hyprland-git # 安装 rofi for wayland yay -S rofi-lbonn-wayland-git # 安装 壁纸切换 git clone https://github.</description>
+      <content:encoded><![CDATA[<p>今天简单尝试了一下 &nbsp;<a href="https://hyprland.org/" target="_blank" rel="noopener">Hyprland</a>
+,它的功能类似于 &nbsp;<a href="/posts/2022-09-29-dwm">DWM</a>
+ + picom 的组合。只是粗略的尝试了一下，发现还是有一些问题:</p>
+<ol>
+<li>分屏的时候，扩展屏幕的光标不显示
+<ul>
+<li>设置 <code>WLR_NO_HARDWARE_CURSORS=1</code>  即可解决</li>
+</ul>
+</li>
+<li>扩展屏幕不时有一些黑块闪烁
+<ul>
+<li>替换安装包为 <code>hyprland-nvidia-git</code>  即可解决</li>
+</ul>
+</li>
+<li>waybar 有一点用的不爽，它的 workspaces 不是每个屏幕都是独立的(DWM 中的 tag 功能)</li>
+</ol>
+<p>当然它还是有一些好处的:</p>
+<ol>
+<li>不打任何补丁就有很好的可用性</li>
+<li>自带了一些动画效果</li>
+<li>配置文件热加载(即每次修改就会立即生效)
+<ul>
+<li>这一点好评，DWM 是每次修改了配置都要重新 <code>make</code></li>
+</ul>
+</li>
+</ol>
+<p>但是我还是选择继续使用 DWM，因为它没有什么必须切换的理由，而且有一些我常用的功能在 Hyprland 中没有找到替代的，加上我的 DWM 的配置也趋于稳定了，也新增了可以点击的 status bar（Hyprland 下使用waybar 可以做到这个功能）。</p>
+<hr>
+<p>安装脚本:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 安装 hyperland</span>
+</span></span><span class="line"><span class="cl">yay -S hyprland-nvidia-git
+</span></span><span class="line"><span class="cl"><span class="c1"># 安装 waybar</span>
+</span></span><span class="line"><span class="cl">yay -S waybar-hyprland-git
+</span></span><span class="line"><span class="cl"><span class="c1"># 安装 hyprland share</span>
+</span></span><span class="line"><span class="cl">yay -S xdg-desktop-portal-hyprland-git
+</span></span><span class="line"><span class="cl"><span class="c1"># 安装 rofi for wayland</span>
+</span></span><span class="line"><span class="cl">yay -S rofi-lbonn-wayland-git
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># 安装 壁纸切换</span>
+</span></span><span class="line"><span class="cl">git clone https://github.com/Horus645xx/swww
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> swww
+</span></span><span class="line"><span class="cl">cargo build --release
+</span></span><span class="line"><span class="cl">cp /target/release/swww /usr/bin
+</span></span><span class="line"><span class="cl">cp /target/release/swww-daemon /usr/bin
+</span></span><span class="line"><span class="cl">swww init 
+</span></span><span class="line"><span class="cl">swww img --transition-type left  ~/Pictures/bg/0494e945880511ebb6edd017c2d2eca2.png
+</span></span></code></pre></div><p>供参考的启动脚本:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">LIBVA_DRIVER_NAME</span><span class="o">=</span>nvidia
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">XDG_SESSION_TYPE</span><span class="o">=</span>wayland
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">GBM_BACKEND</span><span class="o">=</span>nvidia-drm
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">__GLX_VENDOR_LIBRARY_NAME</span><span class="o">=</span>nvidia
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">WLR_NO_HARDWARE_CURSORS</span><span class="o">=</span><span class="m">1</span> <span class="c1"># fix cursor</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># Example IME Support: fcitx5</span>
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">GTK_IM_MODULE</span><span class="o">=</span>fcitx5
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">QT_IM_MODULE</span><span class="o">=</span>fcitx5
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">XMODIFIERS</span><span class="o">=</span>@im<span class="o">=</span>fcitx5
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">SDL_IM_MODULE</span><span class="o">=</span>fcitx5
+</span></span><span class="line"><span class="cl"><span class="nb">export</span> <span class="nv">GLFW_IM_MODULE</span><span class="o">=</span>ibus
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">exec</span> Hyprland
+</span></span></code></pre></div><p>~/.config/hypr/hyprland.conf:</p>
+
+
+
+<details class="details custom-block">
+    <summary>
+        <span> 
+        
+            Details
+        
+        </span>
+    </summary>
+    <p>
+        <pre tabindex="0"><code class="language-conf" data-lang="conf">########################################################################################
+AUTOGENERATED HYPR CONFIG.
+PLEASE USE THE CONFIG PROVIDED IN THE GIT REPO /examples/hypr.conf AND EDIT IT,
+OR EDIT THIS ONE ACCORDING TO THE WIKI INSTRUCTIONS.
+########################################################################################
+
+#
+# Please note not all available settings / options are set here.
+# For a full list, see the wiki
+#
+
+# See https://wiki.hyprland.org/Configuring/Monitors/
+monitor=,preferred,auto,auto
+#monitor=eDP-1-1, 1920x1080@144, 1920x0, 1
+#monitor=HDMI-0, 1920x1080@60, 0x0, 1
+
+# See https://wiki.hyprland.org/Configuring/Keywords/ for more
+
+# Execute your favorite apps at launch
+# exec-once = waybar &amp; hyprpaper &amp; firefox
+
+exec-once = fcitx5
+exec-once = flameshot
+exec-once = /opt/clash/cfw
+exec-once = waybar
+#exec-once = dunst
+
+# Source a file (multi-file configs)
+# source = ~/.config/hypr/myColors.conf
+
+#misc {
+#    no_vfr = 1
+#}
+# For all categories, see https://wiki.hyprland.org/Configuring/Variables/
+input {
+    kb_layout = us
+    kb_variant =
+    kb_model =
+    kb_options =
+    kb_rules =
+
+    follow_mouse = 1
+
+    touchpad {
+        natural_scroll = no
+    }
+
+    sensitivity = 0 # -1.0 - 1.0, 0 means no modification.
+}
+
+general {
+    # See https://wiki.hyprland.org/Configuring/Variables/ for more
+
+    gaps_in = 5
+    gaps_out = 20
+    border_size = 2
+    col.active_border = rgba(33ccffee) rgba(00ff99ee) 45deg
+    col.inactive_border = rgba(595959aa)
+
+    layout = dwindle
+}
+
+decoration {
+    # See https://wiki.hyprland.org/Configuring/Variables/ for more
+
+    rounding = 10
+    blur = yes
+    blur_size = 3
+    blur_passes = 1
+    blur_new_optimizations = on
+
+    drop_shadow = yes
+    shadow_range = 4
+    shadow_render_power = 3
+    col.shadow = rgba(1a1a1aee)
+}
+
+animations {
+    enabled = yes
+
+    # Some default animations, see https://wiki.hyprland.org/Configuring/Animations/ for more
+
+    bezier = myBezier, 0.05, 0.9, 0.1, 1.05
+
+    animation = windows, 1, 7, myBezier
+    animation = windowsOut, 1, 7, default, popin 80%
+    animation = border, 1, 10, default
+    animation = fade, 1, 7, default
+    animation = workspaces, 1, 6, default
+}
+
+dwindle {
+    # See https://wiki.hyprland.org/Configuring/Dwindle-Layout/ for more
+    pseudotile = yes # master switch for pseudotiling. Enabling is bound to mainMod + P in the keybinds section below
+    preserve_split = yes # you probably want this
+}
+
+master {
+    # See https://wiki.hyprland.org/Configuring/Master-Layout/ for more
+    new_is_master = true
+}
+
+gestures {
+    # See https://wiki.hyprland.org/Configuring/Variables/ for more
+    workspace_swipe = off
+}
+
+# Example per-device config
+# See https://wiki.hyprland.org/Configuring/Keywords/#executing for more
+device:epic mouse V1 {
+    sensitivity = -0.5
+}
+
+# Example windowrule v1
+# windowrule = float, ^(kitty)$
+# Example windowrule v2
+# windowrulev2 = float,class:^(kitty)$,title:^(kitty)$
+# See https://wiki.hyprland.org/Configuring/Window-Rules/ for more
+#
+# 定义 class 带 float 的都初始为 float 启动
+windowrulev2 = float,class:^(float)$
+windowrulev2 = noborder,class:^(noborder)$
+
+# See https://wiki.hyprland.org/Configuring/Keywords/ for more
+$mainMod = SUPER
+$term = wezterm
+$term_float = wezterm start --class float
+$rofi = rofi -show window -show-icons
+
+# start term
+bind = $mainMod,       Return,       exec, $term
+# start float term
+bind = $mainMod,   minus,        exec, $term_float
+# start launch
+bind = ALT,        SPACE,        exec, $rofi
+
+# kill window
+bind = $mainMod, Q, killactive,
+bind = $mainMod, P, pseudo, # dwindle
+bind = $mainMod, J, togglesplit, # dwindle
+# super + f 全屏窗口
+bind=$mainMod,F,fullscreen,0
+# super + space 将窗口切换为浮动
+bind=$mainMod,SPACE,togglefloating,active
+
+
+# 切换聚焦窗口
+bind=SUPER,left,movefocus,l
+bind=SUPER,right,movefocus,r
+bind=SUPER,up,movefocus,u
+bind=SUPER,down,movefocus,d
+
+# 将当前窗口移动 可以一直移动
+bind=SUPERSHIFT,left,movewindow,l
+bind=SUPERSHIFT,right,movewindow,r
+bind=SUPERSHIFT,up,movewindow,u
+bind=SUPERSHIFT,down,movewindow,d
+
+# 切换工作空间
+bind=SUPER,TAB,workspace,previous
+bind = $mainMod, 1, workspace, 1
+bind = $mainMod, 2, workspace, 2
+bind = $mainMod, 3, workspace, 3
+bind = $mainMod, 4, workspace, 4
+bind = $mainMod, 5, workspace, 5
+bind = $mainMod, 6, workspace, 6
+bind = $mainMod, 7, workspace, 7
+bind = $mainMod, 8, workspace, 8
+bind = $mainMod, 9, workspace, 9
+bind = $mainMod, 0, workspace, 10
+
+
+# alt+super + 方向键 控制窗口大小
+bind=$mainMod,comma,resizeactive,-20 0
+bind=$mainMod,period,resizeactive,20 0
+bind=ALT_SUPER,up,resizeactive,0 -20
+bind=ALT_SUPER,down,resizeactive,0 20
+
+# Move active window to a workspace with mainMod + SHIFT + [0-9]
+bind = $mainMod SHIFT, 1, movetoworkspace, 1
+bind = $mainMod SHIFT, 2, movetoworkspace, 2
+bind = $mainMod SHIFT, 3, movetoworkspace, 3
+bind = $mainMod SHIFT, 4, movetoworkspace, 4
+bind = $mainMod SHIFT, 5, movetoworkspace, 5
+bind = $mainMod SHIFT, 6, movetoworkspace, 6
+bind = $mainMod SHIFT, 7, movetoworkspace, 7
+bind = $mainMod SHIFT, 8, movetoworkspace, 8
+bind = $mainMod SHIFT, 9, movetoworkspace, 9
+bind = $mainMod SHIFT, 0, movetoworkspace, 10
+
+
+# shift + super + left/right 移动窗口 到下一个或上一个工作区
+bind = $mainMod SHIFT,Left,movetoworkspace,e-1
+bind = $mainMod SHIFT,right,movetoworkspace,e+1
+
+# Scroll through existing workspaces with mainMod + scroll
+bind = $mainMod, mouse_down, workspace, e+1
+bind = $mainMod, mouse_up, workspace, e-1
+
+# Move/resize windows with mainMod + LMB/RMB and dragging
+bindm = $mainMod, mouse:272, movewindow
+bindm = $mainMod, mouse:273, resizewindow
+</code></pre>
+    </p>
+</details>
+
+
+
+
+
+
+
+
+
+
+]]></content:encoded>
+    </item>
+    
     <item>
       <title>操作系统的分时多任务</title>
       <link>https://fzdwx.github.io/posts/2023-01-08-os-multi-programs/</link>
@@ -838,7 +1142,22 @@ I/O 操作让处理器空闲或让处理器忙等，那其他需要处理器资�
 </span></span><span class="line"><span class="cl">DEBUG - Task 2 user end time: 149108,kernel end time 150363 | switch cost: 1255
 </span></span><span class="line"><span class="cl">DEBUG - Task 3 user end time: 37651703,kernel end time 37652583 | switch cost: 880
 </span></span><span class="line"><span class="cl">DEBUG - Task 4 user end time: 56401809,kernel end time 56402745 | switch cost: 936
-</span></span></code></pre></div>]]></content:encoded>
+</span></span></code></pre></div><h3 id="3-实现sys_task_info">3. 实现<code>sys_task_info</code></h3>
+<blockquote>
+<p>根据任务 ID 查询任务信息，任务信息包括任务 ID、任务控制块相关信息（任务状态）、任务使用的系统调用及调用次数、任务总运行时长。</p>
+</blockquote>
+<p>思路比较简单:</p>
+<ol>
+<li>在操作系统分发处理的时候添加次数</li>
+<li>在程序第一次运行时标记开始时间</li>
+<li>如果任务已经结束则直接用当前时间减去开始时间</li>
+<li>如果任务还在运行这用用户态结束时间减去开始时间</li>
+</ol>
+<p><figure id="a-/images/Pasted%20image%2020230121105945.png" class="align-center">
+    <img src="/images/Pasted%20image%2020230121105945.png" alt=""  />
+    
+</figure></p>
+]]></content:encoded>
     </item>
     
     <item>
@@ -4477,12 +4796,23 @@ MapReduce 的调度框架。。。</p>
     </item>
     
     <item>
-      <title>About rofi</title>
+      <title>一个linux中的应用程序 launcher: Rofi</title>
       <link>https://fzdwx.github.io/posts/2022-09-18-about-rofi/</link>
       <pubDate>Sun, 18 Sep 2022 22:15:39 +0800</pubDate>
       
       <guid>https://fzdwx.github.io/posts/2022-09-18-about-rofi/</guid>
-      <description>一个 linux 下的 application launcher, 让你只用键盘就可以进行应用的启动与切换。</description>
+      <description>今天发现了一个 linux 下的 application launcher &amp;nbsp;rofi ，它可以快速切换窗口和启动程序， 我用它和wmctrl进行配合使用。
+我的使用过程:
+1.Archlinux install
+yay -S rofi 2.添加自定义快捷键绑定 hotkey 为alt+space触发rofi -show。
+3.pressalt+space，然后使用shift+leftorright进行切换 mode 。
+更改主题以及显示 icon:
+1.生成配置文件
+mkdir -p ~/.config/rofi rofi -dump-config &amp;gt; ~/.config/rofi/config.rasi 2.显示icon
+sed -i &amp;#39;8c show-icons: true;&amp;#39; ~/.config/rofi/config.rasi 3.更换主题
+参考 &amp;nbsp;https://github.com/lr-tech/rofi-themes-collection#installing-themes 我的wmctrl的配置示例:
+使用xprop WM_CLASS获取前缀。
+alias chrome=&amp;#34;wmctrl -x -a google-chrome || google-chrome-stable &amp;gt; /dev/null 2&amp;gt;&amp;amp;1 &amp;amp;&amp;#34; alias note=&amp;#34;wmctrl -x -a obsidian || /usr/bin/obsidian &amp;gt; /dev/null 2&amp;gt;&amp;amp;1 &amp;amp;&amp;#34; alias codew=&amp;#34;wmctrl -x -a code || /opt/code/code &amp;gt; /dev/null 2&amp;gt;&amp;amp;1 &amp;amp;&amp;#34; alias idea=&amp;#34;wmctrl -x -a jetbrains-idea || /opt/idea/bin/idea.</description>
       <content:encoded><![CDATA[<blockquote>
 <p>今天发现了一个 linux 下的 application launcher &nbsp;<a href="https://github.com/davatorium/rofi" target="_blank" rel="noopener">rofi</a>
  ，它可以快速切换窗口和启动程序，
