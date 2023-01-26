@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>linux on fzdwx</title>
-    <link>https://fzdwx.github.io/tags/linux/</link>
-    <description>Recent content in linux on fzdwx</description>
+    <title>wm on fzdwx</title>
+    <link>https://fzdwx.github.io/tags/wm/</link>
+    <description>Recent content in wm on fzdwx</description>
     <image>
       <url>https://fzdwx.github.io/images/party_parrot.gif</url>
       <link>https://fzdwx.github.io/images/party_parrot.gif</link>
     </image>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright [fzdwx](https://github.com/fzdwx)   since 2022</copyright>
-    <lastBuildDate>Thu, 26 Jan 2023 11:04:48 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/tags/linux/feed.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 26 Jan 2023 11:04:48 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/tags/wm/feed.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Wayland下的窗口管理器： Hyprland</title>
       <link>https://fzdwx.github.io/posts/2023-01-26-hyprland/</link>
@@ -316,134 +316,6 @@ bindm = $mainMod, mouse:273, resizewindow
     </item>
     
     <item>
-      <title>在shell脚本中执行cd后改变main shell的路径</title>
-      <link>https://fzdwx.github.io/posts/2022-10-11-about-source/</link>
-      <pubDate>Tue, 11 Oct 2022 16:55:35 +0800</pubDate>
-      
-      <guid>https://fzdwx.github.io/posts/2022-10-11-about-source/</guid>
-      <description>起因 昨天晚上想用fzf与cd联动，就是fzf的结果传递给cd来执行于是有了这么一条命令:
-cd $(fd --type d | fzf) 这个命令也确实能完成任务，但是问题有两个:
-如果直接退出的话会回到家目录，因为$(..)的执行结果为空 每次都要输入这么多会很麻烦 用alias 然后尝试用alias来试试，所以就往.zshrc里面添加:
-alias cdf=&amp;#34;cd $(fd --type d | fzf)&amp;#34; 结果是直接不能运行，因为它直接识别了$(..)这一段，然后直接运行了，但是后面就不会运行。
-用shell脚本 然后就写了这个文件:
-#!/bin/sh path=$(fd --type d --strip-cwd-prefix --hidden --follow --exclude .git --exclude node_modules | fzf) if [ -z &amp;#34;$path&amp;#34; ]; then exit fi cd &amp;#34;$path&amp;#34; || exit 结果也是不行，后面我在最下面加了一行echo &amp;quot;$PWD&amp;quot;，我看到是执行了的，但是程序退出了就失效了。
-解决 最后我搜索到可以使用source xxx或者. xxx来解决，最后是alias+shell脚本来完成这个操作的:
-alias cdf=&amp;#34;source /path/to/cdf&amp;#34; 同时它也解决我上面提到的两个问题。
-source为什么能解决？ 之所以直接用shell脚本直接运行会不行，是因为它不是在当前shell环境中运行的，而是一个子shell，所以结果就不能改变当前的文件目录了。
-而source或者.就代表着在当前的shell环境中执行，所以就能成功。
-更新 2022/11/18 今天发现一种更容易解决的办法,就是在写一个 shell 方法:
-function cd() { cd &amp;#34;$(fzf)&amp;#34; } 把它加入到.</description>
-      <content:encoded><![CDATA[<h2 id="起因">起因</h2>
-<p>昨天晚上想用fzf与cd联动，就是fzf的结果传递给cd来执行于是有了这么一条命令:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">cd</span> <span class="k">$(</span>fd --type d <span class="p">|</span> fzf<span class="k">)</span>
-</span></span></code></pre></div><p>这个命令也确实能完成任务，但是问题有两个:</p>
-<ol>
-<li>如果直接退出的话会回到家目录，因为<code>$(..)</code>的执行结果为空</li>
-<li>每次都要输入这么多会很麻烦</li>
-</ol>
-<h2 id="用alias">用alias</h2>
-<p>然后尝试用alias来试试，所以就往<code>.zshrc</code>里面添加:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">alias</span> <span class="nv">cdf</span><span class="o">=</span><span class="s2">&#34;cd </span><span class="k">$(</span>fd --type d <span class="p">|</span> fzf<span class="k">)</span><span class="s2">&#34;</span>
-</span></span></code></pre></div><p>结果是直接不能运行，因为它直接识别了<code>$(..)</code>这一段，然后直接运行了，但是后面就不会运行。</p>
-<h2 id="用shell脚本">用shell脚本</h2>
-<p>然后就写了这个文件:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="cp">#!/bin/sh
-</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="nv">path</span><span class="o">=</span><span class="k">$(</span>fd --type d --strip-cwd-prefix --hidden --follow --exclude .git --exclude node_modules <span class="p">|</span> fzf<span class="k">)</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[</span> -z <span class="s2">&#34;</span><span class="nv">$path</span><span class="s2">&#34;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
-</span></span><span class="line"><span class="cl">    <span class="nb">exit</span>
-</span></span><span class="line"><span class="cl"><span class="k">fi</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="nb">cd</span> <span class="s2">&#34;</span><span class="nv">$path</span><span class="s2">&#34;</span> <span class="o">||</span> <span class="nb">exit</span>
-</span></span></code></pre></div><p>结果也是不行，后面我在最下面加了一行<code>echo &quot;$PWD&quot;</code>，我看到是执行了的，但是程序退出了就失效了。</p>
-<h2 id="解决">解决</h2>
-<p>最后我搜索到可以使用<code>source xxx</code>或者<code>. xxx</code>来解决，最后是alias+shell脚本来完成这个操作的:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">alias</span> <span class="nv">cdf</span><span class="o">=</span><span class="s2">&#34;source /path/to/cdf&#34;</span>
-</span></span></code></pre></div><p>同时它也解决我上面提到的两个问题。</p>
-<h2 id="source为什么能解决">source为什么能解决？</h2>
-<p>之所以直接用shell脚本直接运行会不行，是因为它不是在当前shell环境中运行的，而是一个子shell，所以结果就不能改变当前的文件目录了。</p>
-<p>而<code>source</code>或者<code>.</code>就代表着在当前的shell环境中执行，所以就能成功。</p>
-<h2 id="更新">更新</h2>
-<h3 id="20221118">2022/11/18</h3>
-<p>今天发现一种更容易解决的办法,就是在写一个 shell 方法:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="k">function</span> cd<span class="o">()</span> <span class="o">{</span>
-</span></span><span class="line"><span class="cl">    <span class="nb">cd</span> <span class="s2">&#34;</span><span class="k">$(</span>fzf<span class="k">)</span><span class="s2">&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="o">}</span>
-</span></span></code></pre></div><p>把它加入到<code>.zshrc</code>(我用的是 zsh)中，然后在命令行中输入 <code>cd</code> 就好了。</p>
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>在Abstract Machine上玩超级马里奥</title>
-      <link>https://fzdwx.github.io/posts/2022-10-09-mario-nes/</link>
-      <pubDate>Sun, 09 Oct 2022 19:40:42 +0800</pubDate>
-      
-      <guid>https://fzdwx.github.io/posts/2022-10-09-mario-nes/</guid>
-      <description>最近在学习 jyy 的&amp;nbsp; 计算机系统基础习题课 ， 在做&amp;nbsp; pa1 的时候提 到一个运行红白机游戏的&amp;nbsp; 项目 运行起来的效果 遇到的坑:
-1.SIGSTKSZ 参数找不到
-SIGSTKSZ参数找不到 将SIGSTKSZ修改为一个固定的参数
-//uint8_t sigstack[SIGSTKSZ]; uint8_t sigstack[8192]; 2.serial 不正确
-serial不正确 修改nemu/src/device/serial.c#init_serial，每个人的不同，我的是 9。</description>
-      <content:encoded><![CDATA[<p>最近在学习 jyy 的&nbsp;<a href="http://jyywiki.cn/ICS/2021/" target="_blank" rel="noopener"> 计算机系统基础习题课 </a>
-，
-在做&nbsp;<a href="https://nju-projectn.github.io/ics-pa-gitbook/ics2021/1.1.html#nemu%E6%98%AF%E4%BB%80%E4%B9%88" target="_blank" rel="noopener"> pa1 </a>
-的时候提
-到一个运行红白机游戏的&nbsp;<a href="https://github.com/NJU-ProjectN/fceux-am" target="_blank" rel="noopener"> 项目 </a>
-</p>
-<p><figure id="a-/images/4.png" class="align-center">
-    <img src="/images/4.png" alt="运行起来的效果"  />
-    
-    <figcaption>
-       运行起来的效果
-    </figcaption>
-    
-</figure></p>
-<p>遇到的坑:</p>
-<p>1.SIGSTKSZ 参数找不到</p>
-<p><figure id="a-/images/5.png" class="align-center">
-    <img src="/images/5.png" alt="SIGSTKSZ参数找不到"  />
-    
-    <figcaption>
-       SIGSTKSZ参数找不到
-    </figcaption>
-    
-</figure></p>
-<p>将<code>SIGSTKSZ</code>修改为一个固定的参数</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="c1">//uint8_t sigstack[SIGSTKSZ];
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kt">uint8_t</span> <span class="n">sigstack</span><span class="p">[</span><span class="mi">8192</span><span class="p">];</span>
-</span></span></code></pre></div><p>2.serial 不正确</p>
-<p><figure id="a-/images/6.png" class="align-center">
-    <img src="/images/6.png" alt="serial不正确"  />
-    
-    <figcaption>
-       serial不正确
-    </figcaption>
-    
-</figure></p>
-<p>修改<code>nemu/src/device/serial.c#init_serial</code>，每个人的不同，我的是 9。</p>
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>调节linux屏幕的亮度</title>
-      <link>https://fzdwx.github.io/posts/2022-10-04-backlight/</link>
-      <pubDate>Tue, 04 Oct 2022 10:07:28 +0800</pubDate>
-      
-      <guid>https://fzdwx.github.io/posts/2022-10-04-backlight/</guid>
-      <description>由于使用DWM，它不能像KDE那样之间有图形化的亮度调节功能，所以记录一下。</description>
-      <content:encoded><![CDATA[<p><strong>查看当前backlight由什么控制:</strong></p>
-<blockquote>
-<p>一般都是<code>intel</code>。</p>
-</blockquote>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">ls /sys/class/backlight
-</span></span></code></pre></div><p><strong>查看当前的亮度:</strong></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">cat /sys/class/backlight/intel_backlight/max_brightness
-</span></span></code></pre></div><p><strong>修改亮度:</strong></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">echo</span> <span class="m">5000</span> <span class="p">|</span> sudo tee /sys/class/backlight/intel_backlight/brightness
-</span></span></code></pre></div>]]></content:encoded>
-    </item>
-    
-    <item>
       <title>Dwm初体验</title>
       <link>https://fzdwx.github.io/posts/2022-09-29-dwm/</link>
       <pubDate>Thu, 29 Sep 2022 23:42:41 +0800</pubDate>
@@ -666,57 +538,6 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
 </li>
 </ul>
 ]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>一个linux中的应用程序 launcher: Rofi</title>
-      <link>https://fzdwx.github.io/posts/2022-09-18-about-rofi/</link>
-      <pubDate>Sun, 18 Sep 2022 22:15:39 +0800</pubDate>
-      
-      <guid>https://fzdwx.github.io/posts/2022-09-18-about-rofi/</guid>
-      <description>今天发现了一个 linux 下的 application launcher &amp;nbsp;rofi ，它可以快速切换窗口和启动程序， 我用它和wmctrl进行配合使用。
-我的使用过程:
-1.Archlinux install
-yay -S rofi 2.添加自定义快捷键绑定 hotkey 为alt+space触发rofi -show。
-3.pressalt+space，然后使用shift+leftorright进行切换 mode 。
-更改主题以及显示 icon:
-1.生成配置文件
-mkdir -p ~/.config/rofi rofi -dump-config &amp;gt; ~/.config/rofi/config.rasi 2.显示icon
-sed -i &amp;#39;8c show-icons: true;&amp;#39; ~/.config/rofi/config.rasi 3.更换主题
-参考 &amp;nbsp;https://github.com/lr-tech/rofi-themes-collection#installing-themes 我的wmctrl的配置示例:
-使用xprop WM_CLASS获取前缀。
-alias chrome=&amp;#34;wmctrl -x -a google-chrome || google-chrome-stable &amp;gt; /dev/null 2&amp;gt;&amp;amp;1 &amp;amp;&amp;#34; alias note=&amp;#34;wmctrl -x -a obsidian || /usr/bin/obsidian &amp;gt; /dev/null 2&amp;gt;&amp;amp;1 &amp;amp;&amp;#34; alias codew=&amp;#34;wmctrl -x -a code || /opt/code/code &amp;gt; /dev/null 2&amp;gt;&amp;amp;1 &amp;amp;&amp;#34; alias idea=&amp;#34;wmctrl -x -a jetbrains-idea || /opt/idea/bin/idea.</description>
-      <content:encoded><![CDATA[<blockquote>
-<p>今天发现了一个 linux 下的 application launcher &nbsp;<a href="https://github.com/davatorium/rofi" target="_blank" rel="noopener">rofi</a>
- ，它可以快速切换窗口和启动程序，
-我用它和<code>wmctrl</code>进行配合使用。</p>
-</blockquote>
-<p><strong>我的使用过程:</strong></p>
-<p>1.Archlinux install</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">yay -S rofi
-</span></span></code></pre></div><p>2.添加自定义快捷键绑定 hotkey 为<code>alt</code>+<code>space</code>触发<code>rofi -show</code>。</p>
-<p>3.press<code>alt</code>+<code>space</code>，然后使用<code>shift</code>+<code>left</code>or<code>right</code>进行切换 mode 。</p>
-<hr>
-<p><strong>更改主题以及显示 icon</strong>:</p>
-<p>1.生成配置文件</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">mkdir -p ~/.config/rofi
-</span></span><span class="line"><span class="cl">rofi -dump-config &gt; ~/.config/rofi/config.rasi
-</span></span></code></pre></div><p>2.显示icon</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">sed -i <span class="s1">&#39;8c show-icons: true;&#39;</span> ~/.config/rofi/config.rasi
-</span></span></code></pre></div><p>3.更换主题</p>
-<p>参考 &nbsp;<a href="https://github.com/lr-tech/rofi-themes-collection#installing-themes" target="_blank" rel="noopener">https://github.com/lr-tech/rofi-themes-collection#installing-themes</a>
-</p>
-<hr>
-<p><strong>我的<code>wmctrl</code>的配置示例</strong>:</p>
-<blockquote>
-<p>使用<code>xprop WM_CLASS</code>获取前缀。</p>
-</blockquote>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">alias</span> <span class="nv">chrome</span><span class="o">=</span><span class="s2">&#34;wmctrl -x -a google-chrome || google-chrome-stable &gt; /dev/null 2&gt;&amp;1 &amp;&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="nb">alias</span> <span class="nv">note</span><span class="o">=</span><span class="s2">&#34;wmctrl -x -a obsidian || /usr/bin/obsidian &gt; /dev/null 2&gt;&amp;1 &amp;&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="nb">alias</span> <span class="nv">codew</span><span class="o">=</span><span class="s2">&#34;wmctrl -x -a code || /opt/code/code &gt; /dev/null 2&gt;&amp;1 &amp;&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="nb">alias</span> <span class="nv">idea</span><span class="o">=</span><span class="s2">&#34;wmctrl -x -a jetbrains-idea || /opt/idea/bin/idea.sh &gt; /dev/null 2&gt;&amp;1 &amp;&#34;</span>
-</span></span><span class="line"><span class="cl"><span class="nb">alias</span> <span class="nv">discord</span><span class="o">=</span><span class="s2">&#34;wmctrl -x -a discord || /opt/discord/Discord &gt; /dev/null 2&gt;&amp;1 &amp;&#34;</span>
-</span></span></code></pre></div>]]></content:encoded>
     </item>
     
   </channel>

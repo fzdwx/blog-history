@@ -10,7 +10,27 @@
     </image>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright [fzdwx](https://github.com/fzdwx)   since 2022</copyright>
-    <lastBuildDate>Sun, 08 Jan 2023 08:44:38 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/tags/feed.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 26 Jan 2023 11:04:48 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/tags/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>linux</title>
+      <link>https://fzdwx.github.io/tags/linux/</link>
+      <pubDate>Thu, 26 Jan 2023 11:04:48 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/tags/linux/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>wm</title>
+      <link>https://fzdwx.github.io/tags/wm/</link>
+      <pubDate>Thu, 26 Jan 2023 11:04:48 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/tags/wm/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
     <item>
       <title>note</title>
       <link>https://fzdwx.github.io/tags/note/</link>
@@ -92,16 +112,6 @@
     </item>
     
     <item>
-      <title>linux</title>
-      <link>https://fzdwx.github.io/tags/linux/</link>
-      <pubDate>Tue, 11 Oct 2022 16:55:35 +0800</pubDate>
-      
-      <guid>https://fzdwx.github.io/tags/linux/</guid>
-      <description></description>
-      <content:encoded><![CDATA[]]></content:encoded>
-    </item>
-    
-    <item>
       <title>mit6.824</title>
       <link>https://fzdwx.github.io/tags/mit6.824/</link>
       <pubDate>Mon, 10 Oct 2022 22:26:55 +0800</pubDate>
@@ -117,16 +127,6 @@
       <pubDate>Sun, 09 Oct 2022 19:40:42 +0800</pubDate>
       
       <guid>https://fzdwx.github.io/tags/ics/</guid>
-      <description></description>
-      <content:encoded><![CDATA[]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>dwm</title>
-      <link>https://fzdwx.github.io/tags/dwm/</link>
-      <pubDate>Thu, 29 Sep 2022 23:42:41 +0800</pubDate>
-      
-      <guid>https://fzdwx.github.io/tags/dwm/</guid>
       <description></description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>
