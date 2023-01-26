@@ -191,13 +191,23 @@ outputFormats:
 
 # Read: https://github.com/reorx/hugo-PaperModX/wiki/FAQs#using-hugos-syntax-highlighter-chroma
 pygmentsUseClasses: true
+
 markup:
   goldmark:
     renderer:
       unsafe: true
-    highlight:
-      # anchorLineNos: true
-      codeFences: true
-      guessSyntax: true
-      lineNos: true
-#        style: monokai
+  highlight:
+    style: dracula
+    lineNos: false
+    noClasses: false
+
+#markup:
+#  goldmark:
+#    renderer:
+#      unsafe: true
+#    highlight:
+#      # anchorLineNos: true
+#      codeFences: true
+#      guessSyntax: true
+#      lineNos: true
+##        style: monokai

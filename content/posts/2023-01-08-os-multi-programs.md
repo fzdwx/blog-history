@@ -655,3 +655,17 @@ DEBUG - Task 3 user end time: 37651703,kernel end time 37652583 | switch cost: 8
 DEBUG - Task 4 user end time: 56401809,kernel end time 56402745 | switch cost: 936
 ```
 
+
+### 3. 实现`sys_task_info`
+
+> 根据任务 ID 查询任务信息，任务信息包括任务 ID、任务控制块相关信息（任务状态）、任务使用的系统调用及调用次数、任务总运行时长。
+
+思路比较简单:
+1. 在操作系统分发处理的时候添加次数
+2. 在程序第一次运行时标记开始时间
+3. 如果任务已经结束则直接用当前时间减去开始时间
+4. 如果任务还在运行这用用户态结束时间减去开始时间
+
+![](/images/Pasted%20image%2020230121105945.png)
+
+

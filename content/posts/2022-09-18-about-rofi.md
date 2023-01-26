@@ -1,9 +1,8 @@
 ---
 layout: post
-title: "About rofi"
+title: "一个linux中的应用程序 launcher: Rofi"
 date: 2022-09-18 22:15:39 +08:00
-tags: ["launcher"]
-summary: 一个 linux 下的 application launcher, 让你只用键盘就可以进行应用的启动与切换。
+tags: ["launcher","linux"]
 ---
 
 > 今天发现了一个 linux 下的 application launcher [rofi](https://github.com/davatorium/rofi) ，它可以快速切换窗口和启动程序，
