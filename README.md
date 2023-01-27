@@ -103,3 +103,17 @@ func main() {
 {{< center desc="">}}
 {{< /center >}}
 ```
+
+## 数学公式
+
+在要支持数学公式的文章的 front matter 中添加 `math: true`
+
+https://katex.org/docs/supported.html
+
+```
+Inline math: \(\varphi = \dfrac{1+\sqrt5}{2}= 1.6180339887…\)
+
+Block math:
+
+$$ \varphi = 1+\frac{1} {1+\frac{1} {1+\frac{1} {1+\cdots} } } $$
+```
