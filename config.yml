@@ -182,6 +182,11 @@ menu:
     - name: Links
       url: /links/
       weight: 100
+    - name: "🔎 Search"
+      url: https://www.google.com.hk/search?q=site:https://fzdwx.github.io
+      weight: 1000
+      params:
+        external: true
 
 # prefer feed.xml rather than index.xml
 outputFormats:
