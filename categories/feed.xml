@@ -10,7 +10,17 @@
     </image>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright [fzdwx](https://github.com/fzdwx)   since 2022</copyright>
-    <lastBuildDate>Wed, 16 Nov 2022 04:04:10 +0000</lastBuildDate><atom:link href="https://fzdwx.github.io/categories/feed.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 29 Jan 2023 09:23:30 +0000</lastBuildDate><atom:link href="https://fzdwx.github.io/categories/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>awesome</title>
+      <link>https://fzdwx.github.io/categories/awesome/</link>
+      <pubDate>Sun, 29 Jan 2023 09:23:30 +0000</pubDate>
+      
+      <guid>https://fzdwx.github.io/categories/awesome/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
     <item>
       <title>cheatsheet</title>
       <link>https://fzdwx.github.io/categories/cheatsheet/</link>
@@ -37,16 +47,6 @@
       <pubDate>Fri, 04 Nov 2022 10:29:41 +0000</pubDate>
       
       <guid>https://fzdwx.github.io/categories/idea/</guid>
-      <description></description>
-      <content:encoded><![CDATA[]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>awesome</title>
-      <link>https://fzdwx.github.io/categories/awesome/</link>
-      <pubDate>Mon, 31 Oct 2022 06:08:23 +0000</pubDate>
-      
-      <guid>https://fzdwx.github.io/categories/awesome/</guid>
       <description></description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>
