@@ -2,7 +2,7 @@
 title: "HTTP协议"
 date: 2022-09-28T12:19:15+08:00
 draft: false
-tags: ["network","http","note"]
+tags: ["network","http","interview"]
 summary: 简介HTTP/1.1与H2。
 ---
 

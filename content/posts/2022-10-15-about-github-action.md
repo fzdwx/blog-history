@@ -3,7 +3,7 @@ title: "写一个自己的github action"
 date: 2022-10-15T19:25:10+08:00
 draft: false
 summary: "起因是因为想要有一种可以不用编辑文件而作用到网站上的方式，然后就了解到了 github action 的形式。"
-tags: ["github"]
+tags: ["project"]
 ---
 
 主要原理就是通过 github action 的来监听 issue 的相关事件，然后读取issue中的内容创建文件提交到 git 上，最后直接部署。这样就能随时编辑并展示了。

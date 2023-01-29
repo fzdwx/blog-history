@@ -2,6 +2,7 @@
 title: "Code:alias"
 date: 2022-10-10T22:43:27+08:00
 draft: false
+tags: ["idea"]
 ---
 
 ## idea

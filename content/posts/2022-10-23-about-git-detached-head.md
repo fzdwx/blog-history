@@ -2,7 +2,7 @@
 title: "关于 git 游离分支"
 date: 2022-10-23T00:09:44+08:00
 draft: false
-tags: ["github","git"]
+tags: ["git"]
 summary: 如何在切换了分支之后恢复游离分支提交的代码。
 ---
 

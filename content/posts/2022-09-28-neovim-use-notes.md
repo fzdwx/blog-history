@@ -2,13 +2,18 @@
 title: "Neovim使用记录  "
 date: 2022-09-28T15:59:37+08:00
 draft: false
-tags: ["nvim"]
-summary: 由于最近切换到了linux，不可避免的经常需要使用vi等编辑器，所以这次好好折腾一下。
+tags: ["nvim","editor"]
+summary: 由于最近切换到了 linux，不可避免的经常需要使用 vi 等编辑器，所以这次好好折腾一下。
 ---
 
 > 由于最近切换到了linux，不可避免的经常需要使用vi等编辑器，所以这次好好折腾一下。
 
-我的配置地址: https://github.com/fzdwx/nvim。
+我的配置地址: https://github.com/fzdwx/nvim ,现在直接使用 [LazyVim](https://github.com/LazyVim/LazyVim).
+
+--- 
+
+> 过期
+
 
 ## 我的配置
 
