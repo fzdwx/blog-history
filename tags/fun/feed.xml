@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>fun on fzdwx</title>
+    <link>https://fzdwx.github.io/tags/fun/</link>
+    <description>Recent content in fun on fzdwx</description>
+    <image>
+      <url>https://fzdwx.github.io/images/party_parrot.gif</url>
+      <link>https://fzdwx.github.io/images/party_parrot.gif</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Copyright [fzdwx](https://github.com/fzdwx)   since 2022</copyright>
+    <lastBuildDate>Wed, 07 Dec 2022 21:37:59 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/tags/fun/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>隐写术</title>
+      <link>https://fzdwx.github.io/posts/2022-12-07-steganography/</link>
+      <pubDate>Wed, 07 Dec 2022 21:37:59 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/posts/2022-12-07-steganography/</guid>
+      <description>最近在跟 cs61c，第一个 project 中介绍了隐写术，大意可以理解为一个文件的内容是&lt;code&gt;123&lt;/code&gt;,在经过特定的编码转换后成了&lt;code&gt;456&lt;/code&gt;。</description>
+      <content:encoded><![CDATA[<p>在这个项目中是用的图片来作为案例的，首先通过介绍了一种图片的编码形式, ppm:</p>
+<ul>
+<li>第一行表示是什么格式的 ppm 文件</li>
+<li>第二行表示宽和高</li>
+<li>第三行表示颜色范围</li>
+<li>后面的就是各个像素的RGB值</li>
+</ul>
+<pre tabindex="0"><code class="language-ppm" data-lang="ppm">P3
+2 2
+255
+ 29  83  36      45  64  57   
+188 229 201     123 162 184   
+</code></pre><p>他是这么介绍的:</p>
+<blockquote>
+<p>我们将探索一种隐藏消息的方法。虽然大多数图像的每个 RGB 通道都有 8 位数据，但人眼无法轻易看出后 4 位的差异。因此，我们可以将信息隐藏在图像的底部位中。我们通过修改每个像素 B 值的最低有效位, 如果最后一位是 0，则把整个像素转换为黑色(255,255,255),如果最后一位是 1,则转换为白色(0,0,0)。</p>
+</blockquote>
+<p>关键就是： <strong>每个 RGB 通道都有 8 位数据，但人眼无法轻易看出后 4 位的差异</strong>，所以这就给了我们操作的空间。</p>
+]]></content:encoded>
+    </item>
+    
+  </channel>
+</rss>

@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>idea on fzdwx</title>
+    <link>https://fzdwx.github.io/tags/idea/</link>
+    <description>Recent content in idea on fzdwx</description>
+    <image>
+      <url>https://fzdwx.github.io/images/party_parrot.gif</url>
+      <link>https://fzdwx.github.io/images/party_parrot.gif</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Copyright [fzdwx](https://github.com/fzdwx)   since 2022</copyright>
+    <lastBuildDate>Tue, 11 Oct 2022 16:55:35 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/tags/idea/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>在shell脚本中执行cd后改变main shell的路径</title>
+      <link>https://fzdwx.github.io/posts/2022-10-11-about-source/</link>
+      <pubDate>Tue, 11 Oct 2022 16:55:35 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/posts/2022-10-11-about-source/</guid>
+      <description>起因 昨天晚上想用fzf与cd联动，就是fzf的结果传递给cd来执行于是有了这么一条命令:
+cd $(fd --type d | fzf) 这个命令也确实能完成任务，但是问题有两个:
+如果直接退出的话会回到家目录，因为$(..)的执行结果为空 每次都要输入这么多会很麻烦 用alias 然后尝试用alias来试试，所以就往.zshrc里面添加:
+alias cdf=&amp;#34;cd $(fd --type d | fzf)&amp;#34; 结果是直接不能运行，因为它直接识别了$(..)这一段，然后直接运行了，但是后面就不会运行。
+用shell脚本 然后就写了这个文件:
+#!/bin/sh path=$(fd --type d --strip-cwd-prefix --hidden --follow --exclude .git --exclude node_modules | fzf) if [ -z &amp;#34;$path&amp;#34; ]; then exit fi cd &amp;#34;$path&amp;#34; || exit 结果也是不行，后面我在最下面加了一行echo &amp;quot;$PWD&amp;quot;，我看到是执行了的，但是程序退出了就失效了。
+解决 最后我搜索到可以使用source xxx或者. xxx来解决，最后是alias+shell脚本来完成这个操作的:
+alias cdf=&amp;#34;source /path/to/cdf&amp;#34; 同时它也解决我上面提到的两个问题。
+source为什么能解决？ 之所以直接用shell脚本直接运行会不行，是因为它不是在当前shell环境中运行的，而是一个子shell，所以结果就不能改变当前的文件目录了。
+而source或者.就代表着在当前的shell环境中执行，所以就能成功。
+更新 2022/11/18 今天发现一种更容易解决的办法,就是在写一个 shell 方法:
+function cd() { cd &amp;#34;$(fzf)&amp;#34; } 把它加入到.</description>
+      <content:encoded><![CDATA[<h2 id="起因">起因</h2>
+<p>昨天晚上想用fzf与cd联动，就是fzf的结果传递给cd来执行于是有了这么一条命令:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">cd</span> <span class="k">$(</span>fd --type d <span class="p">|</span> fzf<span class="k">)</span>
+</span></span></code></pre></div><p>这个命令也确实能完成任务，但是问题有两个:</p>
+<ol>
+<li>如果直接退出的话会回到家目录，因为<code>$(..)</code>的执行结果为空</li>
+<li>每次都要输入这么多会很麻烦</li>
+</ol>
+<h2 id="用alias">用alias</h2>
+<p>然后尝试用alias来试试，所以就往<code>.zshrc</code>里面添加:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">alias</span> <span class="nv">cdf</span><span class="o">=</span><span class="s2">&#34;cd </span><span class="k">$(</span>fd --type d <span class="p">|</span> fzf<span class="k">)</span><span class="s2">&#34;</span>
+</span></span></code></pre></div><p>结果是直接不能运行，因为它直接识别了<code>$(..)</code>这一段，然后直接运行了，但是后面就不会运行。</p>
+<h2 id="用shell脚本">用shell脚本</h2>
+<p>然后就写了这个文件:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="cp">#!/bin/sh
+</span></span></span><span class="line"><span class="cl"><span class="cp"></span><span class="nv">path</span><span class="o">=</span><span class="k">$(</span>fd --type d --strip-cwd-prefix --hidden --follow --exclude .git --exclude node_modules <span class="p">|</span> fzf<span class="k">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">if</span> <span class="o">[</span> -z <span class="s2">&#34;</span><span class="nv">$path</span><span class="s2">&#34;</span> <span class="o">]</span><span class="p">;</span> <span class="k">then</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">exit</span>
+</span></span><span class="line"><span class="cl"><span class="k">fi</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="nb">cd</span> <span class="s2">&#34;</span><span class="nv">$path</span><span class="s2">&#34;</span> <span class="o">||</span> <span class="nb">exit</span>
+</span></span></code></pre></div><p>结果也是不行，后面我在最下面加了一行<code>echo &quot;$PWD&quot;</code>，我看到是执行了的，但是程序退出了就失效了。</p>
+<h2 id="解决">解决</h2>
+<p>最后我搜索到可以使用<code>source xxx</code>或者<code>. xxx</code>来解决，最后是alias+shell脚本来完成这个操作的:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">alias</span> <span class="nv">cdf</span><span class="o">=</span><span class="s2">&#34;source /path/to/cdf&#34;</span>
+</span></span></code></pre></div><p>同时它也解决我上面提到的两个问题。</p>
+<h2 id="source为什么能解决">source为什么能解决？</h2>
+<p>之所以直接用shell脚本直接运行会不行，是因为它不是在当前shell环境中运行的，而是一个子shell，所以结果就不能改变当前的文件目录了。</p>
+<p>而<code>source</code>或者<code>.</code>就代表着在当前的shell环境中执行，所以就能成功。</p>
+<h2 id="更新">更新</h2>
+<h3 id="20221118">2022/11/18</h3>
+<p>今天发现一种更容易解决的办法,就是在写一个 shell 方法:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="k">function</span> cd<span class="o">()</span> <span class="o">{</span>
+</span></span><span class="line"><span class="cl">    <span class="nb">cd</span> <span class="s2">&#34;</span><span class="k">$(</span>fzf<span class="k">)</span><span class="s2">&#34;</span>
+</span></span><span class="line"><span class="cl"><span class="o">}</span>
+</span></span></code></pre></div><p>把它加入到<code>.zshrc</code>(我用的是 zsh)中，然后在命令行中输入 <code>cd</code> 就好了。</p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>Code:alias</title>
+      <link>https://fzdwx.github.io/posts/2022-10-10-code-alias/</link>
+      <pubDate>Mon, 10 Oct 2022 22:43:27 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/posts/2022-10-10-code-alias/</guid>
+      <description>idea 目前有一个想法，是在命令行下管理脚本的工具。
+例如说我有一些常用的脚本:
+cd $(find . -name &amp;#34;*&amp;#34; -type d | fzf) 然后通过命令行添加
+cli load &amp;#34;cd $(find . -name &amp;#34;*&amp;#34; -type d | fzf)&amp;#34; -alias cdf 然后使用cdf进行运行
+cli cdf 后续 2022-10-18 22:47
+刚刚找到了一个跟我这个想法很契合的项目: &amp;nbsp;https://github.com/denisidoro/navi 。
+今天一晚上都在调研技术的可行性，但是都达不到我想要的效果。还是这个例子，cd $(find . -name &amp;quot;*&amp;quot; -type d | fzf)， 主要有两种思路:
+在运行程序的使用利用shell的tab键盘补全，直接替换成这段命令，然后运行。比如说程序叫qwe，在shell里面输入qwe cdf&amp;lt;TAB&amp;gt; ，然后就直接替换为上面的命令。我在go里面找到cobra这个包，它能动态补全命令，有点效果，但还不够，不能做到全部替换，遂搁置。 直接在程序里面运行这段命令，我试了之后还是不行，cd执行后没有生效，应该还是跟fork有关。 然后就到github里面找别人的实现，没想到找到了一个，但是试过之后还是不支持，但确实做的还不错。
+想要做成我想要的效果就是实现:
+在shell中补全能直接替换所有，而不是一段。 在程序中不用fork运行。 还需要在看看。</description>
+      <content:encoded><![CDATA[<h2 id="idea">idea</h2>
+<p>目前有一个想法，是在命令行下管理脚本的工具。</p>
+<p>例如说我有一些常用的脚本:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl"><span class="nb">cd</span> <span class="k">$(</span>find . -name <span class="s2">&#34;*&#34;</span> -type d <span class="p">|</span> fzf<span class="k">)</span>
+</span></span></code></pre></div><p>然后通过命令行添加</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">cli load <span class="s2">&#34;cd </span><span class="k">$(</span>find . -name <span class="s2">&#34;*&#34;</span> -type d <span class="p">|</span> fzf<span class="k">)</span><span class="s2">&#34;</span> -alias cdf
+</span></span></code></pre></div><p>然后使用cdf进行运行</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-sh" data-lang="sh"><span class="line"><span class="cl">cli cdf 
+</span></span></code></pre></div><h2 id="后续">后续</h2>
+<blockquote>
+<p>2022-10-18 22:47</p>
+</blockquote>
+<p>刚刚找到了一个跟我这个想法很契合的项目: &nbsp;<a href="https://github.com/denisidoro/navi" target="_blank" rel="noopener">https://github.com/denisidoro/navi</a>
+。</p>
+<p>今天一晚上都在调研技术的可行性，但是都达不到我想要的效果。还是这个例子，<code>cd $(find . -name &quot;*&quot; -type d | fzf)</code>，
+主要有两种思路:</p>
+<ol>
+<li>在运行程序的使用利用shell的tab键盘补全，直接替换成这段命令，然后运行。比如说程序叫<code>qwe</code>，在shell里面输入<code>qwe cdf&lt;TAB&gt;</code>
+，然后就直接替换为上面的命令。我在go里面找到<code>cobra</code>这个包，它能动态补全命令，有点效果，但还不够，不能做到全部替换，遂搁置。</li>
+<li>直接在程序里面运行这段命令，我试了之后还是不行，<code>cd</code>执行后没有生效，应该还是跟<code>fork</code>有关。</li>
+</ol>
+<p>然后就到github里面找别人的实现，没想到找到了一个，但是试过之后还是不支持，但确实做的还不错。</p>
+<p>想要做成我想要的效果就是实现:</p>
+<ol>
+<li>在shell中补全能直接替换所有，而不是一段。</li>
+<li>在程序中不用<code>fork</code>运行。</li>
+</ol>
+<p>还需要在看看。</p>
+]]></content:encoded>
+    </item>
+    
+  </channel>
+</rss>

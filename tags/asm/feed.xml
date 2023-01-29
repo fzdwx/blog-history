@@ -1,0 +1,500 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>asm on fzdwx</title>
+    <link>https://fzdwx.github.io/tags/asm/</link>
+    <description>Recent content in asm on fzdwx</description>
+    <image>
+      <url>https://fzdwx.github.io/images/party_parrot.gif</url>
+      <link>https://fzdwx.github.io/images/party_parrot.gif</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Copyright [fzdwx](https://github.com/fzdwx)   since 2022</copyright>
+    <lastBuildDate>Sat, 10 Dec 2022 20:41:41 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/tags/asm/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>RISC-V 简介</title>
+      <link>https://fzdwx.github.io/posts/2022-12-10-risc-v/</link>
+      <pubDate>Sat, 10 Dec 2022 20:41:41 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/posts/2022-12-10-risc-v/</guid>
+      <description>RISC-V 是一种指令集(汇编语言)，是一种 low-level 的编程语言，高级语言通过编译器编译到汇编语言</description>
+      <content:encoded><![CDATA[<h2 id="resource">Resource</h2>
+<ol>
+<li>&nbsp;<a href="https://inst.eecs.berkeley.edu/~cs61c/sp21/resources-pdfs/riscvcard.pdf" target="_blank" rel="noopener">RISC-V Green Card</a>
+</li>
+<li>&nbsp;<a href="https://inst.eecs.berkeley.edu/~cs61c/sp21/resources-pdfs/RISCV_Calling_Convention.pdf" target="_blank" rel="noopener">RISC-V Call convertion</a>
+</li>
+<li>&nbsp;<a href="https://github.com/fzdwx/fzdwx.github.io/releases/download/v1.0/p.h.pdf" target="_blank" rel="noopener">P&amp;H(RISC-V)</a>
+</li>
+</ol>
+<p>在汇编语言中没有变量这个概念，汇编语言通常操作的是<strong>寄存器</strong>。算术指令的操作数必须取自寄存器，内建于硬件的特殊位置(CPU内？)。</p>
+
+
+
+
+
+<div class="tip custom-block">
+    <p class="custom-block-title">
+        
+        
+        TIP
+        
+    </p>
+    <p> <strong>寄存器</strong>（Register）是&nbsp;<a href="https://zh.wikipedia.org/wiki/%E4%B8%AD%E5%A4%AE%E8%99%95%E7%90%86%E5%99%A8" title="中央处理器" target="_blank" rel="noopener">中央处理器</a>
+内用来暂存指令、&nbsp;<a href="https://zh.wikipedia.org/wiki/%E6%95%B8%E6%93%9A" title="数据" target="_blank" rel="noopener">数据</a>
+和&nbsp;<a href="https://zh.wikipedia.org/wiki/%E5%86%85%E5%AD%98%E5%9C%B0%E5%9D%80" title="内存地址" target="_blank" rel="noopener">地址</a>
+的&nbsp;<a href="https://zh.wikipedia.org/wiki/%E9%9B%BB%E8%85%A6%E8%A8%98%E6%86%B6%E9%AB%94" title="电脑存储器" target="_blank" rel="noopener">电脑存储器</a>
+。寄存器的存贮容量有限，读写速度非常快。在&nbsp;<a href="https://zh.wikipedia.org/wiki/%E9%9B%BB%E8%85%A6%E6%9E%B6%E6%A7%8B" title="计算机体系结构" target="_blank" rel="noopener">计算机体系结构</a>
+里，寄存器存储在已知时间点所作计算的中间结果，通过快速地访问数据来加速&nbsp;<a href="https://zh.wikipedia.org/wiki/%E9%9B%BB%E8%85%A6%E7%A8%8B%E5%BC%8F" title="计算机程序" target="_blank" rel="noopener">计算机程序</a>
+的执行。 </p>
+</div>
+
+
+
+
+
+
+
+
+<h2 id="risc-v-card">RISC-V Card</h2>
+<h3 id="risc-v-操作数">RISC-V 操作数</h3>
+<p><figure id="a-/images/Pasted%20image%2020221210211515.png" class="align-center">
+    <img src="/images/Pasted%20image%2020221210211515.png" alt=""  />
+    
+</figure></p>
+<ul>
+<li>如果寄存器的大小是 64位 则称为<strong>双字</strong>，32位 则是<strong>单字</strong>。</li>
+<li>x<sub>0</sub> 被硬连接到 0
+<ul>
+<li><code>add x3, x4, x0</code> =&gt; <code>x3 = x4</code> (x0 is hard-wired to value 0)</li>
+</ul>
+</li>
+</ul>
+<h2 id="汇编指令">汇编指令</h2>
+<p><figure id="a-/images/Pasted%20image%2020221210211545.png" class="align-center">
+    <img src="/images/Pasted%20image%2020221210211545.png" alt=""  />
+    
+</figure><figure id="a-/images/Pasted%20image%2020221210211603.png" class="align-center">
+    <img src="/images/Pasted%20image%2020221210211603.png" alt=""  />
+    
+</figure></p>
+<h2 id="存储操作数">存储操作数</h2>
+
+
+
+
+
+<div class="tip custom-block">
+    <p class="custom-block-title">
+        
+        
+        TIP
+        
+    </p>
+    <p> 将数据从内存复制到寄存器的数据传输指令称为 <em>载入指令(<code>load</code>)</em>。在 RISC-V 中指令是 <strong>ld</strong>,表示取双字。 </p>
+</div>
+
+
+
+
+
+
+
+
+<h3 id="一个从数组中取值的c程序写出汇编代码">一个从数组中取值的C程序，写出汇编代码</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">g</span> <span class="o">=</span> <span class="n">h</span> <span class="o">+</span> <span class="n">A</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span>
+</span></span></code></pre></div><p>A 是一个 100 个双字组成的数组，g, h分别存储在 x20, x21 中，数组起始地址或<em>基址</em>位于 x22 中。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">ld</span> <span class="no">x9</span><span class="p">,</span> <span class="mi">8</span><span class="p">(</span><span class="no">x22</span><span class="p">)</span> <span class="c1">// x9 = A[8]
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">add</span> <span class="no">x21</span><span class="p">,</span> <span class="no">x20</span><span class="p">,</span> <span class="no">x9</span><span class="c1">; // x21 = x20 + x9
+</span></span></span></code></pre></div><p>存放基址的寄存器(x22)被称为<em>基址寄存器</em>, 数据传输指令中的 8 称为<em>偏移量</em>。</p>
+<p><figure id="a-/images/Pasted%20image%2020221212130603.png" class="align-center">
+    <img src="/images/Pasted%20image%2020221212130603.png" alt="实际的RISC-V内存地址和内存中双字的内容。 双字地址是 8 的倍数，同理单字地址是 4 的倍数"  />
+    
+    <figcaption>
+       实际的RISC-V内存地址和内存中双字的内容。 双字地址是 8 的倍数，同理单字地址是 4 的倍数
+    </figcaption>
+    
+</figure></p>
+
+
+
+
+
+<div class="tip custom-block">
+    <p class="custom-block-title">
+        
+        
+        大端与小端编址
+        
+    </p>
+    <p> <p>计算机分为两种，一种使用最左边或“大端”字节的地址作为双字地址，另一种使用最右端或“小端”字节的地址作为双字地址。</p>
+<p>RISC-V 使用小端  。由于仅在以双字形式和 8 个单独字节访问相同数据时，字节顺序才有影响，因此大多情况不需要关系“大小端”。</p>
+ </p>
+</div>
+
+
+
+
+
+
+
+
+<p>所以为了上面的代码获得正确的字节地址加到 x22 这个寄存器的偏移量为 64（8x8）。</p>
+<p>与载入指令相反的指令通常被成为<em>存储指令(store)</em>,从寄存器复制数据到内存。指令是<code>sd</code>,表示存储双字。</p>
+
+
+
+
+
+<div class="tip custom-block">
+    <p class="custom-block-title">
+        
+        
+        TIP
+        
+    </p>
+    <p> 在一些体系结构中，字的起始地址必须是 4 的倍数，双字的起始地址必须是 8 的倍数。该要求成为<em>对齐限制</em> </p>
+</div>
+
+
+
+
+
+
+
+
+<p>RISC-V 和 Intel x86 没有对齐限制，但 MIPS 有这个限制。</p>
+<p><figure id="a-/images/Pasted%20image%2020221212152022.png" class="align-center">
+    <img src="/images/Pasted%20image%2020221212152022.png" alt=""  />
+    
+</figure></p>
+<h3 id="使用-load-和-store-编译生成指令">使用 load 和 store 编译生成指令</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">A</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span> <span class="o">+</span> <span class="n">A</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span>
+</span></span></code></pre></div><p>h 存放在 x21 中，A 的基址存放在 x22 中。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">ld</span> <span class="no">x9</span><span class="p">,</span> <span class="mi">64</span><span class="p">(</span><span class="no">x22</span><span class="p">)</span>  <span class="c1">// x9 = A[8]
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">add</span> <span class="no">x9</span><span class="p">,</span> <span class="no">x21</span><span class="p">,</span> <span class="no">x9</span> <span class="c1">// x9 = h + A[8]
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">sd</span> <span class="no">x9</span><span class="p">,</span> <span class="mi">96</span><span class="p">(</span><span class="no">x22</span><span class="p">)</span>  <span class="c1">// A[12] = x9
+</span></span></span></code></pre></div><h3 id="将字符串复制程序编译为汇编">将字符串复制程序编译为汇编</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">strcpy</span><span class="p">(</span><span class="kt">char</span> <span class="n">x</span><span class="p">[],</span><span class="kt">char</span> <span class="n">y</span><span class="p">[]){</span>
+</span></span><span class="line"><span class="cl">	<span class="kt">size_t</span> <span class="n">i</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="k">while</span><span class="p">((</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="n">y</span><span class="p">[</span><span class="n">i</span><span class="p">])</span> <span class="o">!=</span> <span class="sc">&#39;\0&#39;</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">		<span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>x, y 的基址存放在 x10 和 x11 中， i 存放在 x19 中。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nl">strcpy:</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">addi</span> <span class="no">sp</span><span class="p">,</span> <span class="no">sp</span><span class="p">,</span> <span class="p">-</span><span class="mi">8</span>  <span class="c1">// 调整栈指针，以存放一个item(x19)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">sd</span> <span class="no">x19</span><span class="p">,</span> <span class="mi">0</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>    <span class="c1">// x19 入栈
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">add</span> <span class="no">x19</span><span class="p">,</span> <span class="no">x0</span><span class="p">,</span> <span class="no">x0</span>  <span class="c1">// x19 = 0 + 0
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nl">L1:</span> <span class="nf">add</span> <span class="no">x5</span><span class="p">,</span> <span class="no">x19</span><span class="p">,</span> <span class="no">x11</span> <span class="c1">// x5 = x19 + x11 =&gt; address of y[i] in x5
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">lbu</span> <span class="no">x6</span><span class="p">,</span> <span class="mi">0</span><span class="p">(</span><span class="no">x5</span><span class="p">)</span>    <span class="c1">// temp: x6 = y[i]
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">add</span> <span class="no">x7</span><span class="p">,</span> <span class="no">x19</span><span class="p">,</span> <span class="no">x10</span> <span class="c1">// x5 = x19 + x11 =&gt; address of x[i] in x7
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">sd</span>  <span class="no">x6</span><span class="p">,</span> <span class="mi">0</span><span class="p">(</span><span class="no">x7</span><span class="p">)</span>    <span class="c1">// x[i] = y[i]
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">beq</span> <span class="no">x6</span><span class="p">,</span> <span class="no">x0</span><span class="p">,</span> <span class="no">L2</span>   <span class="c1">// if x6 ==0 then go to L2
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">addi</span> <span class="no">x19</span><span class="p">,</span> <span class="no">x19</span><span class="p">,</span> <span class="mi">1</span> <span class="c1">// i = i  + 1
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">jal</span> <span class="no">x0</span><span class="p">,</span> <span class="no">L1</span>       <span class="c1">// go to L1
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nl">L2:</span> <span class="nf">ld</span> <span class="no">x19</span><span class="p">,</span> <span class="mi">0</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>    <span class="c1">// 恢复 x19 以及栈指针
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">addi</span> <span class="no">sp</span><span class="p">,</span> <span class="no">sp</span><span class="p">,</span> <span class="mi">8</span> 
+</span></span><span class="line"><span class="cl">	<span class="no">jalr</span> <span class="no">x0</span><span class="p">,</span> <span class="mi">0</span><span class="p">(</span><span class="no">x1</span><span class="p">)</span>
+</span></span></code></pre></div><h3 id="一段循环代码编译为汇编">一段循环代码编译为汇编</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">A</span><span class="p">[</span><span class="mi">20</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="p">(</span><span class="kt">int</span>  <span class="mi">3</span><span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">20</span><span class="p">;</span> <span class="n">i</span><span class="o">++</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">	<span class="n">sum</span> <span class="o">+=</span> <span class="n">A</span><span class="p">[</span><span class="n">i</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>RISC-V 汇编（32 bit)</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl">	<span class="nf">add</span> <span class="no">x9</span><span class="p">,</span> <span class="no">x8</span><span class="p">,</span> <span class="no">x0</span>     <span class="c1"># x9 = &amp;A[0]
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">add</span> <span class="no">x10</span><span class="p">,</span> <span class="no">x0</span><span class="p">,</span> <span class="no">x0</span>    <span class="c1"># sum
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">add</span> <span class="no">x11</span><span class="p">,</span> <span class="no">x0</span><span class="p">,</span> <span class="no">x0</span>    <span class="c1"># i
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">addi</span> <span class="no">x13</span><span class="p">,</span><span class="no">x0</span><span class="p">,</span> <span class="mi">20</span>    <span class="c1"># 20
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nl">Loop:</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">bge</span> <span class="no">x11</span><span class="p">,</span> <span class="no">x13</span><span class="p">,</span> <span class="no">Done</span> <span class="c1"># if x11 &gt; x13 go to Down(end loop)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">lw</span> <span class="no">x12</span><span class="p">,</span> <span class="mi">0</span><span class="p">(</span><span class="no">x9</span><span class="p">)</span>      <span class="c1"># x12 = A[i]
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">add</span> <span class="no">x10</span><span class="p">,</span> <span class="no">x10</span><span class="p">,</span> <span class="no">x12</span>  <span class="c1"># sum
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">addi</span> <span class="no">x9</span><span class="p">,</span> <span class="no">x9</span><span class="p">,</span> <span class="mi">4</span>     <span class="c1"># x9 = &amp;A[i+1]
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">addi</span> <span class="no">x11</span><span class="p">,</span> <span class="no">x11</span><span class="p">,</span> <span class="mi">1</span>   <span class="c1"># i++
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">j</span> <span class="no">loop</span>
+</span></span><span class="line"><span class="cl"><span class="nl">Done:</span>
+</span></span></code></pre></div><h2 id="逻辑操作">逻辑操作</h2>
+<ul>
+<li><code>and</code> <code>andi</code>
+<ul>
+<li><code>and x5, x6, x9</code> =&gt; x5 = x6 &amp; x9</li>
+<li><code>addi x5, x6, 3</code> =&gt; x5 = x6 &amp; 3</li>
+</ul>
+</li>
+<li><code>sll</code> <code>ssli</code> , 左移(扩大)
+<ul>
+<li><code>slli x11, x23, 2</code> =&gt; x11 = x23 &laquo; 2</li>
+<li>0000 0010  =&gt; 2</li>
+<li>0000 1000 =&gt; 8</li>
+</ul>
+</li>
+<li><code>srl</code> <code>srli</code> , 右移（缩小)
+<ul>
+<li><code>srli x23, x11, 2</code> = &gt; x23 = x11 &raquo; 2</li>
+<li>0000 1000 =&gt; 8</li>
+<li>0000 0010 =&gt; 2</li>
+</ul>
+</li>
+<li><code>sra</code> <code>srai</code>, 算数右移
+<ul>
+<li>1111 1111 1111 1111 1111 1111 1110 0111 = -25</li>
+<li><code>srai x10, x10, 4</code></li>
+<li>1111 1111 1111 1111 1111 1111 1111 1110 = -2</li>
+</ul>
+</li>
+</ul>
+<h2 id="helpful-risc-v-assmebler-features">Helpful RISC-V Assmebler Features</h2>
+<ol>
+<li>a0 - a7 是参数寄存器(x10 - x17，用于函数调用。</li>
+<li>zero 代表 x0</li>
+<li><code>mv rd, rs = addi rd, rs, 0</code></li>
+<li><code>li rd, 13 = addi rd, x0, 13</code></li>
+<li><code>nop = addi x0, x0</code></li>
+<li><code>la a1 Lable</code> 将 Label 的 地址 加载到 a1</li>
+<li>a0 - a7(x10 - x17): 8 个寄存器用于参数传递以及两个返回值(a0 - a1)</li>
+<li>ra（x1）: 一个返回 address 的寄存器，用于返回原点（调用的位置）</li>
+<li>s0 - s1(x8 - x9) and s2 - s11 (s18 - x27): 保存的寄存器</li>
+</ol>
+<h2 id="risc-v-函数调用的转换">RISC-V 函数调用的转换</h2>
+<ol>
+<li>寄存器比内存快，所以使用它们</li>
+<li><code>jal rd, Label</code> 跳转和链接
+<ol>
+<li><code>jal x1, 100</code></li>
+</ol>
+</li>
+<li><code>jalr rd, rs, imm</code> 跳转和链接寄存器
+<ol>
+<li><code>jalr x1, 100(x5)</code></li>
+</ol>
+</li>
+<li><code>jal Lable</code> =&gt; <code>jal ra, Lable</code> 调用函数</li>
+<li><code>jalr s1</code> 当 s1 是方法指针时，这就是一个函数调用</li>
+</ol>
+<h3 id="一段函数调用转换为汇编">一段函数调用转换为汇编</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="p">...</span>
+</span></span><span class="line"><span class="cl"><span class="nf">sum</span><span class="p">(</span><span class="n">a</span><span class="p">,</span><span class="n">b</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl"><span class="p">...</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">sum</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span> <span class="kt">int</span> <span class="n">y</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">	<span class="n">retrun</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="err">1000</span> <span class="nf">mv</span> <span class="no">a0</span><span class="p">,</span> <span class="no">s0</span>              <span class="c1"># x = a
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">1004</span> <span class="nf">mv</span> <span class="no">a1</span><span class="p">,</span> <span class="no">s1</span>              <span class="c1"># y= b
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">1008</span> <span class="nf">addi</span> <span class="no">ra</span><span class="p">,</span> <span class="no">zero</span><span class="p">,</span> <span class="mi">1016</span>    <span class="c1"># 1016 is sum function
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">1012</span> <span class="nf">j</span>                      <span class="c1"># jump to sum
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="err">1016</span> <span class="na">...</span> 
+</span></span><span class="line"><span class="cl"><span class="no">...</span>
+</span></span><span class="line"><span class="cl"><span class="err">2000</span> <span class="nl">sum:</span> <span class="nf">add</span> <span class="no">a0</span><span class="p">,</span> <span class="no">a0</span><span class="p">,</span> <span class="no">a1</span>
+</span></span><span class="line"><span class="cl"><span class="err">2004</span> <span class="nf">jr</span> <span class="no">ra</span>
+</span></span></code></pre></div><p>1008 ~ 1012 可以使用 <code>jal sum</code> 来替代、</p>
+<h3 id="调用函数的基本步骤">调用函数的基本步骤</h3>
+<ol>
+<li>把需要的参数放到方法可以访问的地方（寄存器）</li>
+<li>转移控制权给函数,使用(<code>jal</code>)
+<ol>
+<li>保持地址，并跳转到函数的地址</li>
+</ol>
+</li>
+<li>获取函数执行所需的(local)存储资源</li>
+<li>执行预期的函数</li>
+<li>将返回值放在调用代码可以访问的地方，并恢复我们使用到的寄存器，释放本地存储</li>
+<li>将控制器返回给主处理器（<code>ret</code>), 使用存储在寄存器中的地址，返回到调用它的地方</li>
+</ol>
+<h3 id="方法调用示例">方法调用示例</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">leaf</span><span class="p">(</span><span class="kt">int</span> <span class="n">g</span><span class="p">,</span> <span class="kt">int</span> <span class="n">h</span><span class="p">,</span> <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">j</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">	<span class="kt">int</span> <span class="n">f</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="n">f</span> <span class="o">=</span> <span class="p">(</span><span class="n">g</span> <span class="o">+</span> <span class="n">h</span><span class="p">)</span> <span class="o">-</span> <span class="p">(</span><span class="n">i</span> <span class="o">+</span> <span class="n">j</span><span class="p">);</span>
+</span></span><span class="line"><span class="cl">	<span class="n">retrun</span> <span class="n">f</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><ol>
+<li>g,h,i,j in a0,a1,a2,a3</li>
+<li>f in s0</li>
+<li>temp is s1</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nl">leaf:</span>
+</span></span><span class="line"><span class="cl">	<span class="c1"># prologue start
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">addi</span> <span class="no">sp</span><span class="p">,</span> <span class="no">sp</span><span class="p">,</span> <span class="p">-</span><span class="mi">8</span>   <span class="c1"># 腾出 8byte 来存放的2个整数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">sw</span> <span class="no">s1</span><span class="p">,</span> <span class="mi">4</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>      <span class="c1"># 保存 s1, s0 到 sp 中
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">sw</span> <span class="no">s0</span><span class="p">,</span> <span class="mi">0</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">	<span class="c1"># prologue end
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">add</span> <span class="no">s0</span><span class="p">,</span> <span class="no">a0</span><span class="p">,</span> <span class="no">a1</span>    <span class="c1"># f = g + h
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">add</span> <span class="no">s1</span><span class="p">,</span> <span class="no">a2</span><span class="p">,</span> <span class="no">a3</span>    <span class="c1"># temp = i + j
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">sub</span> <span class="no">a0</span><span class="p">,</span> <span class="no">s0</span><span class="p">,</span> <span class="no">s1</span>    <span class="c1"># a0 = （g + h) - (i + j) 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl">	<span class="c1"># epilogue
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">lw</span> <span class="no">s0</span><span class="p">,</span> <span class="mi">0</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>      <span class="c1"># 恢复 s1, s0
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">lw</span> <span class="no">s1</span><span class="p">,</span> <span class="mi">4</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>    
+</span></span><span class="line"><span class="cl">	<span class="no">addi</span> <span class="no">sp</span><span class="p">,</span> <span class="no">sp</span> <span class="mi">8</span> 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl">	<span class="no">jr</span> <span class="no">ra</span>
+</span></span></code></pre></div><h2 id="sp">sp</h2>
+
+
+
+
+
+<div class="tip custom-block">
+    <p class="custom-block-title">
+        
+        
+        TIP
+        
+    </p>
+    <p> <p>sp 是栈指针，从内存空间 的最顶部开始向下增长，在 RISC-V 中使用 x2 这个寄存器。</p>
+<ol>
+<li>push 是减少 sp 的指针地址</li>
+<li>pop 是增加</li>
+</ol>
+ </p>
+</div>
+
+
+
+
+
+
+
+
+<p>每个函数都有一组存放在栈上的数据，它们是<strong>栈帧</strong>（stack frame ），栈帧通常包含：</p>
+<ol>
+<li>返回地址</li>
+<li>参数</li>
+<li>使用的局部变量的空间</li>
+</ol>
+<h2 id="嵌套函数调用">嵌套函数调用</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">sumSquare</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span><span class="kt">int</span> <span class="n">y</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nf">mult</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">y</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>在 ra 中有一个 sumSquare 想要跳回的值，但是这个值会被调用 mult 覆盖。</p>
+<ol>
+<li>caller: 调用函数的人</li>
+<li>calle： 被调用的函数</li>
+<li>当被调用者从执行中返回时，调用者需要知道哪些寄存器可能发生了变化，哪些寄存器被保证是不变的。</li>
+<li>寄存器规定： 即哪些寄存器在程序调用(<code>jal</code>) 后将被取消缓存 ，哪些可以被改变。
+<ol>
+<li>即有一些寄存器是易失的(temp),一些是要保存的（<strong>调用者需要恢复它们原来的值</strong>）。</li>
+<li>这优化了每次进入栈帧的寄存器的数量</li>
+</ol>
+</li>
+<li>分类:
+<ol>
+<li>跨函数调用保留:
+<ol>
+<li>sp, gp, tp</li>
+<li>s0 - s11 (s0 is also fp)</li>
+</ol>
+</li>
+<li>不保留:
+<ol>
+<li>参数寄存器以及返回寄存器： a0 - a7, ra</li>
+<li>temp 寄存器: t0 - t6</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<p>上面代码的 RISC-V</p>
+<p>x in a1, y in a1</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nl">sumSquare:</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">addi</span> <span class="no">sp</span><span class="p">,</span> <span class="no">sp</span> <span class="p">-</span><span class="mi">8</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">sw</span> <span class="no">ra</span><span class="p">,</span> <span class="mi">4</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>             <span class="c1">// save retrun address to sp
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">sw</span> <span class="no">a1</span><span class="p">,</span> <span class="mi">0</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>             <span class="c1">// save s1 to y
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">mv</span> <span class="no">a1</span><span class="p">,</span> <span class="no">a0</span>                <span class="c1">// y = x =&gt; mult(x,x)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">jal</span> <span class="no">mult</span>                 <span class="c1">// call mult
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">lw</span> <span class="no">a1</span><span class="p">,</span> <span class="mi">0</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>             <span class="c1">// get y from sp
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">add</span> <span class="no">a0</span><span class="p">,</span> <span class="no">a0</span><span class="p">,</span> <span class="no">a1</span>           <span class="c1">// mult() + y
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">lw</span> <span class="no">ra</span><span class="p">,</span> <span class="mi">4</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>             <span class="c1">// get retrun address from sp
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">addi</span> <span class="no">sp</span><span class="p">,</span> <span class="no">sp</span><span class="p">,</span> <span class="mi">8</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">jr</span> <span class="no">ra</span>
+</span></span></code></pre></div><h2 id="risc-v-寄存器名称">RISC-V 寄存器名称</h2>
+<p><figure id="a-/images/Pasted%20image%2020221213192858.png" class="align-center">
+    <img src="/images/Pasted%20image%2020221213192858.png" alt=""  />
+    
+</figure></p>
+<h2 id="risc-v-方法调用套路">RISC-V 方法调用套路</h2>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nl">matmul:</span>  
+</span></span><span class="line"><span class="cl">    <span class="c1"># 压栈，腾出空间保存我们要使用的几个 s 寄存器
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">addi</span> <span class="no">sp</span> <span class="no">sp</span> <span class="p">-</span><span class="mi">36</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">sw</span> <span class="no">ra</span> <span class="mi">0</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">sw</span> <span class="no">s0</span> <span class="mi">4</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">sw</span> <span class="no">s1</span> <span class="mi">8</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">sw</span> <span class="no">s2</span> <span class="mi">12</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">sw</span> <span class="no">s3</span> <span class="mi">16</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">sw</span> <span class="no">s4</span> <span class="mi">20</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">sw</span> <span class="no">s5</span> <span class="mi">24</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">sw</span> <span class="no">s6</span> <span class="mi">28</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">sw</span> <span class="no">s7</span> <span class="mi">32</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl"><span class="no">body</span><span class="p">:</span>
+</span></span><span class="line"><span class="cl">    <span class="c1"># xxx xxx
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>
+</span></span><span class="line"><span class="cl"><span class="nl">end:</span>  
+</span></span><span class="line"><span class="cl">    <span class="c1"># 恢复寄存器的值  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">lw</span> <span class="no">ra</span> <span class="mi">0</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">lw</span> <span class="no">s0</span> <span class="mi">4</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">lw</span> <span class="no">s1</span> <span class="mi">8</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">lw</span> <span class="no">s2</span> <span class="mi">12</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">lw</span> <span class="no">s3</span> <span class="mi">16</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">lw</span> <span class="no">s4</span> <span class="mi">20</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">lw</span> <span class="no">s5</span> <span class="mi">24</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">lw</span> <span class="no">s6</span> <span class="mi">28</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">lw</span> <span class="no">s7</span> <span class="mi">32</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">addi</span> <span class="no">sp</span> <span class="no">sp</span> <span class="mi">36</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">ret</span>  
+</span></span></code></pre></div><h1 id="risc-v-指令二进制的表示">RISC-V 指令二进制的表示</h1>
+<h2 id="r-格式布局">R 格式布局</h2>
+<p>用于算术和逻辑运算的指令</p>
+<p><figure id="a-/images/Pasted%20image%2020221224214056.png" class="align-center">
+    <img src="/images/Pasted%20image%2020221224214056.png" alt=""  />
+    
+</figure></p>
+<ol>
+<li>opcode，funct3, funct7 : 将告诉我们是否要执行加，减，左移，异或等操作。
+<ol>
+<li>R-format 的 opcode 固定为 0110011</li>
+</ol>
+</li>
+<li>一个 add 操作： <code>add x18 x19 x10</code> =&gt; <code>x18 = x19 + x10</code></li>
+<li><code>0000000 01010 10011 000 10010 0110011</code></li>
+<li><code>rs2 = x19</code>, <code>rs1 = x10</code>, <code>rd = x18</code></li>
+</ol>
+<h2 id="i-格式布局">I 格式布局</h2>
+<p>处理立即数，比如<code>addi rd rs1, imm</code> =&gt; <code>addi a0 a0 1</code></p>
+<p><figure id="a-/images/Pasted%20image%2020221224220039.png" class="align-center">
+    <img src="/images/Pasted%20image%2020221224220039.png" alt=""  />
+    
+</figure></p>
+<ol>
+<li>imm 的范围是 -2084 ～ 2047</li>
+</ol>
+<p><figure id="a-/images/Pasted%20image%2020221224220349.png" class="align-center">
+    <img src="/images/Pasted%20image%2020221224220349.png" alt="addi x15 x1 -50"  />
+    
+    <figcaption>
+       addi x15 x1 -50
+    </figcaption>
+    
+</figure></p>
+<h2 id="risc-v-loads">RISC-V Loads</h2>
+<p>load 指令也是 I 类型的。</p>
+<p><figure id="a-/images/Pasted%20image%2020221224221104.png" class="align-center">
+    <img src="/images/Pasted%20image%2020221224221104.png" alt="lw x14 8(x2)"  />
+    
+    <figcaption>
+       lw x14 8(x2)
+    </figcaption>
+    
+</figure></p>
+<h2 id="s-格式布局">S 格式布局</h2>
+<p><figure id="a-/images/Pasted%20image%2020221224221434.png" class="align-center">
+    <img src="/images/Pasted%20image%2020221224221434.png" alt=""  />
+    
+</figure></p>
+]]></content:encoded>
+    </item>
+    
+  </channel>
+</rss>

@@ -32,16 +32,6 @@
     </item>
     
     <item>
-      <title>note</title>
-      <link>https://fzdwx.github.io/tags/note/</link>
-      <pubDate>Sun, 08 Jan 2023 08:44:38 +0800</pubDate>
-      
-      <guid>https://fzdwx.github.io/tags/note/</guid>
-      <description></description>
-      <content:encoded><![CDATA[]]></content:encoded>
-    </item>
-    
-    <item>
       <title>os</title>
       <link>https://fzdwx.github.io/tags/os/</link>
       <pubDate>Sun, 08 Jan 2023 08:44:38 +0800</pubDate>
@@ -62,21 +52,31 @@
     </item>
     
     <item>
-      <title>obsidian</title>
-      <link>https://fzdwx.github.io/tags/obsidian/</link>
-      <pubDate>Sun, 04 Dec 2022 22:45:02 +0800</pubDate>
+      <title>asm</title>
+      <link>https://fzdwx.github.io/tags/asm/</link>
+      <pubDate>Sat, 10 Dec 2022 20:41:41 +0800</pubDate>
       
-      <guid>https://fzdwx.github.io/tags/obsidian/</guid>
+      <guid>https://fzdwx.github.io/tags/asm/</guid>
       <description></description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>
     
     <item>
-      <title>plugin</title>
-      <link>https://fzdwx.github.io/tags/plugin/</link>
+      <title>fun</title>
+      <link>https://fzdwx.github.io/tags/fun/</link>
+      <pubDate>Wed, 07 Dec 2022 21:37:59 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/tags/fun/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>obsidian</title>
+      <link>https://fzdwx.github.io/tags/obsidian/</link>
       <pubDate>Sun, 04 Dec 2022 22:45:02 +0800</pubDate>
       
-      <guid>https://fzdwx.github.io/tags/plugin/</guid>
+      <guid>https://fzdwx.github.io/tags/obsidian/</guid>
       <description></description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>
@@ -102,11 +102,11 @@
     </item>
     
     <item>
-      <title>github</title>
-      <link>https://fzdwx.github.io/tags/github/</link>
-      <pubDate>Sun, 23 Oct 2022 00:09:44 +0800</pubDate>
+      <title>idea</title>
+      <link>https://fzdwx.github.io/tags/idea/</link>
+      <pubDate>Tue, 11 Oct 2022 16:55:35 +0800</pubDate>
       
-      <guid>https://fzdwx.github.io/tags/github/</guid>
+      <guid>https://fzdwx.github.io/tags/idea/</guid>
       <description></description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>
@@ -122,11 +122,41 @@
     </item>
     
     <item>
+      <title>transaction</title>
+      <link>https://fzdwx.github.io/tags/transaction/</link>
+      <pubDate>Mon, 10 Oct 2022 22:26:55 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/tags/transaction/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
       <title>ics</title>
       <link>https://fzdwx.github.io/tags/ics/</link>
       <pubDate>Sun, 09 Oct 2022 19:40:42 +0800</pubDate>
       
       <guid>https://fzdwx.github.io/tags/ics/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>gfs</title>
+      <link>https://fzdwx.github.io/tags/gfs/</link>
+      <pubDate>Fri, 07 Oct 2022 21:12:56 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/tags/gfs/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>editor</title>
+      <link>https://fzdwx.github.io/tags/editor/</link>
+      <pubDate>Wed, 28 Sep 2022 15:59:37 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/tags/editor/</guid>
       <description></description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>
@@ -147,6 +177,16 @@
       <pubDate>Wed, 28 Sep 2022 12:19:15 +0800</pubDate>
       
       <guid>https://fzdwx.github.io/tags/http/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>interview</title>
+      <link>https://fzdwx.github.io/tags/interview/</link>
+      <pubDate>Wed, 28 Sep 2022 12:19:15 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/tags/interview/</guid>
       <description></description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>

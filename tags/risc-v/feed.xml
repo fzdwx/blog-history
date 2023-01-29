@@ -13,10 +13,10 @@
     <lastBuildDate>Sun, 08 Jan 2023 08:44:38 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/tags/risc-v/feed.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>操作系统的分时多任务</title>
-      <link>https://fzdwx.github.io/posts/2023-01-08-os-multi-programs/</link>
+      <link>https://fzdwx.github.io/doc/2023-01-08-os-multi-programs/</link>
       <pubDate>Sun, 08 Jan 2023 08:44:38 +0800</pubDate>
       
-      <guid>https://fzdwx.github.io/posts/2023-01-08-os-multi-programs/</guid>
+      <guid>https://fzdwx.github.io/doc/2023-01-08-os-multi-programs/</guid>
       <description>记录如何实现一个简单的支持运行多个程序的操作系统，比如如何暂停和恢复应用程序(换栈)，以及如何实现一个抢占式操作系统。</description>
       <content:encoded><![CDATA[
 
@@ -858,10 +858,10 @@ I/O 操作让处理器空闲或让处理器忙等，那其他需要处理器资�
     
     <item>
       <title>操作系统的特权级机制</title>
-      <link>https://fzdwx.github.io/posts/2022-12-30-os-privilege/</link>
+      <link>https://fzdwx.github.io/doc/2022-12-30-os-privilege/</link>
       <pubDate>Fri, 30 Dec 2022 13:54:36 +0800</pubDate>
       
-      <guid>https://fzdwx.github.io/posts/2022-12-30-os-privilege/</guid>
+      <guid>https://fzdwx.github.io/doc/2022-12-30-os-privilege/</guid>
       <description>特权级是为了隔离操作系统中用户程序与操作系统的，主要是防止用户程序的错误不会导致操作系统的一种机制。</description>
       <content:encoded><![CDATA[<p>应用程序会不可避免的出现错误，如果一个程序出现错误会导致其他程序或操作系统都无法运行那就是不可接受的。</p>
 <p>所以人们提出<em>特权级</em>（Privilege）这一保护计算机系统不受有意或无意出错的程序破坏的机制，它让应用程序运行在<strong>用户态</strong>
@@ -1889,10 +1889,10 @@ AppManager 从 app 列表中一次加载各个 app 到指定的内存在用户�
     
     <item>
       <title>浮点数在计算机中的表示</title>
-      <link>https://fzdwx.github.io/posts/2022-12-09-float-rep/</link>
+      <link>https://fzdwx.github.io/doc/2022-12-09-float-rep/</link>
       <pubDate>Fri, 09 Dec 2022 19:02:32 +0800</pubDate>
       
-      <guid>https://fzdwx.github.io/posts/2022-12-09-float-rep/</guid>
+      <guid>https://fzdwx.github.io/doc/2022-12-09-float-rep/</guid>
       <description>简单介绍浮点数的几种表示方式以及 RISC-V 中相关的浮点寄存器</description>
       <content:encoded><![CDATA[<h2 id="表示方法">表示方法</h2>
 <figure class="align-center">

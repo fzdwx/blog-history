@@ -768,10 +768,10 @@ Store &nbsp;<a href="https://static.usenix.org/event/nsdi11/tech/full_papers/Bol
     
     <item>
       <title>MapReduce 框架实现思路</title>
-      <link>https://fzdwx.github.io/posts/2022-09-27-mit6.824-lab1/</link>
+      <link>https://fzdwx.github.io/doc/2022-09-27-mit6.824-lab1/</link>
       <pubDate>Tue, 27 Sep 2022 21:45:29 +0800</pubDate>
       
-      <guid>https://fzdwx.github.io/posts/2022-09-27-mit6.824-lab1/</guid>
+      <guid>https://fzdwx.github.io/doc/2022-09-27-mit6.824-lab1/</guid>
       <description>about mit6.824 lab1(Map reduce framework)</description>
       <content:encoded><![CDATA[<p>看的时候很懵，写的时候更懵，我以为是要写几个<code>MapReduce</code>的程序，在把官方的<code>A few rules</code>以及<code>Hints</code>(
 翻译可以看&nbsp;<a href="https://www.nowcoder.com/discuss/962675" target="_blank" rel="noopener">这里</a>

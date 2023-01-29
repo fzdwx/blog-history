@@ -17,12 +17,17 @@
       <pubDate>Wed, 28 Sep 2022 15:59:37 +0800</pubDate>
       
       <guid>https://fzdwx.github.io/posts/2022-09-28-neovim-use-notes/</guid>
-      <description>由于最近切换到了linux，不可避免的经常需要使用vi等编辑器，所以这次好好折腾一下。</description>
+      <description>由于最近切换到了 linux，不可避免的经常需要使用 vi 等编辑器，所以这次好好折腾一下。</description>
       <content:encoded><![CDATA[<blockquote>
 <p>由于最近切换到了linux，不可避免的经常需要使用vi等编辑器，所以这次好好折腾一下。</p>
 </blockquote>
 <p>我的配置地址: &nbsp;<a href="https://github.com/fzdwx/nvim" target="_blank" rel="noopener">https://github.com/fzdwx/nvim</a>
-。</p>
+ ,现在直接使用 &nbsp;<a href="https://github.com/LazyVim/LazyVim" target="_blank" rel="noopener">LazyVim</a>
+.</p>
+<hr>
+<blockquote>
+<p>过期</p>
+</blockquote>
 <h2 id="我的配置">我的配置</h2>
 <h3 id="pakcer">pakcer</h3>
 <p>我选用的插件管理器是<code>packer</code>，我也不知道选什么好，就按最新的来吧。</p>

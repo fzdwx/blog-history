@@ -1,0 +1,941 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>transaction on fzdwx</title>
+    <link>https://fzdwx.github.io/tags/transaction/</link>
+    <description>Recent content in transaction on fzdwx</description>
+    <image>
+      <url>https://fzdwx.github.io/images/party_parrot.gif</url>
+      <link>https://fzdwx.github.io/images/party_parrot.gif</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Copyright [fzdwx](https://github.com/fzdwx)   since 2022</copyright>
+    <lastBuildDate>Mon, 10 Oct 2022 22:26:55 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/tags/transaction/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Raft Kv</title>
+      <link>https://fzdwx.github.io/posts/2022-10-10-raftkv/</link>
+      <pubDate>Mon, 10 Oct 2022 22:26:55 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/posts/2022-10-10-raftkv/</guid>
+      <description>Lab2文档翻译 由于我的英文不是很好，所以使用翻译软件进行翻译，然后人工进行校对进行理解。
+original地址: &amp;nbsp;https://pdos.csail.mit.edu/6.824/labs/lab-raft.html Introduction 这是一系列实验中的第一个，我们将构建一个 fault-tolerant key/value storage system 。 在本实验中我们将实现 Raft (一种复制的状态机协议)。在下一个实验中，我们将在 Raft 上构建一个 key/value service 。 然后，您将在有多个副本的状态机上进行 shard(分片？根据 key 进行 hash 来决定路由到哪个副本上) 来提高性能。
+复制(replication)通过在多个复制服务器上存储其状态(即数据)的完整副本来实现 fault tolerance 。 即使有一些服务器出现 failure (崩溃或网络断开和抖动) replication 也允许它们继续运行。 挑战在于 failures 可能导致副本存在不同的数据。
+Raft 将客户端的请求组织成一个序列，被称为 log ，并且确保所有 replica servers 看到相同的 log 。 每个 replica 按照日志的顺序来执行客户端的请求，将它们应用于其本地的服务状态副本(就是运行来自客户端的命令)。 由于所有存活的副本读取的日志内容都是相同的，所以都以相同的顺序来执行请求，因此它们都有相同的服务状态。 如果一个服务器发生了 failure 但是后来又 recovery (恢复) 了，Raft 会负责将它的 log 更新到最新状态。只要至少大多数的服务器还活着，并且能够继续通信， 那么 Raft 将持续运行。如果没有到达这个数量，那么 Raft 将会停止运行，直到达到这个数量才会重新开始运行。
+在本 lab 中，你将把 Raft 实现为一个带有相关方法的 GO 的对象类型，目的是为了能在更大的模块中使用。 一组 Raft 实例通过 RPC 来维护 replicated logs。你的 Raft 实例将支持一连串不确定编号的 command， 也可以叫 log entries。 这些 entity 通过 index(索引)来进行编号。具有给定索引的 log entry 将被 commit， 此时，您的 Raft 应该将这条 log 发送到 larger service 上执行。</description>
+      <content:encoded><![CDATA[<h1 id="lab2文档翻译">Lab2文档翻译</h1>
+<p>由于我的英文不是很好，所以使用翻译软件进行翻译，然后人工进行校对进行理解。</p>
+<p>original地址: &nbsp;<a href="https://pdos.csail.mit.edu/6.824/labs/lab-raft.html" target="_blank" rel="noopener">https://pdos.csail.mit.edu/6.824/labs/lab-raft.html</a>
+</p>
+<h2 id="introduction">Introduction</h2>
+<p>这是一系列实验中的第一个，我们将构建一个 <em>fault-tolerant key/value storage system</em> 。
+在本实验中我们将实现 <em>Raft</em> (一种复制的状态机协议)。在下一个实验中，我们将在 Raft 上构建一个 key/value service 。
+然后，您将在有多个副本的状态机上进行 shard(分片？根据 key 进行 hash 来决定路由到哪个副本上) 来提高性能。</p>
+<p>复制(replication)通过在多个复制服务器上存储其状态(即数据)的完整副本来实现 <em>fault tolerance</em> 。
+即使有一些服务器出现 failure (崩溃或网络断开和抖动) replication 也允许它们继续运行。 挑战在于 failures 可能导致副本存在不同的数据。</p>
+<p>Raft 将客户端的请求组织成一个序列，被称为 log ，并且确保所有 replica servers 看到相同的 log 。
+每个 replica 按照日志的顺序来执行客户端的请求，将它们应用于其本地的服务状态副本(就是运行来自客户端的命令)。
+由于所有存活的副本读取的日志内容都是相同的，所以都以相同的顺序来执行请求，因此它们都有相同的服务状态。
+如果一个服务器发生了 failure 但是后来又 recovery (恢复) 了，Raft 会负责将它的 log 更新到最新状态。只要至少大多数的服务器还活着，并且能够继续通信，
+那么 Raft 将持续运行。如果没有到达这个数量，那么 Raft 将会停止运行，直到达到这个数量才会重新开始运行。</p>
+<p>在本 lab 中，你将把 Raft 实现为一个带有相关方法的 GO 的对象类型，目的是为了能在更大的模块中使用。
+一组 Raft 实例通过 RPC 来维护 replicated logs。你的 Raft 实例将支持一连串不确定编号的 command，
+也可以叫 log entries。 这些 entity 通过 index(索引)来进行编号。具有给定索引的 log entry 将被 commit，
+此时，您的 Raft 应该将这条 log 发送到 larger service 上执行。</p>
+<p>你应该遵循&nbsp;<a href="https://pdos.csail.mit.edu/6.824/papers/raft-extended.pdf" target="_blank" rel="noopener">extended Raft paper</a>
+中设计，
+特别是&nbsp;<a href="/posts/2022-10-10-raftkv/#figure-2">图2</a>
+.你将实现论文中的大部分内容，包括保存持久化状态和节点故障自动重启后读取状态。
+你将不会实现集群成员的变化(Section 6)。</p>
+<p>你可能会发现这个&nbsp;<a href="https://thesquareplanet.com/blog/students-guide-to-raft/" target="_blank" rel="noopener">指南</a>
+很有用，
+还有这个关于concurrency的&nbsp;<a href="https://pdos.csail.mit.edu/6.824/labs/raft-locking.txt" target="_blank" rel="noopener">锁</a>
+
+和&nbsp;<a href="https://pdos.csail.mit.edu/6.824/labs/raft-structure.txt" target="_blank" rel="noopener">结构</a>
+的建议，
+如果需要更广泛的视角，可以看看 Paxos,Chubby,Paxos Made Live,Spanner,Zookeeper,Harp,Viewstamped Replication
+和&nbsp;<a href="https://static.usenix.org/event/nsdi11/tech/full_papers/Bolosky.pdf" target="_blank" rel="noopener">Bolosky et al</a>
+。</p>
+<p>请记住，本 lab 中最具挑战性的部分可能不是实现你的解决方案，而是调试它。为了帮助应对这一挑战，你可能需要把事件花在如何使你的实现更容易调试。
+你可以参考&nbsp;<a href="https://pdos.csail.mit.edu/6.824/labs/guidance.html" target="_blank" rel="noopener">指导页</a>
+和这篇关于有效打印声明的&nbsp;<a href="https://blog.josejg.com/debugging-pretty/" target="_blank" rel="noopener">博文</a>
+。</p>
+<p>我们还提供了&nbsp;<a href="https://pdos.csail.mit.edu/6.824/notes/raft_diagram.pdf" target="_blank" rel="noopener">Raft 交互图</a>
+，
+可以帮助阐明Raft代码如何与上层(使用者?)交互。</p>
+<h2 id="the-code">The code</h2>
+<p>通过向<code>raft/raft.go</code>添加代码来实现Raft。在该文件中，你会发现骨架代码，以及如何发送和接收 RPC 的例子。
+你的实现必须支持以下接口，测试者和(最终)你的 key/value service 将使用该接口。你可以在<code>raft.go</code>的注释中找到更多细节。</p>
+
+
+
+
+
+<div class="tip custom-block">
+    <p class="custom-block-title">
+        
+        
+        TIP
+        
+    </p>
+    <p> Raft 实例只能通过 rpc 进行通信且必须使用<code>labrpc</code>这个包(例如不能使用文件以及共享变量)。 </p>
+</div>
+
+
+
+
+
+
+
+
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-go" data-lang="go"><span class="line"><span class="cl"><span class="c1">// create a new Raft server instance:
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">rf</span> <span class="o">:=</span> <span class="nf">Make</span><span class="p">(</span><span class="nx">peers</span><span class="p">,</span> <span class="nx">me</span><span class="p">,</span> <span class="nx">persister</span><span class="p">,</span> <span class="nx">applyCh</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// start agreement on a new log entry:
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">rf</span><span class="p">.</span><span class="nf">Start</span><span class="p">(</span><span class="nx">command</span> <span class="kd">interface</span><span class="p">{})</span> <span class="p">(</span><span class="nx">index</span><span class="p">,</span> <span class="nx">term</span><span class="p">,</span> <span class="nx">isleader</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// ask a Raft for its current term, and whether it thinks it is leader
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nx">rf</span><span class="p">.</span><span class="nf">GetState</span><span class="p">()</span> <span class="p">(</span><span class="nx">term</span><span class="p">,</span> <span class="nx">isLeader</span><span class="p">)</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1">// each time a new entry is committed to the log, each Raft peer
+</span></span></span><span class="line"><span class="cl"><span class="c1">// should send an ApplyMsg to the service (or tester).
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="kd">type</span> <span class="nx">ApplyMsg</span>
+</span></span></code></pre></div><h3 id="make">Make</h3>
+<blockquote>
+<p>Make(peers []*labrpc.ClientEnd, me int,persister *Persister, applyCh chan ApplyMsg)</p>
+</blockquote>
+<p>用于创建 Raft server。</p>
+<ol>
+<li>所有的 raft server 的端口都在<code>peers[]</code>存放(包括当前的服务)，当前服务的端口可以通过<code>peers[me]</code>来获取。</li>
+<li>所有的服务的<code>perrs[]</code>数组都具有相同的顺序。</li>
+<li><code>presister</code>是一个用来存放<code>persistent state</code>的地方，并且在初始的时候会保存最具的状态，如果有。</li>
+<li><code>applyCh</code>是 service 或 tester 发送消息给 raft 的通道。<code>Make()</code>
+必须快速返回，所以它应该为一些长时间运行的任务启动<code>goruntines</code>。</li>
+</ol>
+<h3 id="start">Start</h3>
+<p>使用 Raft 的服务（例如 kv 服务器）希望就下一个要附加到 Raft 日志的命令开始协议。如果此服务器不是领导者，则返回
+false。否则启动协议并立即返回。无法保证此命令将永远提交到 Raft 日志，因为领导者可能会失败或失去选举。即使 Raft
+实例被杀死，这个函数也应该优雅地返回。第一个返回值是该命令在提交时将出现的索引。第二个返回值是当前术语。如果此服务器认为它是领导者，则第三个返回值为
+true。</p>
+<blockquote>
+<p>Start(command interface{}) (int, int, bool)</p>
+</blockquote>
+<p>使用 Raft 的服务(e.g k/v server)希望就下一个要追加到 Raft 日志的命令开始协议。
+如果当前 Raft server 不是 leader 则返回<code>false</code>。否则启动协议并立即返回，无需等待日志追加完成。
+所以无法保证此命令将一定会被提交到 Raft 日志中，因为 leader 可能会失败或者在输掉选举。
+即使 Raft 实例被 kill 这个函数也应该 return gracefully(优雅返回)。</p>
+<p>第一个返回值是该命令在 commit 时将被设置的 index。第二个返回值是当前的 term(任期)。如果此服务器认为自己是 leader
+则第三个返回值是<code>true</code>。</p>
+<p>每个新提交的<code>Raft log entity</code>都应该发送一个<code>AppliMsg</code>到<code>Make()</code>的<code>applyCh</code>中。</p>
+<h2 id="2a---leader-election">2A - Leader Election</h2>
+<p>实现 Raft leader election 以及 heartbeats(<code>AppendEntries RPCs</code>中不附带 log entries)。</p>
+<p>2A的目标是: 选出一个 leader，如果没有 failure，它仍然是 leader，
+如果 old leader 失败或者与 old leader 之间的数据包发生丢失则由 new leader 接管。</p>
+
+
+
+
+
+<div class="tip custom-block">
+    <p class="custom-block-title">
+        
+        
+        TIP
+        
+    </p>
+    <p> 这个失败是 leader 出现故障的意思？就是说只要它没出现运行故障或者网络问题就永远是leader？ </p>
+</div>
+
+
+
+
+
+
+
+
+<p>要点:</p>
+<ol>
+<li>通过运行<code>go test -run 2A</code>来进行测试你的实现。</li>
+<li>按照论文的&nbsp;<a href="/posts/2022-10-10-raftkv/#figure-2">图2</a>
+，主要关心发送和接收<code>RequestVote RPCs</code>
+，与<code>the Rules for Servers that relate to elections</code>
+以及<code>the State related to leader election</code>。</li>
+<li>添加&nbsp;<a href="/posts/2022-10-10-raftkv/#figure-2">图2</a>
+中与 leader election 相关的状态到<code>Raft</code>这个结构体中，且还需要定义一个结构来保存每个日志的信息。</li>
+<li>实现<code>RequestVote()</code>，这样 raft 服务们就能互相投票了。添加<code>RequestVOteArgs</code>和<code>RequestVoteReply</code>者两个结构体。修改<code>Make()</code>
+，创建一个 goroutine，用于检查心跳消息，如果有一段时间没有收到 peer 的消息时将发送<code>RequestVote RPCs</code>来定期发起领导者选举。这样，如果有
+leader 了，peer 将知道谁是 leader，或者自己成为 leader。</li>
+<li>实现心跳，需要定义一个<code>AppendEntries RPC</code>结构(尽管你可能还不需要所有参数)，
+并且让 leader 定期发送它。编写一个<code>AppendEntries RPC</code>的 handle method，用于重置选举超时，
+这样当有一个人已经当选时，其他服务器不会又成为 leader。</li>
+<li>确保不同 peer 的选举超时不在同一时间发生，否则所有peer将只为自己投票，这样就没有人会成为leader了。</li>
+<li>在测试时，leader 每秒发送的RPC请求不能超过 10 次。</li>
+<li>在测试时，要求 Raft 在 old leader 失败后5秒内选举 new leader(如果大多数节点仍然能继续通讯)。
+但是请记住，如果出现<code>split vote</code>(如果数据包丢失或者候选人选择了相同的随机退避时间就有可能发生)，leader 选举可能需要多轮。
+所以必须设置足够短的选举超时(也就是心跳间隔)，即使会选举多轮，也有可能在5秒内完成。</li>
+<li>论文的&nbsp;<a href="/posts/2022-10-10-raftkv/#leader-election">Leader election</a>
+这一节中提到的选举超时范围是150到300毫秒。
+只有当 leader 发送心跳的频率大大高于150毫秒一次时，上面提到的范围才有意义。由于在测试时限制每秒10次心跳，
+所以必须使用比论文中更大的选举超时时间，但是不能太大，因为可能会无法在5秒内完成选举。</li>
+<li>如果您的代码无法通过测试，请再次阅读论文中的&nbsp;<a href="/posts/2022-10-10-raftkv/#figure-2">图2</a>
+，leader 选举的全部逻辑分布在图中多个部分。</li>
+<li>不要忘记实现<code>GetState()</code>。</li>
+<li>在测试时，如果要关闭一个raft实例，会调用<code>rf.kill()</code>。我们可以调用<code>rf.killed</code>来检查是否被调用了<code>kill()</code>。您可能希望在所有的循环中都这样
+做，以避免死亡的Raft实例打印混乱的信息。</li>
+<li><code>go RPC</code>只发送名称以大写字母开头的结构体字段。子结构体也必须拥有大写的字段名。</li>
+</ol>
+<h2 id="2b---log">2B - log</h2>
+<p>实现 leader 以及 follower 的代码来添加新的日志。</p>
+<p>要点:</p>
+<ol>
+<li>你的首要目标就是通过<code>TestBasicAgree2B</code>。从实现<code>Start()</code>开始，根据&nbsp;<a href="/posts/2022-10-10-raftkv/#figure-2">图2</a>
+，编写代码，
+通过<code>AppendEntries</code>发送和接收新的日志。发送最近提交的日志到对方的<code>applyCh</code>中</li>
+<li>需要实现<code>election restriction</code></li>
+<li>在早期的 Lab 2B 测试中未能达成协议的一种方法是: 即时 leader 还存活也要重复进行选举。
+在 election timer 中找 bug，或者在赢得选举后不立即发送心跳的问题。</li>
+<li>你的代码中可能有重复检查某些事件的循环。不要让这些循环连续的的执行而没有暂停，这将使你的实现慢到无法通过测试。
+使用 Go 的&nbsp;<a href="https://pkg.go.dev/sync#Cond" target="_blank" rel="noopener">condition variables</a>
+ 或者加入`time.sleep(10 * Millisecond)在每个循环中。</li>
+<li>读懂<code>config.go</code>以及<code>test_test.go</code>以便了解在测试什么内容。</li>
+</ol>
+<h1 id="代码实现思路">代码实现思路</h1>
+<p>大概记录一下代码的实现思路以及遇到的问题。</p>
+<h2 id="2a">2A</h2>
+<ol>
+<li>根据图2中的 state 这一节添加对应的属性</li>
+<li>添加<code>RaftRole</code>属性，代表当前的角色: leader，candidate，follower</li>
+<li>实现<code>ticker</code>这个函数:
+<ul>
+<li>可以使用两个<code>time.timer</code>来作为触发器</li>
+<li>判断是否很久没有收到心跳，来发起选举</li>
+<li>判断是否需要发送心跳，来维持自己的权威</li>
+</ul>
+</li>
+<li>这个时候要注意这条规则: <strong>如果 RPC 的请求或者响应中包含一个 term T 大于 currentTerm，则 currentTerm 赋值为 T，
+并切换状态为 follower。</strong></li>
+<li>实现发起选举的流程
+<ul>
+<li>根据图2中的<code>Rules for Servers</code>的<code>candaidte</code>流程一步一步实现</li>
+<li>并行发起<code>RequestVote RPC</code>，如果票数大于 1/2 则转换为 leader(可能需要广播心跳)。</li>
+</ul>
+</li>
+<li>实现<code>RequestVote</code>
+<ul>
+<li>根据图2中的<code>RequestVote RPC</code>一步一步实现就好</li>
+</ul>
+</li>
+<li>实现<code>AppendEntries</code>
+<ul>
+<li>只需要简单的实现转换为 follower 以及刷新选举超时时间即可。</li>
+</ul>
+</li>
+<li>所有节点收到响应后刷新选举超时时间(具体情况具体判断)</li>
+<li>成为 leader 后开始刷新心跳超时时间(来刷新 follower 的选举超时时间)</li>
+</ol>
+<p>遇到的问题:</p>
+<p>1.第一个测试会有<code>warning: Term changed even though there were no failures</code>出现</p>
+<p>就是在有一个 leader 的时候其他 follower 还是发起了选举。猜测原因是<code>election timeout</code>和<code>AppendEntries</code>的时间点很邻近，这个只能调试
+两种超时时间，我的选举超时时间是 200~350ms，心跳固定在 125ms。</p>
+<p>然后我在转换角色的时候加了一个<code>if new role == old role then return</code>的判断，这里导致<code>election  timeout</code>没有刷新。</p>
+<p>2.在响应或请求时要第一时间处理第4条。</p>
+<h1 id="raft论文翻译">Raft论文翻译</h1>
+<blockquote>
+<p>选取一些重要的片段进行翻译</p>
+</blockquote>
+<p>original地址: &nbsp;<a href="https://pdos.csail.mit.edu/6.824/papers/raft-extended.pdf" target="_blank" rel="noopener">https://pdos.csail.mit.edu/6.824/papers/raft-extended.pdf</a>
+</p>
+<h2 id="abstract">Abstract</h2>
+<p>Raft 是一种为了管理复制日志的共识算法。它提供了和 Paxos 算法相同的功能和性能，但它的算法结构和 Paxos 不同，
+Raft 更容易理解并且更容易构建实际的系统。为了提升可理解性，Raft 将共识算法分成了几个关键的模块，例如领导人选举，日志复制和安全性。
+同时它通过实施一个更强的一致性来减少需要考虑的状态的数量。Raft 还包括一个机制来允许集群成员的动态改变，它利用重叠的大多数来保证安全性。</p>
+<h2 id="introduction-1">Introduction</h2>
+<p>Raft 算法和已经存在的共识算法在某些地方很相似(主要是 Oki 以及 Liskov&rsquo;s Viewstamped Replication)，但是它有以下新特性:</p>
+<ul>
+<li>强领导者: Raft 使用一种比其他共识算法更强的领导形式。例如，日志只从 leader 发送给其他服务器。
+这简化了对复制日志的管理并使得 Raft 更容易理解。</li>
+<li>领导选举: Raft 使用随机的计时器来选取 leader。这种方式仅仅是在所有共识算法都需要改进的心跳机制上有些许改进，然而这使得
+Raft 在解决冲突时更简单和快速。</li>
+<li>成员调整: Raft 使用了新的联合共识(join consensus)算法来处理集群成员变换的问，
+在处于调整过程中的两种不同的配置的大多数集群会有重叠(overlap)，这就允许集群在成员变更的时候，持续正常运行。</li>
+</ul>
+<h2 id="replicated-state-machine">Replicated State Machine</h2>
+<p><code>Replicated State Machine</code>(复制状态机)在分布式系统中被用于解决各种容错问题。例如 GFS、HDFS、RAMCloud 等单 leader 的大型集群系统，
+通常使用独立的复制状态机来管理领导选举和存储配置信息来保证在 leader 崩溃的情况下也要存活下来，复制状态机的例子包括 Chubby
+以及 Zookeeper。</p>
+<p><figure id="a-/images/7.png" class="align-center">
+    <img src="/images/7.png" alt="Figure 1: 复制状态机架构。共识算法管理来自客户端的包含状态机命令的复制日志，状态机按照相同的顺序来处理它们，所以它们产生相同的输出。"  />
+    
+    <figcaption>
+       Figure 1: 复制状态机架构。共识算法管理来自客户端的包含状态机命令的复制日志，状态机按照相同的顺序来处理它们，所以它们产生相同的输出。
+    </figcaption>
+    
+</figure></p>
+<p>共识算法是在复制状态机的背景下提出的，在这种方法中，在一组服务器上的状态机对同一个的状态会计算出相同的副本，并且在一些服务器宕机的情况下也可以继续运行。</p>
+<p>如图一所示，复制状态机是通过复制日志实现的。每个服务器保存者一个包含一系列命令的日志，其状态机按照顺序来执行它们。
+每个日志包含相同顺序的相同命令，所以每个状态机都执行相同的命令序列。因为状态机是确定的，所以每个状态机会计算出相同的状态和相同顺序的输出。</p>
+<p>共识算法的任务是 保证复制日志的一致性 。服务器上的共识模块接收来自客户端的命令并把它们添加到日志中，
+并与其他服务器上的共识模块进行通讯以确保它们的每一条日志最终都相同(相同的请求有相同的顺序)，即使有一些服务发生故障。
+一旦命令被正确的复制，每一个服务的状态机会按照日志的顺序去处理它们，然后将结果返回给客户端。</p>
+<p>因此，这些服务似乎成为了一个单一的，高度可靠的状态机。</p>
+<p>在实际的共识算法通常有以下属性:</p>
+<ul>
+<li>确保非拜占庭(non-Byzantine)条件下的<em>安全性</em>(永远不返回错误的结果)，包括网络延迟，分区以及网络数据包丢失、冗余、乱序。</li>
+<li>只要大多数的服务都在运行并能相互通信且和客户端通信，它们就能发挥出全部的功能(<em>可用性</em>)。因此，一个5台服务的集群能容忍2台服务出现故障。
+假定服务应为停机而出现故障，它们可能稍后会从<code>stable storage</code>中恢复状态并从新加入集群。</li>
+<li>不依赖与时序来保证日志的一致性: 错误的时钟和极端的信息延迟延迟在最坏的情况下会导致可用性问题。</li>
+<li>在一般情况下，一个命令的完成在于集群中的大多数对单轮远程调用作出响应，少数比较慢的服务不会影响系统的整体性能。</li>
+</ul>
+<h2 id="the-raft-consensus-algorithm">The Raft consensus algorithm</h2>
+<p>Raft就是用于管理上一解描述的复制日志的算法。&nbsp;<a href="/posts/2022-10-10-raftkv/#figure-2">图2</a>
+
+是对该算法的精简型式的总结，&nbsp;<a href="/posts/2022-10-10-raftkv/#figure-3">图3</a>
+列出来该算法的关键属性，接下来对这些部分进行逐一讨论。</p>
+<p>Raft 通过选出一位 <em>leader</em> 然后给予它完全管理日志复制的责任来实现共识。leader 接收来自客户端的日志，然后复制给其他服务，并且通知在何时
+它们可以安全的消费(作用到状态机上)这些日志。leader 简化了日志复制的管理。例如: leader 可以自主确定新日志存放在哪个位置而不用询问其他服务，
+并且数据都从 leader 流向其他服务器。leader 可能会发生故障，或者和其他服务器失去连接，这个时候需要重新选举 leader。</p>
+<p>基于 leader 的方法，Raft 将一致性问题为了三个子过程来解决:</p>
+<ul>
+<li>leader 选举: 当 leader 失败(宕机)时需要选举新 leader</li>
+<li>日志复制: leader 接收来自客户端的日志，并复制给集群中的其他机器，强制其他服务器与自己的一致</li>
+<li>安全: Raft 的安全就在于&nbsp;<a href="/posts/2022-10-10-raftkv/#figure-3">图3</a>
+中的安全属性: 如果任何服务器消费了一个日志，那么其他任何服务器就不
+能在相同的日志索引消费不同的日志</li>
+</ul>
+<h3 id="figure-2">Figure 2</h3>
+<p><figure id="a-/images/raftp2.png" class="align-center">
+    <img src="/images/raftp2.png" alt="Figure 2: Raft共识算法的精简摘要(不包括成员更改以及日志压缩)。左上角的服务器行为被描述为一组独立且重复触发的规则。"  />
+    
+    <figcaption>
+       Figure 2: Raft共识算法的精简摘要(不包括成员更改以及日志压缩)。左上角的服务器行为被描述为一组独立且重复触发的规则。
+    </figcaption>
+    
+</figure></p>
+<p><strong>state</strong>:</p>
+<ul>
+<li>在所有服务器上持久化(在响应 RPC 请求之前，已经更新到了稳定的存储设备)
+<ul>
+<li><code>currentTerm</code>: 服务器已知最新的任期（在服务器首次启动时初始化为0，单调递增）</li>
+<li><code>votedFor</code>: 当前任期内收到选票的 candidate Id，如果没有投给任何候选人则为空</li>
+<li><code>log[]</code>: 日志条目,每个条目包含了用于状态机的命令，以及领导人接收到该条目时的任期(初始索引为1)</li>
+</ul>
+</li>
+<li>所有服务器上的易失性状态
+<ul>
+<li><code>commitIndex</code>: 已知的提交的日志中的最大索引(初始0，单调递增)</li>
+<li><code>lastApplied</code>: 状态机已经执行的日志中的最大索引(初始0，单调递增)</li>
+</ul>
+</li>
+<li>在 leader 上不稳定存在(在每次重新选举后初始化)
+<ul>
+<li><code>nextIndex[]</code>: 对于每一个服务器，发送到该服务器的下一个日志条目的索引(初始为leader的最后一条日志索引+1)</li>
+<li><code>matchIndex[]</code>: 对于每一个服务器，已知的已经复制到该服务器的最高日志条目的索引(初始0，单调递增)</li>
+</ul>
+</li>
+</ul>
+<p><strong>AppendEntries RPC</strong></p>
+<blockquote>
+<p>由leader发起调用来复制日志，同时也用于心跳检测</p>
+</blockquote>
+<ul>
+<li>Arguments:
+<ul>
+<li><code>term</code>: leader 的任期</li>
+<li><code>leaderId</code>: 用于 follower 找到 leader(有时 client 把请求发送给了 follower)</li>
+<li><code>prevLogIndex</code>: 紧邻新日志条目之前的那个日志条目的索引</li>
+<li><code>prevLogTerm</code>: 紧邻新日志条目之前的那个日志条目的任期</li>
+<li><code>entries[]</code>: 需要被保存的日志(为空时是心跳检测，可能一次会发送多条来提升效率)</li>
+<li><code>leaderCommit</code>: leader 已提交的最高的日志条目的索引</li>
+</ul>
+</li>
+<li>Results:
+<ul>
+<li><code>term</code>: <code>currentTerm</code>，用于 leader 更新自己的<code>term</code></li>
+<li><code>success</code>: 如果follower的<code>pervLogIndex</code>以及<code>prevLogTerm</code>能够匹配上则为true</li>
+</ul>
+</li>
+<li>Receiver implementation:
+<ul>
+<li><code>if term &lt; currentTerm then return false</code>(如果 leader 的任期小于接收者的当前任期，接收者可以是 follower 以及
+candidate)</li>
+<li><code>if log[prevLogIndex].term != prevLogTerm then return false</code>(在接收者日志中 如果能找到一个和 prevLogIndex 以及
+prevLogTerm 一样的索引和任期的日志条目则继续执行下面的步骤否则返回假)</li>
+<li><code>if log[oldIndex].term != log[newIndex].term then remove log[oldIndex,lastIndex]</code>(
+如果一个已经存在的日志与新的日志(请求中的日志条目)冲突(索引相同，任期不同)，则删除该索引处以及之后的所有日志)</li>
+<li>添加在日志列表中不存在的新日志</li>
+<li><code>if leaderCommit &gt; commitIndex then commitIndex=min(leaderCommit,log[].last.commitIndex)</code>(
+如果 leader 的已知已提交的最高日志条目的索引大于接收者的已知已提交最高日志条目的索引，则把接收者的已知已经提交的最高的日志条目的索引commitIndex
+重置为 leader 的已知已经提交的最高的日志条目的索引 leaderCommit 或者是 上一个新条目的索引 取两者的最小值)</li>
+</ul>
+</li>
+</ul>
+<p><strong>RequestVote RPC</strong></p>
+<blockquote>
+<p>候选人调用，收集选票</p>
+</blockquote>
+<ul>
+<li>Arguments:
+<ul>
+<li><code>term</code>: candidate 的任期号</li>
+<li><code>candidateId</code>: 发起请求的 candidate 的 id</li>
+<li><code>lastLogIndex</code>: candidate 的最后一条日志的索引</li>
+<li><code>lastLogTerm</code>: candidate 最后一条日志对应的任期号</li>
+</ul>
+</li>
+<li>Results:
+<ul>
+<li>term: 当前任期号，用于candidate更新自己的<code>term</code></li>
+<li>voteGranted: true表示候选人获得了选票</li>
+</ul>
+</li>
+<li>Receiver implementation:
+<ul>
+<li><code>if term &lt; currentTerm then return false</code>(如果term &lt; currentTerm返回 false)</li>
+<li><code>if (votedFor==null||votedFor==candidateId)&amp;&amp;(lastLogIndex,lastLogTerm)==log[].last then return true</code>
+(如果 votedFor 为空或者与 candidateId 相同，并且候选人的日志和自己的日志一样新，则给该候选人投票)</li>
+</ul>
+</li>
+</ul>
+<p><strong>Rules for Servers</strong></p>
+<ul>
+<li>All Servers:
+<ul>
+<li><code>if commitIndex &gt; lastApplied then incr lastApplied and exec log[lastApplied]</code>（如果commitIndex &gt;
+lastApplied，lastApplied自增，将log[lastApplied]应用到状态机）</li>
+<li><code>if appendEntries.logs exist (log.term &gt; currentTerm) then currentTerm = log.term and set status = follower</code>(如果
+RPC 的请求或者响应中包含一个 term T 大于 currentTerm，则 currentTerm 赋值为 T，并切换状态为 follower)</li>
+</ul>
+</li>
+<li>Followers:
+<ul>
+<li>不会发出任何请求，只会对来自 candidates 以及 leader 的请求做出响应</li>
+<li>选举超时后，如果未收到当前 leader(term 相同)的<code>AppendEntries RPC</code>或投票给了 candidate，则转换为 candidate</li>
+</ul>
+</li>
+<li>Candidates:
+<ul>
+<li>转换成candidate之后开始选举
+<ul>
+<li>incr <code>currentTerm</code></li>
+<li>投票给自己</li>
+<li>reset election timer</li>
+<li>发送<code>RequestVote RPC</code>给其他所有服务器</li>
+</ul>
+</li>
+<li>如果收到了多数的选票则成为 leader</li>
+<li>如果收到 new leader 的<code>AppendEntries RPC</code>则成为 follower</li>
+<li>如果选举超时则开始新一轮的选举</li>
+</ul>
+</li>
+<li>Leaders:
+<ul>
+<li>一旦成为 leader 则向其他服务器发送空的<code>AppendEntries RPC</code>，在空闲时重复发送以防止选举超时</li>
+<li>如果收到来自 client 的命令: 添加到本地日志，在执行并作用到状态机后作出响应给 client</li>
+<li>对于 follower <code>if last log index  &gt;= nextIndex</code>(最后日志条目的索引值大于等于 nextIndex):
+则通过<code>AppendEntries RPC</code>将nextIndex之后的所有日志都发送发送出去
+<ul>
+<li>如果成功: 将该 follower 的<code>nextIndex</code>以及<code>matchIndex</code>更新</li>
+<li>如果因为日志不一致导致失败: <code>nextIndex</code>递减并重新发送</li>
+</ul>
+</li>
+<li>如果存在一个数N，满足<code>N &gt; commitIndex</code>，大多数的<code>matchIndex[i] &gt;= N</code>
+以及<code>log[N].term == currentTerm</code>: <code>set commitIndex = N</code></li>
+</ul>
+</li>
+</ul>
+<h3 id="figure-3">Figure 3</h3>
+<p><figure id="a-/images/f3.png" class="align-center">
+    <img src="/images/f3.png" alt="Figure 3: Raft保证这些属性在在任何时候都上正确的。"  />
+    
+    <figcaption>
+       Figure 3: Raft保证这些属性在在任何时候都上正确的。
+    </figcaption>
+    
+</figure></p>
+<ul>
+<li><strong>Election Safety:</strong> 在给定 term 内只能选出一个 leader</li>
+<li><strong>Leader Append-Only</strong>: leader 永远不覆盖或删除日志，只会添加</li>
+<li><strong>Log Matching</strong>: 如果两个日志在包含相同的 index 以及 term，那么就认定它们完全相同</li>
+<li><strong>Leader Completeness</strong>: 如果一条日志在给定的 term 内提交，那么它一定会出现在 term 更大的 leader 的日志中</li>
+<li><strong>State Machine Safety:</strong> 如果一个服务器已经将给定索引位置的日志条目应用到状态机之中，则其他所有服务器不会在相同索引处出现不同的日志</li>
+</ul>
+<h3 id="raft-basics">Raft basics</h3>
+<p>一个 Raft 集群可以包含多个服务器；5 是一个典型的数量，它允许系统容忍2次故障(有两台服务宕机)。
+在给定的时间中每个服务都处在以下三种状态之一:
+<em>leader</em>, <em>follower</em>, <em>candidate</em>。 正常情况下，恰好只有一个 leader，所有其他服务器都是 follower。</p>
+<ul>
+<li>follower 是被动的: 它们不会自己发出请求，而只是响应来自 leader 和 candidate 的请求。</li>
+<li>leader 处理所有 client 的请求(如果 client 联系到 follower，则 follower 重定向到 leader)。</li>
+<li>candidate 用于选举出一个新的 leader(可以看&nbsp;<a href="/posts/2022-10-10-raftkv/#figure-4">图4</a>
+)。</li>
+</ul>
+<h4 id="figure-4">Figure 4</h4>
+<p><figure id="a-/images/9.png" class="align-center">
+    <img src="/images/9.png" alt="Figure 4: Server states。follow 只响应其他服务的请求，如果 follow 接收不到任何消息，就会变成 candidate 并发起选举。获得整个集群
+中大多数人投票的 candidate 成为候选人。leader 通常运行到它们失败为止。"  />
+    
+    <figcaption>
+       Figure 4: Server states。follow 只响应其他服务的请求，如果 follow 接收不到任何消息，就会变成 candidate 并发起选举。获得整个集群
+中大多数人投票的 candidate 成为候选人。leader 通常运行到它们失败为止。
+    </figcaption>
+    
+</figure></p>
+<p>如图5所示: Raft将时间分为任意长度的 <em>terms</em>。terms 的编号是连续的整数。每一个 term 开始于 <em>election</em>，一个或多个 candidate
+尝试成为 leader。如果一个 candidate 赢得了选举，那么它将在剩下的 term 内担任 leader。</p>
+<p>在某些特殊情况下选举的结果是 split vote。在这种情况下，term 将会结束并且没有 leader。一个新的 term(伴随新一轮的选举)将很快开始。
+Raft保证在给定的 term 内最多只有一个 leader。</p>
+<h4 id="figure-5">Figure 5</h4>
+<p><figure id="a-/images/10.png" class="align-center">
+    <img src="/images/10.png" alt="Figure 5: 将时间划分为 terms，每个 term 都以选举开始。选举成功后，一个 leader 管理集群直到 term 结束。
+有时候选举会失败，那么这个 term 就会没有 leader 而结束。 term 之间的切换可以在不同的时间不同的服务器上观察到"  />
+    
+    <figcaption>
+       Figure 5: 将时间划分为 terms，每个 term 都以选举开始。选举成功后，一个 leader 管理集群直到 term 结束。
+有时候选举会失败，那么这个 term 就会没有 leader 而结束。 term 之间的切换可以在不同的时间不同的服务器上观察到
+    </figcaption>
+    
+</figure></p>
+<p>不同的服务器可能会在不同的时间观察到 term 之间的转换，在某些情况下，一个服务器可能不会观察到选举甚至整个 term 的全程。
+term 在 Raft 中充当了逻辑时钟，term 使得可以服务器检测过时的信息: 如过时的 leader。</p>
+<p>每个服务器都存储一个当前的 term 编号，该编号随时间单调地增加。每当服务器进行通信时，就会交换当前 term；
+如果一个服务器的当前 term 比另一个服务器的小，那么它就会将其当前 term 更新为较大的值。</p>
+<p>如果一个 candidate 或 leader 发现它的 term 已经过时，它将立即恢复到 follower 的状态。</p>
+<p>如果一个服务器收到的请求是一个过时的 term 编号，它将拒绝该请求。</p>
+<p>Raft 服务器使用 RPC 进行通信，而基本的共识算法只需要两种类型的RPC。<code>RequestVote RPCs</code>由 candidate 在选举期间发起；
+<code>AppendEntries RPCs</code>由 leader 发起，用于复制日志条目并提供一种心跳机制。在下面的章节还增加了第三个RPC，用于在服务器之间传输快照。
+如果服务器没有及时收到响应，它们会重试 RPC，并且为了获得最佳性能，它们会并行地发出 RPC。</p>
+<h3 id="leader-election">Leader election</h3>
+<p>Raft 使用心跳机制来触发 leader 选举。当服务器启动时，初始状态都是 follower 。只要服务器收到来自 leader 或 candidate 的有效RPC，
+它就一直处于 follower 状态。 leader 定期向所有 follower 发送心跳（<code>AppendEntries RPCs</code>，不携带日志条目），以保持他们的权威。
+如果 follower 在一段时间内没有收到任何通信(<em>election timeout</em>)，那么它就认为没有可用的 leader，并开始选举以选择一个新的
+leader。</p>
+<p>要开始一场选举，follower 要增加它的当前 term 并过转换到 candidate 状态。
+然后，它为自己投票，并行的向集群中的每个其他服务器发出<code>RequestVote RPCs</code>。
+candidate 将一直处于这种状态，直到发生以下三种情况之一:</p>
+<ol>
+<li>它赢得了选举</li>
+<li>另一个服务器确立了自己的领导地位</li>
+<li>一段时间之后没有任何人获胜。</li>
+</ol>
+<p>接下来就对这些结果进行讨论:</p>
+<blockquote>
+<p>它赢得了选举</p>
+</blockquote>
+<p>如果一个 candidate 在同一任期( term )内获得了整个集群中大多数服务器的投票，那么它就赢得了选举。
+每台服务器在给定的 term 内最多为一名 candidate 投票，以先来后到为原则。</p>
+<p>少数服从多数的原则保证了最多只有一名 candidate能够在某一 term 内赢得选举
+(&nbsp;<a href="/posts/2022-10-10-raftkv/#figure-3">图3</a>
+中的选举 Safety 属性)。
+一旦一个 candidate 在选举中获胜，它就成为 leader。然后，它向所有其他服务器发送心跳信息(不携带日志的<code>AppendEntries RPC</code>)，
+以建立其权威并防止新的选举发生。</p>
+<blockquote>
+<p>另一个服务器确立了自己的领导地位</p>
+</blockquote>
+<p>在等待投票的过程中，candidate 可能会收到另一个服务器的<code>AppendEntries RPC</code>，声称自己是领导者。
+如果这个 leader 的term(会携带在 RPC 中)不小于 candidate 当前的 term，
+那么 candidate 就会承认 leader 是合法的并返回到 follower 状态。
+如果 RPC 中的 term 比 candidate 当前的 term 小，那么候选者会拒绝 RPC，并继续处于 candidate 状态。</p>
+<blockquote>
+<p>一段时间之后没有任何人获胜</p>
+</blockquote>
+<p>第三个可能的结果是 candidate 既没有赢得选举，也没有输掉选举: 如果许多 follower 同时成为 candidate，那么票数可能被分割，
+因此没有 candidate 能获得足够的投票。
+当这种情况发生时，每个 candidate 都会超时，然后通过增加其 term 和发起新一轮的<code>RequestVote RPC</code>来开始新的选举。
+然而，如果没有额外的措施，<code>split vote</code>可能会无限期地重复。</p>
+<p>Raft 使用随机的选举超时时间，以确保 split vote 很少发生，并能迅速解决。
+为了从一开始就防止 split vote，选举超时时间是从一个固定的时间间隔(例如150-300ms)中随机选择的。
+这样每个服务器的选举超时时间就不同了，所以在大多数情况下，只有一个服务器会超时。</p>
+<p>如果一个服务赢得了选举，就在其他服务超时之前发送心跳，<code>split vote</code>就是使用这样的机制来处理。
+每个 candidate 在选举开始时重新启动其随机选举超时(重新计时？)，并等待超时过后再开始下一次选举；
+这减少了在新的选举中再次出现 split vote 的可能性。</p>
+<p>选举是一个用于说明可理解性是如何指导我们在设计方案做权衡的例子。
+最初我们计划使用一个排名系统: 每个 candidate 被分配一个唯一的排名，用来在竞争的 candidate 之间进行选择。
+如果一个候选人发现了另一个排名更高的候选人，它就会回到 follower 的状态，这样排名更高的候选人就能更容易地赢得下一次选举。
+我们发现这种方法在可用性方面产生了一些微妙的问题(如果一个排名较高的服务发生故障了，一个排名较低的服务器可能需超时并再次成为
+candidate ，但如果它过早地这样做，它可能会重置选举 leader 的进展)。我们对算法进行了多次调整，但每次调整后都会出现新的角落案例。
+最终我们得出结论，随机重试的方法更明显，更容易理解。</p>
+<h3 id="log-replication">Log replication</h3>
+<p>一旦一个领导者被选出，它就开始为 client 的请求提供服务。每个 client 的请求都包含一个要由复制的状态机执行的 command。
+leader 将该 command 作为一个新的条目附加到它的日志中，然后并行发起<code>AppendEntries RPC</code>给其他每个服务器以复制该条日志。
+当条目被安全的复制后(下面会介绍)，leader 将这条日志应用于其状态机，并将执行结果返回给 client。
+如果 follower 崩溃或运行缓慢，又或者网络数据包丢失，leader 会无限期地重试<code>AppendEntries RPC</code>(甚至在它回应了客户端之后)，
+直到所有 follower 最终存储所有日志条目。</p>
+<p><figure id="a-/images/f6.png" class="align-center">
+    <img src="/images/f6.png" alt="Figure 6: 日志由有序序号标记的条目组成。每个条目都包含创建它的 term(每个框中的数字)和一个状态机需要执行的命令。
+如果一个条目可以安全地应用于状态机，那么该条目就被认为是 committed 的"  />
+    
+    <figcaption>
+       Figure 6: 日志由有序序号标记的条目组成。每个条目都包含创建它的 term(每个框中的数字)和一个状态机需要执行的命令。
+如果一个条目可以安全地应用于状态机，那么该条目就被认为是 committed 的
+    </figcaption>
+    
+</figure></p>
+<p>日志的组织方式如&nbsp;<a href="/posts/2022-10-10-raftkv/#a-/images/f6.png">图6</a>
+所示。每个日志条目都存储了一个状态机命令，
+以及 leader 收到该条目时的 term 编号。日志条目中的 term 编号被用来检测日志之间的不一致，
+并确保&nbsp;<a href="/posts/2022-10-10-raftkv/#figure-3">图3</a>
+中的一些属性。每个日志条目也有一个整数的索引来标识它在日志中的位置。</p>
+<p>leader 决定何时将日志条目应用于状态机是安全的，这样的条目被称为 <em>committed</em> 。
+Raft 保证所提交的条目是持久化的并且最终会被所有可用的状态机执行。
+一旦创建该条目的 leader 将其复制到大多数服务器上，该日志条目就会被提交(例如，图6中的条目7)。
+这也会提交 leader 日志中所有之前的条目，包括之前领导者创建的条目。
+leader 会跟踪它所知道的已提交的最大索引，并且它在未来的<code>AppendEntries RPC</code>(包括心跳)中包括该索引，以便其他服务器最终发现。
+一旦 follower 得知一个日志条目被提交，它就会将该条目应用于其本地状态机(按日志顺序)。</p>
+<p>我们设计的 Raft 日志机制在不同服务器上的日志之间保持高度的一致性。这不仅简化了系统的行为，使其更具可预测性，而且是确保安全的重要组成部分。
+Raft 维护了以下特性，它们共同构成了&nbsp;<a href="/posts/2022-10-10-raftkv/#figure-3">图3</a>
+中的<code>Log Matching</code>特性:</p>
+<blockquote>
+<p>如果不同的两个日志具有相同的 index 以及 term</p>
+</blockquote>
+<ul>
+<li>那么就认为它们存储的是同一个 command</li>
+<li>那么就认为它们之前的所有日志也是相同的</li>
+</ul>
+<p>第一个属性来自于这样一个事实，即一个 leader 在一个 term 内只能在一个 index 上创建一个日志条目，并且日志条目永远不会改变它们在日志中的位置。
+第二个属性由<code>AppendEntries RPC</code>执行的简单一致性检查来保证。
+当发送<code>AppendEntries RPC</code>时，leader 会包含其日志中紧接新条目之前的条目的 index 和 term 。
+如果 follower 在其日志中没有找到具有相同 index 和 term 的条目，那么它将拒绝新条目。
+一致性检查就像一个归纳步骤: 日志的初始状态是肯定满足<code>Log Matching</code>属性的，
+并且每当日志被扩展时，一致性检查都会保留<code>Log Matching</code>属性。
+因此，每当<code>AppendEntries</code>成功返回时，leader 知道 follower 的日志与自己的日志在新条目之前是相同的</p>
+<p>在正常运行期间，leader 和 follower 的日志保持一致，所以<code>AppendEntries</code>一致性检查不会失败。
+然而，leader 崩溃会使日志不一致(old leader 可能没有完全复制其日志中的所有条目)。
+这些不一致会在一系列 leader 和 follower 的崩溃中加剧。图7说明了 follower 的日志可能与new leader 的日志不同的方式。</p>
+<ul>
+<li>follower 可能会丢失 leader 的条目</li>
+<li>follower 可能会有 leader 没有的额外条目</li>
+<li>或者两者都有</li>
+</ul>
+<p>日志中缺失和多余的条目可能跨越多个 term 。</p>
+<p><figure id="a-/images/f7.png" class="align-center">
+    <img src="/images/f7.png" alt="Figure 7: 当一个 leader 成功当选时，follower 可能是(a-f)中的任何一种情况。
+每个盒子代表一个日志条目；盒子里的数字是其 term。一个 follower 可能缺少条目(a-b)，可能有额外的未承诺的条目(c-d)，或者两者都有(e-f)。
+例如f的发生条件: 如果该服务器是第2期的 leader ，在其日志中中已经增加了几个条目，然后在提交条目之前就崩溃了；它很快重新启动，成为第3期的 leader，
+并在其日志中增加了几个条目；在第2期或第3期的条目被提交之前，该服务器又崩溃了，并持续了几个任期。"  />
+    
+    <figcaption>
+       Figure 7: 当一个 leader 成功当选时，follower 可能是(a-f)中的任何一种情况。
+每个盒子代表一个日志条目；盒子里的数字是其 term。一个 follower 可能缺少条目(a-b)，可能有额外的未承诺的条目(c-d)，或者两者都有(e-f)。
+例如f的发生条件: 如果该服务器是第2期的 leader ，在其日志中中已经增加了几个条目，然后在提交条目之前就崩溃了；它很快重新启动，成为第3期的 leader，
+并在其日志中增加了几个条目；在第2期或第3期的条目被提交之前，该服务器又崩溃了，并持续了几个任期。
+    </figcaption>
+    
+</figure></p>
+<p>在 Raft 中，leader 通过强迫 follower 的日志重复自己的日志来处理不一致的情况。这意味着 follower 日志中的冲突条目将被 leader
+日志中的条目覆盖。在下一节将表明，如果再加上一个限制，这就是安全的。</p>
+<p>为了使 follower 的日志与自己的日志保持一致，leader 必须找到两个日志一致的最新日志条目，删除该点之后 follower 日志中的所有条目，
+并将该点之后的所有 leader 条目发送给 follower。所有这些操作都是为了响应<code>AppendEntries RPC</code>执行的一致性检查而发生的。
+leader 为每个 follower 维护一个 nextIndex ，这是 leader 将发送给该 follower 的下一个日志条目的 index 。
+当 leader 当选时，它会初始化所有 nextIndex 的值为自己最后一条日志的 index + 1(图 7 中的 11)。
+如果 follower 的日志与 leader 的日志不一致，则<code>AppendEntries</code>一致性检查将在下一个<code>AppendEntries RPC</code>中失败。
+follower 拒绝后，leader 会减少 nextIndex 的值并重试<code>AppendEntries RPC</code>。
+最终<code>nextIndex</code>将达到 leader 和 follower 日志匹配的点。
+发生这种情况时，<code>AppendEntries</code>将成功，这将删除 follower 日志中的任何冲突条目，并从 leader 日志中添加条目(如果有)。
+一旦<code>AppendEntries</code>成功，follower 的 log 就会和 leader 的一致，并且在接下来的任期内保持这种状态。</p>
+<blockquote>
+<p>如果需要，可以优化协议以减少被拒绝的<code>AppendEntries RPC</code>的数量。例如，当拒绝<code>AppendEntries</code>请求时，
+follower 可以包含冲突条目的 term 以它在 term 中存储的第一个索引。
+有了这些信息，leader 可以减少 nextIndex 以绕过该 term 中的所有冲突条目；
+每个有日志冲突的 term 都只需要一个<code>AppendEntries RPC</code>，而不是每个日志条目一个 RPC。
+在实践中，我们怀疑这种优化是否必要，因为失败很少发生，而且不太可能有很多不一致的条目。</p>
+</blockquote>
+<p>通过这种机制，leader 在上台时无需采取任何特殊措施来恢复日志一致性。它刚刚开始正常运行，
+并且日志会自动收敛以响应<code>AppendEntries</code>一致性检查的失败。
+leader 永远不会覆盖或删除自己日志中的条目(&nbsp;<a href="/posts/2022-10-10-raftkv/#figure-3">图3</a>
+中的<code>Leader Append-Only</code>)。</p>
+<p>理想的 Raft:</p>
+<ul>
+<li>只要大多数服务器启动，Raft 就可以接受、复制和应用新的日志条目</li>
+<li>可以通过单轮 RPC 将新条目复制到集群的大部分；</li>
+<li>并且单个慢速 follower 不会影响性能。</li>
+</ul>
+<h3 id="safety">Safety</h3>
+<p>在前面的章节里面介绍了 Raft 怎样选举领导以及复制日志。
+然而，这些机制还远不够来保证每个状态机以相同的顺序来执行相同的 command。
+例如，一个 follower 可能是不可用状态(unavailable)而 leader 提交了若干个日志，然后它可能会被选为 leader 然后覆盖这些日志；
+结果就是不同的状态机可能执行了不同的 command sequence。</p>
+<p>在这一节通过添加对哪些服务器可以被选举为 leader的限制来完善 Raft。
+这个限制确保 leader 在任意给定 term 内，包含了之前任职期间的所有被提交的日志(&nbsp;<a href="/posts/2022-10-10-raftkv/#figure-3">图3</a>
+中的<code>Leader Completeness Property</code>)
+增加这个选举限制，让我们使提交时的规则更加准确。
+最后，我们会展示一个简要的证明为<code>Leader Completeness Property</code>并且说明是怎样引导出正确行为的复制状态机。</p>
+<h4 id="election-restriction">Election restriction</h4>
+<p>在任何基于 leader 的共识算法中，leader 必须将已提交的日志存储。在一些共识算法中，比如<code>Viewstamped Replication</code>，
+一个节点能当选 leader，即使它一开始没有包含所有已提交的日志。
+这些算法都有额外的机制来识别丢失的日志并发送给 new leader，要么在选举的过程中或者在选举之后不久。
+不幸的是，这种方法会导致相当大的额外的机制和复杂性。</p>
+<p>Raft 使用了一种更加简单的方法，它可以保证在选举的时候新的 leader 拥有所有之前任期中已经提交的日志条目，
+而不需要传送这些日志条目给 leader 。这意味着日志条目的传送是单向的，只从 leader 传给 follower，
+并且 leader 从不会覆盖自身本地日志中已经存在的条目。</p>
+<p>Raft 使用投票的过程来阻止 candidate 赢得选举，除非它的日志包含所有已经提交的条目。cand-
+idate 为了被选举必须联系集群中的大部分节点，这意味着每个被提交的日志在这些服务上至少存在一个节点上。
+如果 candidate 的日志至少与大多数日志中的任何其他日志一样最新(“最新”的定义在下面)，那么它一定保存了所有已提交的日志。</p>
+<p><code>RequestVote RPC</code>实现的限制: RPC 会包含关于 candidate 的日志信息，如果 voter 自己的日志比 candidate 的日志更新，
+那么 vote 会拒绝投票。</p>
+<p>Raft 通过比较最后一个日志的 index 以及 term来决定两个日志中的那个是最新的。
+如果最后一条日志的 term 不同，则更大的那份就是更新的。
+如果日志有相同的 term，那么哪个日志长(日志数组的长度？还是 index 的大小？)，哪个就是最新的。</p>
+<h4 id="committing-entries-from-previous-terms">Committing entries from previous terms</h4>
+<p>如&nbsp;<a href="/posts/2022-10-10-raftkv/#log-replication">Log replication</a>
+介绍的那样，
+只要日志被存储到大多数节点中，leader 就知道这条日志是可以在当前 term 内被提交的。
+如果 leader 在提交日志之前崩溃了，未来的 leader 将会尝试完成这条日志的复制。
+然而，leader 不能立即推断出在前一个 term 的日志在保存到大多数服务器上时就一定被提交了。
+图8说明了一种情况: 一条已经被存储到大多数节点上的老日志条目，也依然有可能会被未来的领导者覆盖掉。</p>
+<p><figure id="a-/images/f8.png" class="align-center">
+    <img src="/images/f8.png" alt="Figure 8: 如图的时间序列展示了为什么领导者无法决定对老任期号的日志条目进行提交。在 (a) 中，S1 是领导者，部分的复制了索引位置 2 的日志条目。在 (b) 中，S1 崩溃了，然后 S5 在任期 3 里通过 S3、S4 和自己的选票赢得选举，然后从客户端接收了一条不一样的日志条目放在了索引 2 处。然后到 (c)，S5 又崩溃了；S1 重新启动，选举成功，开始复制日志。在这时，来自任期 2 的那条日志已经被复制到了集群中的大多数机器上，但是还没有被提交。如果 S1 在 (d1) 中又崩溃了，S5 可以重新被选举成功（通过来自 S2，S3 和 S4 的选票），然后覆盖了他们在索引 2 处的日志。反之，如果在崩溃之前，S1 把自己主导的新任期里产生的日志条目复制到了大多数机器上，就如 (d2) 中那样，那么在后面任期里面这些新的日志条目就会被提交（因为 S5 就不可能选举成功）。 这样在同一时刻就同时保证了，之前的所有老的日志条目就会被提交。"  />
+    
+    <figcaption>
+       Figure 8: 如图的时间序列展示了为什么领导者无法决定对老任期号的日志条目进行提交。在 (a) 中，S1 是领导者，部分的复制了索引位置 2 的日志条目。在 (b) 中，S1 崩溃了，然后 S5 在任期 3 里通过 S3、S4 和自己的选票赢得选举，然后从客户端接收了一条不一样的日志条目放在了索引 2 处。然后到 (c)，S5 又崩溃了；S1 重新启动，选举成功，开始复制日志。在这时，来自任期 2 的那条日志已经被复制到了集群中的大多数机器上，但是还没有被提交。如果 S1 在 (d1) 中又崩溃了，S5 可以重新被选举成功（通过来自 S2，S3 和 S4 的选票），然后覆盖了他们在索引 2 处的日志。反之，如果在崩溃之前，S1 把自己主导的新任期里产生的日志条目复制到了大多数机器上，就如 (d2) 中那样，那么在后面任期里面这些新的日志条目就会被提交（因为 S5 就不可能选举成功）。 这样在同一时刻就同时保证了，之前的所有老的日志条目就会被提交。
+    </figcaption>
+    
+</figure></p>
+<p>为了消除图8中的问题，Raft 永远不使用通过计算副本数量的方式去提交前一个 term 的日志。
+只有 leader 当前 term 内的日志条目才会通过计算副本数量的方式来提交；
+一旦当前 term 的日志以这种方式提交，那么由于<code>Log Matching</code>则之前的所有日志条目也被间接提交。
+在某些情况下，leader能安全的知道一个老的日志是否已经被提交(例如，该日志是否存储到服务器上)，
+但是 Raft 为了简化问题使用了一种更加保守的方法。</p>
+<p>当 leader 复制之前任期里的日志时，Raft 会为所有日志保留原始的任期号，这在提交规则上产生了额外的复杂性。
+在其他的共识算法中，如果一个新的 leader 要重新复制之前的任期里的日志时，它必须使用当前新的任期号。
+Raft 使用的方法更加容易辨别出日志，因为它可以随着时间和日志的变化对日志维护着同一个任期编号。
+另外，和其他的算法相比，Raft 中的 new leader 只需要发送更少日志条目(
+其他算法中必须在他们被提交之前发送更多的冗余日志条目来为他们重新编号)。
+但是，这在实践中可能并不十分重要，因为领导者更换很少会发生。</p>
+<h3 id="follower-and-candidate-crashes">Follower and candidate crashes</h3>
+<p>如果 follower 或者 candidate 崩溃了，那么后续发给他们的 RPC 都会失败。
+Raft 的处理方式就是无限重试，如果后续它们恢复了，这些请求就会成功。
+如果一个节点在接收了一个 RPC 请求后，但是还没有响应的时候崩溃了，那么它在恢复的时候会再次收到同样的请求。
+Raft 的 RPC 都是幂等的，所以重试不会造成任何问题。
+如果一个 follower 收到<code>AppendEntires RPC</code>中包含已经存在的日志，那么它会直接忽略这个新的请求。</p>
+<h3 id="timing-and-availability">Timing and availability</h3>
+<p>Raft 的要求之一就是安全性不能依赖时间：整个系统不能因为某些事件运行的比预期快一点或者慢一点就产生了错误的结果。
+但是，可用性（系统可以及时的响应客户端）不可避免的要依赖于时间。
+例如，如果消息交换比服务器故障间隔时间长，候选人将没有足够长的时间来赢得选举；没有一个稳定的领导人，Raft 将无法工作。</p>
+<p>领导人选举是 Raft 中对时间要求最为关键的方面。Raft 可以选举并维持一个稳定的领导人,只要系统满足下面的时间要求：</p>
+<figure class="align-center">
+    <em>broadcastTime ≪ electionTimeout ≪ MTBF(平均故障时间)</em>
+
+    
+</figure>
+<ol>
+<li>broadcastTime: 从一个服务器并行的发送 RPC 给集群中的其他服务器并接收响应的平均时间</li>
+<li>electionTimeout: 选举超时时间</li>
+<li>MTBF: 对一台服务器而言，两次故障之间的平均时间</li>
+</ol>
+<p>broadcastTime 必须比 electionTimeout 小一个数量级才能够发送稳定的心跳消息来阻止 follower 进入选举状态。
+通过随机生成的 electionTimeout，这个不等式使得 split vote 的情况变为不可能。
+electionTimeout 应该比 MTBF 小上几个数量级，这样系统才能稳定的运行。
+当 leader 崩溃后，整个系统会在一个 electionTimeout 内不可用，我们希望这种情况在整个系统的运行中很少出现。</p>
+<p>broadcastTime 和 MTBF 是由系统决定的，但是 electionTimeout 是我们自己选择的。Raft 的 RPCs 需要接收方将信息持久化的保存到稳定存储中去，
+所以 broadcastTime 大约是 0.5 毫秒到 20 毫秒，取决于存储的技术。
+因此，electionTimeout 可能需要在 10 毫秒到 500 毫秒之间。大多数的服务器的 MTBF 都在几个月甚至更长，很容易满足时间的需求。</p>
+<h2 id="cluster-membership-changes">Cluster membership changes</h2>
+<p>&nbsp;<a href="https://github.com/OneSizeFitsQuorum/raft-thesis-zh_cn" target="_blank" rel="noopener">https://github.com/OneSizeFitsQuorum/raft-thesis-zh_cn</a>
+</p>
+<h1 id="links">Links</h1>
+<ol>
+<li>项目地址: &nbsp;<a href="https://pdos.csail.mit.edu/6.824/labs/lab-raft.html" target="_blank" rel="noopener">https://pdos.csail.mit.edu/6.824/labs/lab-raft.html</a>
+</li>
+<li>Raft 官网: &nbsp;<a href="https://raft.github.io/" target="_blank" rel="noopener">https://raft.github.io/</a>
+</li>
+<li>GFS 相关资料: &nbsp;<a href="https://fzdwx.github.io/posts/2022-10-07-gfs/#links" target="_blank" rel="noopener">https://fzdwx.github.io/posts/2022-10-07-gfs/#links</a>
+</li>
+<li>Raft paper: &nbsp;<a href="https://pdos.csail.mit.edu/6.824/papers/raft-extended.pdf" target="_blank" rel="noopener">https://pdos.csail.mit.edu/6.824/papers/raft-extended.pdf</a>
+</li>
+<li>Raft paper 中文翻译: &nbsp;<a href="https://github.com/maemual/raft-zh_cn/blob/master/raft-zh_cn.md" target="_blank" rel="noopener">https://github.com/maemual/raft-zh_cn/blob/master/raft-zh_cn.md</a>
+</li>
+<li>Diagram of Raft interactions： &nbsp;<a href="https://pdos.csail.mit.edu/6.824/notes/raft_diagram.pdf" target="_blank" rel="noopener">https://pdos.csail.mit.edu/6.824/notes/raft_diagram.pdf</a>
+</li>
+<li>Students guid to Raft: &nbsp;<a href="https://thesquareplanet.com/blog/students-guide-to-raft/" target="_blank" rel="noopener">https://thesquareplanet.com/blog/students-guide-to-raft/</a>
+</li>
+<li>Raft locking: &nbsp;<a href="https://pdos.csail.mit.edu/6.824/labs/raft-locking.txt" target="_blank" rel="noopener">https://pdos.csail.mit.edu/6.824/labs/raft-locking.txt</a>
+</li>
+<li>Raft structure: &nbsp;<a href="https://pdos.csail.mit.edu/6.824/labs/raft-structure.txt" target="_blank" rel="noopener">https://pdos.csail.mit.edu/6.824/labs/raft-structure.txt</a>
+</li>
+<li>Paxos Replicated State Machines as the Basis of a High-Performance Data
+Store &nbsp;<a href="https://static.usenix.org/event/nsdi11/tech/full_papers/Bolosky.pdf" target="_blank" rel="noopener">https://static.usenix.org/event/nsdi11/tech/full_papers/Bolosky.pdf</a>
+</li>
+<li>TiKV 对于 Raft 优化 &nbsp;<a href="https://cn.pingcap.com/blog/optimizing-raft-in-tikv" target="_blank" rel="noopener">https://cn.pingcap.com/blog/optimizing-raft-in-tikv</a>
+</li>
+<li>&nbsp;<a href="https://www.cnblogs.com/niejunlei/p/9719557.html" target="_blank" rel="noopener">https://www.cnblogs.com/niejunlei/p/9719557.html</a>
+</li>
+<li>&nbsp;<a href="https://blog.csdn.net/viskaz/article/details/124232474" target="_blank" rel="noopener">https://blog.csdn.net/viskaz/article/details/124232474</a>
+</li>
+<li>&nbsp;<a href="https://www.cnblogs.com/brianleelxt/p/13251540.html" target="_blank" rel="noopener">https://www.cnblogs.com/brianleelxt/p/13251540.html</a>
+</li>
+</ol>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>GFS</title>
+      <link>https://fzdwx.github.io/posts/2022-10-07-gfs/</link>
+      <pubDate>Fri, 07 Oct 2022 21:12:56 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/posts/2022-10-07-gfs/</guid>
+      <description>为了性能(Performance), 所以将数据分割放到大量的服务器上，从而实现并行的读取数据，这就是分片(Sharding)。 而成败上千的机器总会发生错误，所以有了容错(Fault Tolerance)。 实现容错最简单的方式就是复制(Replication)，其中一个发生故障了就切换另一个。 使用了复制，如果你不够小心，那么它们之间就可能会不一致。数据就有可能出现问题，所以就有了不一致的问题(Inconsistency)。 如果为了实现一致性(Consistency)，那么就需要多进行额外的交互来保证一致性，所以代价就是低性能(Low Perf) ，但这与我们开始的希望不符合。 TIP So，强一致性代表着低性能。 设计目标 由于GFS是建立在大量的计算机上的，而这些计算机会不可避免的发生故障。所以必须要进行：检查，容错以及快速从故障恢复。 主要支持大文件(例如说好几个G的文件)，同时也支持小文件但不做针对性的优化。 工作负载主要由两种类型的读取组成：大的流式读取和小的随机读取 。对于性能有过特别考虑的应用通常会作批处理并且对他们读取的内容进行排序，这样可以使得他们的读取始终是单向顺序读取，而不需要往回读取数据。 在大的流式读取中，单个操作通常要读取数百k，甚至1m或者更大的数据。对于同一个客户端来说，往往会发起连续的读取操作顺序读取一个文件。 小的随机读取通常在某个任意的偏移位置读取几kb的数据。小规模的随机读取通常在文件的不同位置，读取几k数据。 GFS中的文件通常上一旦完成写入就很少会再次修改，所以主要针对大的流式读取，同时夜支持任意位置的小规模写入操作。 GFS对多个客户端并行添加同一个文件必须要有非常有效且明确语义的支持，即原子操作。通常会有多个客户端会并行的对同一个文件进行append。 高性能的稳定带宽的网络要比低延时更加重要。我们大多数的目标应用程序都非常重视高速批量处理数据 ，而很少有人对单个读写操作有严格的响应时间要求。 架构 单个master，多个chunk server(保存具体的文件)，多个client。 每个文件被拆分为一定大小(64mb)的块(chunk)，且每个chunk有一个唯一的64位的标志(chunk handle)。 每个chunk都会在不同的chunk server上保存备份(默认是3个)，用户可以指定不同的复制级别。 master管理元数据(metadata)，例如文件到chunk的映射关系，chunk的位置信息等。 master管理chunk的分片，孤点chunk的垃圾回收机制，chunk server之间的镜像管理等 每个chunk server与master之间有心跳机制，并在检测的过程中年发出指令并收集状态。 GFS Master中的metadata filename -&amp;gt; chunk ids(chunk handles) NV chunk handle与chunk数据的对应关系 chunk保存在哪个服务器上(chunk server list) chunk的version no NV chunk的primary chunk server，因为写操作在在其上进行 primary chunk server的lease expiration 这两个data table都在master的内存中存放，为了容错(例如说重启后数据不丢失数据)，它会在磁盘上存储log，读取的使用从内存里面读取，写的时候会写入内存以及磁盘。 每当有数据变更时，就会在磁盘上的日志进行追加，并且定期(日志增长超过某一个大小)创建checkpoint(类似快照，不用从头开始读取)
+GFS Read Steps 首先读请求就表明client有filename以及想要读取的位置(offset)，然后发送给master。 master收到请求后就从filenames中获取对应的chunk handles。而每个chunk的大小上固定的，所以就得到的具体开始的chunk handle。 然后根据chunk handle找到对应存放数据的chunk server的列表返回给client。 client可以选择一个server来进行读取(论文中说会选择一个最近的服务器，应为google里面ip是连续的，可以根据ip判断远近) ，应为客户端每次只读取1mb或者64kb的数据，所以它会缓存chunk与chunk server的关系，这样就不用每次都请求。 chunk server收到请求后，根据chunk handle(推测chunk是安装chunk handle进行命名的)找到对应的chunk以及offset对应的数据给客户端。 q1: 如果读取的数据跨越了一个chunk怎么办？ 例如说client想要读取的数据超过了64mb，或者仅仅上是2个byte却跨越了chunk，client会在发送请求时注意到这次请求跨越了边界， 所以会将一个请求拆分为2个请求发送到master，所以这里可能上向master发送两次读请求，之后在向不同的chunk server读取数据。</description>
+      <content:encoded><![CDATA[<ol>
+<li>为了性能(<strong>Performance</strong>), 所以将数据分割放到大量的服务器上，从而实现并行的读取数据，这就是分片(<strong>Sharding</strong>)。</li>
+<li>而成败上千的机器总会发生错误，所以有了容错(<strong>Fault Tolerance</strong>)。</li>
+<li>实现容错最简单的方式就是复制(<strong>Replication</strong>)，其中一个发生故障了就切换另一个。</li>
+<li>使用了复制，如果你不够小心，那么它们之间就可能会不一致。数据就有可能出现问题，所以就有了不一致的问题(<strong>Inconsistency</strong>)。</li>
+<li>如果为了实现一致性(<strong>Consistency</strong>)，那么就需要多进行额外的交互来保证一致性，所以代价就是低性能(<strong>Low Perf</strong>)
+，但这与我们开始的希望不符合。</li>
+</ol>
+
+
+
+
+
+<div class="tip custom-block">
+    <p class="custom-block-title">
+        
+        
+        TIP
+        
+    </p>
+    <p> So，强一致性代表着低性能。 </p>
+</div>
+
+
+
+
+
+
+
+
+<h2 id="设计目标">设计目标</h2>
+<ol>
+<li>由于GFS是建立在大量的计算机上的，而这些计算机会不可避免的发生故障。所以必须要进行：<strong>检查，容错以及快速从故障恢复</strong>。</li>
+<li><strong>主要支持大文件</strong>(例如说好几个G的文件)，同时也支持小文件但不做针对性的优化。</li>
+<li>工作负载主要由两种类型的读取组成：<strong>大的流式读取</strong>和<strong>小的随机读取</strong>
+。对于性能有过特别考虑的应用通常会作批处理并且对他们读取的内容进行排序，这样可以使得他们的读取始终是单向顺序读取，而不需要往回读取数据。
+<ul>
+<li>在大的流式读取中，单个操作通常要读取数百k，甚至1m或者更大的数据。对于同一个客户端来说，往往会发起连续的读取操作顺序读取一个文件。</li>
+<li>小的随机读取通常在某个任意的偏移位置读取几kb的数据。小规模的随机读取通常在文件的不同位置，读取几k数据。</li>
+</ul>
+</li>
+<li>GFS中的文件通常上一旦完成写入就很少会再次修改，所以主要针对<strong>大的流式读取</strong>，同时夜支持任意位置的小规模写入操作。</li>
+<li>GFS对多个客户端并行添加同一个文件必须要有非常有效且明确语义的支持，即<strong>原子操作</strong>。通常会有多个客户端会并行的对同一个文件进行append。</li>
+<li>高性能的稳定带宽的网络要比低延时更加重要。我们大多数的目标应用程序都非常<strong>重视高速批量处理数据</strong>
+，而很少有人对单个读写操作有严格的响应时间要求。</li>
+</ol>
+<h2 id="架构">架构</h2>
+<ol>
+<li>单个master，多个chunk server(保存具体的文件)，多个client。</li>
+<li>每个文件被拆分为一定大小(64mb)的块(chunk)，且每个chunk有一个唯一的64位的标志(chunk handle)。</li>
+<li>每个chunk都会在不同的chunk server上保存备份(默认是3个)，用户可以指定不同的复制级别。</li>
+<li>master管理元数据(metadata)，例如文件到chunk的映射关系，chunk的位置信息等。</li>
+<li>master管理chunk的分片，孤点chunk的垃圾回收机制，chunk server之间的镜像管理等</li>
+<li>每个chunk server与master之间有心跳机制，并在检测的过程中年发出指令并收集状态。</li>
+</ol>
+<h2 id="gfs-master中的metadata">GFS Master中的metadata</h2>
+<ol>
+<li>filename -&gt; chunk ids(chunk handles) <em><strong>NV</strong></em></li>
+<li>chunk handle与chunk数据的对应关系
+<ul>
+<li>chunk保存在哪个服务器上(chunk server list)</li>
+<li>chunk的version no <em><strong>NV</strong></em></li>
+<li>chunk的primary chunk server，因为写操作在在其上进行</li>
+<li>primary chunk server的lease expiration</li>
+</ul>
+</li>
+</ol>
+<p>这两个data table都在master的内存中存放，为了容错(例如说重启后数据不丢失数据)，它会在磁盘上存储log，读取的使用从内存里面读取，写的时候会写入内存以及磁盘。
+每当有数据变更时，就会在磁盘上的日志进行追加，并且定期(日志增长超过某一个大小)创建checkpoint(类似快照，不用从头开始读取)</p>
+<h2 id="gfs-read-steps">GFS Read Steps</h2>
+<ol>
+<li>首先读请求就表明client有filename以及想要读取的位置(offset)，然后发送给master。</li>
+<li>master收到请求后就从filenames中获取对应的chunk handles。而每个chunk的大小上固定的，所以就得到的具体开始的chunk handle。</li>
+<li>然后根据chunk handle找到对应存放数据的chunk server的列表返回给client。</li>
+<li>client可以选择一个server来进行读取(论文中说会选择一个最近的服务器，应为google里面ip是连续的，可以根据ip判断远近)
+，应为客户端每次只读取1mb或者64kb的数据，所以它会缓存chunk与chunk server的关系，这样就不用每次都请求。</li>
+<li>chunk server收到请求后，根据chunk handle(推测chunk是安装chunk handle进行命名的)找到对应的chunk以及offset对应的数据给客户端。</li>
+</ol>
+<h3 id="q1-如果读取的数据跨越了一个chunk怎么办">q1: 如果读取的数据跨越了一个chunk怎么办？</h3>
+<p>例如说client想要读取的数据超过了64mb，或者仅仅上是2个byte却跨越了chunk，client会在发送请求时注意到这次请求跨越了边界，
+所以会将一个请求拆分为2个请求发送到master，所以这里可能上向master发送两次读请求，之后在向不同的chunk server读取数据。</p>
+<h2 id="多个副本之间变更顺序的一致性">多个副本之间变更顺序的一致性</h2>
+<p>针对一个chunk</p>
+<ol>
+<li>master授权给某个持有这个chunk的server一个租约期限(60s)，称为primary。</li>
+<li>primary对所有的更改操作进行排序(serial order)，然后其他的secondary根据这个顺序进行变更。</li>
+<li>只要这个chunk正在变更，那么primary就可以向master申请延长租约。</li>
+</ol>
+<h2 id="gfs-write-steps">GFS Write Steps</h2>
+<ol>
+<li>client向master发送请求获取chunk server list(primary,secondaries)，
+如果没有primary，master就会选择一个secondary成为primary。</li>
+<li>client获取到chunk server list后会缓存下来，只有当primary
+没有响应或租约过期后才会再次请求。</li>
+<li>client将数据推送到所有replicas，客户端不保证推送的顺序，每个chunk server会将数据保存在内部的lur cache中，直到数据被使用或过期。</li>
+<li>当所有replicas都收到了数据，client将会发送一个写请求到primary，它标识了之前推送到每个副本的数据。
+primary将这些写入组织成一定的顺序应用到自己本地。</li>
+<li>primary然后将这个应用顺序转发给各个secondary。</li>
+<li>secondaries应用这个顺序完成修改并答复primary。</li>
+<li>primary答复client，如果出现了任意错误也会答复给client。在出现错误的情况下，write request也可能在primary以及secondary中成功
+(如果primary直接就失败了，那么它将不会转发serial order给secondaries)，client将认为这次请求是失败的，它会通过重试来处理(
+3-7尝试几次重新写入)</li>
+</ol>
+<h2 id="gfs-atomic-record-appends">GFS Atomic Record Appends</h2>
+
+
+
+
+
+<div class="tip custom-block">
+    <p class="custom-block-title">
+        
+        
+        对同一片区域个并发写入是不可序列化的
+        
+    </p>
+    <p> 这片区域可能最终包含多个客户端的数据片段。 </p>
+</div>
+
+
+
+
+
+
+
+
+<p>一个原子的append操作。<code>recored append</code>至少会在给定的offset(GFS自己选择的，因为这里可能会失败，可能有一些chunk server上有这个数据)
+上追加到文件上一次，并将该offset返回给client。它类似<code>O_APPEND</code>保证原子性。
+<code>recored append</code>遵守&nbsp;<a href="#gfs-write-steps"> GFS Write Steps </a>
+流程，但是有一些特别的地方:</p>
+<ol>
+<li>client推送所有数据后，primary会检查append到该chunk后是否超过了单个chunk的大小。</li>
+<li>如果超过了，则在当前chunk填充到最大offset时(secondary也要保存)，回复client，指出该操作应该在下一个chunk上重试(
+record的大小需要控制在单个chunk最大值的四分之一，以保证碎片在可接收的水平)。</li>
+<li>如果没有超过最大大小，则按照正常的情况进行保存。</li>
+</ol>
+<h2 id="过期副本检测">过期副本检测</h2>
+<p>如果chunk server发生故障而宕机或者丢失了某些更新请求，那么它就有可能过期了。对于每个chunk，master都维护了一个version
+no来标识最新和过期的副本。</p>
+<p>当master为一个chunk的primary server授权或续期时就会增加version no并通知所有replicas进行更新。</p>
+<p>在数据一致的情况下，master和所有replicas的version no是一致的(在client发送写请求之前可以保证)。</p>
+<p>当chunk server重启或上报version no时，master会检查它时否包含过期的副本，如果发现master发现version
+no大于它的记录，master会采用更高的version no进行更新。</p>
+<p>master通过周期性的垃圾回收来删除过期的副本，在删除前，它会确认在它所有client的chunk信息请求的应答中没有包含这个过期的副本。</p>
+<p>client在从master获取chunk server列表时会附带获取version no，所以它可以进行比对，选择最新的副本进行操作。</p>
+<h2 id="总结">总结</h2>
+<p>这并不是一个合格的多副本，多活，高可用，故障自修复的分布式系统。</p>
+<h2 id="links">Links</h2>
+<ol>
+<li>&nbsp;<a href="https://static.googleusercontent.com/media/research.google.com/zh-CN//archive/gfs-sosp2003.pdf" target="_blank" rel="noopener">gfs paper 原文</a>
+</li>
+<li>&nbsp;<a href="https://zhuanlan.zhihu.com/p/424677701" target="_blank" rel="noopener">gfs paper 中文翻译</a>
+</li>
+<li>&nbsp;<a href="https://www.bilibili.com/video/BV1R7411t71W/?p=3&amp;spm_id_from=333.788.top_right_bar_window_history.content.click&amp;vd_source=98f230be6561d2fc7450e7ce05876f68" target="_blank" rel="noopener">gfs 视频</a>
+</li>
+<li>&nbsp;<a href="https://mit-public-courses-cn-translatio.gitbook.io/mit6-824/lecture-03-gfs/3.1" target="_blank" rel="noopener">gfs 视频翻译</a>
+</li>
+<li>&nbsp;<a href="https://mit-public-courses-cn-translatio.gitbook.io/mit6-824/lecture-03-gfs/3.2-qiang-yi-zhi-xing-strong-consistency" target="_blank" rel="noopener">Bad Replication Design</a>
+</li>
+</ol>
+]]></content:encoded>
+    </item>
+    
+  </channel>
+</rss>
