@@ -237,20 +237,19 @@ h6:hover .anchor {
 .post-content .chroma {
     border-radius: var(--radius);
 }
-/* TODO refactor this shit */
 .post-content code {
     /* inline code */
     color: var(--vp-c-text-code);
     background-color: var(--vp-c-bg-mute);
-    border-radius: 4px;
-    padding: 3px 6px;
-    transition: color 0.5s, background-color 0.5s;
+    margin: 0 3px;
+    padding: 4px 5px;
+    border-radius: 3px;
     /*border: 0.1rem solid rgba(0, 0, 0, .2);*/
     /*border-radius: var(--ifm-global-radius);*/
     /*padding: var(--ifm-code-padding-vertical) var(--ifm-code-padding-horizontal);*/
     /*margin: 0 2px;*/
     /*font-size: 90%;*/
-    font-family: var(--ifm-font-family-monospace);
+    font-family: var(--fjet);
 }
 
 .post-content pre code {
