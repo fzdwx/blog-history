@@ -10,7 +10,27 @@
     </image>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright [fzdwx](https://github.com/fzdwx)   since 2022</copyright>
-    <lastBuildDate>Thu, 26 Jan 2023 11:04:48 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/tags/feed.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 01 Feb 2023 23:59:53 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/tags/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>nvim</title>
+      <link>https://fzdwx.github.io/tags/nvim/</link>
+      <pubDate>Wed, 01 Feb 2023 23:59:53 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/tags/nvim/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>project</title>
+      <link>https://fzdwx.github.io/tags/project/</link>
+      <pubDate>Wed, 01 Feb 2023 23:59:53 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/tags/project/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
     <item>
       <title>linux</title>
       <link>https://fzdwx.github.io/tags/linux/</link>
@@ -82,16 +102,6 @@
     </item>
     
     <item>
-      <title>project</title>
-      <link>https://fzdwx.github.io/tags/project/</link>
-      <pubDate>Sun, 04 Dec 2022 22:45:02 +0800</pubDate>
-      
-      <guid>https://fzdwx.github.io/tags/project/</guid>
-      <description></description>
-      <content:encoded><![CDATA[]]></content:encoded>
-    </item>
-    
-    <item>
       <title>git</title>
       <link>https://fzdwx.github.io/tags/git/</link>
       <pubDate>Sun, 23 Oct 2022 00:09:44 +0800</pubDate>
@@ -157,16 +167,6 @@
       <pubDate>Wed, 28 Sep 2022 15:59:37 +0800</pubDate>
       
       <guid>https://fzdwx.github.io/tags/editor/</guid>
-      <description></description>
-      <content:encoded><![CDATA[]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>nvim</title>
-      <link>https://fzdwx.github.io/tags/nvim/</link>
-      <pubDate>Wed, 28 Sep 2022 15:59:37 +0800</pubDate>
-      
-      <guid>https://fzdwx.github.io/tags/nvim/</guid>
       <description></description>
       <content:encoded><![CDATA[]]></content:encoded>
     </item>
