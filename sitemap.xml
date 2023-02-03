@@ -41,31 +41,40 @@
         <loc>https://fzdwx.github.io/tags/wm/</loc>
         <lastmod>2023-01-26T11:04:48+08:00</lastmod>
     </url><url>
-        <loc>https://fzdwx.github.io/tags/os/</loc>
+        <loc>https://fzdwx.github.io/docs/</loc>
         <lastmod>2023-01-08T08:44:38+08:00</lastmod>
     </url><url>
-        <loc>https://fzdwx.github.io/tags/risc-v/</loc>
+        <loc>https://fzdwx.github.io/document/</loc>
         <lastmod>2023-01-08T08:44:38+08:00</lastmod>
     </url><url>
-        <loc>https://fzdwx.github.io/doc/2023-01-08-os-multi-programs/</loc>
+        <loc>https://fzdwx.github.io/docs/os/</loc>
         <lastmod>2023-01-08T08:44:38+08:00</lastmod>
     </url><url>
-        <loc>https://fzdwx.github.io/doc/</loc>
+        <loc>https://fzdwx.github.io/docs/risc-v/</loc>
         <lastmod>2023-01-08T08:44:38+08:00</lastmod>
     </url><url>
-        <loc>https://fzdwx.github.io/doc/2022-12-30-os-privilege/</loc>
+        <loc>https://fzdwx.github.io/document/2023-01-08-os-multi-programs/</loc>
+        <lastmod>2023-01-08T08:44:38+08:00</lastmod>
+    </url><url>
+        <loc>https://fzdwx.github.io/document/2022-12-30-os-privilege/</loc>
         <lastmod>2022-12-30T13:54:36+08:00</lastmod>
     </url><url>
-        <loc>https://fzdwx.github.io/doc/2022-12-16-os-concurrent/</loc>
+        <loc>https://fzdwx.github.io/document/2022-12-16-os-concurrent/</loc>
         <lastmod>2022-12-16T20:54:45+08:00</lastmod>
     </url><url>
         <loc>https://fzdwx.github.io/tags/asm/</loc>
         <lastmod>2022-12-10T20:41:41+08:00</lastmod>
     </url><url>
+        <loc>https://fzdwx.github.io/tags/os/</loc>
+        <lastmod>2022-12-10T20:41:41+08:00</lastmod>
+    </url><url>
+        <loc>https://fzdwx.github.io/tags/risc-v/</loc>
+        <lastmod>2022-12-10T20:41:41+08:00</lastmod>
+    </url><url>
         <loc>https://fzdwx.github.io/posts/2022-12-10-risc-v/</loc>
         <lastmod>2022-12-10T20:41:41+08:00</lastmod>
     </url><url>
-        <loc>https://fzdwx.github.io/doc/2022-12-09-float-rep/</loc>
+        <loc>https://fzdwx.github.io/document/2022-12-09-float-rep/</loc>
         <lastmod>2022-12-09T19:02:32+08:00</lastmod>
     </url><url>
         <loc>https://fzdwx.github.io/tags/fun/</loc>
@@ -83,7 +92,10 @@
         <loc>https://fzdwx.github.io/notes/16/</loc>
         <lastmod>2022-11-26T09:42:10+00:00</lastmod>
     </url><url>
-        <loc>https://fzdwx.github.io/doc/2022-11-22-number/</loc>
+        <loc>https://fzdwx.github.io/docs/number/</loc>
+        <lastmod>2022-11-22T16:01:52+08:00</lastmod>
+    </url><url>
+        <loc>https://fzdwx.github.io/document/2022-11-22-number/</loc>
         <lastmod>2022-11-22T16:01:52+08:00</lastmod>
     </url><url>
         <loc>https://fzdwx.github.io/categories/cheatsheet/</loc>
@@ -161,7 +173,10 @@
         <loc>https://fzdwx.github.io/posts/2022-10-09-mario-nes/</loc>
         <lastmod>2022-10-09T19:40:42+08:00</lastmod>
     </url><url>
-        <loc>https://fzdwx.github.io/doc/2022-10-09-c-compile/</loc>
+        <loc>https://fzdwx.github.io/document/2022-10-09-c-compile/</loc>
+        <lastmod>2022-10-09T14:10:36+08:00</lastmod>
+    </url><url>
+        <loc>https://fzdwx.github.io/docs/ics/</loc>
         <lastmod>2022-10-09T14:10:36+08:00</lastmod>
     </url><url>
         <loc>https://fzdwx.github.io/tags/gfs/</loc>
@@ -197,7 +212,10 @@
         <loc>https://fzdwx.github.io/tags/network/</loc>
         <lastmod>2022-09-28T12:19:15+08:00</lastmod>
     </url><url>
-        <loc>https://fzdwx.github.io/doc/2022-09-27-mit6.824-lab1/</loc>
+        <loc>https://fzdwx.github.io/document/2022-09-27-mit6.824-lab1/</loc>
+        <lastmod>2022-09-27T21:45:29+08:00</lastmod>
+    </url><url>
+        <loc>https://fzdwx.github.io/docs/mit6.824/</loc>
         <lastmod>2022-09-27T21:45:29+08:00</lastmod>
     </url><url>
         <loc>https://fzdwx.github.io/tags/launcher/</loc>

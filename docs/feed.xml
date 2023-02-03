@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Docs on fzdwx</title>
+    <link>https://fzdwx.github.io/docs/</link>
+    <description>Recent content in Docs on fzdwx</description>
+    <image>
+      <url>https://fzdwx.github.io/images/party_parrot.gif</url>
+      <link>https://fzdwx.github.io/images/party_parrot.gif</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Copyright [fzdwx](https://github.com/fzdwx)   since 2022</copyright>
+    <lastBuildDate>Sun, 08 Jan 2023 08:44:38 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/docs/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>os</title>
+      <link>https://fzdwx.github.io/docs/os/</link>
+      <pubDate>Sun, 08 Jan 2023 08:44:38 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/docs/os/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>risc-v</title>
+      <link>https://fzdwx.github.io/docs/risc-v/</link>
+      <pubDate>Sun, 08 Jan 2023 08:44:38 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/docs/risc-v/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>number</title>
+      <link>https://fzdwx.github.io/docs/number/</link>
+      <pubDate>Tue, 22 Nov 2022 16:01:52 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/docs/number/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>ics</title>
+      <link>https://fzdwx.github.io/docs/ics/</link>
+      <pubDate>Sun, 09 Oct 2022 14:10:36 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/docs/ics/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>mit6.824</title>
+      <link>https://fzdwx.github.io/docs/mit6.824/</link>
+      <pubDate>Tue, 27 Sep 2022 21:45:29 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/docs/mit6.824/</guid>
+      <description></description>
+      <content:encoded><![CDATA[]]></content:encoded>
+    </item>
+    
+  </channel>
+</rss>

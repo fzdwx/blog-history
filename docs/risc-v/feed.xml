@@ -1,0 +1,1740 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>risc-v on fzdwx</title>
+    <link>https://fzdwx.github.io/docs/risc-v/</link>
+    <description>Recent content in risc-v on fzdwx</description>
+    <image>
+      <url>https://fzdwx.github.io/images/party_parrot.gif</url>
+      <link>https://fzdwx.github.io/images/party_parrot.gif</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Copyright [fzdwx](https://github.com/fzdwx)   since 2022</copyright>
+    <lastBuildDate>Sun, 08 Jan 2023 08:44:38 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/docs/risc-v/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>操作系统的分时多任务</title>
+      <link>https://fzdwx.github.io/document/2023-01-08-os-multi-programs/</link>
+      <pubDate>Sun, 08 Jan 2023 08:44:38 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/document/2023-01-08-os-multi-programs/</guid>
+      <description>记录如何实现一个简单的支持运行多个程序的操作系统，比如如何暂停和恢复应用程序(换栈)，以及如何实现一个抢占式操作系统。</description>
+      <content:encoded><![CDATA[
+
+
+
+
+<div class="tip custom-block">
+    <p class="custom-block-title">
+        
+        
+        TIP
+        
+    </p>
+    <p> <p>提高系统的性能和效率是操作系统的核心目标之一：</p>
+<ol>
+<li>通过提前加载应用程序到内存，减少应用程序切换开销</li>
+<li>通过协作机制支持程序主动放弃处理器，提高系统执行效率</li>
+<li>通过抢占机制支持程序被动放弃处理器，保证不同程序对处理器资源使用的公平性，也进一步提高了应用对 I/O 事件的响应效率</li>
+</ol>
+ </p>
+</div>
+
+
+
+
+
+
+
+
+<p>通过特权级机制我们可以轻松实现一个顺序执行程序的操作系统：</p>
+<ol>
+<li>在硬件级特权隔离机制的帮助之下，运行在更高特权级的操作系统不会受到有意或者无意出错的应用的影响</li>
+<li>在硬件异常触发机制的帮助之下，可以全方位监控运行在用户态低特权级的应用执行</li>
+<li>一旦应用越过了特权级界限或主动申请获得操作系统的服务，就会触发 Trap 进入到内核栈中进行处理</li>
+<li>无论原因是应用出错或应用申请更高级别的权限，操作系统就会开始运行下一个程序</li>
+</ol>
+<p>可以看到这个操作系统的特是: <strong>在内存中同一时间最多只需要驻留一个应用</strong>。因为只要当一个应用结束运行或运行出错时，操作系统才会加载另一个应用程序到该内存 。</p>
+<p>而一次只能运行一个程序是显然不符合我们对于操作系统的期望的，所以人们就考虑开始在内存中尽量同时驻留多个应用，提高处理器的利用率。</p>
+
+
+
+
+
+<div class="tip custom-block">
+    <p class="custom-block-title">
+        
+        
+        多道程序
+        
+    </p>
+    <p> 一个程序执行完毕后或主动放弃执行，处理器才能执行另外一个程序 </p>
+</div>
+
+
+
+
+
+
+
+
+<p><figure id="a-/images/Pasted%20image%2020230108192734.png" class="align-center">
+    <img src="/images/Pasted%20image%2020230108192734.png" alt="多道程序操作系统的结构"  />
+    
+    <figcaption>
+       多道程序操作系统的结构
+    </figcaption>
+    
+</figure></p>
+<ol>
+<li>首先 Qemu 把多个应用程序和 MultiprogOS 的 image 镜像加载到内存中</li>
+<li>RustSBI(bootloader)完成基本的硬件初始化后，跳转到 MultiprogOS 的起始位置</li>
+<li>MultiprogOS 首先进行正常运行前的初始化工作，建立栈空间和清空 bss 段</li>
+<li>然后通过 AppManager 从 app 列表中把所有 app 都加载到内存中，并按指定顺序在用户态一个个的执行</li>
+</ol>
+
+
+
+
+
+<div class="tip custom-block">
+    <p class="custom-block-title">
+        
+        
+        协作式操作系统
+        
+    </p>
+    <p> <p>在<strong>多道程序</strong>运行方式下，一个程序如果不让出处理器，其他程序是无法执行的。如果一个应用由于
+I/O 操作让处理器空闲或让处理器忙等，那其他需要处理器资源进行计算的应用还是没法使用空闲的处理器。</p>
+<p>所以就相当让应用在执行 I/O 操作或空闲时，可以主动 <strong>释放处理器</strong>，让其他应用继续执行。由操作系统提供这样的服务(syscall)给应用程序调用,这种操作系统就是支持 多道程序 或 协作式多任务 的<strong>协作式操作系统</strong></p>
+ </p>
+</div>
+
+
+
+
+
+
+
+
+<p><figure id="a-/images/Pasted%20image%2020230108193817.png" class="align-center">
+    <img src="/images/Pasted%20image%2020230108193817.png" alt="协作式操作系统"  />
+    
+    <figcaption>
+       协作式操作系统
+    </figcaption>
+    
+</figure></p>
+<ol>
+<li>把 Appmanager 拆分为负责加载应用的 Loader 和管理应用运行过程的 TaskManger</li>
+<li>Taskmanager 通过  task 任务控制块来管理应用程序的执行过程，支持应用程序主动放弃 CPU 并切换到另一个应用继续执行</li>
+<li>应用程序在运行时有自己所在的内存空间和栈，确保被切换时相关信息不会被其他应用破坏</li>
+<li>如果当前应用程序正在运行，则该应用对应的任务处于 Running 状态</li>
+<li>如果该应用主动放弃处理器，则切换到 Ready 状态</li>
+<li>操作系统进行任务切换时，需要把暂停任务的上下文(即任务用到的通用寄存器)保存起来</li>
+<li>把要继续执行的任务的上下文恢复为暂停前的内容</li>
+</ol>
+<h2 id="抢占式操作系统">抢占式操作系统</h2>
+<p>由于应用程序员在编写程序时，无法做到在程序合适的位置放置 <strong>放弃处理器的系统调用请求</strong>，这样系统的整体利用率还是无法提高。</p>
+<p>所以还需要有一种机制能强制打断应用程序的执行，来提高系统的利用率。在计算机体系的硬件设计中，外设可以通过硬件中断机制来与处理器进行 I/O 交互操作。这种打断机制可以随时打断应用程序的执行，并让操作系统完成对外设的 I/O 响应。</p>
+<p>而操作系统可以进一步用某种固定时长为时间间隔的外设中断(比如时钟中断)来强制打断一个程序的执行，这样一个程序只能运行一段时间(可以简称为一个<strong>时间片</strong>, time slice)就一定会让出处理器，且操作系统可以在处理外设的 I/O 响应后，让不同的应用程序分时占用处理器执行，并可通过统计程序占用处理器的总执行时间来评估程序对处理器资源的消耗。这种运行方式就是<strong>分时共享(time sharing)</strong> 或 <strong>抢占式多任务(multitasking)</strong>,也可以合称为<strong>分时多任务</strong>。</p>
+<p>我们可以把:</p>
+<ul>
+<li>一个程序一次完整执行过程称为一次<strong>任务</strong>(task)</li>
+<li>一个程序在一个时间片上占用处理器执行的过程称为一个<strong>任务片</strong>（task slice)</li>
+</ul>
+<p>操作系统对不同程序的执行过程中的任务片进行调度和管理，即通过平衡各个程序在整个时间段上的任务片数量就能达到一定程序的系统公平和高效的系统效率。</p>
+
+
+
+
+
+<div class="tip custom-block">
+    <p class="custom-block-title">
+        
+        
+        TIP
+        
+    </p>
+    <p> 在一个包含多个时间片的时间段上，会有属于不同程序的多个任务片在轮流占用处理器执行，这样的系统就是支持分时多任务或抢占式多任务的抢占式操作系统。 </p>
+</div>
+
+
+
+
+
+
+
+
+<p><figure id="a-/images/Pasted%20image%2020230108201513.png" class="align-center">
+    <img src="/images/Pasted%20image%2020230108201513.png" alt="分时多任务操作系统"  />
+    
+    <figcaption>
+       分时多任务操作系统
+    </figcaption>
+    
+</figure></p>
+<ol>
+<li>改进 Trap Handle，支持时钟中断，从而可以抢占应用的执行</li>
+<li>改进 TaskManger，提供任务调度功能，可以在收到时钟中断后统计任务的使用时间片，如果任务的时间片用完后，则切换任务</li>
+</ol>
+<h2 id="多道程序的放置与加载">多道程序的放置与加载</h2>
+<p>每个应用都按照它的编号被分别放置并加载到内存中的不同位置，因为是一次性全部加载的，所以在切换到另一个应用执行时会很快，不需要清空前一个应用然后在加载当前应用的开销。</p>
+<h3 id="多道程序放置">多道程序放置</h3>
+<ol>
+<li>调整每个用户应用程序构建时的链接脚本<code>linker.ld</code>中的起始地址<code>BASE_ADDRESS</code>,这个地址就是应用被内核加载到内存中的起始地址，所以每个应用也知道自己会被加载到某个地址运行</li>
+<li>比如说第一个应用的地址范围是<code>BASE_ADDRESS</code> ～ <code>BASE_ADDRESS</code>+<code>APP_LIMIT</code>,第二个应用的地址范围是<code>BASE_ADDRESS</code>+<code>APP_LIMIT</code>~<code>BASE_ADDRESS</code>+2 * <code>APP_LIMIT</code>。</li>
+<li>可以看出这就是另一种形式的硬编码，与每次复制应用程序到<code>BASE_ADDRESS</code>而言没什么区别</li>
+<li>这么做的原因是因为操作系统的能力还比较弱，目前应用程序的编址方式是基于绝对位置的，并没做到与位置无关，内核也没有提供相应的地址重定位机制</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-python" data-lang="python"><span class="line"><span class="cl"><span class="kn">import</span> <span class="nn">os</span>  
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl"><span class="n">base_address</span> <span class="o">=</span> <span class="mh">0x80400000</span>  
+</span></span><span class="line"><span class="cl"><span class="n">step</span> <span class="o">=</span> <span class="mh">0x20000</span>  
+</span></span><span class="line"><span class="cl"><span class="n">linker</span> <span class="o">=</span> <span class="s1">&#39;src/linker.ld&#39;</span>  
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl"><span class="n">app_id</span> <span class="o">=</span> <span class="mi">0</span>  
+</span></span><span class="line"><span class="cl"><span class="n">apps</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">listdir</span><span class="p">(</span><span class="s1">&#39;src/bin&#39;</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl"><span class="n">apps</span><span class="o">.</span><span class="n">sort</span><span class="p">()</span>  
+</span></span><span class="line"><span class="cl"><span class="k">for</span> <span class="n">app</span> <span class="ow">in</span> <span class="n">apps</span><span class="p">:</span>  
+</span></span><span class="line"><span class="cl">    <span class="n">app</span> <span class="o">=</span> <span class="n">app</span><span class="p">[:</span><span class="n">app</span><span class="o">.</span><span class="n">find</span><span class="p">(</span><span class="s1">&#39;.&#39;</span><span class="p">)]</span>  
+</span></span><span class="line"><span class="cl">    <span class="n">lines</span> <span class="o">=</span> <span class="p">[]</span>  
+</span></span><span class="line"><span class="cl">    <span class="n">lines_before</span> <span class="o">=</span> <span class="p">[]</span>  
+</span></span><span class="line"><span class="cl">    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">linker</span><span class="p">,</span> <span class="s1">&#39;r&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>  
+</span></span><span class="line"><span class="cl">        <span class="k">for</span> <span class="n">line</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>  
+</span></span><span class="line"><span class="cl">            <span class="n">lines_before</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">            <span class="o">//</span> <span class="n">替换初始的base_address</span> <span class="n">到每个应用具体的内存地址</span>
+</span></span><span class="line"><span class="cl">            <span class="n">line</span> <span class="o">=</span> <span class="n">line</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="nb">hex</span><span class="p">(</span><span class="n">base_address</span><span class="p">),</span> <span class="nb">hex</span><span class="p">(</span><span class="n">base_address</span><span class="o">+</span><span class="n">step</span><span class="o">*</span><span class="n">app_id</span><span class="p">))</span>  
+</span></span><span class="line"><span class="cl">            <span class="n">lines</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">line</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">linker</span><span class="p">,</span> <span class="s1">&#39;w+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>  
+</span></span><span class="line"><span class="cl">        <span class="n">f</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">lines</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="o">//</span> <span class="n">编译应用程序</span>
+</span></span><span class="line"><span class="cl">    <span class="n">os</span><span class="o">.</span><span class="n">system</span><span class="p">(</span><span class="s1">&#39;cargo build --bin </span><span class="si">%s</span><span class="s1"> --release&#39;</span> <span class="o">%</span> <span class="n">app</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;[build.py] application </span><span class="si">%s</span><span class="s1"> start with address </span><span class="si">%s</span><span class="s1">&#39;</span> <span class="o">%</span><span class="p">(</span><span class="n">app</span><span class="p">,</span> <span class="nb">hex</span><span class="p">(</span><span class="n">base_address</span><span class="o">+</span><span class="n">step</span><span class="o">*</span><span class="n">app_id</span><span class="p">)))</span>  
+</span></span><span class="line"><span class="cl">    <span class="o">//</span> <span class="n">还原到初始的base_address</span>
+</span></span><span class="line"><span class="cl">    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">linker</span><span class="p">,</span> <span class="s1">&#39;w+&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>  
+</span></span><span class="line"><span class="cl">        <span class="n">f</span><span class="o">.</span><span class="n">writelines</span><span class="p">(</span><span class="n">lines_before</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="n">app_id</span> <span class="o">=</span> <span class="n">app_id</span> <span class="o">+</span> <span class="mi">1</span>
+</span></span></code></pre></div><h3 id="多道程序的加载">多道程序的加载</h3>
+<p>前面一个操作系统的所有应用都是使用同一个固定的加载物理地址，所以内存中最多只能驻留一个应用，只要当它运行完毕或运行出错时才由操作系统加载一个新的应用来替换它。</p>
+<p>但是我们要实现所有的应用在内核初始化的时候就一起加载到内存中。为了防止覆盖，所以要加载到不同的物理地址上:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="sd">/// Load nth user app at  
+</span></span></span><span class="line"><span class="cl"><span class="sd">/// [APP_BASE_ADDRESS + n * APP_SIZE_LIMIT, APP_BASE_ADDRESS + (n+1) * APP_SIZE_LIMIT).  
+</span></span></span><span class="line"><span class="cl"><span class="sd"></span><span class="k">pub</span><span class="w"> </span><span class="k">fn</span> <span class="nf">load_apps</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">extern</span><span class="w"> </span><span class="s">&#34;C&#34;</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">fn</span> <span class="nf">_num_app</span><span class="p">();</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">num_app_ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">_num_app</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">usize</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="o">*</span><span class="k">const</span><span class="w"> </span><span class="kt">usize</span><span class="p">;</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">num_app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_num_app</span><span class="p">();</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">app_start</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">unsafe</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">core</span>::<span class="n">slice</span>::<span class="n">from_raw_parts</span><span class="p">(</span><span class="n">num_app_ptr</span><span class="p">.</span><span class="n">add</span><span class="p">(</span><span class="mi">1</span><span class="p">),</span><span class="w"> </span><span class="n">num_app</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="p">};</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// clear i-cache first  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="k">unsafe</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="fm">asm!</span><span class="p">(</span><span class="s">&#34;fence.i&#34;</span><span class="p">);</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// load apps  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="mi">0</span><span class="o">..</span><span class="n">num_app</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// 计算方式同放置时一样
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">base_i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_base_i</span><span class="p">(</span><span class="n">i</span><span class="p">);</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// clear region  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">        </span><span class="p">(</span><span class="n">base_i</span><span class="o">..</span><span class="n">base_i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">APP_SIZE_LIMIT</span><span class="p">)</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">.</span><span class="n">for_each</span><span class="p">(</span><span class="o">|</span><span class="n">addr</span><span class="o">|</span><span class="w"> </span><span class="k">unsafe</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="p">(</span><span class="n">addr</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="o">*</span><span class="k">mut</span><span class="w"> </span><span class="kt">u8</span><span class="p">).</span><span class="n">write_volatile</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span><span class="w"> </span><span class="p">});</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="c1">// load app from data section to memory  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">src</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">unsafe</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">core</span>::<span class="n">slice</span>::<span class="n">from_raw_parts</span><span class="p">(</span><span class="n">app_start</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="o">*</span><span class="k">const</span><span class="w"> </span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="n">app_start</span><span class="p">[</span><span class="n">i</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="mi">1</span><span class="p">]</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">app_start</span><span class="p">[</span><span class="n">i</span><span class="p">])</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">};</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">dst</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="k">unsafe</span><span class="w"> </span><span class="p">{</span><span class="w"> </span><span class="n">core</span>::<span class="n">slice</span>::<span class="n">from_raw_parts_mut</span><span class="p">(</span><span class="n">base_i</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="o">*</span><span class="k">mut</span><span class="w"> </span><span class="kt">u8</span><span class="p">,</span><span class="w"> </span><span class="n">src</span><span class="p">.</span><span class="n">len</span><span class="p">())</span><span class="w"> </span><span class="p">};</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">dst</span><span class="p">.</span><span class="n">copy_from_slice</span><span class="p">(</span><span class="n">src</span><span class="p">);</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl">    <span class="na">.align</span> <span class="mi">3</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">.section</span> <span class="no">.data</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">.global</span> <span class="no">_num_app</span>  
+</span></span><span class="line"><span class="cl"><span class="no">_num_app</span><span class="p">:</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">.quad</span> <span class="mi">4</span>  <span class="no">s</span>
+</span></span><span class="line"><span class="cl">    <span class="na">.quad</span> <span class="no">app_0_start</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">.quad</span> <span class="no">app_1_start</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">.quad</span> <span class="no">app_2_start</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">.quad</span> <span class="no">app_3_start</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">.quad</span> <span class="no">app_3_end</span>  
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">    <span class="no">.section</span> <span class="no">.data</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">.global</span> <span class="no">app_0_start</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">.global</span> <span class="no">app_0_end</span>  
+</span></span><span class="line"><span class="cl"><span class="no">app_0_start</span><span class="p">:</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">.incbin</span> <span class="s">&#34;../user/target/riscv64gc-unknown-none-elf/release/00power_3.bin&#34;</span>  
+</span></span><span class="line"><span class="cl"><span class="no">app_0_end</span><span class="p">:</span>  
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">    <span class="no">.section</span> <span class="no">.data</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">.global</span> <span class="no">app_1_start</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">.global</span> <span class="no">app_1_end</span>  
+</span></span><span class="line"><span class="cl"><span class="no">app_1_start</span><span class="p">:</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">.incbin</span> <span class="s">&#34;../user/target/riscv64gc-unknown-none-elf/release/01power_5.bin&#34;</span>  
+</span></span><span class="line"><span class="cl"><span class="no">app_1_end</span><span class="p">:</span>  
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">    <span class="no">.section</span> <span class="no">.data</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">.global</span> <span class="no">app_2_start</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">.global</span> <span class="no">app_2_end</span>  
+</span></span><span class="line"><span class="cl"><span class="no">app_2_start</span><span class="p">:</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">.incbin</span> <span class="s">&#34;../user/target/riscv64gc-unknown-none-elf/release/02power_7.bin&#34;</span>  
+</span></span><span class="line"><span class="cl"><span class="no">app_2_end</span><span class="p">:</span>  
+</span></span><span class="line"><span class="cl">  
+</span></span><span class="line"><span class="cl">    <span class="no">.section</span> <span class="no">.data</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">.global</span> <span class="no">app_3_start</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">.global</span> <span class="no">app_3_end</span>  
+</span></span><span class="line"><span class="cl"><span class="no">app_3_start</span><span class="p">:</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">.incbin</span> <span class="s">&#34;../user/target/riscv64gc-unknown-none-elf/release/03sleep.bin&#34;</span>  
+</span></span><span class="line"><span class="cl"><span class="no">app_3_end</span><span class="p">:</span>
+</span></span></code></pre></div><h3 id="执行应用程序">执行应用程序</h3>
+<p>当应用程序的初始化放置完成后，或者某个应用程序结束或出错时就要调用<code>run_next_app</code>运行下一个程序。</p>
+<p>此时 CPU 是 S 模式，而要切换到 U 模式下运行。这一过程与&nbsp;<a href="/posts/2022-12-30-os-privilege/#%e6%89%a7%e8%a1%8c%e5%ba%94%e7%94%a8%e7%a8%8b%e5%ba%8f">执行应用程序</a>
+类似。不同的是操作系统知道每个应用程序预先加载在内存中的位置，这就需要设置应用程序返回不同 Trap 上下文(保存了 放置程序起始地址的<code>epc</code>寄存器内容)：</p>
+<ol>
+<li>跳转到应用程序(i)的入口点 entry<sub>i</sub></li>
+<li>切换到用户栈 stack<sub>i</sub></li>
+</ol>
+<p>这样的一个支持把多个应用的代码和数据放置到内存中，并能够依次执行每个应用的操作系统就完成了，但是它的任务调度的灵活性还有很大改进空间。</p>
+<h2 id="任务切换">任务切换</h2>
+<p>上面这这个操作系统还是一个应用会一直占用 CPU 直到它结束或者出错。为了提高效率，我们需要介绍新的概率: <strong>任务</strong>、<strong>任务切换</strong>、<strong>任务上下文</strong>。</p>
+<p>首先我们把应用程序在不同时间段的执行过程分为两类：</p>
+<ol>
+<li>占用处理器执行有效任务的计算阶段</li>
+<li>不必占用处理器的等待阶段(比如等待 I/O)</li>
+</ol>
+<p>这些阶段就形成了一个&quot;暂停~运行&hellip;&ldquo;组合的控制流或执行历史。</p>
+<h3 id="任务">任务</h3>
+<p>如果操作系统能在某个应用程序处于等待阶段的时候，把处理器转给另外一个处于计算阶段的应用程序，那么只要转换的开销不大，那么处理器的执行效率就会大大提高。</p>
+<p>这需要应用程序在运行途中能主动让出 CPU 的使用权，等到操作系统让它再次执行后，那它才能继续执行。</p>
+<p>我们把</p>
+<ol>
+<li>应用程序的一次执行过程称为一个<strong>任务</strong></li>
+<li>应用执行过程中的一个时间片段或空闲片段称为“<strong>计算任务片</strong>”或“<strong>空闲任务片</strong>”</li>
+</ol>
+<p>当应用程序的所有任务片都完成后，应用程序的一次任务也就完成了。从一个程序的任务切换到另外一个程序的任务称为“<strong>任务切换</strong>”，为了确保切换后的任务能正确继续执行，操作系统需要支持让任务的执行“暂停”和“继续”。</p>
+<p>一条控制流需要支持“暂停～继续”，就需要提供一种控制流切换的机制，而且需要保证程序执行的控制流被切换出去之前和切换回来之后，能够继续正确执行。这需要让程序执行的状态(上下文 context)，即<strong>在执行过程中同步变化额度资源(如寄存器，栈等)保持不变，或者变化在它的预期之内</strong>。不是所有的资源都需要保存，事实上只有那些对于程序接下来的正确执行仍然有用，且在它被切换出去的时候有被覆盖风险的那些资源才有被保持的价值。这些需要保存与恢复的资源称为<strong>任务上下文(task context)</strong>。</p>
+<h3 id="不同类型的上下文与切换">不同类型的上下文与切换</h3>
+<p>在控制流切换的过程中，我们需要结合硬件机制和软件来实现保存和恢复任务上下文。任务的一次切换涉及到被换出和即将被换入的两条控制流(两个应用的不同任务)。前面介绍的两种上下文保存/恢复的例子：</p>
+<ol>
+<li>RISC-V 中的函数调用，为了支持嵌套函数调用，不仅需要硬件平台提供的跳转指令，同时还需要保存和恢复&nbsp;<a href="/posts/2022-12-10-risc-v/#risc-v-%e5%af%84%e5%ad%98%e5%99%a8%e5%90%8d%e7%a7%b0">函数调用上下文</a>
+(比如说返回地址—— ra 寄存器，比如说需要保存的寄存器—— s0~s10)。
+<ol>
+<li>在这个例子中，函数调用包含在普通控制流(与异常控制流相对)之类，且始终用一个固定的栈来保存执行的历史记录，因此函数调用并不涉及控制流的特权级切换。</li>
+<li>但是我们依然可以看成调用者与被调用者两个执行过程的“切换”</li>
+</ol>
+</li>
+<li>在前面的特权级的笔记中涉及到了某种异常（Trap）控制流，即两条控制流的特权级切换,需要保存和恢复&nbsp;<a href="/posts/2022-12-30-os-privilege/#%e7%89%b9%e6%9d%83%e7%ba%a7%e5%88%87%e6%8d%a2">系统调用(Trap)上下文</a>
+。为了让内核能够完全掌控应用的执行，且不会被应用破坏整个系统，就必须利用硬件提供的特权级机制，让应用和内核运行在不同的特权级。</li>
+</ol>
+<p>应用程序与操作系统打交道的核心在于硬件提供的 Trap 机制，也就是在 U 运行的应用控制流和在 S 运行的 Trap 控制流(操作系统的陷入处理部分)之间的切换。Trap 控制流是 Trap 触发的一瞬间生成的，它几乎唯一的目标就是处理 Trap 并恢复到原应用控制流。Trap 控制流需要把 Trap 上下文(几乎所有的通用寄存器)保存在自己的内核栈上，可以回看&nbsp;<a href="/posts/2022-12-30-os-privilege/#trap-%e4%b8%8a%e4%b8%8b%e6%96%87%e7%9a%84%e4%bf%9d%e5%ad%98%e4%b8%8e%e6%81%a2%e5%a4%8d">Trap 上下文的保存与恢复</a>
+。</p>
+<h2 id="任务切换的设计与实现">任务切换的设计与实现</h2>
+<p>现在要介绍的是一种与 Trap 不同的异常控制流,它们都是描述两条控制流之间的切换，如果将它和 Trap 切换进行比较，会有如下异同:</p>
+<ul>
+<li>与 Trap 切换不同，它不涉及特权级切换</li>
+<li>与 Trap 切换不同，它的一部分是由编译器帮忙完成的</li>
+<li>与 Trap 切换相同，它对应用是透明的</li>
+</ul>
+<p>任务切换是来自两个不同应用在内核中的 Trap 控制流之间的切换。当一个应用 Trap 到 S 模式的操作系统内核中进一步处理(操作系统的 Trap 控制流)的时候，Trap 控制流会调用一个特殊的 <code>__switch</code> 函数：在 <code>__switch</code> 返回之后，将继续从调用该函数的位置继续向下执行，但是其中却隐藏者复杂的控制流切换过程：</p>
+<ol>
+<li>调用 <code>__switch</code> 之后直到它返回前，原 Trap 控制流 A 会被切换出去，CPU 会运行另一个应用在内核中的 Trap 控制流 B</li>
+<li>然后在某个合适的时机，原 Trap 控制流 A 才会从某一条 Trap 控制流 C（很可能不是 B）切换回来继续执行并最终返回</li>
+</ol>
+<p><code>__switch</code>函数和一个普通的函数之间的核心差别就是它会<strong>换栈</strong>。</p>
+<p><figure id="a-/images/Pasted%20image%2020230110104125.png" class="align-center">
+    <img src="/images/Pasted%20image%2020230110104125.png" alt=""  />
+    
+</figure></p>
+<p>当 Trap 控制流准备调用 <code>__switch</code> 函数使任务从运行状态进入暂停状态的时候，在调用之前，内核栈会保存应用执行状态的 Trap 上下文以及内核在对 Trap 处理过程中留下的调用栈信息。由于之后还需要恢复并继续执行，所以必须要保存 CPU 当前的某些寄存器(如下图第一阶段中的最下一部分)，这些就是<strong>任务上下文</strong>。这些任务上下文都被保存在 <code>TaskManager</code> 中，从内存布局来看就是 <code>.data</code> 段中。</p>
+<p>对于当前正在执行的任务的 Trap 控制流，我们用一个名为 <code>current_task_cx_ptr</code> 的变量来保存放置当前任务上下文的地址；而用 <code>next_task_cx_ptr</code> 的变量来保存放置下一个要执行任务的上下文的地址。利用 C 语言的引用来描述的话就是：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">TaskContext</span> <span class="o">*</span><span class="n">current_task_cx_ptr</span> <span class="o">=</span> <span class="o">&amp;</span><span class="n">tasks</span><span class="p">[</span><span class="n">current</span><span class="p">].</span><span class="n">task_cx</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl"><span class="n">TaskContext</span> <span class="o">*</span><span class="n">next_task_cx_ptr</span>    <span class="o">=</span> <span class="o">&amp;</span><span class="n">tasks</span><span class="p">[</span><span class="n">next</span><span class="p">].</span><span class="n">task_cx</span><span class="p">;</span>
+</span></span></code></pre></div><p><figure id="a-/images/Pasted%20image%2020230110110143.png" class="align-center">
+    <img src="/images/Pasted%20image%2020230110110143.png" alt="switch 换栈"  />
+    
+    <figcaption>
+       switch 换栈
+    </figcaption>
+    
+</figure></p>
+<p>假设某次 <code>__switch</code> 调用要从 Trap 控制流 A 切换到 B，一共可以分为四个阶段，在每个阶段中我们都给出了 A 和 B 内核栈上的内容：</p>
+<ol>
+<li>在 Trap 控制流 A 调用函数之前，A 的内核栈上只有 Trap 上下文和 Trap 处理函数的调用栈信息，而 B 是之前被切换出去的(处于暂停状态)</li>
+<li>A 在 A 任务上下文空间中保存 CPU 当前寄存器的快照</li>
+<li>读取 <code>next_task_cx_ptr</code> 指向的 B 任务上下文,恢复寄存器后，就做到了一个函数跨两条控制流执行： <em>通过换栈实现了控制流的切换</em>
+<ol>
+<li>恢复 <code>ra</code></li>
+<li>恢复<code>s0~s11</code></li>
+<li>恢复 <code>sp</code></li>
+</ol>
+</li>
+<li>上一步寄存器恢复完成后，可以看到通过恢复 <code>sp</code> 寄存器换到了任务 B 的内核栈上，进而实现了控制流的切换。当 CPU 执行 <code>ret</code> 指令完成 <code>__switch</code> 函数返回后，任务 B 就可以从调用 <code>__switch</code> 的位置继续向下执行</li>
+</ol>
+<p>这时候任务 A 处于暂停状态，而任务 B 恢复了上下文并处于运行状态。</p>
+
+
+
+<details class="details custom-block">
+    <summary>
+        <span> 
+        
+            __switch 的实现
+        
+        </span>
+    </summary>
+    <p>
+        <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="na">.altmacro</span>  
+</span></span><span class="line"><span class="cl"><span class="no">.macro</span> <span class="no">SAVE_SN</span> <span class="no">n</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">sd</span> <span class="no">s</span><span class="err">\</span><span class="no">n</span><span class="p">,</span> <span class="p">(</span><span class="err">\</span><span class="no">n</span><span class="err">+</span><span class="mi">2</span><span class="p">)*</span><span class="mi">8</span><span class="p">(</span><span class="no">a0</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl"><span class="no">.endm</span>  
+</span></span><span class="line"><span class="cl"><span class="no">.macro</span> <span class="no">LOAD_SN</span> <span class="no">n</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">ld</span> <span class="no">s</span><span class="err">\</span><span class="no">n</span><span class="p">,</span> <span class="p">(</span><span class="err">\</span><span class="no">n</span><span class="err">+</span><span class="mi">2</span><span class="p">)*</span><span class="mi">8</span><span class="p">(</span><span class="no">a1</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl"><span class="no">.endm</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">.section</span> <span class="no">.text</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">.globl</span> <span class="no">__switch</span>  
+</span></span><span class="line"><span class="cl"><span class="no">__switch</span><span class="p">:</span>  
+</span></span><span class="line"><span class="cl">    <span class="c1"># 阶段 1
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1"># __switch(  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">#     current_task_cx_ptr: *mut TaskContext,  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1">#     next_task_cx_ptr: *const TaskContext  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1"># )  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1"># 阶段 2 保存 curr 寄存器 sp ra s0~s11
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1"># save kernel stack of current task  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">sd</span> <span class="no">sp</span><span class="p">,</span> <span class="mi">8</span><span class="p">(</span><span class="no">a0</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="c1"># save ra &amp; s0~s11 of current execution  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">sd</span> <span class="no">ra</span><span class="p">,</span> <span class="mi">0</span><span class="p">(</span><span class="no">a0</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">.set</span> <span class="no">n</span><span class="p">,</span> <span class="mi">0</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">.rept</span> <span class="mi">12</span>  
+</span></span><span class="line"><span class="cl">        <span class="no">SAVE_SN</span> <span class="nv">%n</span>  
+</span></span><span class="line"><span class="cl">        <span class="no">.set</span> <span class="no">n</span><span class="p">,</span> <span class="no">n</span> <span class="err">+</span> <span class="mi">1</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">.endr</span>  
+</span></span><span class="line"><span class="cl">    <span class="c1"># 阶段 3 恢复 next 寄存器
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1"># restore ra &amp; s0~s11 of next execution  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">ld</span> <span class="no">ra</span><span class="p">,</span> <span class="mi">0</span><span class="p">(</span><span class="no">a1</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">.set</span> <span class="no">n</span><span class="p">,</span> <span class="mi">0</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">.rept</span> <span class="mi">12</span>  
+</span></span><span class="line"><span class="cl">        <span class="no">LOAD_SN</span> <span class="nv">%n</span>  
+</span></span><span class="line"><span class="cl">        <span class="no">.set</span> <span class="no">n</span><span class="p">,</span> <span class="no">n</span> <span class="err">+</span> <span class="mi">1</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">.endr</span>  
+</span></span><span class="line"><span class="cl">    <span class="c1"># restore kernel stack of next task  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">ld</span> <span class="no">sp</span><span class="p">,</span> <span class="mi">8</span><span class="p">(</span><span class="no">a1</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="c1"># 阶段 4
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">ret</span>  
+</span></span></code></pre></div>
+    </p>
+</details>
+
+
+
+
+
+
+
+
+
+
+<ol>
+<li>保存 <code>ra</code> 是记录 <code>__switch</code> 返回后跳转的位置(<code>ret</code>执行完毕后)</li>
+<li><code>s0~s11</code> 是规定被调用者保存的寄存器</li>
+</ol>
+<p>对应的 TaskContext 的代码:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="k">pub</span><span class="w"> </span><span class="k">struct</span> <span class="nc">TaskContext</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">ra</span>: <span class="kt">usize</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">sp</span>: <span class="kt">usize</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">s</span>: <span class="p">[</span><span class="kt">usize</span><span class="p">;</span><span class="w"> </span><span class="mi">12</span><span class="p">],</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="c1">// 在 rust 中调用 __switch
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="fm">global_asm!</span><span class="p">(</span><span class="fm">include_str!</span><span class="p">(</span><span class="s">&#34;switch.S&#34;</span><span class="p">));</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">use</span><span class="w"> </span><span class="k">super</span>::<span class="n">TaskContext</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">extern</span><span class="w"> </span><span class="s">&#34;C&#34;</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="k">fn</span> <span class="nf">__switch</span><span class="p">(</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">current_task_cx_ptr</span>: <span class="o">*</span><span class="k">mut</span><span class="w"> </span><span class="n">TaskContext</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">next_task_cx_ptr</span>: <span class="o">*</span><span class="k">const</span><span class="w"> </span><span class="n">TaskContext</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><h2 id="多道程序与协作式调度">多道程序与协作式调度</h2>
+
+
+
+
+
+<div class="tip custom-block">
+    <p class="custom-block-title">
+        
+        
+        TIP
+        
+    </p>
+    <p> <p>任务相关概念的扩展:</p>
+<ul>
+<li>任务运行状态: 任务从开始到结束执行过程中所处的不同运行状态，比如:未初始化、准备执行、正在执行、已推出</li>
+<li>任务控制块： 管理程序的执行过程的任务上下文，控制程序的执行与暂停</li>
+<li>任务相关系统调用： 应用程序和操作系统直接的接口，用于程序主动暂停 <code>sys_yield</code> 和主动退出 <code>sys_exit</code></li>
+</ul>
+ </p>
+</div>
+
+
+
+
+
+
+
+
+<h3 id="多道程序背景与-yield-系统调用">多道程序背景与 yield 系统调用</h3>
+<p>我们知道 CPU 的处理速度远快于外设的 I/O 的，只有当 I/O 响应之后 CPU 才能继续计算。那么这是如何实现的？</p>
+<p>通常外设会提供一个可读的寄存器记录它目前的工作状态，于是 CPU 需要不断原地循环读取它直到它的结果显示设备已经将请求处理完毕了，才能继续执行（这就是 <strong>忙等</strong> 的含义）。</p>
+<p>而如果经常让 CPU 忙等的话，效率肯定是不符合预期的。多道程序是如何优化呢？</p>
+<ol>
+<li>内核管理多个应用程序</li>
+<li>如果 I/O 的时间很常，可以切换任务去处理其他应用</li>
+<li>在某次切换回来时去读取设备寄存器，如果已经返回则继续执行</li>
+<li>这样，只要同时存在的应用够多，就能在一定程度上隐藏 I/O 处理的延迟</li>
+</ol>
+<p>这种任务切换应该是应用程序主动调用 <code>sys_yield</code> 来实现的。
+<figure id="a-/images/Pasted%20image%2020230110202921.png" class="align-center">
+    <img src="/images/Pasted%20image%2020230110202921.png" alt="紫色是外设开始处理 I/O,蓝色和绿色的两个应用程序分别占用 CPU 的时间"  />
+    
+    <figcaption>
+       紫色是外设开始处理 I/O,蓝色和绿色的两个应用程序分别占用 CPU 的时间
+    </figcaption>
+    
+</figure></p>
+<h3 id="任务控制块与任务运行状态">任务控制块与任务运行状态</h3>
+<p>在引入了任务切换机制后，内核需要管理多个未完成的应用，而且我们不能对应用完成的顺序做任何假定。所以我们必须维护任务的运行状态:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="k">pub</span><span class="w"> </span><span class="k">enum</span> <span class="nc">TaskStatus</span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="n">UnInit</span><span class="p">,</span><span class="w"> </span><span class="c1">// 未初始化 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">	</span><span class="n">Ready</span><span class="p">,</span><span class="w">  </span><span class="c1">// 准备运行
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">	</span><span class="n">Running</span><span class="p">,</span><span class="c1">// 正在运行
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">	</span><span class="n">Exited</span><span class="p">,</span><span class="w"> </span><span class="c1">// 已退出
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><p>内核还需要一个保存应用的更多信息，将它们保存在 <strong>任务控制快</strong> 中:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="k">pub</span><span class="w"> </span><span class="k">struct</span> <span class="nc">TskControlBlock</span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">pub</span><span class="w"> </span><span class="n">task_status</span>: <span class="nc">TaskStatus</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="k">pub</span><span class="w"> </span><span class="n">task_cx</span>:     <span class="nc">TaskContext</span><span class="p">,</span><span class="w"> </span><span class="c1">// 任务上下文，内有ra,sp,s0~s11等寄存器
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><h3 id="任务管理器">任务管理器</h3>
+<p>一个全局的管理器，包含了所有要执行的任务</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="k">pub</span><span class="w"> </span><span class="k">struct</span> <span class="nc">TaskManager</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">num_app</span>: <span class="kt">usize</span><span class="p">,</span><span class="w"> </span><span class="c1">// 任务管理器管理的应用数目
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="n">inner</span>: <span class="nc">UPSafeCell</span><span class="o">&lt;</span><span class="n">TaskManagerInner</span><span class="o">&gt;</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">struct</span> <span class="nc">TaskManagerInner</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">tasks</span>: <span class="p">[</span><span class="n">TaskControlBlock</span><span class="p">;</span><span class="w"> </span><span class="n">MAX_APP_NUM</span><span class="p">],</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">current_task</span>: <span class="kt">usize</span><span class="p">,</span><span class="w"> </span><span class="c1">// 正在执行的应用编号
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><p>我们可重用并扩展之前初始化 <code>TaskManager</code> 的全局实例 <code>TASK_MANAGER</code> ：</p>
+<ol>
+<li>每个应用的上下文(<code>TaskContext</code>)的 <code>ra</code> 都默认是 <code>__restore</code></li>
+<li><code>init_app_cx</code> 为每个应用的内核栈都构建一个 <code>TrapContext</code>，且设置 <code>sepc</code>( Trap 返回后继续执行的位置) 的值为每个 App 的入口</li>
+</ol>
+
+
+
+<details class="details custom-block">
+    <summary>
+        <span> 
+        
+            初始全局 TaskManger代码
+        
+        </span>
+    </summary>
+    <p>
+        <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="n">lazy_static</span><span class="o">!</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="sd">/// Global variable: TASK_MANAGER  
+</span></span></span><span class="line"><span class="cl"><span class="sd"></span><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="k">static</span><span class="w"> </span><span class="k">ref</span><span class="w"> </span><span class="n">TASK_MANAGER</span>: <span class="nc">TaskManager</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">num_app</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">get_num_app</span><span class="p">();</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">tasks</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="p">[</span><span class="n">TaskControlBlock</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">task_cx</span>: <span class="nc">TaskContext</span>::<span class="n">zero_init</span><span class="p">(),</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">task_status</span>: <span class="nc">TaskStatus</span>::<span class="n">UnInit</span><span class="p">,</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">};</span><span class="w"> </span><span class="n">MAX_APP_NUM</span><span class="p">];</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="w"> </span><span class="n">task</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">tasks</span><span class="p">.</span><span class="n">iter_mut</span><span class="p">().</span><span class="n">enumerate</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">task</span><span class="p">.</span><span class="n">task_cx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TaskContext</span>::<span class="n">goto_restore</span><span class="p">(</span><span class="n">init_app_cx</span><span class="p">(</span><span class="n">i</span><span class="p">));</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">task</span><span class="p">.</span><span class="n">task_status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TaskStatus</span>::<span class="n">Ready</span><span class="p">;</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">TaskManager</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">num_app</span><span class="p">,</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">inner</span>: <span class="nc">unsafe</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">UPSafeCell</span>::<span class="n">new</span><span class="p">(</span><span class="n">TaskManagerInner</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">                    </span><span class="n">tasks</span><span class="p">,</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">                    </span><span class="n">current_task</span>: <span class="mi">0</span><span class="p">,</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="p">})</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">},</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">};</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div>
+    </p>
+</details>
+
+
+
+
+
+
+
+
+
+
+<h3 id="sys_yield-和-sys_exit-的实现">sys_yield 和 sys_exit 的实现</h3>
+<ol>
+<li><code>sys_yield</code> 与 <code>sys_exit</code> 的第一步就是更改当前任务的状态
+<ol>
+<li><code>sys_yield</code> -&gt; Ready</li>
+<li><code>sys_exit</code> -&gt; Exited</li>
+</ol>
+</li>
+<li>第二步都是运行下一个任务
+<ol>
+<li><code>self.find_next_task()</code> 找到下一个状态处于 <code>Ready</code> 的应用 ID</li>
+<li>更改为 <code>Running</code> 状态</li>
+<li>更新 <code>current_task</code></li>
+<li>根据 current 和 next 进行换栈，也就是调用 <code>__switch</code></li>
+</ol>
+</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="sd">/// Switch current `Running` task to the task we have found,    
+</span></span></span><span class="line"><span class="cl"><span class="sd">/// or there is no `Ready` task and we can exit with all applications completed    
+</span></span></span><span class="line"><span class="cl"><span class="sd"></span><span class="k">fn</span> <span class="nf">run_next_task</span><span class="p">(</span><span class="o">&amp;</span><span class="bp">self</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="kd">let</span><span class="w"> </span><span class="nb">Some</span><span class="p">(</span><span class="n">next</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">find_next_task</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">inner</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">self</span><span class="p">.</span><span class="n">inner</span><span class="p">.</span><span class="n">exclusive_access</span><span class="p">();</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="kd">let</span><span class="w"> </span><span class="n">current</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">inner</span><span class="p">.</span><span class="n">current_task</span><span class="p">;</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">inner</span><span class="p">.</span><span class="n">tasks</span><span class="p">[</span><span class="n">next</span><span class="p">].</span><span class="n">task_status</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">TaskStatus</span>::<span class="n">Running</span><span class="p">;</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">inner</span><span class="p">.</span><span class="n">current_task</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">next</span><span class="p">;</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="kd">let</span><span class="w"> </span><span class="n">current_task_cx_ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="n">inner</span><span class="p">.</span><span class="n">tasks</span><span class="p">[</span><span class="n">current</span><span class="p">].</span><span class="n">task_cx</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="o">*</span><span class="k">mut</span><span class="w"> </span><span class="n">TaskContext</span><span class="p">;</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="kd">let</span><span class="w"> </span><span class="n">next_task_cx_ptr</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">&amp;</span><span class="n">inner</span><span class="p">.</span><span class="n">tasks</span><span class="p">[</span><span class="n">next</span><span class="p">].</span><span class="n">task_cx</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="o">*</span><span class="k">const</span><span class="w"> </span><span class="n">TaskContext</span><span class="p">;</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="nb">drop</span><span class="p">(</span><span class="n">inner</span><span class="p">);</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// before this, we should drop local variables that must be dropped manually  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">            </span><span class="k">unsafe</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">__switch</span><span class="p">(</span><span class="n">current_task_cx_ptr</span><span class="p">,</span><span class="w"> </span><span class="n">next_task_cx_ptr</span><span class="p">);</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">}</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="c1">// go back to user mode  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">        </span><span class="p">}</span><span class="w"> </span><span class="k">else</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="fm">println!</span><span class="p">(</span><span class="s">&#34;All applications completed!&#34;</span><span class="p">);</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">use</span><span class="w"> </span><span class="k">crate</span>::<span class="n">board</span>::<span class="n">QEMUExit</span><span class="p">;</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="k">crate</span>::<span class="n">board</span>::<span class="n">QEMU_EXIT_HANDLE</span><span class="p">.</span><span class="n">exit_success</span><span class="p">();</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><p><figure id="a-/images/Pasted%20image%2020230110211219.png" class="align-center">
+    <img src="/images/Pasted%20image%2020230110211219.png" alt="应用的运行状态变化"  />
+    
+    <figcaption>
+       应用的运行状态变化
+    </figcaption>
+    
+</figure></p>
+<h3 id="第一次进入用户态">第一次进入用户态</h3>
+<ol>
+<li>第一次运行应用程序，调用 <code>__switch</code> 函数是用一个默认的 TaskContext 与 <code>task.0</code> ,进行换栈</li>
+<li>每个应用程序的 TaskContext 的 <code>ra</code>  都默认是 <code>__restore</code>, 且都压入了一个默认的 <code>TrapContext</code>,这个 <code>TrapContect</code> 的 <code>sepc</code> 设置的值为每个应用程序的入口。即：</li>
+<li>第一次运行时，调用 <code>__switch</code>，换入 <code>task.0</code></li>
+<li>这时候 <code>ra</code> 会被设置为 <code>__restore</code> 的地址</li>
+<li>返回后进入 <code>__restore</code> 的处理流程</li>
+<li>由于<code>sret</code> 会跳转到 <code>sepc</code> 的地址，即 <code>task.0</code> 的入口</li>
+<li>在运行 <code>__restore</code> 的过程中，特权级会被切换到用户态</li>
+</ol>
+<p>这里也只是一个简单的协作式操作系统，需要每个应用显示的调用 <code>yeild</code> 才能共享 CPU。</p>
+<h2 id="分时多任务系统与抢占式调度">分时多任务系统与抢占式调度</h2>
+<p>对 <strong>任务</strong> 的概念进行进一步扩展和延伸：</p>
+<ul>
+<li>分时多任务： 操作系统管理每个应用程序，以时间片为单位来分时占用处理器运行应用</li>
+<li>时间片轮转调度： 操作系统在一个程序用完其时间片后，就抢占当前程序并调用下一个程序执行，周而复始，形成对应用程序在任务级别上的时间片轮转调度</li>
+</ul>
+
+
+
+
+
+<div class="tip custom-block">
+    <p class="custom-block-title">
+        
+        
+        TIP
+        
+    </p>
+    <p> <p><mark style="background: #FFB8EBA6;">抢占式调度</mark>是应用程序 <em>随时</em> 都有被内核切换出去的可能。现代的任务调度算法基本都是抢占式的，它要求每个应用只能连续执行一段时间(一般是以<mark style="background: #ADCCFFA6;">时间片</mark>作为应用连续执行时长的度量单位)，然后内核就会将它强制性切换出去。</p>
+<p>算法需要考虑：</p>
+<ol>
+<li>每次在换出之前给一个应用多少时间片去执行</li>
+<li>要换入哪个应用</li>
+</ol>
+<p>从以下角度来评价调度算法：</p>
+<ol>
+<li>性能(吞吐量和延迟)
+<ol>
+<li>吞吐量: 某个时间点将一组应用放进去，在固定时间内执行完毕的应用最多</li>
+</ol>
+</li>
+<li>公平性(多个应用分到的时间片占比不能过大)</li>
+</ol>
+ </p>
+</div>
+
+
+
+
+
+
+
+
+<p>这里使用<mark style="background: #ADCCFFA6;">时间片轮转算法</mark>进行调度：使用最原始的 RR 算法，维护一个任务队列，每次从队头去一个应用执行完一个时间片，然后丢入队尾，在继续去队头的应用执行。</p>
+<h3 id="risc-v-中的中断">RISC-V 中的中断</h3>
+<p>时间片轮转调度的核心机制就在于计时，操作系统的计时功能是依靠硬件提供的时钟中断来实现的。而中断与 <code>ecall</code> 都是 <code>Trap</code>,但是中断是异步于当前的指令(即中断的原因与正在执行的指令无关)。</p>
+<p>RISC-V 的中断可以分成三类：</p>
+<ul>
+<li><strong>软件中断</strong> (Software Interrupt)：由软件控制发出的中断</li>
+<li><strong>时钟中断</strong> (Timer Interrupt)：由时钟电路发出的中断</li>
+<li><strong>外部中断</strong> (External Interrupt)：由外设发出的中断</li>
+</ul>
+<p>在判断中断是否会被屏蔽的时候，有以下规则：</p>
+<ul>
+<li>如果中断的特权级低于 CPU 当前的特权级，则该中断会被屏蔽，不会被处理</li>
+<li>如果中断的特权级高于与 CPU 当前的特权级或相同，则需要通过相应的 CSR 判断该中断是否会被屏蔽</li>
+</ul>
+<p>中断产生后，硬件会完成如下事务：</p>
+<ul>
+<li>当中断发生时，<code>sstatus.sie</code> 字段会被保存在 <code>sstatus.spie</code> 字段中，同时把 <code>sstatus.sie</code> 字段置零，这样软件在进行后续的中断处理过程中，所有 S 特权级的中断都会被屏蔽</li>
+<li>当软件执行中断处理完毕后，会执行 <code>sret</code> 指令返回到被中断打断的地方继续执行，硬件会把 <code>sstatus.sie</code> 字段恢复为 <code>sstatus.spie</code> 字段内的值</li>
+</ul>
+<h3 id="时钟中断与计时器">时钟中断与计时器</h3>
+<p>由于软件需要一种计时机制，RISC-V 要求处理器有一个内置时钟：</p>
+<ol>
+<li>频率一般低于 CPU 主频</li>
+<li>还有一个计数器用来统计处理器自上电以来经过了多少个内置时钟的时钟周期</li>
+<li>在 RISC-V 中一般保存在 64 位的 CSR <code>mtime</code> 中</li>
+<li>还有一个 64 位的 CSR <code>mtimecmp</code> 的作用是：一旦计数器 <code>mtime</code> 的值超过了 <code>mtimecmp</code>，就会触发一次时钟中断。这使得我们可以方便的通过设置 <code>mtimecmp</code> 的值来决定下一次时钟中断何时触发</li>
+<li>它们都是 M 级别的寄存器，只能通过 M 级别的 SEE 来访问(RustSBI)</li>
+</ol>
+
+
+
+<details class="details custom-block">
+    <summary>
+        <span> 
+        
+            相关代码
+        
+        </span>
+    </summary>
+    <p>
+        <ol>
+<li><code>CLOCK_FREQ</code> 是不同平台的时钟频率，单位是赫兹，也就是一秒钟之内计数器的增量</li>
+<li><code>set_next_trigger</code> 设置下一次打断的是时间</li>
+<li><code>set_timer</code> 就是设置寄存器 <code>mtimecmp</code> 的值</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="k">use</span><span class="w"> </span><span class="k">crate</span>::<span class="n">config</span>::<span class="n">CLOCK_FREQ</span><span class="p">;</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">use</span><span class="w"> </span><span class="k">crate</span>::<span class="n">sbi</span>::<span class="n">set_timer</span><span class="p">;</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">use</span><span class="w"> </span><span class="n">riscv</span>::<span class="n">register</span>::<span class="n">time</span><span class="p">;</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">const</span><span class="w"> </span><span class="n">TICKS_PER_SEC</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">100</span><span class="p">;</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">const</span><span class="w"> </span><span class="n">MSEC_PER_SEC</span>: <span class="kt">usize</span> <span class="o">=</span><span class="w"> </span><span class="mi">1000</span><span class="p">;</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="sd">/// read the `mtime` registerpub 
+</span></span></span><span class="line"><span class="cl"><span class="sd"></span><span class="k">fn</span> <span class="nf">get_time</span><span class="p">()</span><span class="w"> </span>-&gt; <span class="kt">usize</span> <span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">time</span>::<span class="n">read</span><span class="p">()</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="sd">/// get current time in milliseconds  
+</span></span></span><span class="line"><span class="cl"><span class="sd"></span><span class="k">pub</span><span class="w"> </span><span class="k">fn</span> <span class="nf">get_time_ms</span><span class="p">()</span><span class="w"> </span>-&gt; <span class="kt">usize</span> <span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">time</span>::<span class="n">read</span><span class="p">()</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="p">(</span><span class="n">CLOCK_FREQ</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">MSEC_PER_SEC</span><span class="p">)</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="sd">/// set the next timer interrupt  
+</span></span></span><span class="line"><span class="cl"><span class="sd"></span><span class="k">pub</span><span class="w"> </span><span class="k">fn</span> <span class="nf">set_next_trigger</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">set_timer</span><span class="p">(</span><span class="n">get_time</span><span class="p">()</span><span class="w"> </span><span class="o">+</span><span class="w"> </span><span class="n">CLOCK_FREQ</span><span class="w"> </span><span class="o">/</span><span class="w"> </span><span class="n">TICKS_PER_SEC</span><span class="p">);</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div>
+    </p>
+</details>
+
+
+
+
+
+
+
+
+
+
+<h3 id="抢占式调度">抢占式调度</h3>
+<p>在 <code>trap_handler</code> 放在中添加以下代码，即根据当原因是 S 级特权级时钟打断时，重新设置打断，并暂停当前应用然后运行下一个应用。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="k">match</span><span class="w"> </span><span class="n">scause</span><span class="p">.</span><span class="n">cause</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">Trap</span>::<span class="n">Interrupt</span><span class="p">(</span><span class="n">Interrupt</span>::<span class="n">SupervisorTimer</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">set_next_trigger</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">suspend_current_and_run_next</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><p>然后添加一些初始化代码：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="cp">#[no_mangle]</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">pub</span><span class="w"> </span><span class="k">fn</span> <span class="nf">rust_main</span><span class="p">()</span><span class="w"> </span>-&gt; <span class="o">!</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="n">trap</span>::<span class="n">enable_timer_interrupt</span><span class="p">();</span><span class="w">  </span><span class="c1">// 设置 `sie.stie` 使得 S 特权级时钟中断不会被屏蔽
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="n">timer</span>::<span class="n">set_next_trigger</span><span class="p">();</span><span class="w">  </span><span class="c1">// 设置第一个 10ms 的计时器
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><ol>
+<li>当第一个应用运行了 10ms 后，第一个 S 特权级时钟中断就会触发</li>
+<li>由于应用运行在 U 特权级，且 <code>sie</code> 寄存器被正确设置，该中断不会被屏蔽，而是跳转到 S 特权级内的我们的 <code>trap_handler</code> 里面进行处理，并顺利切换到下一个应用</li>
+</ol>
+<p>现在的操作系统已经支持：</p>
+<ol>
+<li>操作系统进行主动调度</li>
+<li>程序可以主动出让时间片(<code>sys_yield</code>)</li>
+</ol>
+<h2 id="练习">练习</h2>
+<h3 id="1-显示操作系统切换任务的过程">1. 显示操作系统切换任务的过程</h3>
+<p>包装 <code>__switch</code> 函数，然后打印切换任务的 id</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="sd">/// switch 交换两个 task,替换执行流  
+</span></span></span><span class="line"><span class="cl"><span class="sd"></span><span class="k">pub</span><span class="w"> </span><span class="k">fn</span> <span class="nf">switch__</span><span class="p">(</span><span class="n">current_task_cx_ptr</span>: <span class="o">*</span><span class="k">mut</span><span class="w"> </span><span class="n">TaskContext</span><span class="p">,</span><span class="w"> </span><span class="n">next_task_cx_ptr</span>: <span class="o">*</span><span class="k">const</span><span class="w"> </span><span class="n">TaskContext</span><span class="p">)</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">unsafe</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">current</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">current_task_cx_ptr</span><span class="p">.</span><span class="n">as_ref</span><span class="p">().</span><span class="n">unwrap</span><span class="p">();</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="kd">let</span><span class="w"> </span><span class="n">next</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">next_task_cx_ptr</span><span class="p">.</span><span class="n">as_ref</span><span class="p">().</span><span class="n">unwrap</span><span class="p">();</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">debug</span><span class="o">!</span><span class="p">(</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="s">&#34;switch from {:?} to {:?}&#34;</span><span class="p">,</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">current</span><span class="p">.</span><span class="n">get_app_id</span><span class="p">(),</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">next</span><span class="p">.</span><span class="n">get_app_id</span><span class="p">(),</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">);</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">__switch</span><span class="p">(</span><span class="n">current_task_cx_ptr</span><span class="p">,</span><span class="w"> </span><span class="n">next_task_cx_ptr</span><span class="p">);</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><h3 id="2统计每个应用执行后的完成时间用户态完成时间和内核态完成时间">2.统计每个应用执行后的完成时间：用户态完成时间和内核态完成时间</h3>
+<ol>
+<li>根据 <code>user/src/lib.rs</code> 中可得知，用户程序执行完毕后都会调用 <code>syscall</code> 这个系统调用</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="cp">#[no_mangle]</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="cp">#[link_section = </span><span class="s">&#34;.text.entry&#34;</span><span class="cp">]</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">pub</span><span class="w"> </span><span class="k">extern</span><span class="w"> </span><span class="s">&#34;C&#34;</span><span class="w"> </span><span class="k">fn</span> <span class="nf">_start</span><span class="p">()</span><span class="w"> </span>-&gt; <span class="o">!</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">clear_bss</span><span class="p">();</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">exit</span><span class="p">(</span><span class="n">main</span><span class="p">());</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="fm">panic!</span><span class="p">(</span><span class="s">&#34;unreachable after sys_exit!&#34;</span><span class="p">);</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><ol start="2">
+<li>即操作系统处理这个 <code>syscall</code> 时就是用户态完成时间，处理完毕后就是内核态完成时间</li>
+<li>调用 <code>mark_current_exited</code> 时是用户态结束时间</li>
+<li>关于内核态结束时间
+<ol>
+<li>调用 <code>__swich</code> 后会执行 <code>ret</code> 指令直接运行下一个程序</li>
+<li>想到一个简单的办法，在运行下一个程序的开头先调用一个自定义的 syscall: <code>mark_prev_kernel_end</code> 就可以标记上一个应用程序内核态完成时间</li>
+<li>发现了 bug, 这里能成功运行是因为这几个程序在一个时钟周期就运行完毕了，但是如果程序的执行时间大于几个时间周期，而 <code>mark_prev_kernel_end</code> 只在第一次运行时设置，这样就有问题，因为 <code>switch</code> 回来后程序不是从头开始的</li>
+<li>只能在汇编 <code>ret</code> 前加一个方法调用:
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="c1">// ...
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="n">addi</span><span class="w"> </span><span class="n">sp</span><span class="p">,</span><span class="w"> </span><span class="n">sp</span><span class="p">,</span><span class="w"> </span><span class="o">-</span><span class="mi">8</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">sd</span><span class="w"> </span><span class="n">ra</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">(</span><span class="n">sp</span><span class="p">)</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">call</span><span class="w"> </span><span class="n">mark_prev_kernel_end</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">ld</span><span class="w"> </span><span class="n">ra</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">(</span><span class="n">sp</span><span class="p">)</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">addi</span><span class="w"> </span><span class="n">sp</span><span class="p">,</span><span class="w"> </span><span class="n">sp</span><span class="p">,</span><span class="w"> </span><span class="mi">8</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span>#<span class="w"> </span><span class="k">return</span><span class="w"> </span><span class="n">to</span><span class="w"> </span><span class="n">next</span><span class="w"> </span><span class="n">task</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="n">ret</span><span class="w">
+</span></span></span></code></pre></div></li>
+<li>然后在应用程序的 <code>main</code> 结束后，调用标记用户态退出时间</li>
+</ol>
+</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">DEBUG - Task 0 user end time: 99257,kernel end time 102332 | switch cost: 3075
+</span></span><span class="line"><span class="cl">DEBUG - Task 1 user end time: 123140,kernel end time 124516 | switch cost: 1376
+</span></span><span class="line"><span class="cl">DEBUG - Task 2 user end time: 149108,kernel end time 150363 | switch cost: 1255
+</span></span><span class="line"><span class="cl">DEBUG - Task 3 user end time: 37651703,kernel end time 37652583 | switch cost: 880
+</span></span><span class="line"><span class="cl">DEBUG - Task 4 user end time: 56401809,kernel end time 56402745 | switch cost: 936
+</span></span></code></pre></div><h3 id="3-实现sys_task_info">3. 实现<code>sys_task_info</code></h3>
+<blockquote>
+<p>根据任务 ID 查询任务信息，任务信息包括任务 ID、任务控制块相关信息（任务状态）、任务使用的系统调用及调用次数、任务总运行时长。</p>
+</blockquote>
+<p>思路比较简单:</p>
+<ol>
+<li>在操作系统分发处理的时候添加次数</li>
+<li>在程序第一次运行时标记开始时间</li>
+<li>如果任务已经结束则直接用当前时间减去开始时间</li>
+<li>如果任务还在运行这用用户态结束时间减去开始时间</li>
+</ol>
+<p><figure id="a-/images/Pasted%20image%2020230121105945.png" class="align-center">
+    <img src="/images/Pasted%20image%2020230121105945.png" alt=""  />
+    
+</figure></p>
+]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>操作系统的特权级机制</title>
+      <link>https://fzdwx.github.io/document/2022-12-30-os-privilege/</link>
+      <pubDate>Fri, 30 Dec 2022 13:54:36 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/document/2022-12-30-os-privilege/</guid>
+      <description>特权级是为了隔离操作系统中用户程序与操作系统的，主要是防止用户程序的错误不会导致操作系统的一种机制。</description>
+      <content:encoded><![CDATA[<p>应用程序会不可避免的出现错误，如果一个程序出现错误会导致其他程序或操作系统都无法运行那就是不可接受的。</p>
+<p>所以人们提出<em>特权级</em>（Privilege）这一保护计算机系统不受有意或无意出错的程序破坏的机制，它让应用程序运行在<strong>用户态</strong>
+，而操作系统运行在<strong>内核态</strong>，并且实现用户态和内核态的隔离。</p>
+<p><figure id="a-/images/Pasted%20image%2020221230141140.png" class="align-center">
+    <img src="/images/Pasted%20image%2020221230141140.png" alt="一个支持顺序执行多个应用程序的操作系统结构图"  />
+    
+    <figcaption>
+       一个支持顺序执行多个应用程序的操作系统结构图
+    </figcaption>
+    
+</figure></p>
+<p>主要通过 RustSBI 完成基本的硬件初始化后，跳转到操作系统的起始位置，操作系统然后建立栈空间并情况 bss 段（置0），然后通过
+AppManager 从 app 列表中一次加载各个 app 到指定的内存在用户态执行。app 在执行时，会通过系统调用的方式得到操作系统提供的功能，比如输出字符串。</p>
+<h2 id="特权级的软硬件协同设计">特权级的软硬件协同设计</h2>
+<p>实现特权级机制的根本原因是<strong>应用程运行的安全性不可充分信任</strong>
+。所以，计算机科学家和工程师想到了一个方法：让相对安全可靠的操作系统运行在一个硬件保护的安全执行环境中，不受到程序的破坏；而让应用程序运行在另外一个无法破坏操作系统的受限执行环境中。</p>
+<ul>
+<li>应用程序不能随意访问地址空间</li>
+<li>应用程序不能执行某些可能破坏计算机系统的指令</li>
+</ul>
+<p>同时为了应用程序能获得操作系统的服务——应用程序和操作系统还需要有交互的手段。</p>
+<ul>
+<li>低特权级的软件只能做高特权级允许它做的操作</li>
+<li>超出低特权级能力的功能必须寻求高特权级的帮助</li>
+</ul>
+<p>这样<strong>高特权级</strong>(操作系统)就成为<strong>低特权级</strong>（一般应用）的<strong>执行环境的总要组成部分</strong>。</p>
+<p>为了实现这样的特权级机制，需要进行软硬件协同设计。一种简介的方式是： 处理器设置两个不同安全等级的执行环境，<strong>用户态特权级的执行环境和内核态特权级的执行环境</strong>。</p>
+<ul>
+<li>明确指出可能破坏计算机系统的内核态特权指令集子集</li>
+<li>规定内核态特权级指令子集中的指令只能在内核态特权级的执行环境中执行</li>
+<li>处理器在执行指令前会进行特权级安全检查，如果在用户态环境中执行内核态特权级指令就会产生异常</li>
+</ul>
+<p>传统的<code>call</code>和<code>ret</code>指令组合会直接绕过硬件的特权级保护检查，所以需要新的指令：</p>
+<ul>
+<li><code>ecall</code>： 执行环境调用，具有<strong>用户态</strong>到<strong>内核态</strong>的执行环境切换能力的<strong>函数调用</strong>指令
+<ul>
+<li>从当前特权级切换到比当前高一级</li>
+</ul>
+</li>
+<li><code>eret</code>： 执行环境返回，基友<strong>内核态</strong>到<strong>用户态</strong>的执行环境切换能力的<strong>函数返回</strong>指令
+<ul>
+<li>切换到不高于当前特权级</li>
+</ul>
+</li>
+</ul>
+<p>硬件有了这样的机制之后，还需要操作系统的配合才能完成对操作系统自身的保护。</p>
+<ol>
+<li>操作系统需要提供能在执行<code>eret</code>前<strong>准备和恢复用户态执行应用程序的上下文</strong></li>
+<li>在用户程序调用<code>ecall</code>后能<strong>检查应用程序的系统调用参数</strong>，确保参数不会破坏操作系统</li>
+</ol>
+<h2 id="risc-v-特权级架构">RISC-V 特权级架构</h2>
+<table>
+<thead>
+<tr>
+<th>级别</th>
+<th>编码</th>
+<th>名称</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>00</td>
+<td>用户/应用模式 (U,User/Application)</td>
+</tr>
+<tr>
+<td>1</td>
+<td>01</td>
+<td>监督模式 (S,Supervisor)</td>
+</tr>
+<tr>
+<td>2</td>
+<td>10</td>
+<td>虚拟监督模式 (H,Hypervisor)</td>
+</tr>
+<tr>
+<td>3</td>
+<td>11</td>
+<td>机器模式 (M,Machine)</td>
+</tr>
+</tbody>
+</table>
+<p>级别数值越大则特权级越高，掌控硬件的能力越强。即 M 最强，U 最弱，在 CPU 层面只有 M 是必须的。</p>
+<p><figure id="a-/images/Pasted%20image%2020221230152533.png" class="align-center">
+    <img src="/images/Pasted%20image%2020221230152533.png" alt="在特权级架构的角度看待一套支持应用程序运行的执行环境"  />
+    
+    <figcaption>
+       在特权级架构的角度看待一套支持应用程序运行的执行环境
+    </figcaption>
+    
+</figure></p>
+<p>白色表示执行环境，黑色表示相邻两层执行环境之间的接口。SSE 代表<strong>监督模式执行环境</strong>，例如 RustSBI。</p>
+<p>按需实现 RISC-V 特权级：</p>
+<ol>
+<li>简单的嵌入式应用只需实现 M</li>
+<li>带有一定保护能力的嵌入式系统需要实现 M、U</li>
+<li>复杂的多任务系统需要实现 M、S、U</li>
+</ol>
+<h3 id="操作系统异常控制流">操作系统异常控制流</h3>
+<ol>
+<li>中断： 由外部设备引起的外部 I/O 时间如时钟中断、控制台中断等。外设中断是异步产生的，与处理器的执行无关。</li>
+<li>异常： 处理器执行指令期间检测到不正常的或非法的内部事件(如除零、数组越界等)</li>
+<li>陷入: 程序在执行过程中通过系统调用请求操作系统服务时而有意引发的事件</li>
+</ol>
+<p>要处理上面的异常，都需要操作系统保存与恢复被 打断/陷入 前应用程序的控制流上下文。</p>
+
+
+
+
+
+<div class="tip custom-block">
+    <p class="custom-block-title">
+        
+        
+        TIP
+        
+    </p>
+    <p> <p>控制流上下文： 确保下一刻能继续正确执行控制流指令的物理资源，也可称为控制流所在执行环境的状态。</p>
+<p>这里的物理资源即计算机硬件资源，如 CPU 的寄存器、内存等。</p>
+ </p>
+</div>
+
+
+
+
+
+
+
+
+<p><strong>执行环境</strong>的另一种功能是对<strong>上层软件</strong>的执行进行监管管理： 当<strong>上层软件</strong>执行出现了异常或特殊情况，导致需要用到<strong>执行环境
+<strong>中提供的功能，因此需要暂停</strong>上层软件</strong>的执行，转而运行<strong>执行环境</strong>的代码。</p>
+<p>而<strong>上层软件</strong>和<strong>执行环境</strong>的<strong>特权等级</strong>往往不同，所以这个过程可能(大部分情况下)会有 CPU 的<strong>特权级切换</strong>。当<strong>执行环境
+<strong>的代码运行结束后，我们就需要回到</strong>上层软件</strong>暂停的位置<strong>继续执行</strong>。在 RISC-V 中，这种异常控制流被称为<strong>异常</strong>，是 RISC-V
+中的 <strong>trap</strong> 的一种。</p>
+<p>用户态应用直接触发从用户态到内核态的异常的原因总体上可以分为两种：</p>
+<ol>
+<li>用户态软件为获得内核态操作系统的服务功能而执行特殊指令</li>
+<li>在执行某条指令出现了错误(如执行了用户态不允许执行的指令)并被 CPU 检测到</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th>interrupt</th>
+<th>exception code</th>
+<th>description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>0</td>
+<td>0</td>
+<td>Instruction address misaligned</td>
+</tr>
+<tr>
+<td>0</td>
+<td>1</td>
+<td>Instruction access fault</td>
+</tr>
+<tr>
+<td>0</td>
+<td>2</td>
+<td>Illegal instruction</td>
+</tr>
+<tr>
+<td>0</td>
+<td>3</td>
+<td>Breakpoint</td>
+</tr>
+<tr>
+<td>0</td>
+<td>4</td>
+<td>Load address misaligned</td>
+</tr>
+<tr>
+<td>0</td>
+<td>5</td>
+<td>Load access fault</td>
+</tr>
+<tr>
+<td>0</td>
+<td>6</td>
+<td>Store/AMO address misaligned</td>
+</tr>
+<tr>
+<td>0</td>
+<td>7</td>
+<td>Store/AMO access fault</td>
+</tr>
+<tr>
+<td>0</td>
+<td>8</td>
+<td>Environment call from U-mode</td>
+</tr>
+<tr>
+<td>0</td>
+<td>9</td>
+<td>Environment call from S-mode</td>
+</tr>
+<tr>
+<td>0</td>
+<td>11</td>
+<td>Environment call from M-mode</td>
+</tr>
+<tr>
+<td>0</td>
+<td>12</td>
+<td>Instruction page fault</td>
+</tr>
+<tr>
+<td>0</td>
+<td>13</td>
+<td>Load page fault</td>
+</tr>
+<tr>
+<td>0</td>
+<td>15</td>
+<td>Store/AMO page fault</td>
+</tr>
+</tbody>
+</table>
+<p>其中 <code>Breakpoint</code> 和 <code>Environment call</code> 两种异常指令称为 陷入 或 trap 类指令。通过在上层软件中执行一条特定的指令触发的：</p>
+<ol>
+<li>执行 <code>ebreak</code> 指令就会触发 <code>Breakpoint</code> 异常</li>
+<li>执行 <code>ecall</code> 指令就会根据 CPU 当前所处的特权级而触发不同的异常(8/9/11)</li>
+</ol>
+<h3 id="ecall">ecall</h3>
+<p>这是一种特殊的陷入类指令，相邻的两特权级软件之间的接口正是通过这种陷入机制实现的。M 模式软件 SEE 和 S 模式的内核之间的接口被称为<strong>监督模式二进制接口</strong>(Supervisor Binary interface, <strong>SBI</strong>)，而内核和 U 模式的应用程序之间的接口被称为<strong>应用程序二进制接口</strong>(Application Binary interface, <strong>ABI</strong>)——系统调用(<strong>syscall</strong>)。</p>
+<p>而为什么叫二进制接口，是因为它是机器/汇编指令级的接口(没有针对某种特定的高级语言编写的内部调用接口)，而且不是普通的函数调用控制流，而是陷入异常控制流，会切换 CPU 特权级。所以只有机器/汇编级别才能满足跨语言的通用和灵活性。</p>
+<p><figure id="a-/images/Pasted%20image%2020221230220510.png" class="align-center">
+    <img src="/images/Pasted%20image%2020221230220510.png" alt="在软件(应用，操作系统)执行过程中经常能看到特权级切换"  />
+    
+    <figcaption>
+       在软件(应用，操作系统)执行过程中经常能看到特权级切换
+    </figcaption>
+    
+</figure></p>
+<p>总之出现:</p>
+<ol>
+<li>执行某一指令发生了某种错误(如除零、无效地址访问、无效指令等)</li>
+<li>执行了高特权级指令</li>
+<li>访问了不应该方法的高特权级的资源</li>
+</ol>
+<p>就需要将控制权移交给高特权级的软件来处理。当错误/异常恢复后，则重新回到低特权级的软件中执行，如果错误不能恢复，那么高特权级软件有权限杀死和清除低特权级软件。</p>
+<h3 id="risc-v-的s级特权指令">RISC-V 的S级特权指令</h3>
+<p>在 RISC-V 中有两类属于 S 模式的特权指令</p>
+<ol>
+<li>指令本身属于高特权级，如 <code>sret</code>(从 S 模式返回 U 模式)</li>
+<li>访问的 S 模式下才能访问的寄存器或内存
+<ol>
+<li>sstatus: <code>SPP</code> 等字段给出 Trap 发生之前 CPU 处在哪个特权级（S/U）等信息</li>
+<li>spec: 当 Trap 是一个异常的时候，记录 Trap 发生之前执行的最后一条指令的地址</li>
+<li>scause: 描述 Trap 的原因</li>
+<li>stval: 给出 Trap 附加信息</li>
+<li>stvec: 控制 Trap 处理代码的入口地址</li>
+</ol>
+</li>
+</ol>
+<h2 id="特权级切换">特权级切换</h2>
+<p>当执行到一条 trap 类指令时(如<code>ecall</code>)，CPU 发现触发了一个异常并需要进行特殊处理，这涉及到执行环境切换，就是：</p>
+<ol>
+<li>用户态的执行环境中的应用程序通过调用<code>ecall</code>指令来向内核态的执行环境中的操作系统来请求某项服务</li>
+<li>这时候 CPU 和操作系统就会完成用户态到内核态的执行环境切换</li>
+<li>并在操作系统完成服务后再次切换回用户态执行环境</li>
+<li>然后应用程序就会紧接着<code>ecall</code>指令的后一条继续执行</li>
+</ol>
+<p>在切换回来之后需要从发出 syscall 的执行位置恢复应用程序上下文并继续执行，这需要在切换前后维持应用程序的上下文保持不变。</p>
+<p>应用程序的上下文包括通用寄存器和栈两个主要部分。而 CPU 在不同特权级下共享一套通用寄存器，所以操作系统在处理 trap 的过程中也会使用到这些寄存器，就会改变应用程序的上下文。所以同函数调用一样，在执行操作系统的 trap 处理过程之前我们需要在某个地方(某内存块或内核的栈)保存这些寄存器并在 trap 处理结束之后恢复这些寄存器。</p>
+<p>同时还有一些在 S 模式下专用的寄存器，也需要保证它们的变化在预期之内。</p>
+
+
+
+
+
+<div class="tip custom-block">
+    <p class="custom-block-title">
+        
+        
+        TIP
+        
+    </p>
+    <p> <p>执行环境： 主要负责给在其上执行的软件提供相应的功能与资源，并可在计算机系统中形成多层次的执行环境。</p>
+<ol>
+<li>比如之间运行在裸机硬件上的操作系统，其执行环境就是 计算机的硬件</li>
+<li>后面就出现了在应用程序下面有了一层比较通用的函数库，这使得程序不用直接访问硬件了。所以应用程序的执行环境就是 函数库 -&gt; 计算机硬件</li>
+<li>在后来，操作系统取代了函数库来访问硬件。 函数库 -&gt; 操作系统 -&gt; 计算机硬件</li>
+</ol>
+ </p>
+</div>
+
+
+
+
+
+
+
+
+<h3 id="特权级切换的硬件控制机制">特权级切换的硬件控制机制</h3>
+<p>当 CPU 执行完一条指令(如<code>ecall</code>)并准备从 U 陷入到 S 时，硬件会完成：</p>
+<ol>
+<li><code>sstatus</code>的<code>SPP</code>会被修改为 CPU 当前的特权级(U/S)</li>
+<li><code>sepc</code>会被修改为 trap 处理完成后默认会执行的下一条指令的地址</li>
+<li><code>scause/stval</code>分别会被修改为这次 trap 的原因以及相关的附加信息</li>
+<li>CPU 会跳转到 <code>stvec</code> 所设置的 trap 处理入口地址，并将当前特权级设置为 S,并从 trap 处理入口开始执行
+<ol>
+<li><code>stvec</code>保存了中断处理的入口地址</li>
+<li>它后两个字段:
+<ol>
+<li>MODE 1~0, 2 bits</li>
+<li>BASE 63~2, 62 bits</li>
+</ol>
+</li>
+<li>当 MODE 为 0 时，<code>stvec</code>是 direct 模式，trap 的入口地址固定为 <code>BASE&lt;&lt;2</code></li>
+</ol>
+</li>
+</ol>
+<p>当 CPU 完成 trap 处理准备返回时，需要通过<code>sret</code>来完成:</p>
+<ol>
+<li>CPU 会将当前的特权级按照<code>sstatus</code>的<code>SPP</code>字段设置为 U/S</li>
+<li>CPU 会跳转到<code>sepc</code>指向的指令并继续执行</li>
+</ol>
+<h3 id="用户栈和内核栈">用户栈和内核栈</h3>
+<p>当 trap 触发的一瞬间，CPU 就会切换到 S 特权级并跳转到<code>stvec</code>设置的位置，但是在正式进入 S 特权级的处理之前，我们必须保存原控制流的寄存器状态，这一般是通过内核栈来保存的。这是专门为操作系统准备的内核栈，而不是应用程序运行时的用户栈。</p>
+<p>使用两个栈主要是为了安全性:隔离数据，不让用户态的应用程序读取到内核态的操作系统的数据。</p>
+<h3 id="trap-管理">Trap 管理</h3>
+<p>特权级切换的核心就是对 trap 的管理：</p>
+<ol>
+<li>应用程序通过<code>ecall</code>进入到内核状态时，操作系统需要保存被打断的应用程序的 trap 上下文</li>
+<li>操作系统根据 CSR 寄存器(上述 S 模式下专有的寄存器)，完成系统调用服务的分发与处理</li>
+<li>操作系统完成系统调用后，需要恢复被打断的应用程序的 trap 上下文，并通过<code>sret</code>让应用程序进行执行</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="cp">#[repr(C)]</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">pub</span><span class="w"> </span><span class="k">struct</span> <span class="nc">TrapContext</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">x</span>: <span class="p">[</span><span class="kt">usize</span><span class="p">;</span><span class="w"> </span><span class="mi">32</span><span class="p">],</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">sstatus</span>: <span class="nc">Sstatus</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">pub</span><span class="w"> </span><span class="n">sepc</span>: <span class="kt">usize</span><span class="p">,</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><h4 id="trap-上下文的保存与恢复">Trap 上下文的保存与恢复</h4>
+<p>在操作系统初始化时，我们通过修改<code>stvec</code>的值来指向 trap 处理入口点,即设置初始的<code>stvec</code>的值。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="k">pub</span><span class="w"> </span><span class="k">fn</span> <span class="nf">init</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">extern</span><span class="w"> </span><span class="s">&#34;C&#34;</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">fn</span> <span class="nf">__alltraps</span><span class="p">();</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">unsafe</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">	</span><span class="c1">// 默认为 BASE 为 __alltraps，MODE 为 direct
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">        </span><span class="n">stvec</span>::<span class="n">write</span><span class="p">(</span><span class="n">__alltraps</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">usize</span><span class="p">,</span><span class="w"> </span><span class="n">TrapMode</span>::<span class="n">Direct</span><span class="p">);</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><p>trap 的处理流程如下：</p>
+<ol>
+<li>通过<code>__alltraps</code>将 trap 上下文保存在内核栈上，然后跳转到 <code>trap_handler</code> 函数完成 trap 分发及处理</li>
+<li>当 <code>trap_handler</code>返回之后，使用<code>__restore</code>从保存在内核栈上的 trap 上下文恢复寄存器</li>
+<li>最后通过<code>sret</code>指令回到应用程序执行</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nl">__alltraps:</span>  
+</span></span><span class="line"><span class="cl">    <span class="c1"># csrrw rd csr rs =&gt; rd = csr, csr = rs
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1"># sp = sscratch, sscratch = sp, 交换 sscratch 与 sp
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1"># sp 指向用户栈，sscratch 指向内核栈
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1"># 交换后 sp 指向内核栈，sscratch 指向用户栈
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">csrrw</span> <span class="no">sp</span><span class="p">,</span> <span class="no">sscratch</span><span class="p">,</span> <span class="no">sp</span> 
+</span></span><span class="line"><span class="cl">    <span class="c1"># now sp-&gt;kernel stack, sscratch-&gt;user stack  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1"># allocate a TrapContext on kernel stack  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1"># 预分配 34 * 8 的栈帧
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">addi</span> <span class="no">sp</span><span class="p">,</span> <span class="no">sp</span><span class="p">,</span> <span class="p">-</span><span class="mi">34</span><span class="p">*</span><span class="mi">8</span>  
+</span></span><span class="line"><span class="cl">    <span class="c1"># save general-purpose registers
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1"># 保存 x0 ~ x31 跳过 x0(zero),x2(sp),x4(tp)
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">sd</span> <span class="no">x1</span><span class="p">,</span> <span class="mi">1</span><span class="p">*</span><span class="mi">8</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="c1"># skip sp(x2), we will save it later  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">sd</span> <span class="no">x3</span><span class="p">,</span> <span class="mi">3</span><span class="p">*</span><span class="mi">8</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="c1"># skip tp(x4), application does not use it  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1"># save x5~x31  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="na">.set</span> <span class="no">n</span><span class="p">,</span> <span class="mi">5</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">.rept</span> <span class="mi">27</span>  
+</span></span><span class="line"><span class="cl">        <span class="no">SAVE_GP</span> <span class="nv">%n</span>  
+</span></span><span class="line"><span class="cl">        <span class="no">.set</span> <span class="no">n</span><span class="p">,</span> <span class="no">n</span><span class="err">+</span><span class="mi">1</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">.endr</span>  
+</span></span><span class="line"><span class="cl">    <span class="c1"># we can use t0/t1/t2 freely, because they were saved on kernel stack  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1"># t0 = sstatus
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">csrr</span> <span class="no">t0</span><span class="p">,</span> <span class="no">sstatus</span>  
+</span></span><span class="line"><span class="cl">    <span class="c1"># t1 = spec
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">csrr</span> <span class="no">t1</span><span class="p">,</span> <span class="no">sepc</span>  
+</span></span><span class="line"><span class="cl">    <span class="c1"># 32*8 = t0
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">sd</span> <span class="no">t0</span><span class="p">,</span> <span class="mi">32</span><span class="p">*</span><span class="mi">8</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="c1"># 33*8 = t1
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">sd</span> <span class="no">t1</span><span class="p">,</span> <span class="mi">33</span><span class="p">*</span><span class="mi">8</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="c1"># read user stack from sscratch and save it on the kernel stack  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1"># 2*8 = sscratch
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">csrr</span> <span class="no">t2</span><span class="p">,</span> <span class="no">sscratch</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">sd</span> <span class="no">t2</span><span class="p">,</span> <span class="mi">2</span><span class="p">*</span><span class="mi">8</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="c1"># set input argument of trap_handler(cx: &amp;mut TrapContext) 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1"># a0 = 内核栈
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">mv</span> <span class="no">a0</span><span class="p">,</span> <span class="no">sp</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">call</span> <span class="no">trap_handler</span>
+</span></span></code></pre></div><p>当<code>trap_handler</code>返回之后会从<code>trap_handler</code>的下一条指令开始执行，也就是<code>__restore</code>:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nl">__restore:</span>  
+</span></span><span class="line"><span class="cl">    <span class="c1"># case1: start running app by __restore  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1"># case2: back to U after handling trap  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">mv</span> <span class="no">sp</span><span class="p">,</span> <span class="no">a0</span>  
+</span></span><span class="line"><span class="cl">    <span class="c1"># now sp-&gt;kernel stack(after allocated), sscratch-&gt;user stack  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1"># restore sstatus/sepc
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1"># 恢复在 __alltraps 保存的   
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">ld</span> <span class="no">t0</span><span class="p">,</span> <span class="mi">32</span><span class="p">*</span><span class="mi">8</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  <span class="c1"># sstatus
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">ld</span> <span class="no">t1</span><span class="p">,</span> <span class="mi">33</span><span class="p">*</span><span class="mi">8</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  <span class="c1"># spec
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">ld</span> <span class="no">t2</span><span class="p">,</span> <span class="mi">2</span><span class="p">*</span><span class="mi">8</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>   <span class="c1"># sscratch
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">csrw</span> <span class="no">sstatus</span><span class="p">,</span> <span class="no">t0</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">csrw</span> <span class="no">sepc</span><span class="p">,</span> <span class="no">t1</span> 
+</span></span><span class="line"><span class="cl">    <span class="c1"># 设置为用户栈 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">csrw</span> <span class="no">sscratch</span><span class="p">,</span> <span class="no">t2</span>  
+</span></span><span class="line"><span class="cl">    <span class="c1"># 恢复 x0 ~ x31 寄存器
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1"># restore general-purpuse registers except sp/tp  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">ld</span> <span class="no">x1</span><span class="p">,</span> <span class="mi">1</span><span class="p">*</span><span class="mi">8</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">ld</span> <span class="no">x3</span><span class="p">,</span> <span class="mi">3</span><span class="p">*</span><span class="mi">8</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">.set</span> <span class="no">n</span><span class="p">,</span> <span class="mi">5</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">.rept</span> <span class="mi">27</span>  
+</span></span><span class="line"><span class="cl">        <span class="no">LOAD_GP</span> <span class="nv">%n</span>  
+</span></span><span class="line"><span class="cl">        <span class="no">.set</span> <span class="no">n</span><span class="p">,</span> <span class="no">n</span><span class="err">+</span><span class="mi">1</span>  
+</span></span><span class="line"><span class="cl">    <span class="no">.endr</span>  
+</span></span><span class="line"><span class="cl">    <span class="c1"># release TrapContext on kernel stack
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="c1"># 释放栈帧  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">addi</span> <span class="no">sp</span><span class="p">,</span> <span class="no">sp</span><span class="p">,</span> <span class="mi">34</span><span class="p">*</span><span class="mi">8</span>  
+</span></span><span class="line"><span class="cl">    <span class="c1"># now sp-&gt;kernel stack, sscratch-&gt;user stack  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">csrrw</span> <span class="no">sp</span><span class="p">,</span> <span class="no">sscratch</span><span class="p">,</span> <span class="no">sp</span>  
+</span></span><span class="line"><span class="cl">    <span class="c1"># 返回到用户程序继续执行
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">sret</span>
+</span></span></code></pre></div>
+
+
+
+
+<div class="tip custom-block">
+    <p class="custom-block-title">
+        
+        
+        TIP
+        
+    </p>
+    <p> <p><code>sscratch</code>这个寄存器它：</p>
+<ol>
+<li>保存了内核栈的地址</li>
+<li>作为一个中转站让<code>sp</code>（执行用户栈的地址）暂存在<code>sscratch</code>中</li>
+</ol>
+<p>通过<code>csrrw  sp, sscratch, sp</code>这一条指令就完成内核栈与用户栈的相互交换</p>
+ </p>
+</div>
+
+
+
+
+
+
+
+
+<h4 id="trap-分发与处理">Trap 分发与处理</h4>
+<ol>
+<li>根据<code>scause</code>的<code>cause</code>进行分发处理</li>
+<li>如果是<code>UserEnvCall</code>
+<ol>
+<li>则设置<code>sepc</code>为下一条指令</li>
+<li>调用 syscall</li>
+</ol>
+</li>
+<li>如果出现错误则直接运行下一个应用程序</li>
+<li>如果是不支持的 trap 则直接抛出异常</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="cp">#[no_mangle]</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="sd">/// handle an interrupt, exception, or system call from user space  
+</span></span></span><span class="line"><span class="cl"><span class="sd"></span><span class="k">pub</span><span class="w"> </span><span class="k">fn</span> <span class="nf">trap_handler</span><span class="p">(</span><span class="n">cx</span>: <span class="kp">&amp;</span><span class="nc">mut</span><span class="w"> </span><span class="n">TrapContext</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="kp">&amp;</span><span class="nc">mut</span><span class="w"> </span><span class="n">TrapContext</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">scause</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">scause</span>::<span class="n">read</span><span class="p">();</span><span class="w"> </span><span class="c1">// get trap cause  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="n">stval</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">stval</span>::<span class="n">read</span><span class="p">();</span><span class="w"> </span><span class="c1">// get extra value  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="k">match</span><span class="w"> </span><span class="n">scause</span><span class="p">.</span><span class="n">cause</span><span class="p">()</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">Trap</span>::<span class="n">Exception</span><span class="p">(</span><span class="n">Exception</span>::<span class="n">UserEnvCall</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">cx</span><span class="p">.</span><span class="n">sepc</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">4</span><span class="p">;</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">cx</span><span class="p">.</span><span class="n">x</span><span class="p">[</span><span class="mi">10</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">syscall</span><span class="p">(</span><span class="n">cx</span><span class="p">.</span><span class="n">x</span><span class="p">[</span><span class="mi">17</span><span class="p">],</span><span class="w"> </span><span class="p">[</span><span class="n">cx</span><span class="p">.</span><span class="n">x</span><span class="p">[</span><span class="mi">10</span><span class="p">],</span><span class="w"> </span><span class="n">cx</span><span class="p">.</span><span class="n">x</span><span class="p">[</span><span class="mi">11</span><span class="p">],</span><span class="w"> </span><span class="n">cx</span><span class="p">.</span><span class="n">x</span><span class="p">[</span><span class="mi">12</span><span class="p">]])</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">usize</span><span class="p">;</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">Trap</span>::<span class="n">Exception</span><span class="p">(</span><span class="n">Exception</span>::<span class="n">StoreFault</span><span class="p">)</span><span class="w"> </span><span class="o">|</span><span class="w"> </span><span class="n">Trap</span>::<span class="n">Exception</span><span class="p">(</span><span class="n">Exception</span>::<span class="n">StorePageFault</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="fm">println!</span><span class="p">(</span><span class="s">&#34;[kernel] PageFault in application, kernel killed it.&#34;</span><span class="p">);</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">run_next_app</span><span class="p">();</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">Trap</span>::<span class="n">Exception</span><span class="p">(</span><span class="n">Exception</span>::<span class="n">IllegalInstruction</span><span class="p">)</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="fm">println!</span><span class="p">(</span><span class="s">&#34;[kernel] IllegalInstruction in application, kernel killed it.&#34;</span><span class="p">);</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">run_next_app</span><span class="p">();</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">_</span><span class="w"> </span><span class="o">=&gt;</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="fm">panic!</span><span class="p">(</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="s">&#34;Unsupported trap {:?}, stval = {:#x}!&#34;</span><span class="p">,</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">scause</span><span class="p">.</span><span class="n">cause</span><span class="p">(),</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">                </span><span class="n">stval</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">);</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">}</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">cx</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><h3 id="执行应用程序">执行应用程序</h3>
+<p>当操作系统初始化完成或某个应用形成运行结束或失败时，就调用<code>run_next_app</code>运行下一个应用程序。此时是 S 模式而要切换到 U 模式，所以切换流程:</p>
+<ol>
+<li>构造应用程序开执行所需的 trap 上下文</li>
+<li>通过<code>__restore</code>函数，从 trap 上下文中恢复应用程序执行所需的寄存器</li>
+<li>设置<code>sepc</code>的值为<code>0x80400000</code>(固定为这个值，后续会把每个应用程序加载到这个地址)</li>
+<li>切换<code>scratch</code>和<code>sp</code>，将<code>sp</code>指向应用程序用户栈</li>
+<li>执行<code>sret</code>切换 S =&gt; U</li>
+</ol>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="sd">/// init app context  
+</span></span></span><span class="line"><span class="cl"><span class="sd"></span><span class="k">pub</span><span class="w"> </span><span class="k">fn</span> <span class="nf">app_init_context</span><span class="p">(</span><span class="n">entry</span>: <span class="kt">usize</span><span class="p">,</span><span class="w"> </span><span class="n">sp</span>: <span class="kt">usize</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="nc">Self</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">sstatus</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">sstatus</span>::<span class="n">read</span><span class="p">();</span><span class="w"> </span><span class="c1">// CSR sstatus  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="n">sstatus</span><span class="p">.</span><span class="n">set_spp</span><span class="p">(</span><span class="n">SPP</span>::<span class="n">User</span><span class="p">);</span><span class="w"> </span><span class="c1">//previous privilege mode: user mode  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="kd">let</span><span class="w"> </span><span class="k">mut</span><span class="w"> </span><span class="n">cx</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">Self</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">x</span>: <span class="p">[</span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="mi">32</span><span class="p">],</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">sstatus</span><span class="p">,</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">sepc</span>: <span class="nc">entry</span><span class="p">,</span><span class="w"> </span><span class="c1">// entry point of app  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="p">};</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="n">cx</span><span class="p">.</span><span class="n">set_sp</span><span class="p">(</span><span class="n">sp</span><span class="p">);</span><span class="w"> </span><span class="c1">// app&#39;s user stack pointer  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="n">cx</span><span class="w"> </span><span class="c1">// return initial Trap Context of app  
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="sd">/// run next app  
+</span></span></span><span class="line"><span class="cl"><span class="sd"></span><span class="k">pub</span><span class="w"> </span><span class="k">fn</span> <span class="nf">run_next_app</span><span class="p">()</span><span class="w"> </span>-&gt; <span class="o">!</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="sd">/// ...
+</span></span></span><span class="line"><span class="cl"><span class="sd"></span><span class="w">	
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="k">extern</span><span class="w"> </span><span class="s">&#34;C&#34;</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="k">fn</span> <span class="nf">__restore</span><span class="p">(</span><span class="n">cx_addr</span>: <span class="kt">usize</span><span class="p">);</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// 在内核栈上压入一个 trap 上下文,它在栈顶,所以是 __restore 的参数
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="c1">// 即 a0 = 内核栈顶
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="c1">// 所以会有 `mv sp a0` 这一句,
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="c1">// sepc 的值为固定的程序入口    
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="c1">// 根据`__restore`函数，如果是第一次调用，那么`sscratch`是什么时候设置为用户栈的？
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="c1">// 根据`mv sp a0`那么则 sp = a0 = trapContext
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="c1">// 在`app_init_context`的实现中有`cx.set_sp(sp)`这一句即x[2] = sp = 用户栈
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="c1">// 在`__restore`中有`ld t2, 2*8(sp)`与`csrw sscratch, t2`就完成了设置
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">    </span><span class="k">unsafe</span><span class="w"> </span><span class="p">{</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="n">__restore</span><span class="p">(</span><span class="n">KERNEL_STACK</span><span class="p">.</span><span class="n">push_context</span><span class="p">(</span><span class="n">TrapContext</span>::<span class="n">app_init_context</span><span class="p">(</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">APP_BASE_ADDRESS</span><span class="p">,</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="n">USER_STACK</span><span class="p">.</span><span class="n">get_sp</span><span class="p">(),</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">        </span><span class="p">))</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="o">*</span><span class="k">const</span><span class="w"> </span><span class="n">_</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">usize</span><span class="p">);</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="fm">panic!</span><span class="p">(</span><span class="s">&#34;Unreachable in batch::run_current_app!&#34;</span><span class="p">);</span><span class="w">  
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div>]]></content:encoded>
+    </item>
+    
+    <item>
+      <title>浮点数在计算机中的表示</title>
+      <link>https://fzdwx.github.io/document/2022-12-09-float-rep/</link>
+      <pubDate>Fri, 09 Dec 2022 19:02:32 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/document/2022-12-09-float-rep/</guid>
+      <description>简单介绍浮点数的几种表示方式以及 RISC-V 中相关的浮点寄存器</description>
+      <content:encoded><![CDATA[<h2 id="表示方法">表示方法</h2>
+<figure class="align-center">
+    $$(-1)^{S}\times(1.xxx&hellip;x_{2}\times2^{{yyy&hellip;y}_{2}})$$
+
+    
+    <figcaption>
+        指数表示Y,尾数表示X
+    </figcaption>
+    
+</figure>
+<p><figure id="a-/images/Pasted%20image%2020221209193439.png" class="align-center">
+    <img src="/images/Pasted%20image%2020221209193439.png" alt="单精度的表示方法"  />
+    
+    <figcaption>
+       单精度的表示方法
+    </figcaption>
+    
+</figure></p>
+<p><figure id="a-/images/Pasted%20image%2020221209193511.png" class="align-center">
+    <img src="/images/Pasted%20image%2020221209193511.png" alt="双精度的表示方法"  />
+    
+    <figcaption>
+       双精度的表示方法
+    </figcaption>
+    
+</figure></p>
+<p>公式:</p>
+<figure class="align-center">
+    $$(-1)^{S}\times{F}\times{2^{E}}$$
+
+    
+    <figcaption>
+        F 是尾数表示的值，E 是指数表示的值，S 就对应数的符号位, 1 表示负数。
+    </figcaption>
+    
+</figure>
+<h2 id="移码表示法">移码表示法</h2>
+
+
+
+
+
+<div class="tip custom-block">
+    <p class="custom-block-title">
+        
+        
+        TIP
+        
+    </p>
+    <p> 最理想的表示法是将最小的负指数表示为 00&hellip;00<sub>2</sub>， 将最大的正指数表示为 11&hellip;11<sub>2</sub>。从移码表示的数减去原数就可以得到相应的偏移值，从而由无符号的移码可得到真实的值。 </p>
+</div>
+
+
+
+
+
+
+
+
+<p>IEEE 754规定:</p>
+<ol>
+<li>单精度的偏移值为 127
+<ol>
+<li>指数为 -1 表示 -1 + 127<sub>10</sub> = 126<sub>10</sub> = 01111110<sub>2</sub></li>
+<li>+1 = 1 + 127<sup>10</sup> = 128<sub>10</sub> = 10000000<sub>2</sub></li>
+<li>最大指数为127</li>
+<li>最小为-126</li>
+</ol>
+</li>
+<li>双精度的指数偏移值为 1023
+<ol>
+<li>1023</li>
+<li>-1022</li>
+</ol>
+</li>
+</ol>
+<p>带偏移值的指数意味着一个由浮点数表示的值实际上是:</p>
+<figure class="align-center">
+    $$(-1)^{S}\times{(1 + 有效位数)}\times{2^{指数 - 偏移值}}$$
+
+    
+</figure>
+<h3 id="表示---075sub10sub">表示 - 0.75<sub>10</sub></h3>
+<p>分数表示为：</p>
+<figure class="align-center">
+    (-3/4)<sub>10</sub> = (-3/2<sup>2</sup>)<sub>10</sub>
+
+    
+</figure>
+<p>二进制小数表示:</p>
+<figure class="align-center">
+    (-11/2<sup>2</sup>)<sub>10</sub> = -0.11<sub>2</sub>
+
+    
+    <figcaption>
+        -11 右移 2 位
+    </figcaption>
+    
+</figure>
+<p>用科学计数法表示:</p>
+<figure class="align-center">
+    -0.11<sub>2</sub> x 2<sup>0</sup>
+
+    
+</figure>
+<p>用规格化的科学计数法表示:</p>
+<figure class="align-center">
+    -1.1<sub>2</sub> x 2<sup>-1</sup>
+
+    
+</figure>
+<p>由上面的公式的到：</p>
+<figure class="align-center">
+    $$(-1)^{S}\times{(1 + 有效位数)}\times{2^{指数 - 偏移值}}$$
+
+    
+</figure>
+<ul>
+<li>有效位数: 0.1<sub>2</sub></li>
+<li>
+<ul>
+<li>1 = (- 1)<sup>S</sup> =&gt; S = 1<sub>2</sub></li>
+</ul>
+</li>
+<li>指数 - 127 = -1 =&gt; 指数 = 126<sub>10</sub></li>
+</ul>
+<p>单精度可以表示:</p>
+<p><figure id="a-/images/Pasted%20image%2020221210142957.png" class="align-center">
+    <img src="/images/Pasted%20image%2020221210142957.png" alt=""  />
+    
+</figure></p>
+<p>双精度表示:</p>
+<p><figure id="a-/images/Pasted%20image%2020221210143322.png" class="align-center">
+    <img src="/images/Pasted%20image%2020221210143322.png" alt=""  />
+    
+</figure></p>
+<h3 id="表示二进制浮点数为十进制浮点数">表示二进制浮点数为十进制浮点数</h3>
+<p><figure id="a-/images/Pasted%20image%2020221210143423.png" class="align-center">
+    <img src="/images/Pasted%20image%2020221210143423.png" alt=""  />
+    
+</figure></p>
+<ul>
+<li>S = 1</li>
+<li>有效位数: 0.01<sub>2</sub> =&gt; 1 x 2<sup>-2</sup>（右移两位） = 0.25</li>
+<li>指数: 129</li>
+</ul>
+<p>根据公式:</p>
+<p>$$(-1)^{1}\times{(1 + 0.25)}\times{2^{129 - 127}}$$</p>
+<p>= $$-1\times1.25\times2^2$$</p>
+<p>= $$-1.25\times4$$</p>
+<p>= $$-5$$</p>
+<blockquote>
+<p>浮点加法与浮点乘法可以看 P&amp;H 3.5.4~3.5.5 &nbsp;<a href="https://github.com/fzdwx/fzdwx.github.io/releases/download/v1.0/p.h.pdf" target="_blank" rel="noopener">https://github.com/fzdwx/fzdwx.github.io/releases/download/v1.0/p.h.pdf</a>
+</p>
+</blockquote>
+<h2 id="risc-v-中的浮点指令">RISC-V 中的浮点指令</h2>
+<ul>
+<li>算术
+<ul>
+<li>加法: <code>fadd.s</code> <code>fadd.d</code>
+<ul>
+<li><code>fadd.s f0, f1, f2</code> =&gt; <code>f0 = f1 + f2</code></li>
+</ul>
+</li>
+<li>减法：<code>fsub</code> <code>fsub</code>
+<ul>
+<li><code>fsub.s f0, f1, f2</code> =&gt; <code>f0 = f1 - f2</code></li>
+</ul>
+</li>
+<li>乘法: <code>fmul</code>
+<ul>
+<li><code>fmul.s f0, f1, f2</code> =&gt; <code>f0 = f1 * f2</code></li>
+</ul>
+</li>
+<li>除法: <code>fdiv</code>
+<ul>
+<li><code>fdivs f0, f1, f2</code> =&gt; <code>f0 = f1 / f2</code></li>
+</ul>
+</li>
+<li>平方根: <code>fsqrt</code>
+<ul>
+<li><code>fsqrt.s f0, f1</code> =&gt; <code>$$f0 = \sqrt{f1}$$</code></li>
+</ul>
+</li>
+</ul>
+</li>
+<li>比较
+<ul>
+<li>相等: <code>feq</code>
+<ul>
+<li><code>feq.s x5, f0, f1</code> =&gt; <code>x5 = 1 if f0 == f1, else 0</code></li>
+</ul>
+</li>
+<li>小于: <code>flt</code>
+<ul>
+<li><code>flt.s x5, f0, f1</code> =&gt; <code>x5 = 1 if f0 &lt; f1, else 0</code></li>
+</ul>
+</li>
+<li>小于或等于: <code>fle</code>
+<ul>
+<li><code>fle.s x5, f0, f1</code> =&gt; <code>x5 = 1 if f0 &lt;= f1, else 0</code></li>
+</ul>
+</li>
+<li>如果比较结果为 真，则将整点寄存器设置 1,否则为 0</li>
+<li>所以可以使用整数分支指令 <code>beq</code> 和 <code>bne</code> 来比较结果并进行分支</li>
+</ul>
+</li>
+<li>取存指令:
+<ul>
+<li>双：<code>fld</code> <code>fsd</code>
+<ul>
+<li><code>fld f0, 8(x5)</code> =&gt; <code>f0 = Memory[x5 + 8]</code></li>
+<li><code>fsd f0, 8(x5)</code> =&gt; <code>Memory[x5 +8] = f0</code></li>
+</ul>
+</li>
+<li>单:<code>flw</code> <code>fsw</code></li>
+<li>浮点数据传输指令的基址寄存器仍为整点寄存器</li>
+<li>在 RISC-V中有独立的浮点寄存器: f0 ~ f31</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p>上述指令都有单双精度版本，单精度以 <code>.s</code> 结尾，双精度以 <code>.d</code> 结尾</p>
+</blockquote>
+<p>一个示例: 从内存中取出两个单精度数，相加，然后将总和存入内存中</p>
+<pre tabindex="0"><code class="language-ricv-v" data-lang="ricv-v">flw    f0, 0(x10)     // 加载一个 32bit 的数到 f0
+flw    f1, 4(x10)     // 加载一个 32bit 的数到 f1
+fadd.s f2, f0, f1     // f2 = f0 + f1
+fsw    f2, 8(x10)     // 保存来自 f2 的 32bit 的数
+</code></pre>
+
+
+
+
+<div class="tip custom-block">
+    <p class="custom-block-title">
+        
+        
+        TIP
+        
+    </p>
+    <p> <p>独立浮点寄存器的好处: 在不需要增加指令位的情况下，可以获得倍增的寄存器数目，同时因为有独立的整点和浮点寄存器，可以获得倍增的寄存器带宽，并且还能为浮点定制寄存器。</p>
+<p>例如一些寄存器中所有类型的操作数转换为单一的内部格式。</p>
+ </p>
+</div>
+
+
+
+
+
+
+
+
+<h3 id="将一段-c-代码转换成-risc-v-的的汇编代码">将一段 C 代码转换成 RISC-V 的的汇编代码</h3>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">float</span> <span class="nf">f2c</span><span class="p">(</span><span class="kt">float</span> <span class="n">qwe</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">	<span class="nf">retrun</span> <span class="p">((</span><span class="mf">5.0f</span> <span class="o">/</span> <span class="mf">9.0f</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">qwe</span> <span class="o">-</span> <span class="mf">32.0f</span><span class="p">));</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>假设参数 <code>qwe</code> 传入到寄存器 <code>f10</code> 中，且结果也存入 <code>f10</code>中:</p>
+<pre tabindex="0"><code class="language-risc-v" data-lang="risc-v">f2c:
+	flw    f0, const5(x3)  // f0 = 5.0f
+	flw    f1, const9(x3)  // f1 = 9.0f
+	fdiv.s f0, f0, f1      // f0 = 5.0f / 9.0f
+	flw    f1, const32(x3) // f1 = 32.0f
+	fsub.s f10, f10, f1    // f10 = qwe - 32.0f
+	fmul.s f10, f0,  f10   // f10 = ((5.0f / 9.0f) * (qwe - 32.0f)); 
+	jalr   x0, 0(x1)       // retrun
+</code></pre><p>假设通过 <code>x3</code> 访问上面3个常量浮点数</p>
+<h3 id="将二维矩阵的c代码转换为risc-v的汇编代码">将二维矩阵的C代码转换为RISC-V的汇编代码</h3>
+<figure class="align-center">
+    $$C=C+A\times{B}$$
+
+    
+</figure>
+<p>假设A, B, C都是 32 x 32 的二维矩阵</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">mm</span><span class="p">(</span><span class="kt">double</span> <span class="n">c</span><span class="p">[][],</span> <span class="kt">double</span> <span class="n">a</span><span class="p">[][],</span> <span class="kt">double</span> <span class="n">b</span><span class="p">[][]){</span>
+</span></span><span class="line"><span class="cl">	<span class="kt">size_t</span> <span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">,</span><span class="n">k</span><span class="p">;</span>
+</span></span><span class="line"><span class="cl">	<span class="k">for</span><span class="p">(</span><span class="n">i</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">i</span><span class="o">&lt;</span><span class="mi">32</span><span class="p">;</span><span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">		<span class="k">for</span><span class="p">(</span><span class="n">j</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">j</span><span class="o">&lt;</span><span class="mi">32</span><span class="p">;</span><span class="n">j</span><span class="o">=</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">			<span class="k">for</span><span class="p">(</span><span class="n">k</span><span class="o">=</span><span class="mi">0</span><span class="p">;</span><span class="n">k</span><span class="o">&lt;</span><span class="mi">32</span><span class="p">;</span><span class="n">k</span><span class="o">=</span><span class="n">k</span><span class="o">+</span><span class="mi">1</span><span class="p">){</span>
+</span></span><span class="line"><span class="cl">				<span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">c</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">a</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">k</span><span class="p">]</span> <span class="o">*</span> <span class="n">b</span><span class="p">[</span><span class="n">k</span><span class="p">][</span><span class="n">j</span><span class="p">];</span>
+</span></span><span class="line"><span class="cl">			<span class="p">}</span>
+</span></span><span class="line"><span class="cl">		<span class="p">}</span>
+</span></span><span class="line"><span class="cl">	<span class="p">}</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>方法参数分别存放在 x10, x11, x12; i, j, k 分别存放在x5, x6, x7。</p>
+<pre tabindex="0"><code class="language-risc-v" data-lang="risc-v">	mm:...
+		li x28, 32        // x28 = 32
+		li x5, 0          // i = 0;
+L1:		li x6, 0          // j = 0;
+L2:		li x7, 0          // k = 0;
+		slli x30, x5, 5   // x30 = i * 2 ^ 5(size of row of c)
+		add x30, x30, x6  // x30 = i * size(row) + j
+		slli x30, x30, 3  // x30 = byte offset of [i][j] 8个字节,左移3位
+		add x30, x10, x30 // x30 = byte address of c[i][j]
+		fld f0, 0(x30)    // f0 = 8 bytes of c[i][j]
+L3:     slli x29, x7, 5   // x29 = k * 2 ^ 5
+		add x29, x29, x6  
+		slli x29, x29, 3
+		add x29, x12, x29
+		fld f1, 0(x29)     // f1 = 8 bytes of b[k][j]
+		slli x29,x5 5      // x29 = i * 2 ^ 5
+		add x29, x29, x7
+		slli x29, x29, 3
+		add x29, x11, x29
+		fld f2, 0(x29)     // f2 = a[i][k]
+		fmul.d f1, f2, f1  // f1 = a[i][k] * b[k][j]
+		fadd.d f0, f0 ,f1  // f0 = c[i][j] + a[i][k] * b[k][j]
+		addi x7, x7, 1     // k = k + 1
+		bltu x7, x28, L3   // if (k &lt; 32) go to L3
+		fsd f0, 0(x30)     // c[i][j] = f0
+		addi x6, x6, 1     // j = j + 1
+		bltu x6, x28, L2   // if (j &lt; 32) go to L2
+		addi x5, x5, 1     // i = i + 1
+		bltu x5, x28, 1    // if (i &lt; 32) go to L1
+</code></pre><h2 id="一些c语言和java的数据类型数据传输指令">一些C语言和Java的数据类型、数据传输指令：</h2>
+<p><figure id="a-/images/Pasted%20image%2020221210170829.png" class="align-center">
+    <img src="/images/Pasted%20image%2020221210170829.png" alt=""  />
+    
+</figure></p>
+<h3 id="二进制浮点数表示图">二进制浮点数表示图</h3>
+<p><figure id="a-/images/Pasted%20image%2020221210194225.png" class="align-center">
+    <img src="/images/Pasted%20image%2020221210194225.png" alt=""  />
+    
+</figure></p>
+]]></content:encoded>
+    </item>
+    
+  </channel>
+</rss>
