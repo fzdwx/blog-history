@@ -321,8 +321,12 @@ term:
       <pubDate>Mon, 31 Oct 2022 06:08:23 +0000</pubDate>
       
       <guid>https://fzdwx.github.io/notes/11/</guid>
-      <description>最近在看 动漫 电视剧 已看完 动漫 电影 电视剧 </description>
-      <content:encoded><![CDATA[<h2 id="最近在看">最近在看</h2>
+      <description> 记录一些影视作品的观看记录
+最近在看 动漫 已看完 动漫 电影 电视剧 </description>
+      <content:encoded><![CDATA[<blockquote>
+<p>记录一些影视作品的观看记录</p>
+</blockquote>
+<h2 id="最近在看">最近在看</h2>
 <h3 id="动漫">动漫</h3>
 <p><div class="douban_show">
     <div id="dbhttps://movie.douban.com/subject/35604677/"
@@ -338,7 +342,6 @@ term:
     class="douban_item post-preview">
 </div>
 </p>
-<h3 id="电视剧">电视剧</h3>
 <h2 id="已看完">已看完</h2>
 <h3 id="动漫-1">动漫</h3>
 <p><div class="douban_show">
@@ -384,7 +387,7 @@ term:
     class="douban_item post-preview">
 </div>
 </p>
-<h3 id="电视剧-1">电视剧</h3>
+<h3 id="电视剧">电视剧</h3>
 <p><div class="douban_show">
     <div id="dbhttps://movie.douban.com/subject/30198955/"
     urlstring="https://movie.douban.com/subject/30198955/"
@@ -403,6 +406,13 @@ term:
     <div id="dbhttps://movie.douban.com/subject/35314632/"
     urlstring="https://movie.douban.com/subject/35314632/"
     to="https://ddys.art/the-glory-2022/"
+    class="douban_item post-preview">
+</div>
+
+<div class="douban_show">
+    <div id="dbhttps://movie.douban.com/subject/35465232/"
+    urlstring="https://movie.douban.com/subject/35465232/"
+    to=""
     class="douban_item post-preview">
 </div>
 </p>
