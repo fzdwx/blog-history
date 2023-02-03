@@ -77,7 +77,7 @@ BufLineFolder
 <p>在 lazy 中使用:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="p">{</span>  
 </span></span><span class="line"><span class="cl">    <span class="s2">&#34;fzdwx/bufline.nvim&#34;</span><span class="p">,</span>  
-</span></span><span class="line"><span class="cl">    <span class="n">event</span> <span class="o">=</span> <span class="s2">&#34;BufReadPre&#34;</span><span class="p">,</span>  
+</span></span><span class="line"><span class="cl">    <span class="n">event</span> <span class="o">=</span> <span class="s2">&#34;BufEnter&#34;</span><span class="p">,</span>  
 </span></span><span class="line"><span class="cl">    <span class="n">dependencies</span> <span class="o">=</span> <span class="p">{</span>  
 </span></span><span class="line"><span class="cl">        <span class="s2">&#34;nvim-tree/nvim-web-devicons&#34;</span><span class="p">,</span>  
 </span></span><span class="line"><span class="cl">    <span class="p">},</span>  

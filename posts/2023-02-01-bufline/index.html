@@ -37,7 +37,7 @@ BufLineFolder
 </code></pre><p>这些高亮标签都没有默认设置，需要用户自定义，例如:</p><pre tabindex=0><code>vim.cmd([[au ColorScheme * hi BufLineTitleSel gui=none guibg=&#39;#282C34&#39; guifg=&#39;#5C6370&#39;]])
 </code></pre><p>设置高亮遇到的问题，当设置 icon 的背景为空时，有背景颜色的 icon 跟没有的会一大一小，后来没办法，只能让它都开启颜色的，也就是没选中的 buffer 也会开启颜色跟 bufferline的一样。</p><p>在 lazy 中使用:</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-lua data-lang=lua><span class=line><span class=cl><span class=p>{</span>  
 </span></span><span class=line><span class=cl>    <span class=s2>&#34;fzdwx/bufline.nvim&#34;</span><span class=p>,</span>  
-</span></span><span class=line><span class=cl>    <span class=n>event</span> <span class=o>=</span> <span class=s2>&#34;BufReadPre&#34;</span><span class=p>,</span>  
+</span></span><span class=line><span class=cl>    <span class=n>event</span> <span class=o>=</span> <span class=s2>&#34;BufEnter&#34;</span><span class=p>,</span>  
 </span></span><span class=line><span class=cl>    <span class=n>dependencies</span> <span class=o>=</span> <span class=p>{</span>  
 </span></span><span class=line><span class=cl>        <span class=s2>&#34;nvim-tree/nvim-web-devicons&#34;</span><span class=p>,</span>  
 </span></span><span class=line><span class=cl>    <span class=p>},</span>  
