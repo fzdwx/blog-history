@@ -1,43 +1,27 @@
-{{- define "main" }}
-
-{{- if (and site.Params.profileMode.enabled .IsHome) }}
-{{- partial "index_profile.html" . }}
-{{- else }} {{/* if not profileMode */}}
-
-{{- if not .IsHome | and .Title }}
 <header class="page-header">
-    {{- partial "breadcrumbs.html" . }}
-    <h1>
-        {{/* see: https://gohugo.io/variables/taxonomy/#taxonomy-terms-page-variables */}}
-        {{- if eq .Kind "term" -}}{{- .Data.Singular }}: {{ end -}}
-        {{ .Title -}}
+    <h1 qwe style="font-family:f1Font;font-size:50px">
+        文档
     </h1>
-    {{- if .Description }}
-    <div class="post-description post-content">
-        {{ .Description | markdownify }}
+    <div class="post-content">
+        <blockquote>
+            作为系列笔记使用
+        </blockquote>
     </div>
-    {{- end }}
-    {{- partial "inline_links.html" . -}}
 </header>
-{{- end }}
 
-{{- if .Content }}
-<div class="post-content">
-    {{- if not (.Param "disableAnchoredHeadings") }}
-    {{- partial "anchored_headings.html" .Content -}}
-    {{- else }}{{ .Content }}{{ end }}
-</div>
-{{- end }}
-
+<ul class="terms-tags shadow-bottom">
+    {{range $name, $taxonomy := .Site.Taxonomies.docs}} {{ $cnt := .Count }}
+    {{ with $.Site.GetPage (printf "/docs/%s" $name) }}
+    <li class="nomargin">
+        <a href="{{ .Permalink }}">{{ .Name }} <sup><strong><sup>{{ $cnt }}</sup></strong></sup> </a>
+    </li>
+    {{end}}
+    {{end}}
+</ul>
 
 {{- $pages := .Pages }}
-{{- if .IsHome }}
-{{/* get all regular pages instead of pages in a section */}}
-{{- $pages = where site.RegularPages "Section" "in" site.Params.mainSections }}
-{{- end }}
 {{- $pages = where $pages "Params.hidden" "!=" true }}
 
-{{/* related issue: https://github.com/gohugoio/hugo/issues/9003 */}}
 {{ $paginator := "" }}
 {{ if (.Param "paginate") }}
 {{- $paginator = .Paginate $pages (.Param "paginate") }}
@@ -45,9 +29,6 @@
 {{- $paginator = .Paginate $pages }}
 {{ end }}
 
-{{- if and .IsHome site.Params.homeInfoParams (eq $paginator.PageNumber 1) }}
-{{- partial "home_info.html" . }}
-{{- end }}
 
 {{- $term := .Data.Term }}
 {{- range $index, $page := $paginator.Pages }}
@@ -101,7 +82,3 @@
     </nav>
 </footer>
 {{- end }}
-
-{{- end }}{{/* end profileMode */}}
-
-{{- end }}{{- /* end main */ -}}

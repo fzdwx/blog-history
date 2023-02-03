@@ -2,6 +2,7 @@
 title: "Fault-Tolerant And Replication"
 date: 2022-10-09T12:01:28+08:00
 draft: true
+docs: ["6.824"]
 ---
 
 容错(fault-tolerant)本身时为了提高可用性(high availability)，而我们使用的方法就是复制(replication)。复制到底能解决什么样的故障(Failure)？

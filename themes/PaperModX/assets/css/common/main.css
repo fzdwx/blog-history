@@ -207,8 +207,8 @@ pre:hover .copy-code {
     transition: var(--link-transition);
 }
 .meta-item a:hover {
-    color: var(--primary);
-    box-shadow: 0 1px 0 var(--secondary);
+    color: var(--a1);
+    box-shadow: 0 1px 0 var(--blue);
 }
 .meta-item .post-tags a:not(:last-of-type) {
     margin-inline-end: .3em;

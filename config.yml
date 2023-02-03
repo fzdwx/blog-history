@@ -12,6 +12,7 @@ buildExpired: false
 taxonomies:
   category: categories
   tag: tags
+  doc: docs
 
 googleAnalytics: G-DGKZ9K6GHW
 Copyright: "Copyright [fzdwx](https://github.com/fzdwx)   since 2022"
@@ -174,14 +175,14 @@ menu:
       url: /notes/
       weight: 1
     - name: Docs
-      url: /doc/
+      url: /document/
       weight: 10
     - name: Archives
       url: /archives/
       weight: 20
-    - name: Tags
-      url: /tags/
-      weight: 40
+#    - name: Tags
+#      url: /tags/
+#      weight: 40
     - name: Links
       url: /links/
       weight: 100

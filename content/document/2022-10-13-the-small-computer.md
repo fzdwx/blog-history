@@ -2,7 +2,7 @@
 title: "最简单的计算机"
 date: 2022-10-13T22:20:38+08:00
 draft: true
-tags: ["linux", "ics"]
+docs: ["linux", "ics"]
 ---
 
 

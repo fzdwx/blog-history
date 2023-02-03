@@ -1,3 +1,33 @@
+<header>
+    <h1 style="font-family: f1Font;font-size: 50px">小记</h1>
+    <div class="post-content">
+        <blockquote>
+            通过Github action将 <a target="_blank" href="https://github.com/fzdwx/fzdwx.github.io/issues">issues</a>
+            自动同步到这里。
+            主要用于记录一些零碎的笔记。
+        </blockquote>
+    </div>
+</header>
+
+<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
+        <path d="M12 6H0l6-6z"/>
+    </svg>
+</a>
+
+{{- partial "notes.side.html" . }}
+
+<ul class="terms-tags shadow-bottom">
+    {{range $name, $taxonomy := .Site.Taxonomies.categories}} {{ $cnt := .Count }}
+    {{ with $.Site.GetPage (printf "/categories/%s" $name) }}
+    <li class="nomargin">
+        <a href="{{ .Permalink }}">{{ .Name }} <sup><strong><sup>{{ $cnt }}</sup></strong></sup> </a>
+    </li>
+    {{end}}
+    {{end}}
+</ul>
+
+
 {{- $pages := .Pages }}
 {{ $paginator := "" }}
 {{ if (.Param "paginate") }}
@@ -13,17 +43,18 @@
 {{- $class = "post-entry tag-entry" }}
 
 <article class="{{ $class }}">
-  <header class="post-header">
-    <h1 id="{{ urlize .Title }}" class="post-title">
-     <a target="_blank" href="https://github.com/fzdwx/fzdwx.github.io/issues/{{- .File.BaseFileName }}"> {{- .Title }}</a>
-    </h1>
+    <header class="post-header">
+        <h1 id="{{ urlize .Title }}" class="post-title">
+            <a target="_blank" href="https://github.com/fzdwx/fzdwx.github.io/issues/{{- .File.BaseFileName }}"> {{-
+                .Title }}</a>
+        </h1>
 
-    {{- partial "notes_meta.html" . }}
-    <!--        {{ time.Format "2006-01-02 3:4" .Params.Updated }}-->
-  </header>
-  <div class="post-content">
-    {{ .Content }}
-  </div>
+        {{- partial "notes_meta.html" . }}
+        <!--        {{ time.Format "2006-01-02 3:4" .Params.Updated }}-->
+    </header>
+    <div class="post-content">
+        {{ .Content }}
+    </div>
 
 </article>
 

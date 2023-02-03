@@ -1,32 +1,5 @@
 {{- define "main" }}
 
-<header>
-    <h1 style="font-family: f1Font;font-size: 50px">小记</h1>
-    <div class="post-content">
-        <blockquote>
-            通过Github action将 <a target="_blank" href="https://github.com/fzdwx/fzdwx.github.io/issues">issues</a> 自动同步到这里。
-        </blockquote>
-    </div>
-</header>
-
-<ul class="terms-tags shadow-bottom">
-    {{range $name, $taxonomy := .Site.Taxonomies.categories}} {{ $cnt := .Count }}
-    {{ with $.Site.GetPage (printf "/categories/%s" $name) }}
-    <li class="nomargin">
-        <a href="{{ .Permalink }}">{{ .Name }} <sup><strong><sup>{{ $cnt }}</sup></strong></sup> </a>
-    </li>
-    {{end}}
-    {{end}}
-</ul>
-
-<a href="#top" aria-label="go to top" title="Go to Top (Alt + G)" class="top-link" id="top-link" accesskey="g">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 12 6" fill="currentColor">
-        <path d="M12 6H0l6-6z"/>
-    </svg>
-</a>
-
-{{- partial "notes.side.html" . }}
-
 {{- partial "notes_body.html" . }}
 
 {{- end }}

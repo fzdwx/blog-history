@@ -2,7 +2,7 @@
 title: "操作系统的并发编程"
 date: 2022-12-16T20:54:45+08:00
 draft: false
-tags: [os]
+docs: [os]
 summary: 从操作系统的层面讲要支持并发需要哪些条件
 ---
 

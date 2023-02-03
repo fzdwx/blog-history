@@ -128,7 +128,7 @@ var InstantClick = function(document, location) {
 
   function changePage(title, body, headCache, newUrl, scrollY) {
     document.documentElement.replaceChild(body, document.body)
-    /* We cannot just use `document.body = doc.body`, it causes Safari (tested
+    /* We cannot just use `document.body = docs.body`, it causes Safari (tested
        5.1, 6.0 and Mobile 7.0) to execute script tags directly.
     */
 
@@ -696,14 +696,14 @@ var InstantClick = function(document, location) {
   /* The state of Android's AOSP browsers:
 
      2.3.7: pushState appears to work correctly, but
-            `doc.documentElement.innerHTML = body` is buggy.
+            `docs.documentElement.innerHTML = body` is buggy.
             See details here: http://stackoverflow.com/q/21918564
             Not an issue anymore, but it may fail where 3.0 do, this needs
             testing again.
 
      3.0:   pushState appears to work correctly (though the URL bar is only
             updated on focus), but
-            `document.documentElement.replaceChild(doc.body, document.body)`
+            `document.documentElement.replaceChild(docs.body, document.body)`
         throws DOMException: WRONG_DOCUMENT_ERR.
 
      4.0.2: Doesn't support pushState.
