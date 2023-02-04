@@ -614,13 +614,41 @@ libco &amp;nbsp;https://www.bilibili.com/video/BV17T4y1S7RS/?spm_id_from=333.788
     </item>
     
     <item>
-      <title>🌟  收藏夹</title>
+      <title>收藏夹</title>
       <link>https://fzdwx.github.io/notes/1/</link>
       <pubDate>Sat, 01 Oct 2022 06:33:55 +0000</pubDate>
       
       <guid>https://fzdwx.github.io/notes/1/</guid>
-      <description>终端下好用的程序 ranger &amp;nbsp;https://github.com/ranger/ranger 配置推荐 &amp;nbsp;https://zhuanlan.zhihu.com/p/105731111 &amp;nbsp;https://zhuanlan.zhihu.com/p/441083543 fzf(模糊搜索) &amp;nbsp;https://github.com/junegunn/fzf 压测工具 &amp;nbsp;https://github.com/link1st/go-stress-testing vhs(根据预定义的命令，调用bash，然后将输出结果记录为gif等) &amp;nbsp;https://github.com/charmbracelet/vhs 一些开源书 &amp;nbsp;zlib &amp;nbsp;《FFmpeg原理》 正则表达式 &amp;nbsp;learn regex101 Blockchain &amp;nbsp;中本聪论文 速查表 &amp;nbsp;GDB Card &amp;nbsp;LLDB </description>
-      <content:encoded><![CDATA[<h1 id="终端下好用的程序">终端下好用的程序</h1>
+      <description>1. 资料以及书 &amp;nbsp;zlib &amp;nbsp;《FFmpeg原理》 &amp;nbsp;数据库/存储学习路径推荐 &amp;nbsp;MySQL 45讲 2. 正则表达式 &amp;nbsp;learn regex101 3.Blockchain &amp;nbsp;中本聪论文 4.速查表 &amp;nbsp;GDB Card &amp;nbsp;LLDB 5. 终端下好用的程序 ranger &amp;nbsp;https://github.com/ranger/ranger 配置推荐 &amp;nbsp;https://zhuanlan.zhihu.com/p/105731111 &amp;nbsp;https://zhuanlan.zhihu.com/p/441083543 fzf(模糊搜索) &amp;nbsp;https://github.com/junegunn/fzf 压测工具 &amp;nbsp;https://github.com/link1st/go-stress-testing vhs(根据预定义的命令，调用bash，然后将输出结果记录为gif等) &amp;nbsp;https://github.com/charmbracelet/vhs </description>
+      <content:encoded><![CDATA[<h1 id="1-资料以及书">1. 资料以及书</h1>
+<ol>
+<li>&nbsp;<a href="https://zlib.cydiar.com/" target="_blank" rel="noopener">zlib</a>
+</li>
+<li>&nbsp;<a href="https://ffmpeg.xianwaizhiyin.net/cover.html" target="_blank" rel="noopener">《FFmpeg原理》</a>
+</li>
+<li>&nbsp;<a href="https://www.v2ex.com/t/913147#reply5" target="_blank" rel="noopener">数据库/存储学习路径推荐</a>
+</li>
+<li>&nbsp;<a href="https://fanlv.fun/2020/08/01/mysql-45-lesson/" target="_blank" rel="noopener">MySQL 45讲</a>
+</li>
+</ol>
+<h1 id="2-正则表达式">2. 正则表达式</h1>
+<ol>
+<li>&nbsp;<a href="https://regexlearn.com/zh-cn/learn" target="_blank" rel="noopener">learn regex101</a>
+</li>
+</ol>
+<h1 id="3blockchain">3.Blockchain</h1>
+<ol>
+<li>&nbsp;<a href="https://nakamotoinstitute.org/static/docs/bitcoin-zh-cn.pdf" target="_blank" rel="noopener">中本聪论文</a>
+</li>
+</ol>
+<h1 id="4速查表">4.速查表</h1>
+<ol>
+<li>&nbsp;<a href="https://inst.eecs.berkeley.edu/~cs61c/sp21/resources-pdfs/gdb5-refcard.pdf" target="_blank" rel="noopener">GDB Card</a>
+</li>
+<li>&nbsp;<a href="https://lldb.llvm.org/use/map.html" target="_blank" rel="noopener">LLDB</a>
+</li>
+</ol>
+<h1 id="5-终端下好用的程序">5. 终端下好用的程序</h1>
 <ol>
 <li>ranger &nbsp;<a href="https://github.com/ranger/ranger" target="_blank" rel="noopener">https://github.com/ranger/ranger</a>
   配置推荐
@@ -636,30 +664,6 @@ libco &amp;nbsp;https://www.bilibili.com/video/BV17T4y1S7RS/?spm_id_from=333.788
 <li>压测工具 &nbsp;<a href="https://github.com/link1st/go-stress-testing" target="_blank" rel="noopener">https://github.com/link1st/go-stress-testing</a>
 </li>
 <li>vhs(根据预定义的命令，调用bash，然后将输出结果记录为gif等) &nbsp;<a href="https://github.com/charmbracelet/vhs" target="_blank" rel="noopener">https://github.com/charmbracelet/vhs</a>
-</li>
-</ol>
-<h1 id="一些开源书">一些开源书</h1>
-<ol>
-<li>&nbsp;<a href="https://zlib.cydiar.com/" target="_blank" rel="noopener">zlib</a>
-</li>
-<li>&nbsp;<a href="https://ffmpeg.xianwaizhiyin.net/cover.html" target="_blank" rel="noopener">《FFmpeg原理》</a>
-</li>
-</ol>
-<h1 id="正则表达式">正则表达式</h1>
-<ol>
-<li>&nbsp;<a href="https://regexlearn.com/zh-cn/learn" target="_blank" rel="noopener">learn regex101</a>
-</li>
-</ol>
-<h1 id="blockchain">Blockchain</h1>
-<ol>
-<li>&nbsp;<a href="https://nakamotoinstitute.org/static/docs/bitcoin-zh-cn.pdf" target="_blank" rel="noopener">中本聪论文</a>
-</li>
-</ol>
-<h1 id="速查表">速查表</h1>
-<ol>
-<li>&nbsp;<a href="https://inst.eecs.berkeley.edu/~cs61c/sp21/resources-pdfs/gdb5-refcard.pdf" target="_blank" rel="noopener">GDB Card</a>
-</li>
-<li>&nbsp;<a href="https://lldb.llvm.org/use/map.html" target="_blank" rel="noopener">LLDB</a>
 </li>
 </ol>
 ]]></content:encoded>
