@@ -10,7 +10,36 @@
     </image>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright [fzdwx](https://github.com/fzdwx)   since 2022</copyright>
-    <lastBuildDate>Wed, 01 Feb 2023 23:59:53 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/posts/feed.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 09 Feb 2023 12:50:21 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/posts/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>linux 连接蓝牙耳机</title>
+      <link>https://fzdwx.github.io/posts/2023-02-09-bluetooth/</link>
+      <pubDate>Thu, 09 Feb 2023 12:50:21 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/posts/2023-02-09-bluetooth/</guid>
+      <description>以 Archlinux 为例子
+bluetoothctl power on # 扫描 bluetoothctl scan on # 结对 bluetoothctl pair xxx # 连接 bluetoothctl connect xxx # 设置 蓝牙为默认输出 pavucontrol 设置 蓝牙为默认输出 </description>
+      <content:encoded><![CDATA[<p>以 Archlinux 为例子</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">bluetoothctl power on
+</span></span><span class="line"><span class="cl"><span class="c1"># 扫描</span>
+</span></span><span class="line"><span class="cl">bluetoothctl scan on  
+</span></span><span class="line"><span class="cl"><span class="c1"># 结对</span>
+</span></span><span class="line"><span class="cl">bluetoothctl pair xxx
+</span></span><span class="line"><span class="cl"><span class="c1"># 连接</span>
+</span></span><span class="line"><span class="cl">bluetoothctl connect xxx
+</span></span><span class="line"><span class="cl"><span class="c1"># 设置 蓝牙为默认输出</span>
+</span></span><span class="line"><span class="cl">pavucontrol
+</span></span></code></pre></div><p><figure id="a-/images/Pasted%20image%2020230209125317.png" class="align-center">
+    <img src="/images/Pasted%20image%2020230209125317.png" alt="设置 蓝牙为默认输出"  />
+    
+    <figcaption>
+       设置 蓝牙为默认输出
+    </figcaption>
+    
+</figure></p>
+]]></content:encoded>
+    </item>
+    
     <item>
       <title>自定义一个 Neovim bufferline</title>
       <link>https://fzdwx.github.io/posts/2023-02-01-bufline/</link>
