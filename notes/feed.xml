@@ -308,11 +308,19 @@ term:
       
       <guid>https://fzdwx.github.io/notes/11/</guid>
       <description> 记录一些影视作品的观看记录
-最近在看 动漫 已看完 动漫 电影 电视剧 </description>
+最近在看 电影 动漫 已看完 动漫 电影 电视剧 </description>
       <content:encoded><![CDATA[<blockquote>
 <p>记录一些影视作品的观看记录</p>
 </blockquote>
 <h2 id="最近在看">最近在看</h2>
+<h3 id="电影">电影</h3>
+<div class="douban_show">
+    <div id="dbhttps://movie.douban.com/subject/1308747/"
+    urlstring="https://movie.douban.com/subject/1308747/"
+    to=""
+    class="douban_item post-preview">
+</div>
+
 <h3 id="动漫">动漫</h3>
 <p><div class="douban_show">
     <div id="dbhttps://movie.douban.com/subject/35604677/"
@@ -358,7 +366,7 @@ term:
     class="douban_item post-preview">
 </div>
 </p>
-<h3 id="电影">电影</h3>
+<h3 id="电影-1">电影</h3>
 <p><div class="douban_show">
     <div id="dbhttps://movie.douban.com/subject/2124724/"
     urlstring="https://movie.douban.com/subject/2124724/"
