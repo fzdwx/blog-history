@@ -37,6 +37,13 @@
     to=""
     class="douban_item post-preview">
 </div>
+
+<div class="douban_show">
+    <div id="dbhttps://movie.douban.com/subject/1307690/"
+    urlstring="https://movie.douban.com/subject/1307690/"
+    to=""
+    class="douban_item post-preview">
+</div>
 </p>
 <h3 id="动漫">动漫</h3>
 <p><div class="douban_show">
@@ -137,6 +144,13 @@
 <div class="douban_show">
     <div id="dbhttps://movie.douban.com/subject/35465232/"
     urlstring="https://movie.douban.com/subject/35465232/"
+    to=""
+    class="douban_item post-preview">
+</div>
+
+<div class="douban_show">
+    <div id="dbhttps://movie.douban.com/subject/27060077/"
+    urlstring="https://movie.douban.com/subject/27060077/"
     to=""
     class="douban_item post-preview">
 </div>
