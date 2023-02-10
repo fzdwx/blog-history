@@ -314,13 +314,20 @@ term:
 </blockquote>
 <h2 id="最近在看">最近在看</h2>
 <h3 id="电影">电影</h3>
-<div class="douban_show">
+<p><div class="douban_show">
     <div id="dbhttps://movie.douban.com/subject/1308747/"
     urlstring="https://movie.douban.com/subject/1308747/"
     to=""
     class="douban_item post-preview">
 </div>
 
+<div class="douban_show">
+    <div id="dbhttps://movie.douban.com/subject/1304022/"
+    urlstring="https://movie.douban.com/subject/1304022/"
+    to=""
+    class="douban_item post-preview">
+</div>
+</p>
 <h3 id="动漫">动漫</h3>
 <p><div class="douban_show">
     <div id="dbhttps://movie.douban.com/subject/35604677/"
