@@ -131,6 +131,14 @@
     class="douban_item post-preview">
     
 </div>
+
+<div class="douban_show">
+    <div id="dbhttps://movie.douban.com/subject/27060077/"
+    urlstring="https://movie.douban.com/subject/27060077/"
+    to=""
+    class="douban_item post-preview">
+    
+</div>
 </p>
 <h3 id="电视剧">电视剧</h3>
 <p><div class="douban_show">
@@ -160,14 +168,6 @@
 <div class="douban_show">
     <div id="dbhttps://movie.douban.com/subject/35465232/"
     urlstring="https://movie.douban.com/subject/35465232/"
-    to=""
-    class="douban_item post-preview">
-    
-</div>
-
-<div class="douban_show">
-    <div id="dbhttps://movie.douban.com/subject/27060077/"
-    urlstring="https://movie.douban.com/subject/27060077/"
     to=""
     class="douban_item post-preview">
     
