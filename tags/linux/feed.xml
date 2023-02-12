@@ -10,7 +10,85 @@
     </image>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright [fzdwx](https://github.com/fzdwx)   since 2022</copyright>
-    <lastBuildDate>Thu, 09 Feb 2023 12:50:21 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/tags/linux/feed.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 12 Feb 2023 16:10:50 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/tags/linux/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>使用 tmux &#43; st</title>
+      <link>https://fzdwx.github.io/posts/2023-02-12-tmux-st/</link>
+      <pubDate>Sun, 12 Feb 2023 16:10:50 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/posts/2023-02-12-tmux-st/</guid>
+      <description>&amp;nbsp;st 是一个非常的简单的终端软件，它对我的来说只少一个功能，就是多路服用(上下左右切分窗口)，这在其他终端软件中都有提供，比如说 wezterm 。
+而 tmux 刚好可以提供这个功能:
+tmux split-window # 向下切分 tmux split-window -h # 向右切分 然后就可以在 st 中设置快捷键: Details /* 切分 */ static char *sp[] = { &amp;#34;/bin/sh&amp;#34;, &amp;#34;-c&amp;#34;, &amp;#34;tmux split-window&amp;#34;,&amp;#34;externalpipe&amp;#34;, NULL }; static char *sph[] = { &amp;#34;/bin/sh&amp;#34;, &amp;#34;-c&amp;#34;, &amp;#34;tmux split-window -h&amp;#34;,&amp;#34;externalpipe&amp;#34;, NULL }; /* 切换窗口 */ static char *gd[] = { &amp;#34;/bin/sh&amp;#34;, &amp;#34;-c&amp;#34;, &amp;#34;tmux select-pane -D&amp;#34;,&amp;#34;externalpipe&amp;#34;, NULL }; static char *gu[] = { &amp;#34;/bin/sh&amp;#34;, &amp;#34;-c&amp;#34;, &amp;#34;tmux select-pane -U&amp;#34;,&amp;#34;externalpipe&amp;#34;, NULL }; static char *gr[] = { &amp;#34;/bin/sh&amp;#34;, &amp;#34;-c&amp;#34;, &amp;#34;tmux select-pane -R&amp;#34;,&amp;#34;externalpipe&amp;#34;, NULL }; static char *gl[] = { &amp;#34;/bin/sh&amp;#34;, &amp;#34;-c&amp;#34;, &amp;#34;tmux select-pane -L&amp;#34;,&amp;#34;externalpipe&amp;#34;, NULL }; /* 调整窗口大小 */ static char *rd[] = { &amp;#34;/bin/sh&amp;#34;, &amp;#34;-c&amp;#34;, &amp;#34;tmux resize-pane -D 2&amp;#34;,&amp;#34;externalpipe&amp;#34;, NULL }; static char *ru[] = { &amp;#34;/bin/sh&amp;#34;, &amp;#34;-c&amp;#34;, &amp;#34;tmux resize-pane -U 2&amp;#34;,&amp;#34;externalpipe&amp;#34;, NULL }; static char *rr[] = { &amp;#34;/bin/sh&amp;#34;, &amp;#34;-c&amp;#34;, &amp;#34;tmux resize-pane -R 2&amp;#34;,&amp;#34;externalpipe&amp;#34;, NULL }; static char *rl[] = { &amp;#34;/bin/sh&amp;#34;, &amp;#34;-c&amp;#34;, &amp;#34;tmux resize-pane -L 2&amp;#34;,&amp;#34;externalpipe&amp;#34;, NULL }; static Shortcut shortcuts[] = { { ControlMask, XK_minus, externalpipe, {.</description>
+      <content:encoded><![CDATA[<p>&nbsp;<a href="https://st.suckless.org/" target="_blank" rel="noopener">st</a>
+ 是一个非常的简单的终端软件，它对我的来说只少一个功能，就是多路服用(上下左右切分窗口)，这在其他终端软件中都有提供，比如说 wezterm 。</p>
+<p>而 tmux 刚好可以提供这个功能:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">tmux split-window    <span class="c1"># 向下切分</span>
+</span></span><span class="line"><span class="cl">tmux split-window -h <span class="c1"># 向右切分</span>
+</span></span></code></pre></div><p>然后就可以在 st 中设置快捷键:
+
+
+
+<details class="details custom-block">
+    <summary>
+        <span> 
+        
+            Details
+        
+        </span>
+    </summary>
+    <p>
+        <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cm">/* 切分 */</span>
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">char</span> <span class="o">*</span><span class="n">sp</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&#34;/bin/sh&#34;</span><span class="p">,</span> <span class="s">&#34;-c&#34;</span><span class="p">,</span> <span class="s">&#34;tmux split-window&#34;</span><span class="p">,</span><span class="s">&#34;externalpipe&#34;</span><span class="p">,</span> <span class="nb">NULL</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">char</span> <span class="o">*</span><span class="n">sph</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&#34;/bin/sh&#34;</span><span class="p">,</span> <span class="s">&#34;-c&#34;</span><span class="p">,</span> <span class="s">&#34;tmux split-window -h&#34;</span><span class="p">,</span><span class="s">&#34;externalpipe&#34;</span><span class="p">,</span> <span class="nb">NULL</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* 切换窗口 */</span>
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">char</span> <span class="o">*</span><span class="n">gd</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&#34;/bin/sh&#34;</span><span class="p">,</span> <span class="s">&#34;-c&#34;</span><span class="p">,</span> <span class="s">&#34;tmux select-pane -D&#34;</span><span class="p">,</span><span class="s">&#34;externalpipe&#34;</span><span class="p">,</span> <span class="nb">NULL</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">char</span> <span class="o">*</span><span class="n">gu</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&#34;/bin/sh&#34;</span><span class="p">,</span> <span class="s">&#34;-c&#34;</span><span class="p">,</span> <span class="s">&#34;tmux select-pane -U&#34;</span><span class="p">,</span><span class="s">&#34;externalpipe&#34;</span><span class="p">,</span> <span class="nb">NULL</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">char</span> <span class="o">*</span><span class="n">gr</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&#34;/bin/sh&#34;</span><span class="p">,</span> <span class="s">&#34;-c&#34;</span><span class="p">,</span> <span class="s">&#34;tmux select-pane -R&#34;</span><span class="p">,</span><span class="s">&#34;externalpipe&#34;</span><span class="p">,</span> <span class="nb">NULL</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">char</span> <span class="o">*</span><span class="n">gl</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&#34;/bin/sh&#34;</span><span class="p">,</span> <span class="s">&#34;-c&#34;</span><span class="p">,</span> <span class="s">&#34;tmux select-pane -L&#34;</span><span class="p">,</span><span class="s">&#34;externalpipe&#34;</span><span class="p">,</span> <span class="nb">NULL</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="cm">/* 调整窗口大小 */</span>
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">char</span> <span class="o">*</span><span class="n">rd</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&#34;/bin/sh&#34;</span><span class="p">,</span> <span class="s">&#34;-c&#34;</span><span class="p">,</span> <span class="s">&#34;tmux resize-pane -D 2&#34;</span><span class="p">,</span><span class="s">&#34;externalpipe&#34;</span><span class="p">,</span> <span class="nb">NULL</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">char</span> <span class="o">*</span><span class="n">ru</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&#34;/bin/sh&#34;</span><span class="p">,</span> <span class="s">&#34;-c&#34;</span><span class="p">,</span> <span class="s">&#34;tmux resize-pane -U 2&#34;</span><span class="p">,</span><span class="s">&#34;externalpipe&#34;</span><span class="p">,</span> <span class="nb">NULL</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">char</span> <span class="o">*</span><span class="n">rr</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&#34;/bin/sh&#34;</span><span class="p">,</span> <span class="s">&#34;-c&#34;</span><span class="p">,</span> <span class="s">&#34;tmux resize-pane -R 2&#34;</span><span class="p">,</span><span class="s">&#34;externalpipe&#34;</span><span class="p">,</span> <span class="nb">NULL</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="kt">char</span> <span class="o">*</span><span class="n">rl</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span> <span class="s">&#34;/bin/sh&#34;</span><span class="p">,</span> <span class="s">&#34;-c&#34;</span><span class="p">,</span> <span class="s">&#34;tmux resize-pane -L 2&#34;</span><span class="p">,</span><span class="s">&#34;externalpipe&#34;</span><span class="p">,</span> <span class="nb">NULL</span> <span class="p">};</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="k">static</span> <span class="n">Shortcut</span> <span class="n">shortcuts</span><span class="p">[]</span> <span class="o">=</span> <span class="p">{</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="n">ControlMask</span><span class="p">,</span> <span class="n">XK_minus</span><span class="p">,</span> <span class="n">externalpipe</span><span class="p">,</span> <span class="p">{.</span><span class="n">v</span> <span class="o">=</span> <span class="n">sp</span> <span class="p">}</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="n">ControlMask</span><span class="p">,</span> <span class="n">XK_backslash</span><span class="p">,</span> <span class="n">externalpipe</span><span class="p">,</span> <span class="p">{.</span><span class="n">v</span> <span class="o">=</span> <span class="n">sph</span> <span class="p">}</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="n">MODKEY</span><span class="p">,</span> <span class="n">XK_Up</span><span class="p">,</span> <span class="n">externalpipe</span><span class="p">,</span> <span class="p">{.</span><span class="n">v</span> <span class="o">=</span> <span class="n">gu</span><span class="p">}</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="n">MODKEY</span><span class="p">,</span> <span class="n">XK_Down</span><span class="p">,</span> <span class="n">externalpipe</span><span class="p">,</span> <span class="p">{.</span><span class="n">v</span> <span class="o">=</span> <span class="n">gd</span><span class="p">}</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="n">MODKEY</span><span class="p">,</span> <span class="n">XK_Left</span><span class="p">,</span> <span class="n">externalpipe</span><span class="p">,</span> <span class="p">{.</span><span class="n">v</span> <span class="o">=</span> <span class="n">gl</span><span class="p">}</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="n">MODKEY</span><span class="p">,</span> <span class="n">XK_Right</span><span class="p">,</span> <span class="n">externalpipe</span><span class="p">,</span> <span class="p">{.</span><span class="n">v</span> <span class="o">=</span> <span class="n">gr</span><span class="p">}</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="n">ControlMask</span><span class="p">,</span> <span class="n">XK_Up</span><span class="p">,</span> <span class="n">externalpipe</span><span class="p">,</span> <span class="p">{.</span><span class="n">v</span> <span class="o">=</span> <span class="n">ru</span><span class="p">}</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="n">ControlMask</span><span class="p">,</span> <span class="n">XK_Down</span><span class="p">,</span> <span class="n">externalpipe</span><span class="p">,</span> <span class="p">{.</span><span class="n">v</span> <span class="o">=</span> <span class="n">rd</span><span class="p">}</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="n">ControlMask</span><span class="p">,</span> <span class="n">XK_Left</span><span class="p">,</span> <span class="n">externalpipe</span><span class="p">,</span> <span class="p">{.</span><span class="n">v</span> <span class="o">=</span> <span class="n">rl</span><span class="p">}</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl"><span class="p">{</span> <span class="n">ControlMask</span><span class="p">,</span> <span class="n">XK_Right</span><span class="p">,</span> <span class="n">externalpipe</span><span class="p">,</span> <span class="p">{.</span><span class="n">v</span> <span class="o">=</span> <span class="n">rr</span><span class="p">}</span> <span class="p">},</span>
+</span></span><span class="line"><span class="cl"><span class="p">};</span>
+</span></span></code></pre></div>
+    </p>
+</details>
+
+
+
+
+
+
+
+
+
+</p>
+<p>最后关闭 tmux 的 status line, 因为我只需要它的 pane 功能，其他的都太碍眼了。</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">set</span> <span class="o">-</span><span class="n">g</span> <span class="n">status</span> <span class="n">off</span>
+</span></span></code></pre></div><hr>
+<p>我的分支: &nbsp;<a href="https://github.com/fzdwx/st" target="_blank" rel="noopener">https://github.com/fzdwx/st</a>
+</p>
+]]></content:encoded>
+    </item>
+    
     <item>
       <title>linux 连接蓝牙耳机</title>
       <link>https://fzdwx.github.io/posts/2023-02-09-bluetooth/</link>
