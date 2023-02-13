@@ -83,7 +83,15 @@ tmux split-window # 向下切分 tmux split-window -h # 向右切分 然后就�
 </p>
 <p>最后关闭 tmux 的 status line, 因为我只需要它的 pane 功能，其他的都太碍眼了。</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">set</span> <span class="o">-</span><span class="n">g</span> <span class="n">status</span> <span class="n">off</span>
-</span></span></code></pre></div><hr>
+</span></span></code></pre></div><p><figure id="a-https://user-images.githubusercontent.com/65269574/218301130-4e361459-e366-4793-b94f-a8b4b07a47e4.gif" class="align-center">
+    <img src="https://user-images.githubusercontent.com/65269574/218301130-4e361459-e366-4793-b94f-a8b4b07a47e4.gif" alt="preview"  />
+    
+    <figcaption>
+       preview
+    </figcaption>
+    
+</figure></p>
+<hr>
 <p>我的分支: &nbsp;<a href="https://github.com/fzdwx/st" target="_blank" rel="noopener">https://github.com/fzdwx/st</a>
 </p>
 ]]></content:encoded>
