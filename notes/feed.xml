@@ -629,7 +629,7 @@ Map Reduce &amp;nbsp;https://fzdwx.github.io/posts/2022-09-27-mit6.824-lab1/ Raf
       <pubDate>Sat, 01 Oct 2022 06:33:55 +0000</pubDate>
       
       <guid>https://fzdwx.github.io/notes/1/</guid>
-      <description>1. 资料以及书 &amp;nbsp;zlib &amp;nbsp;《FFmpeg原理》 &amp;nbsp;数据库/存储学习路径推荐 &amp;nbsp;MySQL 45讲 2. 正则表达式 &amp;nbsp;learn regex101 3.Blockchain &amp;nbsp;中本聪论文 4.速查表 &amp;nbsp;GDB Card &amp;nbsp;LLDB 5. 终端下好用的程序 ranger &amp;nbsp;https://github.com/ranger/ranger 配置推荐 &amp;nbsp;https://zhuanlan.zhihu.com/p/105731111 &amp;nbsp;https://zhuanlan.zhihu.com/p/441083543 fzf(模糊搜索) &amp;nbsp;https://github.com/junegunn/fzf 压测工具 &amp;nbsp;https://github.com/link1st/go-stress-testing vhs(根据预定义的命令，调用bash，然后将输出结果记录为gif等) &amp;nbsp;https://github.com/charmbracelet/vhs </description>
+      <description>1. 资料以及书 &amp;nbsp;zlib &amp;nbsp;《FFmpeg原理》 &amp;nbsp;数据库/存储学习路径推荐 &amp;nbsp;MySQL 45讲 2. 正则表达式 &amp;nbsp;learn regex101 3.Blockchain &amp;nbsp;中本聪论文 4.速查表 &amp;nbsp;GDB Card &amp;nbsp;LLDB 5. 终端下好用的程序 ranger &amp;nbsp;https://github.com/ranger/ranger 配置推荐 &amp;nbsp;https://zhuanlan.zhihu.com/p/105731111 &amp;nbsp;https://zhuanlan.zhihu.com/p/441083543 fzf(模糊搜索) &amp;nbsp;https://github.com/junegunn/fzf 压测工具 &amp;nbsp;https://github.com/link1st/go-stress-testing vhs(根据预定义的命令，调用bash，然后将输出结果记录为gif等) &amp;nbsp;https://github.com/charmbracelet/vhs 6. 网站 分享屏幕: &amp;nbsp;https://screensy.marijn.it/#RoundWizardsBreakMerrily </description>
       <content:encoded><![CDATA[<h1 id="1-资料以及书">1. 资料以及书</h1>
 <ol>
 <li>&nbsp;<a href="https://zlib.cydiar.com/" target="_blank" rel="noopener">zlib</a>
@@ -674,6 +674,11 @@ Map Reduce &amp;nbsp;https://fzdwx.github.io/posts/2022-09-27-mit6.824-lab1/ Raf
 <li>压测工具 &nbsp;<a href="https://github.com/link1st/go-stress-testing" target="_blank" rel="noopener">https://github.com/link1st/go-stress-testing</a>
 </li>
 <li>vhs(根据预定义的命令，调用bash，然后将输出结果记录为gif等) &nbsp;<a href="https://github.com/charmbracelet/vhs" target="_blank" rel="noopener">https://github.com/charmbracelet/vhs</a>
+</li>
+</ol>
+<h1 id="6-网站">6. 网站</h1>
+<ol>
+<li>分享屏幕: &nbsp;<a href="https://screensy.marijn.it/#RoundWizardsBreakMerrily" target="_blank" rel="noopener">https://screensy.marijn.it/#RoundWizardsBreakMerrily</a>
 </li>
 </ol>
 ]]></content:encoded>
