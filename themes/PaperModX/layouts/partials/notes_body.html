@@ -15,9 +15,7 @@
     </svg>
 </a>
 
-{{- partial "notes.side.html" . }}
-
-<ul class="terms-tags shadow-bottom">
+<ul class="terms-tags">
     {{range $name, $taxonomy := .Site.Taxonomies.categories}} {{ $cnt := .Count }}
     {{ with $.Site.GetPage (printf "/categories/%s" $name) }}
     <li class="nomargin">
@@ -26,6 +24,8 @@
     {{end}}
     {{end}}
 </ul>
+
+{{- partial "notes.side.html" . }}
 
 
 {{- $pages := .Pages }}

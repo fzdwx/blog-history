@@ -1,5 +1,5 @@
 <header class="page-header">
-    <h1 qwe style="font-family:f1Font;font-size:50px">
+    <h1 style="font-family:f1Font;font-size:50px">
         文档
     </h1>
     <div class="post-content">
@@ -9,7 +9,7 @@
     </div>
 </header>
 
-<ul class="terms-tags shadow-bottom">
+<ul class="terms-tags">
     {{range $name, $taxonomy := .Site.Taxonomies.docs}} {{ $cnt := .Count }}
     {{ with $.Site.GetPage (printf "/docs/%s" $name) }}
     <li class="nomargin">
