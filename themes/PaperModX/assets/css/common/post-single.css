@@ -263,8 +263,13 @@ h6:hover .anchor {
     font-family: var(--monospace);
 }
 .post-content .chroma code {
-    background-color: inherit;
-    font-family: var(--monospace);
+    font-family: var(--fjet);
+    display: block;
+    /*padding: 0 10px;*/
+    width: fit-content;
+    transition: color .5s;
+    min-width: 100%;
+    line-height: var(--line-height);
 }
 
 .post-content blockquote {
