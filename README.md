@@ -22,6 +22,8 @@ orasd
 
 [参考](https://github.com/Lednerb/bilberry-hugo-theme#video)
 
+[//]: # (https://hugo-theme-luna.imiku.me/2022/05/02/shortcodes.html/)
+
 ```markdown
 <!-- YouTube -->
 {{< video type="youtube" id="<youtube-video-id>" >}}
@@ -102,6 +104,12 @@ func main() {
 
 {{< center desc="">}}
 {{< /center >}}
+```
+
+## 换行
+
+```
+{{< br >}}
 ```
 
 ## 数学公式

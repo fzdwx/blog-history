@@ -291,3 +291,8 @@ figure > img {
     width: inherit;
     height: inherit;
 }
+
+ol > li::marker {
+    color: var(--a1);
+    font-weight: bold;
+}
