@@ -279,7 +279,7 @@ term:
       <pubDate>Fri, 04 Nov 2022 10:29:41 +0000</pubDate>
       
       <guid>https://fzdwx.github.io/notes/12/</guid>
-      <description> 一个 tui 的 markdown 编辑器，just markdown。考虑用 go 写，附带 preview。 可能要使用到的库 &amp;nbsp;https://github.com/charmbracelet/glamour &amp;nbsp;https://github.com/charmbracelet/bubbletea &amp;nbsp;https://github.com/charmbracelet/lipgloss 这两天写了一个 demo: &amp;nbsp;https://github.com/fzdwx/md , 可以一用。 </description>
+      <description> 一个 tui 的 markdown 编辑器，just markdown。考虑用 go 写，附带 preview。 可能要使用到的库 &amp;nbsp;https://github.com/charmbracelet/glamour &amp;nbsp;https://github.com/charmbracelet/bubbletea &amp;nbsp;https://github.com/charmbracelet/lipgloss 这两天写了一个 demo: &amp;nbsp;https://github.com/fzdwx/md , 可以一用。 diff sql, 生成 修改表的 sql. 使用场景，在日常 crud 中经常需要修改表, 但里面又已经有数据了,不好之间删除了,然后又重新建 </description>
       <content:encoded><![CDATA[<ul>
 <li><input checked="" disabled="" type="checkbox"> 一个 tui 的 markdown 编辑器，just markdown。考虑用 go 写，附带 preview。
 <ul>
@@ -297,6 +297,7 @@ term:
 , 可以一用。</li>
 </ul>
 </li>
+<li><input disabled="" type="checkbox"> diff sql, 生成 修改表的 sql. 使用场景，在日常 crud 中经常需要修改表, 但里面又已经有数据了,不好之间删除了,然后又重新建</li>
 </ul>
 ]]></content:encoded>
     </item>
