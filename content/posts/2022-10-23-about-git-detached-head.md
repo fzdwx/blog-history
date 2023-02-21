@@ -4,6 +4,7 @@ date: 2022-10-23T00:09:44+08:00
 draft: false
 tags: ["git"]
 summary: 如何在切换了分支之后恢复游离分支提交的代码。
+ShowToc: false
 ---
 
 刚刚改[nvim](https://github.com/fzdwx/nvim)配置时，不知道怎么回事，出现了游离分支(英文名称大概是 _detached head_ )。主要症状就是

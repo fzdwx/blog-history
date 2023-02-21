@@ -3,6 +3,7 @@ title: "在shell脚本中执行cd后改变main shell的路径"
 date: 2022-10-11T16:55:35+08:00
 draft: false
 tags: ["linux","idea"]
+ShowToc: false
 ---
 
 ## 起因

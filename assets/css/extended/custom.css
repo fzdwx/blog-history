@@ -54,9 +54,9 @@ figcaption {
     border-inline-start: 3px solid var(--c0);
 }
 
-.dark .post-content code {
-    color: #e770a6;
-}
+/*.dark .post-content code {*/
+/*    color: #e770a6;*/
+/*}*/
 
 .meta-item .post-tags a:before {
     content: none;

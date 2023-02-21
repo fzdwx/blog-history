@@ -3,6 +3,7 @@ title: "隐写术"
 date: 2022-12-07T21:37:59+08:00
 draft: false
 tags: ["fun"]
+ShowToc: false
 summary: 最近在跟 cs61c，第一个 project 中介绍了隐写术，大意可以理解为一个文件的内容是`123`,在经过特定的编码转换后成了`456`。
 cover:
     image: /images/14.png
