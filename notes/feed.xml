@@ -19,7 +19,7 @@
       <guid>https://fzdwx.github.io/notes/16/</guid>
       <description>在线阅读网站:
 &amp;nbsp;https://app.flowoss.com/ 资源网站：
-&amp;nbsp;https://zbook.lol/ -&amp;gt; &amp;nbsp;https://github.com/book-searcher-org/book-searcher &amp;nbsp;https://www.aliyundrive.com/s/AECNXPqn8WA dBeJ &amp;nbsp;https://xmsoushu.com/#/ &amp;nbsp;《深入解析CSS》 &amp;nbsp;《计算机网络：自顶向下》 &amp;nbsp;《CSAPP》 &amp;nbsp;《图解HThe.C.Programming.Language.pdfTTP》 &amp;nbsp;《高性能MySQL》 &amp;nbsp;《计算机组成与设计：硬件_软件接口》(P&amp;amp;H) &amp;nbsp;《C程序设计语言》(K&amp;amp;R) &amp;nbsp;《Rust Atomics and Locks-Low-Level Concurrency in Practice》 &amp;nbsp;《FFmpeg原理》 &amp;nbsp;数据库/存储学习路径推荐 &amp;nbsp;MySQL 45讲 </description>
+&amp;nbsp;https://zbook.lol/ -&amp;gt; &amp;nbsp;https://github.com/book-searcher-org/book-searcher &amp;nbsp;https://www.aliyundrive.com/s/AECNXPqn8WA dBeJ &amp;nbsp;https://xmsoushu.com/#/ &amp;nbsp;《深入解析CSS》 &amp;nbsp;《计算机网络：自顶向下》 &amp;nbsp;《CSAPP》 &amp;nbsp;《csapp》 中文 &amp;nbsp;《图解HThe.C.Programming.Language.pdfTTP》 &amp;nbsp;《高性能MySQL》 &amp;nbsp;《计算机组成与设计：硬件_软件接口》(P&amp;amp;H) &amp;nbsp;《C程序设计语言》(K&amp;amp;R) &amp;nbsp;《Rust Atomics and Locks-Low-Level Concurrency in Practice》 &amp;nbsp;《FFmpeg原理》 &amp;nbsp;数据库/存储学习路径推荐 &amp;nbsp;MySQL 45讲 </description>
       <content:encoded><![CDATA[<p>在线阅读网站:</p>
 <p>&nbsp;<a href="https://app.flowoss.com/" target="_blank" rel="noopener">https://app.flowoss.com/</a>
 </p>
@@ -40,6 +40,8 @@
 <li>&nbsp;<a href="https://github.com/fzdwx/fzdwx.github.io/releases/download/v1.0/jiSuanJiWangluo-zdxx.pdf" target="_blank" rel="noopener">《计算机网络：自顶向下》</a>
 </li>
 <li>&nbsp;<a href="https://github.com/fzdwx/fzdwx.github.io/releases/download/v1.0/csapp.pdf" target="_blank" rel="noopener">《CSAPP》</a>
+</li>
+<li>&nbsp;<a href="https://hansimov.gitbook.io/csapp/" target="_blank" rel="noopener">《csapp》 中文</a>
 </li>
 <li>&nbsp;<a href="https://github.com/fzdwx/fzdwx.github.io/releases/download/v1.0/HTTP&#43;.pdf" target="_blank" rel="noopener">《图解HThe.C.Programming.Language.pdfTTP》</a>
 </li>
