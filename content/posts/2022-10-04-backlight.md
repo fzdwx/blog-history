@@ -4,6 +4,7 @@ date: 2022-10-04T10:07:28+08:00
 draft: false
 tags: ["linux"]
 ShowToc: false
+ShowBreadCrumbs: false
 summary: 由于使用DWM，它不能像KDE那样之间有图形化的亮度调节功能，所以记录一下。
 ---
 

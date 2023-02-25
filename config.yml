@@ -39,7 +39,7 @@ params:
   author: fzdwx
   # author: ["Me", "You"] # multiple authors
   images: [ "https://avatars.githubusercontent.com/u/65269574?v=4" ]
-  DateFormat: "2006-01-02"
+  DateFormat: "2006年01月02日"
   defaultTheme: auto # dark, light
   disableThemeToggle: false
 
@@ -148,8 +148,8 @@ params:
     hiddenInSingle: false # hide on single page
 
   editPost:
-    URL: "https://github.com/fzdwx/fzdwx.github.io/tree/content"
-    Text: "Suggest Changes" # edit text
+    URL: "https://github.com/fzdwx/fzdwx.github.io/blob/main/content"
+    Text: "✍" # edit text
     appendFilePath: true # to append file path to Edit link
   
   #  # for search

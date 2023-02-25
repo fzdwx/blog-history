@@ -4,6 +4,7 @@ date: 2022-10-11T16:55:35+08:00
 draft: false
 tags: ["linux","idea"]
 ShowToc: false
+ShowBreadCrumbs: false
 ---
 
 ## 起因

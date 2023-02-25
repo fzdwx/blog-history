@@ -5,6 +5,7 @@ draft: false
 tags: ["network","http","interview"]
 summary: 简介HTTP/1.1与H2。
 ShowToc: false
+ShowBreadCrumbs: false
 ---
 
 > HTTP 1.1之前的实现就不讨论了，因为它们已经过时太久了，我上网的时候就已经接触不到了，所以主要说说HTTP/1.1、HTTP/2。

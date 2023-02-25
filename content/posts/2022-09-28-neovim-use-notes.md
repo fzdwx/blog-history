@@ -5,6 +5,7 @@ draft: false
 tags: ["nvim","editor"]
 summary: 由于最近切换到了 linux，不可避免的经常需要使用 vi 等编辑器，所以这次好好折腾一下。
 ShowToc: false
+ShowBreadCrumbs: false
 ---
 
 > 由于最近切换到了linux，不可避免的经常需要使用vi等编辑器，所以这次好好折腾一下。
