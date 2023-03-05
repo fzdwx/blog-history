@@ -22,8 +22,6 @@ orasd
 
 [参考](https://github.com/Lednerb/bilberry-hugo-theme#video)
 
-[//]: # (https://hugo-theme-luna.imiku.me/2022/05/02/shortcodes.html/)
-
 ```markdown
 <!-- YouTube -->
 {{< video type="youtube" id="<youtube-video-id>" >}}
@@ -50,7 +48,7 @@ orasd
 
 ## 代码块高亮
 
-```text
+````text
 ```go {hl_lines=[8,"15-17"]}
 package main
 
@@ -73,8 +71,8 @@ func main() {
 		panic(err)
 	}
 }
-/```
 ```
+````
 
 ## 自定义块
 
