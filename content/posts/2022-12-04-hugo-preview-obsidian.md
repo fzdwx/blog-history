@@ -2,8 +2,7 @@
 title: "在 Obsidian 中预览 hugo "
 date: 2022-12-04T22:45:02+08:00
 draft: false
-summary: 前段时间玩过几天的 obsidian，由于太费神了所以转向了 hugo ,然后直接用文本编辑器写 md ，体验还是不太好，然后我想起还有
-obsidian 这个软件，所以就有了这个插件。
+summary: 前段时间玩过几天的 obsidian，由于太费神了所以转向了 hugo ,然后直接用文本编辑器写 md ，体验还是不太好，然后我想起还有 obsidian 这个软件，所以就有了这个插件。
 tags: ["obsidian","project"]
 ShowToc: false
 ShowBreadCrumbs: false
