@@ -87,7 +87,11 @@ func main() {
 使用模板:
 
 ```
-{{< block type="xxx" title="xxx">}}
+{{< block type="details" title="xxx">}}
+## 这里是内容
+{{< /block >}}
+
+{{< block type="tip" title="TIP">}}
 ## 这里是内容
 {{< /block >}}
 ```
