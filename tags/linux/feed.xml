@@ -10,7 +10,108 @@
     </image>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright [fzdwx](https://github.com/fzdwx)   since 2022</copyright>
-    <lastBuildDate>Sun, 12 Feb 2023 16:10:50 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/tags/linux/feed.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sun, 05 Mar 2023 22:27:31 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/tags/linux/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>记录学习 jyyos 操作系统课</title>
+      <link>https://fzdwx.github.io/posts/2023-03-05-jyyos_c_compile/</link>
+      <pubDate>Sun, 05 Mar 2023 22:27:31 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/posts/2023-03-05-jyyos_c_compile/</guid>
+      <description> 最近也是又追起了南京大学的操作系统课(前面几次都中途放弃了)，记录一下
+1. 首先就是编译第三节课的一个demo时，找不到 ld 等命令 &amp;nbsp;http://jyywiki.cn/OS/2023/build/lect3.ipynb demo(&amp;lsquo;hello-os&amp;rsquo;, &amp;lsquo;i/hello-os&amp;rsquo;)
+由于我使用的是 archlinux, binutils 编译出来的 ld, gcc 等命令都是不带 x86 的前缀的， 而 Makefile 中定义的都是带 x86 的, 所以需要建立一个链接:
+ln -s /usr/bin/ld /usr/bin/x86_64-linux-gnu-ld 来自 chatgpt 的解释: 该命令创建了一个名为“x86_64-linux-gnu-ld”的符号链接，指向“/usr/bin/ld”。这个符号链接可以被用作“x86_64-linux-gnu-ld”二进制文件的替代品。 符号链接是一种特殊的文件类型，它是一个指向另一个文件的文件，可以用来在文件系统中创建指向其他文件或目录的别名。
+在Linux系统中，“/usr/bin/ld”是一个连接器（linker），用于将多个目标文件合并为单个可执行文件。通过创建“x86_64-linux-gnu-ld”的符号链接，可以使该链接器的功能可以在不同的系统上使用，并且不需要更改可执行文件的代码。 这个符号链接通常被用于交叉编译（cross-compiling）应用程序，这种情况下，应用程序在不同的硬件平台上运行。
+2. 使用 vscode 等编辑器时，第一个问题的代码中头文件无法跳转 使用 bear 生成 compile_commands.json, 然后编辑器就会自动识别了
+bear -- make 来自 chatgpt 的解释: 该命令使用Bear和Make工具，用于自动捕获Makefile的编译命令和编译期间的调用链。
+具体来说，Bear是一个工具，它可以将系统调用跟踪器（strace）输出转换为JSON格式的文件，这个文件包含了所有运行期间的系统调用。 Make是一个工具，它用于根据Makefile规则自动构建和编译程序。
+当这两个工具一起使用时，可以使用“bear &amp;ndash; make”命令自动捕获Makefile的编译命令和编译期间的调用链，这个过程可以在后续的调试中使用。 该命令的执行将产生一个JSON格式的文件，其中包含编译期间的所有系统调用和它们的参数。这个文件可以用于调试，性能优化，以及自动化编译和构建系统的开发。
+总之，“bear &amp;ndash; make”命令可以帮助程序员更好地理解他们的代码在编译期间所做的事情，以及识别代码中的潜在问题。
+3. 写一个 pstree &amp;nbsp;http://jyywiki.cn/OS/2023/labs/M1 实现思路:
+扫描 /proc/ 目录下所有为数字的文件夹 读取 /proc/{pid}/status 文件 读取 name 以及 ppid 建树并打印树结构 </description>
+      <content:encoded><![CDATA[<blockquote>
+<p>最近也是又追起了南京大学的操作系统课(前面几次都中途放弃了)，记录一下</p>
+</blockquote>
+<h3 id="1-首先就是编译第三节课的一个demo时找不到-ld-等命令">1. 首先就是编译第三节课的一个demo时，找不到 ld 等命令</h3>
+<blockquote>
+<p>&nbsp;<a href="http://jyywiki.cn/OS/2023/build/lect3.ipynb" target="_blank" rel="noopener">http://jyywiki.cn/OS/2023/build/lect3.ipynb</a>
+ demo(&lsquo;hello-os&rsquo;, &lsquo;i/hello-os&rsquo;)</p>
+</blockquote>
+<p>由于我使用的是 archlinux, <code>binutils</code> 编译出来的 ld, gcc 等命令都是不带 x86 的前缀的，
+而 Makefile 中定义的都是带 x86 的, 所以需要建立一个链接:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">ln -s /usr/bin/ld /usr/bin/x86_64-linux-gnu-ld
+</span></span></code></pre></div>
+
+
+
+
+<div class="tip custom-block">
+    <p class="custom-block-title">
+        
+        
+        来自 chatgpt 的解释:
+        
+    </p>
+    <p> <p>该命令创建了一个名为“x86_64-linux-gnu-ld”的符号链接，指向“/usr/bin/ld”。这个符号链接可以被用作“x86_64-linux-gnu-ld”二进制文件的替代品。
+符号链接是一种特殊的文件类型，它是一个指向另一个文件的文件，可以用来在文件系统中创建指向其他文件或目录的别名。</p>
+<p>在Linux系统中，“/usr/bin/ld”是一个连接器（linker），用于将多个目标文件合并为单个可执行文件。通过创建“x86_64-linux-gnu-ld”的符号链接，可以使该链接器的功能可以在不同的系统上使用，并且不需要更改可执行文件的代码。
+这个符号链接通常被用于交叉编译（cross-compiling）应用程序，这种情况下，应用程序在不同的硬件平台上运行。</p>
+ </p>
+</div>
+
+
+
+
+
+
+
+
+<h3 id="2-使用-vscode-等编辑器时第一个问题的代码中头文件无法跳转">2. 使用 vscode 等编辑器时，第一个问题的代码中头文件无法跳转</h3>
+<p>使用 bear 生成 compile_commands.json, 然后编辑器就会自动识别了</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">bear -- make
+</span></span></code></pre></div>
+
+
+
+
+<div class="tip custom-block">
+    <p class="custom-block-title">
+        
+        
+        来自 chatgpt 的解释:
+        
+    </p>
+    <p> <p>该命令使用Bear和Make工具，用于自动捕获Makefile的编译命令和编译期间的调用链。</p>
+<p>具体来说，Bear是一个工具，它可以将系统调用跟踪器（strace）输出转换为JSON格式的文件，这个文件包含了所有运行期间的系统调用。
+Make是一个工具，它用于根据Makefile规则自动构建和编译程序。</p>
+<p>当这两个工具一起使用时，可以使用“bear &ndash; make”命令自动捕获Makefile的编译命令和编译期间的调用链，这个过程可以在后续的调试中使用。
+该命令的执行将产生一个JSON格式的文件，其中包含编译期间的所有系统调用和它们的参数。这个文件可以用于调试，性能优化，以及自动化编译和构建系统的开发。</p>
+<p>总之，“bear &ndash; make”命令可以帮助程序员更好地理解他们的代码在编译期间所做的事情，以及识别代码中的潜在问题。</p>
+ </p>
+</div>
+
+
+
+
+
+
+
+
+<h3 id="3-写一个-pstree">3. 写一个 pstree</h3>
+<blockquote>
+<p>&nbsp;<a href="http://jyywiki.cn/OS/2023/labs/M1" target="_blank" rel="noopener">http://jyywiki.cn/OS/2023/labs/M1</a>
+</p>
+</blockquote>
+<p>实现思路:</p>
+<ol>
+<li>扫描 <code>/proc/</code> 目录下所有为数字的文件夹</li>
+<li>读取 <code>/proc/{pid}/status</code> 文件</li>
+<li>读取 name 以及 ppid</li>
+<li>建树并打印树结构</li>
+</ol>
+]]></content:encoded>
+    </item>
+    
     <item>
       <title>使用 tmux &#43; st</title>
       <link>https://fzdwx.github.io/posts/2023-02-12-tmux-st/</link>
