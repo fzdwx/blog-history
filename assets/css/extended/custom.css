@@ -43,10 +43,6 @@ figcaption {
     color: var(--link-hover-color);
 }
 
-.post-content hr {
-    background: var(--link-hover-underline-color)
-}
-
 .dark .post-content blockquote {
     border-inline-start: 3px solid var(--a2);
 }

@@ -302,11 +302,13 @@ h6:hover .anchor {
 }
 
 .post-content hr {
-    margin: 30px 0;
+    margin: 3.5rem auto;
+    max-width: 200px;
     height: 2px;
-    background: var(--tertiary-bg);
+    background: var(--link-hover-underline-color);
     border-top: 0;
     border-bottom: 0;
+    opacity: .50;
 }
 
 .post-content iframe {
