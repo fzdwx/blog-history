@@ -132,24 +132,6 @@ BufLineFolder
 <p>前段时间玩过几天的 obsidian，由于太费神了所以转向了 hugo ,然后直接用文本编辑器写 md ，体验还是不太好，然后我想起还有
 obsidian 这个软件，所以就有了这个插件。</p>
 </blockquote>
-<p><strong>当前主要功能</strong>：</p>
-<ol>
-<li>开一个 <code>custome iframe</code> 预览 hugo (via &nbsp;<a href="https://github.com/Ellpeck/ObsidianCustomFrames" target="_blank" rel="noopener">https://github.com/Ellpeck/ObsidianCustomFrames</a>
-)</li>
-<li>后台启动 <code>hugo server</code><figure id="a-static/images/Pasted%20image%2020221205140050.png" class="align-center">
-    <img src="static/images/Pasted%20image%2020221205140050.png" alt=""  />
-    
-</figure>
-<ol>
-<li>当前还有一点问题，子进程( hugo 进程)在程序推出时不会关闭。</li>
-</ol>
-</li>
-</ol>
-<p><strong>遇到的问题</strong>:</p>
-<ol>
-<li>获取 obsidian 打开的目录不知道 api( cwd ),后提 issue 知道了获取方法。</li>
-</ol>
-<hr>
 <p>仓库: &nbsp;<a href="https://github.com/fzdwx/hugo-preview-obsidian" target="_blank" rel="noopener">https://github.com/fzdwx/hugo-preview-obsidian</a>
 </p>
 <p><figure id="a-/images/12.png" class="align-center">
@@ -160,16 +142,26 @@ obsidian 这个软件，所以就有了这个插件。</p>
     </figcaption>
     
 </figure></p>
-<h2 id="更新">更新</h2>
+<hr>
+<h3 id="1-当前主要功能">1. 当前主要功能</h3>
+<ol>
+<li>开一个 <code>custome iframe</code> 预览 hugo (via &nbsp;<a href="https://github.com/Ellpeck/ObsidianCustomFrames" target="_blank" rel="noopener">https://github.com/Ellpeck/ObsidianCustomFrames</a>
+)</li>
+<li>后台启动 <code>hugo server</code></li>
+</ol>
+<h3 id="2-遇到的问题">2. 遇到的问题</h3>
+<ol>
+<li><del>获取 obsidian 打开的目录不知道 api( cwd ),后提 issue 知道了获取方法</del></li>
+</ol>
+<h3 id="3-更新">3. 更新</h3>
 <ol>
 <li>支持自定义 exec command, 例如可以用来启动终端。 使用 <code>ALT+F12</code> 唤起。
 <ol>
-<li>由于我使用 git
-进行同步，时常需要打开终端并且进入到具体的目录，所以需要一个快速启动终端在当前的目录下的命令： <code>wezterm start --class float --cwd ${cwd}</code>。</li>
+<li>由于我使用 git 进行同步，时常需要打开终端并且进入到具体的目录，所以需要一个快速启动终端在当前的目录下的命令： <code>wezterm start --class float --cwd ${cwd}</code>。</li>
 <li>目前只提供了 cwd 这个变量，它会替换为当前笔记的路径</li>
 </ol>
 </li>
-<li>添加定义 <code>hugo</code> 的路径，如果不设置则使用系统的 <code>hugo</code> 命令 &ndash; v0.1.5</li>
+<li>添加定义 <code>hugo</code> 的路径，如果不设置则使用系统的 <code>hugo</code> 命令</li>
 </ol>
 <p><figure id="a-/images/13.png" class="align-center">
     <img src="/images/13.png" alt="自定义 command 配置示例"  />
