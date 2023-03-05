@@ -12,14 +12,14 @@
     <copyright>Copyright [fzdwx](https://github.com/fzdwx)   since 2022</copyright>
     <lastBuildDate>Sat, 26 Nov 2022 09:42:10 +0000</lastBuildDate><atom:link href="https://fzdwx.github.io/notes/feed.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>📑  书单</title>
+      <title>资料</title>
       <link>https://fzdwx.github.io/notes/16/</link>
       <pubDate>Sat, 26 Nov 2022 09:42:10 +0000</pubDate>
       
       <guid>https://fzdwx.github.io/notes/16/</guid>
       <description>在线阅读网站:
 &amp;nbsp;https://app.flowoss.com/ &amp;nbsp;https://www.chatpdf.com/ 资源网站：
-&amp;nbsp;https://zbook.lol/ -&amp;gt; &amp;nbsp;https://github.com/book-searcher-org/book-searcher &amp;nbsp;https://www.aliyundrive.com/s/AECNXPqn8WA dBeJ &amp;nbsp;https://xmsoushu.com/#/ &amp;nbsp;https://tools.pdf24.org/zh/pdf-to-epub or docker run -ti --rm -v pwd:/temp dodeeric/pdf2epubex pdf2epubEX &amp;nbsp;《深入解析CSS》 &amp;nbsp;《计算机网络：自顶向下》 &amp;nbsp;《CSAPP》 &amp;nbsp;《csapp》 中文 &amp;nbsp;《图解HTTP》 &amp;nbsp;《高性能MySQL》 &amp;nbsp;《计算机组成与设计：硬件_软件接口》(P&amp;amp;H) &amp;nbsp;《C程序设计语言》(K&amp;amp;R) &amp;nbsp;《Rust Atomics and Locks-Low-Level Concurrency in Practice》 &amp;nbsp;《FFmpeg原理》 &amp;nbsp;数据库/存储学习路径推荐 &amp;nbsp;MySQL 45讲 &amp;nbsp;OSTEP.pdf </description>
+&amp;nbsp;https://zbook.lol/ -&amp;gt; &amp;nbsp;https://github.com/book-searcher-org/book-searcher &amp;nbsp;https://www.aliyundrive.com/s/AECNXPqn8WA dBeJ &amp;nbsp;https://xmsoushu.com/#/ &amp;nbsp;https://tools.pdf24.org/zh/pdf-to-epub or docker run -ti --rm -v pwd:/temp dodeeric/pdf2epubex pdf2epubEX &amp;nbsp;《深入解析CSS》 &amp;nbsp;《计算机网络：自顶向下》 &amp;nbsp;《CSAPP》 &amp;nbsp;《csapp》 中文 &amp;nbsp;《图解HTTP》 &amp;nbsp;《高性能MySQL》 &amp;nbsp;《计算机组成与设计：硬件_软件接口》(P&amp;amp;H) &amp;nbsp;《C程序设计语言》(K&amp;amp;R) &amp;nbsp;《Rust Atomics and Locks-Low-Level Concurrency in Practice》 &amp;nbsp;《FFmpeg原理》 &amp;nbsp;数据库/存储学习路径推荐 &amp;nbsp;MySQL 45讲 &amp;nbsp;OSTEP.pdf &amp;nbsp;每个程序员都应该了解的内存知识 </description>
       <content:encoded><![CDATA[<p>在线阅读网站:</p>
 <ol>
 <li>&nbsp;<a href="https://app.flowoss.com/" target="_blank" rel="noopener">https://app.flowoss.com/</a>
@@ -66,6 +66,8 @@
 <li>&nbsp;<a href="https://fanlv.fun/2020/08/01/mysql-45-lesson/" target="_blank" rel="noopener">MySQL 45讲</a>
 </li>
 <li>&nbsp;<a href="https://github.com/fzdwx/fzdwx.github.io/releases/download/v1.0/OSTEP.pdf" target="_blank" rel="noopener">OSTEP.pdf</a>
+</li>
+<li>&nbsp;<a href="https://zhuanlan.zhihu.com/p/611133924" target="_blank" rel="noopener">每个程序员都应该了解的内存知识</a>
 </li>
 </ol>
 ]]></content:encoded>
@@ -633,67 +635,6 @@ Map Reduce &amp;nbsp;https://fzdwx.github.io/posts/2022-09-27-mit6.824-lab1/ Raf
 <li>&nbsp;<a href="https://wallpaperscraft.com/catalog/anime/1920x1080" target="_blank" rel="noopener">https://wallpaperscraft.com/catalog/anime/1920x1080</a>
 </li>
 <li>&nbsp;<a href="https://wall.alphacoders.com/" target="_blank" rel="noopener">https://wall.alphacoders.com/</a>
-</li>
-</ol>
-]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>收藏夹</title>
-      <link>https://fzdwx.github.io/notes/1/</link>
-      <pubDate>Sat, 01 Oct 2022 06:33:55 +0000</pubDate>
-      
-      <guid>https://fzdwx.github.io/notes/1/</guid>
-      <description>1. 资料以及书 &amp;nbsp;zlib &amp;nbsp;《FFmpeg原理》 &amp;nbsp;数据库/存储学习路径推荐 &amp;nbsp;MySQL 45讲 2. 正则表达式 &amp;nbsp;learn regex101 3.Blockchain &amp;nbsp;中本聪论文 4.速查表 &amp;nbsp;GDB Card &amp;nbsp;LLDB 5. 终端下好用的程序 ranger &amp;nbsp;https://github.com/ranger/ranger 配置推荐 &amp;nbsp;https://zhuanlan.zhihu.com/p/105731111 &amp;nbsp;https://zhuanlan.zhihu.com/p/441083543 fzf(模糊搜索) &amp;nbsp;https://github.com/junegunn/fzf 压测工具 &amp;nbsp;https://github.com/link1st/go-stress-testing vhs(根据预定义的命令，调用bash，然后将输出结果记录为gif等) &amp;nbsp;https://github.com/charmbracelet/vhs 6. 网站 分享屏幕: &amp;nbsp;https://screensy.marijn.it/#RoundWizardsBreakMerrily </description>
-      <content:encoded><![CDATA[<h1 id="1-资料以及书">1. 资料以及书</h1>
-<ol>
-<li>&nbsp;<a href="https://zlib.cydiar.com/" target="_blank" rel="noopener">zlib</a>
-</li>
-<li>&nbsp;<a href="https://ffmpeg.xianwaizhiyin.net/cover.html" target="_blank" rel="noopener">《FFmpeg原理》</a>
-</li>
-<li>&nbsp;<a href="https://www.v2ex.com/t/913147#reply5" target="_blank" rel="noopener">数据库/存储学习路径推荐</a>
-</li>
-<li>&nbsp;<a href="https://fanlv.fun/2020/08/01/mysql-45-lesson/" target="_blank" rel="noopener">MySQL 45讲</a>
-</li>
-</ol>
-<h1 id="2-正则表达式">2. 正则表达式</h1>
-<ol>
-<li>&nbsp;<a href="https://regexlearn.com/zh-cn/learn" target="_blank" rel="noopener">learn regex101</a>
-</li>
-</ol>
-<h1 id="3blockchain">3.Blockchain</h1>
-<ol>
-<li>&nbsp;<a href="https://nakamotoinstitute.org/static/docs/bitcoin-zh-cn.pdf" target="_blank" rel="noopener">中本聪论文</a>
-</li>
-</ol>
-<h1 id="4速查表">4.速查表</h1>
-<ol>
-<li>&nbsp;<a href="https://inst.eecs.berkeley.edu/~cs61c/sp21/resources-pdfs/gdb5-refcard.pdf" target="_blank" rel="noopener">GDB Card</a>
-</li>
-<li>&nbsp;<a href="https://lldb.llvm.org/use/map.html" target="_blank" rel="noopener">LLDB</a>
-</li>
-</ol>
-<h1 id="5-终端下好用的程序">5. 终端下好用的程序</h1>
-<ol>
-<li>ranger &nbsp;<a href="https://github.com/ranger/ranger" target="_blank" rel="noopener">https://github.com/ranger/ranger</a>
-  配置推荐
-<ul>
-<li>&nbsp;<a href="https://zhuanlan.zhihu.com/p/105731111" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/105731111</a>
-</li>
-<li>&nbsp;<a href="https://zhuanlan.zhihu.com/p/441083543" target="_blank" rel="noopener">https://zhuanlan.zhihu.com/p/441083543</a>
-</li>
-</ul>
-</li>
-<li>fzf(模糊搜索) &nbsp;<a href="https://github.com/junegunn/fzf" target="_blank" rel="noopener">https://github.com/junegunn/fzf</a>
-</li>
-<li>压测工具 &nbsp;<a href="https://github.com/link1st/go-stress-testing" target="_blank" rel="noopener">https://github.com/link1st/go-stress-testing</a>
-</li>
-<li>vhs(根据预定义的命令，调用bash，然后将输出结果记录为gif等) &nbsp;<a href="https://github.com/charmbracelet/vhs" target="_blank" rel="noopener">https://github.com/charmbracelet/vhs</a>
-</li>
-</ol>
-<h1 id="6-网站">6. 网站</h1>
-<ol>
-<li>分享屏幕: &nbsp;<a href="https://screensy.marijn.it/#RoundWizardsBreakMerrily" target="_blank" rel="noopener">https://screensy.marijn.it/#RoundWizardsBreakMerrily</a>
 </li>
 </ol>
 ]]></content:encoded>

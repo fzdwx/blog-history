@@ -19,7 +19,8 @@
       <guid>https://fzdwx.github.io/posts/2022-12-04-hugo-preview-obsidian/</guid>
       <description>前段时间玩过几天的 obsidian，由于太费神了所以转向了 hugo ,然后直接用文本编辑器写 md ，体验还是不太好，然后我想起还有 obsidian 这个软件，所以就有了这个插件。</description>
       <content:encoded><![CDATA[<blockquote>
-<p>前段时间玩过几天的 obsidian，由于太费神了所以转向了 hugo ,然后直接用文本编辑器写 md ，体验还是不太好，然后我想起还有 obsidian 这个软件，所以就有了这个插件。</p>
+<p>前段时间玩过几天的 obsidian，由于太费神了所以转向了 hugo ,然后直接用文本编辑器写 md ，体验还是不太好，然后我想起还有
+obsidian 这个软件，所以就有了这个插件。</p>
 </blockquote>
 <p><strong>当前主要功能</strong>：</p>
 <ol>
@@ -53,10 +54,12 @@
 <ol>
 <li>支持自定义 exec command, 例如可以用来启动终端。 使用 <code>ALT+F12</code> 唤起。
 <ol>
-<li>由于我使用 git 进行同步，时常需要打开终端并且进入到具体的目录，所以需要一个快速启动终端在当前的目录下的命令： <code>wezterm start --class float --cwd ${cwd}</code>。</li>
-<li>目前只提供了 cwd 这个变量，它会替换为当前笔记的路径。</li>
+<li>由于我使用 git
+进行同步，时常需要打开终端并且进入到具体的目录，所以需要一个快速启动终端在当前的目录下的命令： <code>wezterm start --class float --cwd ${cwd}</code>。</li>
+<li>目前只提供了 cwd 这个变量，它会替换为当前笔记的路径</li>
 </ol>
 </li>
+<li>添加定义 <code>hugo</code> 的路径，如果不设置则使用系统的 <code>hugo</code> 命令 &ndash; v0.1.5</li>
 </ol>
 <p><figure id="a-/images/13.png" class="align-center">
     <img src="/images/13.png" alt="自定义 command 配置示例"  />
