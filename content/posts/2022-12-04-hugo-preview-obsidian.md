@@ -1,7 +1,7 @@
 ---
 title: "在 Obsidian 中预览 hugo "
 date: 2022-12-04T22:45:02+08:00
-update: 2023-03-05T19:28:02+08:00
+update: 2023-03-06T20:19:02+0800
 draft: false
 summary: 前段时间玩过几天的 obsidian，由于太费神了所以转向了 hugo ,然后直接用文本编辑器写 md ，体验还是不太好，然后我想起还有 obsidian 这个软件，所以就有了这个插件。
 tags: ["obsidian","project"]
@@ -16,7 +16,7 @@ ShowBreadCrumbs: false
 
 ![运行图例，左编辑区域，右预览区域](/images/12.png)
 
----
+---  
 
 ### 1. 当前主要功能
 

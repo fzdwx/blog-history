@@ -16,3 +16,9 @@ new filename="" :
 
 view:
     open url http://localhost:1313/
+
+update_time:
+    #!/usr/bin/env sh
+    for file in $(git status --porcelain | awk '{if($1=="M" && $2 ~ /\.md$/) print $2}'); do
+        sed -i "s/^update:.*/update: $(date +'%Y-%m-%dT%H:%M:%S%z')/" "$file";
+    done

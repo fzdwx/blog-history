@@ -7,7 +7,7 @@
 
 {{- if .Params.Update -}}
 <span class="meta-item">
-<span>{{ .Params.Update | time.Format (default "January 2, 2006" site.Params.DateFormat) }}</span>
+<span>{{ .Params.Update | time.Format (default "January 2, 2006" "2006-01-02 15:04:05") }}</span>
 </span>
 {{- end }}
 
