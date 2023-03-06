@@ -10,7 +10,55 @@
     </image>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright [fzdwx](https://github.com/fzdwx)   since 2022</copyright>
-    <lastBuildDate>Sun, 08 Jan 2023 08:44:38 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/document/feed.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Mon, 06 Mar 2023 20:30:48 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/document/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>操作系统的地址空间</title>
+      <link>https://fzdwx.github.io/document/2023-03-06-os_address_space/</link>
+      <pubDate>Mon, 06 Mar 2023 20:30:48 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/document/2023-03-06-os_address_space/</guid>
+      <description> 回顾 前面通过 &amp;nbsp;Trap 机制 ，实现了操作系统的分时复用, 这是为了公平性的考虑，防止独占 CPU 的情况发生，而应用自认为的独占 CPU 只是内核想让应用看到的一种假象。
+CPU 计算资源被 分时复用 的实质被内核通过恰当的抽象隐藏了起来，对应用不可见。
+但是内存管理这一块还是非常狂野的，应用程序可以随便读写内存，这样就会导致一些问题：
+应用程序可以随意改写内核的代码，这样就会导致内核崩溃 应用程序运行完毕后，内存中的数据没有被清理，这样就会导致内存泄漏 内核提供的接口不够友善，应用程序需要自己去管理内存，这样就会导致应用程序的复杂度提高 所以为了解决这些问题，更好的管理内存，我们需要引入操作系统的地址空间。
+1. 分页机制 </description>
+      <content:encoded><![CDATA[
+
+
+
+
+<div class="tip custom-block">
+    <p class="custom-block-title">
+        
+        
+        回顾
+        
+    </p>
+    <p> <p>前面通过 &nbsp;<a href="http://fzdwx.github.io/document/2023-01-08-os-multi-programs/#%e5%88%86%e6%97%b6%e5%a4%9a%e4%bb%bb%e5%8a%a1%e7%b3%bb%e7%bb%9f%e4%b8%8e%e6%8a%a2%e5%8d%a0%e5%bc%8f%e8%b0%83%e5%ba%a6" target="_blank" rel="noopener">Trap 机制</a>
+，实现了操作系统的分时复用,
+这是为了公平性的考虑，防止独占 CPU 的情况发生，而应用自认为的独占 CPU 只是内核想让应用看到的一种假象。</p>
+<p>CPU 计算资源被 分时复用 的实质被内核通过恰当的抽象隐藏了起来，对应用不可见。</p>
+ </p>
+</div>
+
+
+
+
+
+
+
+
+<p>但是内存管理这一块还是非常狂野的，应用程序可以随便读写内存，这样就会导致一些问题：</p>
+<ol>
+<li>应用程序可以随意改写内核的代码，这样就会导致内核崩溃</li>
+<li>应用程序运行完毕后，内存中的数据没有被清理，这样就会导致内存泄漏</li>
+<li>内核提供的接口不够友善，应用程序需要自己去管理内存，这样就会导致应用程序的复杂度提高</li>
+</ol>
+<p>所以为了解决这些问题，更好的管理内存，我们需要引入操作系统的地址空间。</p>
+<h2 id="1-分页机制">1. 分页机制</h2>
+]]></content:encoded>
+    </item>
+    
     <item>
       <title>操作系统的分时多任务</title>
       <link>https://fzdwx.github.io/document/2023-01-08-os-multi-programs/</link>
@@ -1400,194 +1448,6 @@ AppManager 从 app 列表中一次加载各个 app 到指定的内存在用户�
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="fm">panic!</span><span class="p">(</span><span class="s">&#34;Unreachable in batch::run_current_app!&#34;</span><span class="p">);</span><span class="w">  
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
 </span></span></span></code></pre></div>]]></content:encoded>
-    </item>
-    
-    <item>
-      <title>操作系统的并发编程</title>
-      <link>https://fzdwx.github.io/document/2022-12-16-os-concurrent/</link>
-      <pubDate>Fri, 16 Dec 2022 20:54:45 +0800</pubDate>
-      
-      <guid>https://fzdwx.github.io/document/2022-12-16-os-concurrent/</guid>
-      <description>从操作系统的层面讲要支持并发需要哪些条件</description>
-      <content:encoded><![CDATA[<blockquote>
-<p>操作系统是最早的并发程序之一。</p>
-</blockquote>
-<p>开始，我们肯定要理解什么是并发和并行以及它们的区别。</p>
-<ul>
-<li>并行： 可以同时处理多个任务。</li>
-<li>并发： 可以执行多个任务，但是同时只能执行一个任务，会在它们之间进行切换。</li>
-</ul>
-<h2 id="如果一个操作系统要支持并发那么以下的哪些部分需要复制多份">如果一个操作系统要支持并发，那么以下的哪些部分需要复制多份？</h2>
-<ol>
-<li>全局变量</li>
-<li>堆内存m</li>
-<li>函数调用栈</li>
-</ol>
-<p><figure id="a-/images/Pasted%20image%2020221216211245.png" class="align-center">
-    <img src="/images/Pasted%20image%2020221216211245.png" alt="答案显而易见的是 函数调用栈"  />
-    
-    <figcaption>
-       答案显而易见的是 函数调用栈
-    </figcaption>
-    
-</figure></p>
-<p>并发编程为什么难？</p>
-<ol>
-<li>所有线程都共享一个堆内存</li>
-<li>单个线程的状态机的执行结果是固定的，但是多线程不一样，因为它们涉及到一个线程切换的问题，这会导致每次程序运行的结果可能都是不一样的。</li>
-</ol>
-<p><figure id="a-/images/Pasted%20image%2020221216211708.png" class="align-center">
-    <img src="/images/Pasted%20image%2020221216211708.png" alt="多线程状态机执行示意图"  />
-    
-    <figcaption>
-       多线程状态机执行示意图
-    </figcaption>
-    
-</figure></p>
-<h2 id="无法保证的三个特性">无法保证的三个特性</h2>
-<ol>
-<li>原子性: 一段代码执行时独占整个计算机系统
-<ol>
-<li>无法保证的例子： 两个线程对一个值进行 ++ N 次， 这个结果可能不是 2N</li>
-<li>实现原子性： <code>lock</code> &amp; <code>unlock</code>
-<ul>
-<li>实现临界去的绝对串行化</li>
-<li>其他部分仍然可以并行执行</li>
-</ul>
-</li>
-</ol>
-</li>
-<li>顺序性: 代码按编写的顺序执行，也就是实现源代码的按顺序翻译(为汇编)。
-<ol>
-<li>会导致的原因: 编译器的优化(<strong>编译器对内存访问 “eventually consistent” 的处理导致共享内存作为线程同步工具的失效</strong>。)，比如说 gcc 加<code>-O1/2</code></li>
-<li>实际例子：
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">while</span><span class="p">(</span><span class="o">!</span><span class="n">done</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl"><span class="c1">// =&gt; opt
-</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="n">done</span><span class="p">)</span> <span class="k">while</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span> 
-</span></span></code></pre></div></li>
-<li>实现源代码的按顺序翻译： 在代码中插入“优化不能穿越的” barrier
-<ol>
-<li>asm volatile (&quot;&quot; ::: &ldquo;memory&rdquo;);
-<ol>
-<li>含义是 可以读写任何内存</li>
-</ol>
-</li>
-<li>使用 volatile 变量
-<ol>
-<li>保持 c 语义和汇编语义一致</li>
-</ol>
-</li>
-</ol>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">extern</span> <span class="kt">int</span> <span class="k">volatile</span> <span class="n">done</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="k">while</span><span class="p">(</span><span class="o">!</span><span class="n">done</span><span class="p">);</span>
-</span></span></code></pre></div></li>
-</ol>
-</li>
-<li>可见性： 对某个共享内存的修改，其他线程要立马可见。
-<ol>
-<li>一段代码: 它的结果可能为: <code>0,0</code> <code>0,1</code> <code>1,0</code> <code>1,1</code> 4种情况, 但是只要有方法(f1 / f2)被执行就不会出现<code>0,0</code>这种结果。但实际的情况是<code>0,0</code>这个结果出现的次数最多。
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">x</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">f1</span><span class="p">(){</span>
-</span></span><span class="line"><span class="cl">	 <span class="n">x</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span><span class="err">一个操</span>
-</span></span><span class="line"><span class="cl">	 <span class="k">asm</span> <span class="k">volatile</span><span class="p">(</span><span class="s">&#34;&#34;</span><span class="o">:::</span><span class="s">&#34;memory&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">	 <span class="nf">printf</span><span class="p">(</span><span class="s">&#34;%d &#34;</span><span class="p">,</span><span class="n">y</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">f2</span><span class="p">(){</span>
-</span></span><span class="line"><span class="cl">	<span class="n">y</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">	<span class="k">asm</span> <span class="k">volatile</span><span class="p">(</span><span class="s">&#34;&#34;</span><span class="o">:::</span><span class="s">&#34;memory&#34;</span><span class="p">);</span>
-</span></span><span class="line"><span class="cl">	<span class="nf">printf</span><span class="p">(</span><span class="s">&#34;%d &#34;</span><span class="p">,</span><span class="n">x</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div></li>
-<li>原因是：现代处理器也是一个动态编译器。单个处理器把汇编（用电路）编译成更小的操作符。
-<ol>
-<li>在任何时刻，处理器都维护了一个操作符的容器</li>
-<li>每一周期尽可能多的补充操作符</li>
-<li>每一周期执行尽可能多的操作符</li>
-<li>乱序执行，按序提交</li>
-</ol>
-</li>
-<li>实现顺序一致性： 使用<code>mfence</code>指令或使用原子指令(lock),让它每次都到内存中去读取，而不读取缓存</li>
-</ol>
-</li>
-</ol>
-<h2 id="自旋锁-spin-lock">自旋锁 spin lock</h2>
-<p>假如硬件能提供一条“瞬间完成” 的读 + 写的指令</p>
-<ul>
-<li>其他所有人暂停，load + store
-<ul>
-<li>如果有人同时请求，硬件选出一个胜利者</li>
-<li>败者等胜利者完成后继续</li>
-</ul>
-</li>
-</ul>
-<h3 id="x86提供的-lock-前缀">X86提供的 lock 前缀</h3>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">long</span> <span class="n">sum</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">sum</span><span class="p">(){</span>
-</span></span><span class="line"><span class="cl">	<span class="k">for</span><span class="p">(;;){</span>
-</span></span><span class="line"><span class="cl">		<span class="k">asm</span> <span class="k">volatile</span><span class="p">(</span><span class="s">&#34;lock addq $1, %0&#34;</span><span class="o">:</span> <span class="s">&#34;+m&#34;</span><span class="p">(</span><span class="n">sum</span><span class="p">));</span>
-</span></span><span class="line"><span class="cl">	<span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>atomic exchange(load + store)</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">xchg</span><span class="p">(</span><span class="k">volatile</span> <span class="kt">int</span> <span class="o">*</span><span class="n">addr</span><span class="p">,</span> <span class="kt">int</span> <span class="n">newval</span><span class="p">)</span> <span class="p">{</span>
-</span></span><span class="line"><span class="cl">	<span class="kt">int</span> <span class="n">result</span><span class="p">;</span> 
-</span></span><span class="line"><span class="cl">	<span class="k">asm</span> <span class="k">volatile</span> <span class="p">(</span><span class="s">&#34;lock xchg %0, %1&#34;</span> 
-</span></span><span class="line"><span class="cl">		<span class="o">:</span> <span class="s">&#34;+m&#34;</span><span class="p">(</span><span class="o">*</span><span class="n">addr</span><span class="p">),</span> <span class="s">&#34;=a&#34;</span><span class="p">(</span><span class="n">result</span><span class="p">)</span> <span class="o">:</span> <span class="s">&#34;1&#34;</span><span class="p">(</span><span class="n">newval</span><span class="p">));</span> 
-</span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="n">result</span><span class="p">;</span> 
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>实现自旋锁:</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="n">locked</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> 
-</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">lock</span><span class="p">()</span> <span class="p">{</span> <span class="k">while</span> <span class="p">(</span><span class="nf">xchg</span><span class="p">(</span><span class="o">&amp;</span><span class="n">locked</span><span class="p">,</span> <span class="mi">1</span><span class="p">))</span> <span class="p">;</span> <span class="p">}</span> 
-</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">unlock</span><span class="p">()</span> <span class="p">{</span> <span class="nf">xchg</span><span class="p">(</span><span class="o">&amp;</span><span class="n">locked</span><span class="p">,</span> <span class="mi">0</span><span class="p">);</span> <span class="p">}</span>
-</span></span></code></pre></div><h3 id="lock-指令的现代实现">lock 指令的现代实现</h3>
-<p>在 L1 cache 层保持一致性</p>
-<ul>
-<li>所有 cpu 的L1缓存都用总线连起来</li>
-<li>对某个内存 M 执行 lock，则其他所有缓存的 M 都无效（这个代价非常大）</li>
-</ul>
-<h2 id="risc-v-的原子操作">RISC-V 的原子操作</h2>
-<p>原子操作的目的：</p>
-<ol>
-<li><code>a = load(x); if (a == xx){ store(x,y) }</code></li>
-<li><code>a = load(x); store(x,y)</code></li>
-<li><code>a = load(x); a++; store(x,a)</code></li>
-</ol>
-<p>它们的本质都是 load -&gt; exec(进行运算) -&gt; store</p>
-<h3 id="load-reserved--store-conditional">Load reserved / Store Conditional</h3>
-<p>LR: 在读取时会对这个内存加上一个标记，中断、其他处理器的写入都会导致标记消除</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">lr.w</span> <span class="no">rd</span> <span class="p">(</span><span class="no">rs1</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="nf">rd</span> <span class="err">=</span> <span class="no">M</span><span class="p">[</span><span class="no">rs1</span><span class="p">]</span>
-</span></span><span class="line"><span class="cl">	<span class="nf">reserve</span> <span class="no">M</span><span class="p">[</span><span class="no">rs1</span><span class="p">]</span>
-</span></span></code></pre></div><p>SC: 如果那片内存还存在标记则继续写入</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">sc.w</span> <span class="no">rd</span> <span class="no">rs2</span> <span class="p">(</span><span class="no">rs1</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="nf">if</span> <span class="no">still</span> <span class="no">reserved</span><span class="p">:</span>
-</span></span><span class="line"><span class="cl">		<span class="nf">M</span><span class="p">[</span><span class="no">rs1</span><span class="p">]</span> <span class="err">=</span> <span class="no">rs2</span>
-</span></span><span class="line"><span class="cl">		<span class="nf">rd</span> <span class="err">=</span> <span class="mi">0</span>
-</span></span><span class="line"><span class="cl">	<span class="nl">else:</span>
-</span></span><span class="line"><span class="cl">		<span class="nf">rd</span> <span class="err">=</span> <span class="no">nonzero</span>
-</span></span></code></pre></div><h3 id="实现-cas">实现 cas</h3>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">cas</span><span class="p">(</span><span class="kt">int</span> <span class="o">*</span><span class="n">addr</span><span class="p">,</span> <span class="kt">int</span> <span class="n">cmp_val</span><span class="p">,</span> <span class="kt">int</span> <span class="n">new_val</span><span class="p">){</span>
-</span></span><span class="line"><span class="cl">	<span class="kt">int</span> <span class="n">old_val</span> <span class="o">=</span> <span class="o">*</span><span class="n">addr</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">	<span class="k">if</span> <span class="p">(</span><span class="n">old_val</span> <span class="o">==</span> <span class="n">cmp_val</span><span class="p">){</span>
-</span></span><span class="line"><span class="cl">		<span class="o">*</span><span class="n">addr</span> <span class="o">=</span> <span class="n">new_val</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="mi">0</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">	<span class="p">}</span><span class="k">else</span><span class="p">{</span>
-</span></span><span class="line"><span class="cl">		<span class="k">return</span> <span class="mi">1</span><span class="p">;</span>
-</span></span><span class="line"><span class="cl">	<span class="p">}</span>
-</span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nl">cas:</span>
-</span></span><span class="line"><span class="cl">	<span class="nf">lr.w</span> <span class="no">t0</span> <span class="p">(</span><span class="no">a0</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="nf">bne</span> <span class="no">t0</span> <span class="no">a1</span> <span class="no">fail</span>
-</span></span><span class="line"><span class="cl">	<span class="nf">sc.w</span> <span class="no">t0</span> <span class="no">a2</span> <span class="p">(</span><span class="no">a0</span><span class="p">)</span>
-</span></span><span class="line"><span class="cl">	<span class="nf">bnez</span> <span class="no">t0</span> <span class="no">cas</span>
-</span></span><span class="line"><span class="cl">	<span class="nf">li</span> <span class="no">a0</span> <span class="mi">0</span>
-</span></span><span class="line"><span class="cl">	<span class="nf">jr</span> <span class="no">ra</span>
-</span></span><span class="line"><span class="cl"><span class="nl">fail:</span>
-</span></span><span class="line"><span class="cl">	<span class="nf">li</span> <span class="no">a0</span> <span class="mi">1</span>
-</span></span><span class="line"><span class="cl">	<span class="nf">ja</span> <span class="no">ra</span>
-</span></span></code></pre></div><h2 id="线程同步">线程同步</h2>
-]]></content:encoded>
     </item>
     
     <item>
