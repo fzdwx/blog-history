@@ -98,7 +98,7 @@ params:
       description: Emacs hacker.
       favicon: https://avatars.githubusercontent.com/u/237487?v=4
     - name: 云风的 BLOG
-      description: 思绪来得快去得也快，偶尔会在这里停留
+      description: 思绪来得快去得也快,偶尔会在这里停留
       url: https://blog.codingnow.com/
       favicon: https://blog.codingnow.com/favicon.ico
     - name: linux-china

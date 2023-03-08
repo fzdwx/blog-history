@@ -7,8 +7,8 @@ ShowToc: false
 ShowBreadCrumbs: false
 ---
 
-> 今天发现了一个 linux 下的 application launcher [rofi](https://github.com/davatorium/rofi) ，它可以快速切换窗口和启动程序，
-> 我用它和`wmctrl`进行配合使用。
+> 今天发现了一个 linux 下的 application launcher [rofi](https://github.com/davatorium/rofi) ,它可以快速切换窗口和启动程序,
+> 我用它和`wmctrl`进行配合使用.
 
 **我的使用过程:**
 
@@ -18,9 +18,9 @@ ShowBreadCrumbs: false
 yay -S rofi
 ```
 
-2.添加自定义快捷键绑定 hotkey 为`alt`+`space`触发`rofi -show`。
+2.添加自定义快捷键绑定 hotkey 为`alt`+`space`触发`rofi -show`.
 
-3.press`alt`+`space`，然后使用`shift`+`left`or`right`进行切换 mode 。
+3.press`alt`+`space`,然后使用`shift`+`left`or`right`进行切换 mode.
 
 ---
 
@@ -47,7 +47,7 @@ sed -i '8c show-icons: true;' ~/.config/rofi/config.rasi
 
 **我的`wmctrl`的配置示例**:
 
-> 使用`xprop WM_CLASS`获取前缀。
+> 使用`xprop WM_CLASS`获取前缀.
 
 ```shell
 alias chrome="wmctrl -x -a google-chrome || google-chrome-stable > /dev/null 2>&1 &"
