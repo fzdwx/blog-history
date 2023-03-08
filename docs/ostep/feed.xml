@@ -2,7 +2,7 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>ostep on fzdwx</title>
-    <link>https://fzdwx.github.io/tags/ostep/</link>
+    <link>https://fzdwx.github.io/docs/ostep/</link>
     <description>Recent content in ostep on fzdwx</description>
     <image>
       <url>https://fzdwx.github.io/images/party_parrot.gif</url>
@@ -10,7 +10,7 @@
     </image>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright [fzdwx](https://github.com/fzdwx)   since 2022</copyright>
-    <lastBuildDate>Wed, 08 Mar 2023 20:14:58 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/tags/ostep/feed.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 08 Mar 2023 20:14:58 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/docs/ostep/feed.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>并发和线程</title>
       <link>https://fzdwx.github.io/document/2023-03-08-jyyos_concurrency/</link>
