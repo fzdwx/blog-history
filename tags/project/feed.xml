@@ -17,11 +17,11 @@
       <pubDate>Mon, 13 Feb 2023 20:10:04 +0800</pubDate>
       
       <guid>https://fzdwx.github.io/posts/2023-02-13-asd/</guid>
-      <description>项目地址： &amp;nbsp;https://github.com/fzdwx/popup-translation 基本原理就是通过 wry 打开一个 webview 窗口，然后打开某个翻译平台的网页翻译内容，并通过 js 代码屏蔽掉不需要的内容，专注于翻译内容本身。
-弹窗示例 当前获取需要被翻译的内容是从 粘贴板 中读取的（当然也可以直接指定 fanyi hello），在 Linux(x11) 下支持直接翻译被鼠标选中的内容（即不需要复制到粘贴板中）。</description>
+      <description>项目地址： &amp;nbsp;https://github.com/fzdwx/popup-translation 基本原理就是通过 wry 打开一个 webview 窗口,然后打开某个翻译平台的网页翻译内容,并通过 js 代码屏蔽掉不需要的内容,专注于翻译内容本身.
+弹窗示例 当前获取需要被翻译的内容是从 粘贴板 中读取的（当然也可以直接指定 fanyi hello）,在 Linux(x11) 下支持直接翻译被鼠标选中的内容（即不需要复制到粘贴板中）.</description>
       <content:encoded><![CDATA[<p>项目地址： &nbsp;<a href="https://github.com/fzdwx/popup-translation" target="_blank" rel="noopener">https://github.com/fzdwx/popup-translation</a>
 </p>
-<p>基本原理就是通过 wry 打开一个 webview 窗口，然后打开某个翻译平台的网页翻译内容，并通过 js 代码屏蔽掉不需要的内容，专注于翻译内容本身。</p>
+<p>基本原理就是通过 wry 打开一个 webview 窗口,然后打开某个翻译平台的网页翻译内容,并通过 js 代码屏蔽掉不需要的内容,专注于翻译内容本身.</p>
 <p><figure id="a-/images/Pasted%20image%2020230213201701.png" class="align-center">
     <img src="/images/Pasted%20image%2020230213201701.png" alt="弹窗示例"  />
     
@@ -30,8 +30,8 @@
     </figcaption>
     
 </figure></p>
-<p>当前获取需要被翻译的内容是从 粘贴板 中读取的（当然也可以直接指定 <code>fanyi hello</code>），在
-Linux(x11) 下支持直接翻译被鼠标选中的内容（即不需要复制到粘贴板中）。</p>
+<p>当前获取需要被翻译的内容是从 粘贴板 中读取的（当然也可以直接指定 <code>fanyi hello</code>）,在
+Linux(x11) 下支持直接翻译被鼠标选中的内容（即不需要复制到粘贴板中）.</p>
 ]]></content:encoded>
     </item>
     
@@ -41,16 +41,16 @@ Linux(x11) 下支持直接翻译被鼠标选中的内容（即不需要复制到
       <pubDate>Wed, 01 Feb 2023 23:59:53 +0800</pubDate>
       
       <guid>https://fzdwx.github.io/posts/2023-02-01-bufline/</guid>
-      <description>现在比较流行的 buffer line 插件是 &amp;nbsp;akinsho/bufferline ，但是我感觉他太重了，而且不好看。比如说它可以跟 lsp 集成，可以切换各种 tab/buffer 模式等,但是不一定每个人都需要，而且各个顺序都固定了，总之就是我想造轮子: &amp;nbsp;fzdwx/bufline.nvim 在 nvim 中定义 tabline 可以使用 vim.opt.tabline=xxx 来设置, 比如说下面这段代码，就很容易的实现一个 buffer line：
+      <description>现在比较流行的 buffer line 插件是 &amp;nbsp;akinsho/bufferline ,但是我感觉他太重了,而且不好看.比如说它可以跟 lsp 集成,可以切换各种 tab/buffer 模式等,但是不一定每个人都需要,而且各个顺序都固定了,总之就是我想造轮子: &amp;nbsp;fzdwx/bufline.nvim 在 nvim 中定义 tabline 可以使用 vim.opt.tabline=xxx 来设置, 比如说下面这段代码,就很容易的实现一个 buffer line：
 function _G.qweqweqwe() retrun &amp;#34;this is my line&amp;#34; end -- config vim.opt.tabline = &amp;#34;%!v:lua.qweqweqwe()&amp;#34; Show 那么接下来就很容易想到:
-获取所有 buffer 获取 buffer 对应文件的信息 比如说文件名称 显示文件 icon(由 &amp;nbsp;nvim-tree/nvim-web-devicons 支持) 支持高亮 如何实现的就不赘述了，如果有兴趣可以查看: &amp;nbsp;fzdwx/bufline.nvim 。 目前所有的内容都可以自定义：
-M.folder -- 入参是 buffer 数量，要求返回 Group: {hl,str} M.dirName -- 入参是当前 buffer id, 要求返回 Group M.devicon -- 入参是当前 buffer id,&amp;#34;Sel/NoSel&amp;#34;,是否选中, 要求返回 Group M.</description>
+获取所有 buffer 获取 buffer 对应文件的信息 比如说文件名称 显示文件 icon(由 &amp;nbsp;nvim-tree/nvim-web-devicons 支持) 支持高亮 如何实现的就不赘述了,如果有兴趣可以查看: &amp;nbsp;fzdwx/bufline.nvim . 目前所有的内容都可以自定义：
+M.folder -- 入参是 buffer 数量,要求返回 Group: {hl,str} M.dirName -- 入参是当前 buffer id, 要求返回 Group M.devicon -- 入参是当前 buffer id,&amp;#34;Sel/NoSel&amp;#34;,是否选中, 要求返回 Group M.</description>
       <content:encoded><![CDATA[<blockquote>
 <p>现在比较流行的 buffer line 插件是 &nbsp;<a href="https://github.com/akinsho/bufferline.nvim" target="_blank" rel="noopener">akinsho/bufferline</a>
-，但是我感觉他太重了，而且不好看。比如说它可以跟 lsp 集成，可以切换各种 tab/buffer 模式等,但是不一定每个人都需要，而且各个顺序都固定了，总之就是<em>我想造轮子</em>: &nbsp;<a href="https://github.com/fzdwx/bufline.nvim.git" target="_blank" rel="noopener">fzdwx/bufline.nvim</a>
+,但是我感觉他太重了,而且不好看.比如说它可以跟 lsp 集成,可以切换各种 tab/buffer 模式等,但是不一定每个人都需要,而且各个顺序都固定了,总之就是<em>我想造轮子</em>: &nbsp;<a href="https://github.com/fzdwx/bufline.nvim.git" target="_blank" rel="noopener">fzdwx/bufline.nvim</a>
 </p>
 </blockquote>
-<p>在 nvim 中定义 tabline 可以使用 <code>vim.opt.tabline=xxx</code> 来设置, 比如说下面这段代码，就很容易的实现一个 buffer line：</p>
+<p>在 nvim 中定义 tabline 可以使用 <code>vim.opt.tabline=xxx</code> 来设置, 比如说下面这段代码,就很容易的实现一个 buffer line：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="kr">function</span> <span class="nc">_G</span><span class="p">.</span><span class="nf">qweqweqwe</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl">	<span class="n">retrun</span> <span class="s2">&#34;this is my line&#34;</span>
 </span></span><span class="line"><span class="cl"><span class="kr">end</span>
@@ -77,16 +77,16 @@ M.folder -- 入参是 buffer 数量，要求返回 Group: {hl,str} M.dirName -- 
 </li>
 <li>支持高亮</li>
 </ol>
-<p>如何实现的就不赘述了，如果有兴趣可以查看: &nbsp;<a href="https://github.com/fzdwx/bufline.nvim.git" target="_blank" rel="noopener">fzdwx/bufline.nvim</a>
- 。 目前所有的内容都可以自定义：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="n">M.folder</span>  <span class="c1">-- 入参是 buffer 数量，要求返回 Group: {hl,str}</span>
+<p>如何实现的就不赘述了,如果有兴趣可以查看: &nbsp;<a href="https://github.com/fzdwx/bufline.nvim.git" target="_blank" rel="noopener">fzdwx/bufline.nvim</a>
+. 目前所有的内容都可以自定义：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="n">M.folder</span>  <span class="c1">-- 入参是 buffer 数量,要求返回 Group: {hl,str}</span>
 </span></span><span class="line"><span class="cl"><span class="n">M.dirName</span> <span class="c1">-- 入参是当前 buffer id, 要求返回 Group</span>
 </span></span><span class="line"><span class="cl"><span class="n">M.devicon</span> <span class="c1">-- 入参是当前 buffer id,&#34;Sel/NoSel&#34;,是否选中, 要求返回 Group</span>
 </span></span><span class="line"><span class="cl"><span class="n">M.title</span>   <span class="c1">-- 入参是当前 buffer id,&#34;Sel/NoSel&#34;, 要求返回 Group</span>
 </span></span><span class="line"><span class="cl"><span class="n">M.modified</span>  <span class="c1">-- 入参是当前 buffer id, 要求返回 str</span>
 </span></span><span class="line"><span class="cl"><span class="n">M.separator</span> <span class="c1">-- 要求返回 Group</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1">-- 下面这两个方法也可以自定义，需要用户自己保证正确性</span>
+</span></span><span class="line"><span class="cl"><span class="c1">-- 下面这两个方法也可以自定义,需要用户自己保证正确性</span>
 </span></span><span class="line"><span class="cl"><span class="n">M.cell</span>  <span class="c1">-- 每个 buffer 对应的信息,入参是当前 buffer id,当前选择的buffer id,要求返回 group 列表</span>
 </span></span><span class="line"><span class="cl"><span class="n">M.bufline</span> <span class="c1">-- 构造整个 bufline</span>
 </span></span></code></pre></div><p><code>str</code> 就是具体内容, <code>hl</code> 就是要高亮标签, 例如 <code>BufLineFolder</code>当前支持：</p>
@@ -95,9 +95,9 @@ BufLineTitleNoSel
 BufLineFill  
 BufLine  
 BufLineFolder
-</code></pre><p>这些高亮标签都没有默认设置，需要用户自定义，例如:</p>
+</code></pre><p>这些高亮标签都没有默认设置,需要用户自定义,例如:</p>
 <pre tabindex="0"><code>vim.cmd([[au ColorScheme * hi BufLineTitleSel gui=none guibg=&#39;#282C34&#39; guifg=&#39;#5C6370&#39;]])
-</code></pre><p>设置高亮遇到的问题，当设置 icon 的背景为空时，有背景颜色的 icon 跟没有的会一大一小，后来没办法，只能让它都开启颜色的，也就是没选中的 buffer 也会开启颜色跟 bufferline的一样。</p>
+</code></pre><p>设置高亮遇到的问题,当设置 icon 的背景为空时,有背景颜色的 icon 跟没有的会一大一小,后来没办法,只能让它都开启颜色的,也就是没选中的 buffer 也会开启颜色跟 bufferline的一样.</p>
 <p>在 lazy 中使用:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="p">{</span>  
 </span></span><span class="line"><span class="cl">    <span class="s2">&#34;fzdwx/bufline.nvim&#34;</span><span class="p">,</span>  
@@ -127,18 +127,18 @@ BufLineFolder
       <pubDate>Sun, 04 Dec 2022 22:45:02 +0800</pubDate>
       
       <guid>https://fzdwx.github.io/posts/2022-12-04-hugo-preview-obsidian/</guid>
-      <description>前段时间玩过几天的 obsidian，由于太费神了所以转向了 hugo ,然后直接用文本编辑器写 md ，体验还是不太好，然后我想起还有 obsidian 这个软件，所以就有了这个插件。</description>
+      <description>前段时间玩过几天的 obsidian,由于太费神了所以转向了 hugo ,然后直接用文本编辑器写 md ,体验还是不太好,然后我想起还有 obsidian 这个软件,所以就有了这个插件.</description>
       <content:encoded><![CDATA[<blockquote>
-<p>前段时间玩过几天的 obsidian，由于太费神了所以转向了 hugo ,然后直接用文本编辑器写 md ，体验还是不太好，然后我想起还有
-obsidian 这个软件，所以就有了这个插件。</p>
+<p>前段时间玩过几天的 obsidian,由于太费神了所以转向了 hugo ,然后直接用文本编辑器写 md ,体验还是不太好,然后我想起还有
+obsidian 这个软件,所以就有了这个插件.</p>
 </blockquote>
 <p>仓库: &nbsp;<a href="https://github.com/fzdwx/hugo-preview-obsidian" target="_blank" rel="noopener">https://github.com/fzdwx/hugo-preview-obsidian</a>
 </p>
 <p><figure id="a-/images/12.png" class="align-center">
-    <img src="/images/12.png" alt="运行图例，左编辑区域，右预览区域"  />
+    <img src="/images/12.png" alt="运行图例,左编辑区域,右预览区域"  />
     
     <figcaption>
-       运行图例，左编辑区域，右预览区域
+       运行图例,左编辑区域,右预览区域
     </figcaption>
     
 </figure></p>
@@ -155,13 +155,13 @@ obsidian 这个软件，所以就有了这个插件。</p>
 </ol>
 <h3 id="3-更新">3. 更新</h3>
 <ol>
-<li>支持自定义 exec command, 例如可以用来启动终端。 使用 <code>ALT+F12</code> 唤起。
+<li>支持自定义 exec command, 例如可以用来启动终端. 使用 <code>ALT+F12</code> 唤起.
 <ol>
-<li>由于我使用 git 进行同步，时常需要打开终端并且进入到具体的目录，所以需要一个快速启动终端在当前的目录下的命令： <code>wezterm start --class float --cwd ${cwd}</code>。</li>
-<li>目前只提供了 cwd 这个变量，它会替换为当前笔记的路径</li>
+<li>由于我使用 git 进行同步,时常需要打开终端并且进入到具体的目录,所以需要一个快速启动终端在当前的目录下的命令： <code>wezterm start --class float --cwd ${cwd}</code>.</li>
+<li>目前只提供了 cwd 这个变量,它会替换为当前笔记的路径</li>
 </ol>
 </li>
-<li>添加定义 <code>hugo</code> 的路径，如果不设置则使用系统的 <code>hugo</code> 命令</li>
+<li>添加定义 <code>hugo</code> 的路径,如果不设置则使用系统的 <code>hugo</code> 命令</li>
 </ol>
 <p><figure id="a-/images/13.png" class="align-center">
     <img src="/images/13.png" alt="自定义 command 配置示例"  />
@@ -180,20 +180,20 @@ obsidian 这个软件，所以就有了这个插件。</p>
       <pubDate>Sat, 15 Oct 2022 19:25:10 +0800</pubDate>
       
       <guid>https://fzdwx.github.io/posts/2022-10-15-about-github-action/</guid>
-      <description>起因是因为想要有一种可以不用编辑文件而作用到网站上的方式，然后就了解到了 github action 的形式。</description>
-      <content:encoded><![CDATA[<p>主要原理就是通过 github action 的来监听 issue 的相关事件，然后读取issue中的内容创建文件提交到 git 上，最后直接部署。这样就能随时编辑并展示了。</p>
+      <description>起因是因为想要有一种可以不用编辑文件而作用到网站上的方式,然后就了解到了 github action 的形式.</description>
+      <content:encoded><![CDATA[<p>主要原理就是通过 github action 的来监听 issue 的相关事件,然后读取issue中的内容创建文件提交到 git 上,最后直接部署.这样就能随时编辑并展示了.</p>
 <p>具体可以看 &nbsp;<a href="https://github.com/fzdwx/add-event-to-myblog" target="_blank" rel="noopener">add event to myb log</a>
-这个仓库，
+这个仓库,
 以及&nbsp;<a href="https://github.com/fzdwx/fzdwx.github.io/blob/main/.github/workflows/add-event.yml" target="_blank" rel="noopener">使用方式</a>
-。</p>
+.</p>
 <p>接下来介绍如何开发一个 github action:</p>
 <h3 id="1-克隆官方提供的template">1. 克隆官方提供的template</h3>
-<p>官方主要对 typescript 的支持比较好，提供了一系列的&nbsp;<a href="https://github.com/actions/toolkit" target="_blank" rel="noopener">工具包</a>
-，没办法只能同ts来进行开发，</p>
+<p>官方主要对 typescript 的支持比较好,提供了一系列的&nbsp;<a href="https://github.com/actions/toolkit" target="_blank" rel="noopener">工具包</a>
+,没办法只能同ts来进行开发,</p>
 <p>&nbsp;<a href="https://github.com/actions/typescript-action" target="_blank" rel="noopener">https://github.com/actions/typescript-action</a>
 </p>
 <h3 id="2-定义想要在运行时用户输入的参数">2. 定义想要在运行时用户输入的参数</h3>
-<p>通过编辑<code>action.yml</code>这个文件来定义想要在运行时定义的参数，比如说<code>GITHUB_TOKEN</code>:</p>
+<p>通过编辑<code>action.yml</code>这个文件来定义想要在运行时定义的参数,比如说<code>GITHUB_TOKEN</code>:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-yaml" data-lang="yaml"><span class="line"><span class="cl"><span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;add event to my blog&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">description</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;add event to my blog&#39;</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">author</span><span class="p">:</span><span class="w"> </span><span class="s1">&#39;fzdwx&#39;</span><span class="w">
@@ -213,17 +213,17 @@ obsidian 这个软件，所以就有了这个插件。</p>
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="nt">default</span><span class="p">:</span><span class="w"> </span><span class="l">默认值</span><span class="w">
 </span></span></span></code></pre></div><h3 id="3-实现想要的功能">3. 实现想要的功能</h3>
 <p>详细可以查看我的&nbsp;<a href="https://github.com/fzdwx/add-event-to-myblog/blob/v2.1/src/main.ts" target="_blank" rel="noopener">主要代码</a>
-。我的里面主要做了:</p>
+.我的里面主要做了:</p>
 <ol>
 <li>根据当前issue number&nbsp;<a href="https://github.com/fzdwx/add-event-to-myblog/blob/v2.1/src/main.ts#L16" target="_blank" rel="noopener">获取该issue的内容</a>
-。</li>
-<li>根据预定义的模板，&nbsp;<a href="https://github.com/fzdwx/add-event-to-myblog/blob/v2.1/src/main.ts#L18-L33" target="_blank" rel="noopener">创建文件内容</a>
-。</li>
+.</li>
+<li>根据预定义的模板,&nbsp;<a href="https://github.com/fzdwx/add-event-to-myblog/blob/v2.1/src/main.ts#L18-L33" target="_blank" rel="noopener">创建文件内容</a>
+.</li>
 <li>提交到&nbsp;<a href="https://github.com/fzdwx/add-event-to-myblog/blob/v2.1/src/main.ts#L34-L38" target="_blank" rel="noopener">git</a>
-上。</li>
+上.</li>
 </ol>
 <h3 id="4-发布到marketplace">4. 发布到marketplace</h3>
-<p>需要勾选 <strong>Publish this Action to the GitHub Marketplace</strong>，可能需要2fa认证，找一个 github 支持(我用的是 authy，防止后面忘记了)就ok了。</p>
+<p>需要勾选 <strong>Publish this Action to the GitHub Marketplace</strong>,可能需要2fa认证,找一个 github 支持(我用的是 authy,防止后面忘记了)就ok了.</p>
 <p><figure id="a-/images/8.png" class="align-center">
     <img src="/images/8.png" alt="Figure 1"  />
     
@@ -232,7 +232,7 @@ obsidian 这个软件，所以就有了这个插件。</p>
     </figcaption>
     
 </figure></p>
-<p>成功 release 后就能在别的项目中使用了。</p>
+<p>成功 release 后就能在别的项目中使用了.</p>
 ]]></content:encoded>
     </item>
     

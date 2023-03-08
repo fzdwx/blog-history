@@ -17,16 +17,16 @@
       <pubDate>Wed, 01 Feb 2023 23:59:53 +0800</pubDate>
       
       <guid>https://fzdwx.github.io/posts/2023-02-01-bufline/</guid>
-      <description>现在比较流行的 buffer line 插件是 &amp;nbsp;akinsho/bufferline ，但是我感觉他太重了，而且不好看。比如说它可以跟 lsp 集成，可以切换各种 tab/buffer 模式等,但是不一定每个人都需要，而且各个顺序都固定了，总之就是我想造轮子: &amp;nbsp;fzdwx/bufline.nvim 在 nvim 中定义 tabline 可以使用 vim.opt.tabline=xxx 来设置, 比如说下面这段代码，就很容易的实现一个 buffer line：
+      <description>现在比较流行的 buffer line 插件是 &amp;nbsp;akinsho/bufferline ,但是我感觉他太重了,而且不好看.比如说它可以跟 lsp 集成,可以切换各种 tab/buffer 模式等,但是不一定每个人都需要,而且各个顺序都固定了,总之就是我想造轮子: &amp;nbsp;fzdwx/bufline.nvim 在 nvim 中定义 tabline 可以使用 vim.opt.tabline=xxx 来设置, 比如说下面这段代码,就很容易的实现一个 buffer line：
 function _G.qweqweqwe() retrun &amp;#34;this is my line&amp;#34; end -- config vim.opt.tabline = &amp;#34;%!v:lua.qweqweqwe()&amp;#34; Show 那么接下来就很容易想到:
-获取所有 buffer 获取 buffer 对应文件的信息 比如说文件名称 显示文件 icon(由 &amp;nbsp;nvim-tree/nvim-web-devicons 支持) 支持高亮 如何实现的就不赘述了，如果有兴趣可以查看: &amp;nbsp;fzdwx/bufline.nvim 。 目前所有的内容都可以自定义：
-M.folder -- 入参是 buffer 数量，要求返回 Group: {hl,str} M.dirName -- 入参是当前 buffer id, 要求返回 Group M.devicon -- 入参是当前 buffer id,&amp;#34;Sel/NoSel&amp;#34;,是否选中, 要求返回 Group M.</description>
+获取所有 buffer 获取 buffer 对应文件的信息 比如说文件名称 显示文件 icon(由 &amp;nbsp;nvim-tree/nvim-web-devicons 支持) 支持高亮 如何实现的就不赘述了,如果有兴趣可以查看: &amp;nbsp;fzdwx/bufline.nvim . 目前所有的内容都可以自定义：
+M.folder -- 入参是 buffer 数量,要求返回 Group: {hl,str} M.dirName -- 入参是当前 buffer id, 要求返回 Group M.devicon -- 入参是当前 buffer id,&amp;#34;Sel/NoSel&amp;#34;,是否选中, 要求返回 Group M.</description>
       <content:encoded><![CDATA[<blockquote>
 <p>现在比较流行的 buffer line 插件是 &nbsp;<a href="https://github.com/akinsho/bufferline.nvim" target="_blank" rel="noopener">akinsho/bufferline</a>
-，但是我感觉他太重了，而且不好看。比如说它可以跟 lsp 集成，可以切换各种 tab/buffer 模式等,但是不一定每个人都需要，而且各个顺序都固定了，总之就是<em>我想造轮子</em>: &nbsp;<a href="https://github.com/fzdwx/bufline.nvim.git" target="_blank" rel="noopener">fzdwx/bufline.nvim</a>
+,但是我感觉他太重了,而且不好看.比如说它可以跟 lsp 集成,可以切换各种 tab/buffer 模式等,但是不一定每个人都需要,而且各个顺序都固定了,总之就是<em>我想造轮子</em>: &nbsp;<a href="https://github.com/fzdwx/bufline.nvim.git" target="_blank" rel="noopener">fzdwx/bufline.nvim</a>
 </p>
 </blockquote>
-<p>在 nvim 中定义 tabline 可以使用 <code>vim.opt.tabline=xxx</code> 来设置, 比如说下面这段代码，就很容易的实现一个 buffer line：</p>
+<p>在 nvim 中定义 tabline 可以使用 <code>vim.opt.tabline=xxx</code> 来设置, 比如说下面这段代码,就很容易的实现一个 buffer line：</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="kr">function</span> <span class="nc">_G</span><span class="p">.</span><span class="nf">qweqweqwe</span><span class="p">()</span>
 </span></span><span class="line"><span class="cl">	<span class="n">retrun</span> <span class="s2">&#34;this is my line&#34;</span>
 </span></span><span class="line"><span class="cl"><span class="kr">end</span>
@@ -53,16 +53,16 @@ M.folder -- 入参是 buffer 数量，要求返回 Group: {hl,str} M.dirName -- 
 </li>
 <li>支持高亮</li>
 </ol>
-<p>如何实现的就不赘述了，如果有兴趣可以查看: &nbsp;<a href="https://github.com/fzdwx/bufline.nvim.git" target="_blank" rel="noopener">fzdwx/bufline.nvim</a>
- 。 目前所有的内容都可以自定义：</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="n">M.folder</span>  <span class="c1">-- 入参是 buffer 数量，要求返回 Group: {hl,str}</span>
+<p>如何实现的就不赘述了,如果有兴趣可以查看: &nbsp;<a href="https://github.com/fzdwx/bufline.nvim.git" target="_blank" rel="noopener">fzdwx/bufline.nvim</a>
+. 目前所有的内容都可以自定义：</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="n">M.folder</span>  <span class="c1">-- 入参是 buffer 数量,要求返回 Group: {hl,str}</span>
 </span></span><span class="line"><span class="cl"><span class="n">M.dirName</span> <span class="c1">-- 入参是当前 buffer id, 要求返回 Group</span>
 </span></span><span class="line"><span class="cl"><span class="n">M.devicon</span> <span class="c1">-- 入参是当前 buffer id,&#34;Sel/NoSel&#34;,是否选中, 要求返回 Group</span>
 </span></span><span class="line"><span class="cl"><span class="n">M.title</span>   <span class="c1">-- 入参是当前 buffer id,&#34;Sel/NoSel&#34;, 要求返回 Group</span>
 </span></span><span class="line"><span class="cl"><span class="n">M.modified</span>  <span class="c1">-- 入参是当前 buffer id, 要求返回 str</span>
 </span></span><span class="line"><span class="cl"><span class="n">M.separator</span> <span class="c1">-- 要求返回 Group</span>
 </span></span><span class="line"><span class="cl">
-</span></span><span class="line"><span class="cl"><span class="c1">-- 下面这两个方法也可以自定义，需要用户自己保证正确性</span>
+</span></span><span class="line"><span class="cl"><span class="c1">-- 下面这两个方法也可以自定义,需要用户自己保证正确性</span>
 </span></span><span class="line"><span class="cl"><span class="n">M.cell</span>  <span class="c1">-- 每个 buffer 对应的信息,入参是当前 buffer id,当前选择的buffer id,要求返回 group 列表</span>
 </span></span><span class="line"><span class="cl"><span class="n">M.bufline</span> <span class="c1">-- 构造整个 bufline</span>
 </span></span></code></pre></div><p><code>str</code> 就是具体内容, <code>hl</code> 就是要高亮标签, 例如 <code>BufLineFolder</code>当前支持：</p>
@@ -71,9 +71,9 @@ BufLineTitleNoSel
 BufLineFill  
 BufLine  
 BufLineFolder
-</code></pre><p>这些高亮标签都没有默认设置，需要用户自定义，例如:</p>
+</code></pre><p>这些高亮标签都没有默认设置,需要用户自定义,例如:</p>
 <pre tabindex="0"><code>vim.cmd([[au ColorScheme * hi BufLineTitleSel gui=none guibg=&#39;#282C34&#39; guifg=&#39;#5C6370&#39;]])
-</code></pre><p>设置高亮遇到的问题，当设置 icon 的背景为空时，有背景颜色的 icon 跟没有的会一大一小，后来没办法，只能让它都开启颜色的，也就是没选中的 buffer 也会开启颜色跟 bufferline的一样。</p>
+</code></pre><p>设置高亮遇到的问题,当设置 icon 的背景为空时,有背景颜色的 icon 跟没有的会一大一小,后来没办法,只能让它都开启颜色的,也就是没选中的 buffer 也会开启颜色跟 bufferline的一样.</p>
 <p>在 lazy 中使用:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="p">{</span>  
 </span></span><span class="line"><span class="cl">    <span class="s2">&#34;fzdwx/bufline.nvim&#34;</span><span class="p">,</span>  
@@ -103,9 +103,9 @@ BufLineFolder
       <pubDate>Wed, 28 Sep 2022 15:59:37 +0800</pubDate>
       
       <guid>https://fzdwx.github.io/posts/2022-09-28-neovim-use-notes/</guid>
-      <description>由于最近切换到了 linux，不可避免的经常需要使用 vi 等编辑器，所以这次好好折腾一下。</description>
+      <description>由于最近切换到了 linux,不可避免的经常需要使用 vi 等编辑器,所以这次好好折腾一下.</description>
       <content:encoded><![CDATA[<blockquote>
-<p>由于最近切换到了linux，不可避免的经常需要使用vi等编辑器，所以这次好好折腾一下。</p>
+<p>由于最近切换到了linux,不可避免的经常需要使用vi等编辑器,所以这次好好折腾一下.</p>
 </blockquote>
 <p>我的配置地址: &nbsp;<a href="https://github.com/fzdwx/nvim" target="_blank" rel="noopener">https://github.com/fzdwx/nvim</a>
  ,现在直接使用 &nbsp;<a href="https://github.com/LazyVim/LazyVim" target="_blank" rel="noopener">LazyVim</a>
@@ -116,7 +116,7 @@ BufLineFolder
 </blockquote>
 <h2 id="我的配置">我的配置</h2>
 <h3 id="pakcer">pakcer</h3>
-<p>我选用的插件管理器是<code>packer</code>，我也不知道选什么好，就按最新的来吧。</p>
+<p>我选用的插件管理器是<code>packer</code>,我也不知道选什么好,就按最新的来吧.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="c1">--- setup packer</span>
 </span></span><span class="line"><span class="cl"><span class="kd">local</span> <span class="n">fn</span> <span class="o">=</span> <span class="n">vim.fn</span>
 </span></span><span class="line"><span class="cl"><span class="kd">local</span> <span class="n">install_path</span> <span class="o">=</span> <span class="n">fn.stdpath</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">)</span> <span class="o">..</span> <span class="s1">&#39;/site/pack/packer/start/packer.nvim&#39;</span>
@@ -137,7 +137,7 @@ BufLineFolder
 </span></span><span class="line"><span class="cl"><span class="kr">end</span><span class="p">)</span>
 </span></span></code></pre></div><h3 id="alphahttpsgithubcomgoolordalpha-nvim">&nbsp;<a href="https://github.com/goolord/alpha-nvim" target="_blank" rel="noopener">alpha</a>
 </h3>
-<p>是一个dashboard，也可以说是一个欢迎界面。</p>
+<p>是一个dashboard,也可以说是一个欢迎界面.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="n">require</span><span class="p">(</span><span class="s1">&#39;packer&#39;</span><span class="p">).</span><span class="n">startup</span><span class="p">(</span><span class="kr">function</span><span class="p">(</span><span class="n">use</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">-- ...</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">--- 添加下面两行进行安装</span>
@@ -145,11 +145,11 @@ BufLineFolder
 </span></span><span class="line"><span class="cl">    <span class="n">use</span> <span class="s2">&#34;kyazdani42/nvim-web-devicons&#34;</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">-- ...</span>
 </span></span><span class="line"><span class="cl"><span class="kr">end</span><span class="p">)</span>
-</span></span></code></pre></div><p>配置代码太长了就不放了，可以点击这里&nbsp;<a href="https://github.com/fzdwx/nvim/blob/main/lua/config/plugins/alpha.lua" target="_blank" rel="noopener"> 这里 </a>
-参考。</p>
+</span></span></code></pre></div><p>配置代码太长了就不放了,可以点击这里&nbsp;<a href="https://github.com/fzdwx/nvim/blob/main/lua/config/plugins/alpha.lua" target="_blank" rel="noopener"> 这里 </a>
+参考.</p>
 <h3 id="telescopehttpsgithubcomnvim-telescopetelescopenvim">&nbsp;<a href="https://github.com/nvim-telescope/telescope.nvim" target="_blank" rel="noopener">telescope</a>
 </h3>
-<p>主要作用是文件的查找与预览。</p>
+<p>主要作用是文件的查找与预览.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="n">require</span><span class="p">(</span><span class="s1">&#39;packer&#39;</span><span class="p">).</span><span class="n">startup</span><span class="p">(</span><span class="kr">function</span><span class="p">(</span><span class="n">use</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">-- ...</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">--- 添加下面代码进行安装</span>

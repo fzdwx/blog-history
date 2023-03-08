@@ -78,7 +78,7 @@
 </span></span><span class="line"><span class="cl">   return 0;
 </span></span><span class="line"><span class="cl">}
 </span></span></code></pre></div><h3 id="修改true定义的例子">修改true定义的例子</h3>
-<p>它只在特定的行数时才会为true。</p>
+<p>它只在特定的行数时才会为true.</p>
 <p>a.c:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="cp">#define true (__LINE__ % 2 != 0)
 </span></span></span><span class="line"><span class="cl"><span class="cp"></span>
@@ -107,7 +107,7 @@
 </span></span><span class="line"><span class="cl">   <span class="cp">#define PRINT(x) puts(&#34;Hello,&#34; #x &#34;!&#34;);
 </span></span></span><span class="line"><span class="cl"><span class="cp"></span>   <span class="nf">NAMES</span><span class="p">(</span><span class="n">PRINT</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>可以看到，展开后是调用了4遍。</p>
+</span></span></code></pre></div><p>可以看到,展开后是调用了4遍.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-text" data-lang="text"><span class="line"><span class="cl">❯ gcc -E a.c
 </span></span><span class="line"><span class="cl"># 0 &#34;a.c&#34;
 </span></span><span class="line"><span class="cl"># 0 &#34;&lt;built-in&gt;&#34;
@@ -127,15 +127,15 @@
 <p>静态: C代码连续的一段总能找到对应一段连续的机器指令
 动态: C代码执行的状态总能对应到机器的状态</p>
 <ul>
-<li>源代码视角: 函数，变量，指针</li>
-<li>机器指令视角: 寄存器，内存，地址</li>
+<li>源代码视角: 函数,变量,指针</li>
+<li>机器指令视角: 寄存器,内存,地址</li>
 </ul>
 <p>共同的地方: 内存</p>
 <ul>
-<li>代码，变量(源代码) = 地址 + 长度(机器指令)</li>
+<li>代码,变量(源代码) = 地址 + 长度(机器指令)</li>
 <li>内存 = 代码 + 数据 + 堆栈</li>
 </ul>
-<p>所以理解C程序执行最重要的就时<strong>内存模型</strong>。</p>
+<p>所以理解C程序执行最重要的就时<strong>内存模型</strong>.</p>
 ]]></content:encoded>
     </item>
     

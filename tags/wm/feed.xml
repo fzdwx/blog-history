@@ -17,16 +17,16 @@
       <pubDate>Thu, 26 Jan 2023 11:04:48 +0800</pubDate>
       
       <guid>https://fzdwx.github.io/posts/2023-01-26-hyprland/</guid>
-      <description>今天简单尝试了一下 &amp;nbsp;Hyprland ,它的功能类似于 &amp;nbsp;DWM + picom 的组合。只是粗略的尝试了一下，发现还是有一些问题:
-分屏的时候，扩展屏幕的光标不显示 设置 WLR_NO_HARDWARE_CURSORS=1 即可解决 扩展屏幕不时有一些黑块闪烁 替换安装包为 hyprland-nvidia-git 即可解决 waybar 有一点用的不爽，它的 workspaces 不是每个屏幕都是独立的(DWM 中的 tag 功能) 当然它还是有一些好处的:
-不打任何补丁就有很好的可用性 自带了一些动画效果 配置文件热加载(即每次修改就会立即生效) 这一点好评，DWM 是每次修改了配置都要重新 make 但是我还是选择继续使用 DWM，因为它没有什么必须切换的理由，而且有一些我常用的功能在 Hyprland 中没有找到替代的，加上我的 DWM 的配置也趋于稳定了，也新增了可以点击的 status bar（Hyprland 下使用waybar 可以做到这个功能）。
+      <description>今天简单尝试了一下 &amp;nbsp;Hyprland ,它的功能类似于 &amp;nbsp;DWM + picom 的组合.只是粗略的尝试了一下,发现还是有一些问题:
+分屏的时候,扩展屏幕的光标不显示 设置 WLR_NO_HARDWARE_CURSORS=1 即可解决 扩展屏幕不时有一些黑块闪烁 替换安装包为 hyprland-nvidia-git 即可解决 waybar 有一点用的不爽,它的 workspaces 不是每个屏幕都是独立的(DWM 中的 tag 功能) 当然它还是有一些好处的:
+不打任何补丁就有很好的可用性 自带了一些动画效果 配置文件热加载(即每次修改就会立即生效) 这一点好评,DWM 是每次修改了配置都要重新 make 但是我还是选择继续使用 DWM,因为它没有什么必须切换的理由,而且有一些我常用的功能在 Hyprland 中没有找到替代的,加上我的 DWM 的配置也趋于稳定了,也新增了可以点击的 status bar（Hyprland 下使用waybar 可以做到这个功能）.
 相关代码 安装脚本:
 # 安装 hyperland yay -S hyprland-nvidia-git # 安装 waybar yay -S waybar-hyprland-git # 安装 hyprland share yay -S xdg-desktop-portal-hyprland-git # 安装 rofi for wayland yay -S rofi-lbonn-wayland-git # 安装 壁纸切换 git clone https://github.</description>
       <content:encoded><![CDATA[<p>今天简单尝试了一下 &nbsp;<a href="https://hyprland.org/" target="_blank" rel="noopener">Hyprland</a>
 ,它的功能类似于 &nbsp;<a href="/posts/2022-09-29-dwm">DWM</a>
- + picom 的组合。只是粗略的尝试了一下，发现还是有一些问题:</p>
+ + picom 的组合.只是粗略的尝试了一下,发现还是有一些问题:</p>
 <ol>
-<li>分屏的时候，扩展屏幕的光标不显示
+<li>分屏的时候,扩展屏幕的光标不显示
 <ul>
 <li>设置 <code>WLR_NO_HARDWARE_CURSORS=1</code>  即可解决</li>
 </ul>
@@ -36,7 +36,7 @@
 <li>替换安装包为 <code>hyprland-nvidia-git</code>  即可解决</li>
 </ul>
 </li>
-<li>waybar 有一点用的不爽，它的 workspaces 不是每个屏幕都是独立的(DWM 中的 tag 功能)</li>
+<li>waybar 有一点用的不爽,它的 workspaces 不是每个屏幕都是独立的(DWM 中的 tag 功能)</li>
 </ol>
 <p>当然它还是有一些好处的:</p>
 <ol>
@@ -44,11 +44,11 @@
 <li>自带了一些动画效果</li>
 <li>配置文件热加载(即每次修改就会立即生效)
 <ul>
-<li>这一点好评，DWM 是每次修改了配置都要重新 <code>make</code></li>
+<li>这一点好评,DWM 是每次修改了配置都要重新 <code>make</code></li>
 </ul>
 </li>
 </ol>
-<p>但是我还是选择继续使用 DWM，因为它没有什么必须切换的理由，而且有一些我常用的功能在 Hyprland 中没有找到替代的，加上我的 DWM 的配置也趋于稳定了，也新增了可以点击的 status bar（Hyprland 下使用waybar 可以做到这个功能）。</p>
+<p>但是我还是选择继续使用 DWM,因为它没有什么必须切换的理由,而且有一些我常用的功能在 Hyprland 中没有找到替代的,加上我的 DWM 的配置也趋于稳定了,也新增了可以点击的 status bar（Hyprland 下使用waybar 可以做到这个功能）.</p>
 
 
 
@@ -320,17 +320,17 @@ bindm = $mainMod, mouse:273, resizewindow
       <pubDate>Thu, 29 Sep 2022 23:42:41 +0800</pubDate>
       
       <guid>https://fzdwx.github.io/posts/2022-09-29-dwm/</guid>
-      <description>安装 git clone https://git.suckless.org/dwm cd dwm sudo make clean install 启动 如果已经有了sddm，可以使用sudo systemctl disable sddm.service 来进行关闭，如果到时候不想用了可以用sudo systemctl enable sddm.service来开启sddm。
-# 准备配置文件 cp /etc/X11/xinit/xinitrc ~/.xinitrc vim ~/.xinitrc # 添加 exec dwm # 注释 #twm &amp;amp; #xclock -geometry 50x50-1+1 &amp;amp; #xterm -geometry 80x50+494+51 &amp;amp; #xterm -geometry 80x20+494-0 &amp;amp; #exec xterm -geometry 80x66+0+0 -name login 然后重启并调用startx即可。
-遇到的问题 直接断网 使用NetworkManager进行连接，可能要用到dhcpcd。
-nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 可能会连接失败，你可以试试nmcli connection show 来查看是否存在以前的连接信息，可以用nmcli connection delete {{wifi name}}来删除对应的信息</description>
+      <description>安装 git clone https://git.suckless.org/dwm cd dwm sudo make clean install 启动 如果已经有了sddm,可以使用sudo systemctl disable sddm.service 来进行关闭,如果到时候不想用了可以用sudo systemctl enable sddm.service来开启sddm.
+# 准备配置文件 cp /etc/X11/xinit/xinitrc ~/.xinitrc vim ~/.xinitrc # 添加 exec dwm # 注释 #twm &amp;amp; #xclock -geometry 50x50-1+1 &amp;amp; #xterm -geometry 80x50+494+51 &amp;amp; #xterm -geometry 80x20+494-0 &amp;amp; #exec xterm -geometry 80x66+0+0 -name login 然后重启并调用startx即可.
+遇到的问题 直接断网 使用NetworkManager进行连接,可能要用到dhcpcd.
+nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 可能会连接失败,你可以试试nmcli connection show 来查看是否存在以前的连接信息,可以用nmcli connection delete {{wifi name}}来删除对应的信息</description>
       <content:encoded><![CDATA[<h2 id="安装">安装</h2>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">git clone https://git.suckless.org/dwm
 </span></span><span class="line"><span class="cl"><span class="nb">cd</span> dwm
 </span></span><span class="line"><span class="cl">sudo make clean install
 </span></span></code></pre></div><h2 id="启动">启动</h2>
-<p>如果已经有了sddm，可以使用<code>sudo systemctl disable sddm.service</code>
-来进行关闭，如果到时候不想用了可以用<code>sudo systemctl enable sddm.service</code>来开启sddm。</p>
+<p>如果已经有了sddm,可以使用<code>sudo systemctl disable sddm.service</code>
+来进行关闭,如果到时候不想用了可以用<code>sudo systemctl enable sddm.service</code>来开启sddm.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 准备配置文件</span>
 </span></span><span class="line"><span class="cl">cp /etc/X11/xinit/xinitrc ~/.xinitrc
 </span></span><span class="line"><span class="cl">vim ~/.xinitrc
@@ -344,14 +344,14 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
 </span></span><span class="line"><span class="cl"><span class="c1">#xterm -geometry 80x50+494+51 &amp;</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#xterm -geometry 80x20+494-0 &amp;</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#exec xterm -geometry 80x66+0+0 -name login</span>
-</span></span></code></pre></div><p>然后重启并调用<code>startx</code>即可。</p>
+</span></span></code></pre></div><p>然后重启并调用<code>startx</code>即可.</p>
 <h2 id="遇到的问题">遇到的问题</h2>
 <h3 id="直接断网">直接断网</h3>
-<p>使用NetworkManager进行连接，可能要用到<code>dhcpcd</code>。</p>
+<p>使用NetworkManager进行连接,可能要用到<code>dhcpcd</code>.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">nmcli device wifi list
 </span></span><span class="line"><span class="cl">nmcli device wifi connect <span class="o">{{</span>wifi name<span class="o">}}</span> password <span class="o">{{</span>pwd<span class="o">}}</span>
-</span></span></code></pre></div><p>可能会连接失败，你可以试试<code>nmcli connection show</code>
-来查看是否存在以前的连接信息，可以用<code>nmcli connection delete {{wifi name}}</code>来删除对应的信息</p>
+</span></span></code></pre></div><p>可能会连接失败,你可以试试<code>nmcli connection show</code>
+来查看是否存在以前的连接信息,可以用<code>nmcli connection delete {{wifi name}}</code>来删除对应的信息</p>
 <h3 id="输入法失效">输入法失效</h3>
 <p>添加配置文件</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">vim ~/.pam_environment
@@ -369,8 +369,8 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 可以先查看有哪些屏幕</span>
 </span></span><span class="line"><span class="cl">xrandr 
 </span></span><span class="line"><span class="cl"><span class="c1">#</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 将下面的命令加入 ~/.xinitrc1 中，在exec dwm之前添加</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 我有两个，是上下关系，所以用below 其他有 left 以及 right</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 将下面的命令加入 ~/.xinitrc1 中,在exec dwm之前添加</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 我有两个,是上下关系,所以用below 其他有 left 以及 right</span>
 </span></span><span class="line"><span class="cl">xrandr --output eDP-1-1  --auto --below HDMI-0
 </span></span></code></pre></div><h2 id="常用快捷键">常用快捷键</h2>
 <p>可以参考我配置： &nbsp;<a href="https://github.com/fzdwx/dwm" target="_blank" rel="noopener">https://github.com/fzdwx/dwm</a>
@@ -432,7 +432,7 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
 </tr>
 <tr>
 <td><code>MOD + a</code></td>
-<td>第一次是显示所有tag，第二次是跳转到聚焦的窗口所在的窗口</td>
+<td>第一次是显示所有tag,第二次是跳转到聚焦的窗口所在的窗口</td>
 </tr>
 </tbody>
 </table>
@@ -455,7 +455,7 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
 </tr>
 <tr>
 <td><code>MOD + SHIFT + h</code></td>
-<td>显示窗口（像一个栈一样。）</td>
+<td>显示窗口（像一个栈一样.）</td>
 </tr>
 <tr>
 <td><code>MOD + ENTER</code></td>
@@ -514,7 +514,7 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
 <p>主要原理就是根据预定义的格式解析出<code>signal</code>
 ,然后调用预定义的脚本文件(&nbsp;<a href="https://github.com/fzdwx/dwm/commit/b30b5bedb1661e70acf6830f924857650831b441#diff-62eebf5eaf0e6a76a21dfed9da6556ee5413ddb49f06013bd83403cc1a485d98" target="_blank" rel="noopener">commit</a>
 )</p>
-<p>也很容易扩展，可以参考我的&nbsp;<a href="https://github.com/fzdwx/dwm/blob/main/statusbar/packages/fm.sh" target="_blank" rel="noopener">fm</a>
+<p>也很容易扩展,可以参考我的&nbsp;<a href="https://github.com/fzdwx/dwm/blob/main/statusbar/packages/fm.sh" target="_blank" rel="noopener">fm</a>
 , <code>update</code>是构造要返回的内容,
 <code>click</code>就是点击时调用的方法,<code>wezterm start --class float ranger</code>我这一段就是启动 wezterm 并调用 ranger.</p>
 <p><figure id="a-/images/11.png" class="align-center">

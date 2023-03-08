@@ -17,27 +17,27 @@
       <pubDate>Sun, 05 Mar 2023 22:27:31 +0800</pubDate>
       
       <guid>https://fzdwx.github.io/posts/2023-03-05-jyyos_c_compile/</guid>
-      <description> 最近也是又追起了南京大学的操作系统课(前面几次都中途放弃了)，记录一下
-1. 首先就是编译第三节课的一个demo时，找不到 ld 等命令 &amp;nbsp;http://jyywiki.cn/OS/2023/build/lect3.ipynb demo(&amp;lsquo;hello-os&amp;rsquo;, &amp;lsquo;i/hello-os&amp;rsquo;)
-由于我使用的是 archlinux, binutils 编译出来的 ld, gcc 等命令都是不带 x86 的前缀的， 而 Makefile 中定义的都是带 x86 的, 所以需要建立一个链接:
-ln -s /usr/bin/ld /usr/bin/x86_64-linux-gnu-ld 来自 chatgpt 的解释: 该命令创建了一个名为“x86_64-linux-gnu-ld”的符号链接，指向“/usr/bin/ld”。这个符号链接可以被用作“x86_64-linux-gnu-ld”二进制文件的替代品。 符号链接是一种特殊的文件类型，它是一个指向另一个文件的文件，可以用来在文件系统中创建指向其他文件或目录的别名。
-在Linux系统中，“/usr/bin/ld”是一个连接器（linker），用于将多个目标文件合并为单个可执行文件。通过创建“x86_64-linux-gnu-ld”的符号链接，可以使该链接器的功能可以在不同的系统上使用，并且不需要更改可执行文件的代码。 这个符号链接通常被用于交叉编译（cross-compiling）应用程序，这种情况下，应用程序在不同的硬件平台上运行。
-2. 使用 vscode 等编辑器时，第一个问题的代码中头文件无法跳转 使用 bear 生成 compile_commands.json, 然后编辑器就会自动识别了
-bear -- make 来自 chatgpt 的解释: 该命令使用Bear和Make工具，用于自动捕获Makefile的编译命令和编译期间的调用链。
-具体来说，Bear是一个工具，它可以将系统调用跟踪器（strace）输出转换为JSON格式的文件，这个文件包含了所有运行期间的系统调用。 Make是一个工具，它用于根据Makefile规则自动构建和编译程序。
-当这两个工具一起使用时，可以使用“bear &amp;ndash; make”命令自动捕获Makefile的编译命令和编译期间的调用链，这个过程可以在后续的调试中使用。 该命令的执行将产生一个JSON格式的文件，其中包含编译期间的所有系统调用和它们的参数。这个文件可以用于调试，性能优化，以及自动化编译和构建系统的开发。
-总之，“bear &amp;ndash; make”命令可以帮助程序员更好地理解他们的代码在编译期间所做的事情，以及识别代码中的潜在问题。
+      <description> 最近也是又追起了南京大学的操作系统课(前面几次都中途放弃了),记录一下
+1. 首先就是编译第三节课的一个demo时,找不到 ld 等命令 &amp;nbsp;http://jyywiki.cn/OS/2023/build/lect3.ipynb demo(&amp;lsquo;hello-os&amp;rsquo;, &amp;lsquo;i/hello-os&amp;rsquo;)
+由于我使用的是 archlinux, binutils 编译出来的 ld, gcc 等命令都是不带 x86 的前缀的, 而 Makefile 中定义的都是带 x86 的, 所以需要建立一个链接:
+ln -s /usr/bin/ld /usr/bin/x86_64-linux-gnu-ld 来自 chatgpt 的解释: 该命令创建了一个名为“x86_64-linux-gnu-ld”的符号链接,指向“/usr/bin/ld”.这个符号链接可以被用作“x86_64-linux-gnu-ld”二进制文件的替代品. 符号链接是一种特殊的文件类型,它是一个指向另一个文件的文件,可以用来在文件系统中创建指向其他文件或目录的别名.
+在Linux系统中,“/usr/bin/ld”是一个连接器（linker）,用于将多个目标文件合并为单个可执行文件.通过创建“x86_64-linux-gnu-ld”的符号链接,可以使该链接器的功能可以在不同的系统上使用,并且不需要更改可执行文件的代码. 这个符号链接通常被用于交叉编译（cross-compiling）应用程序,这种情况下,应用程序在不同的硬件平台上运行.
+2. 使用 vscode 等编辑器时,第一个问题的代码中头文件无法跳转 使用 bear 生成 compile_commands.json, 然后编辑器就会自动识别了
+bear -- make 来自 chatgpt 的解释: 该命令使用Bear和Make工具,用于自动捕获Makefile的编译命令和编译期间的调用链.
+具体来说,Bear是一个工具,它可以将系统调用跟踪器（strace）输出转换为JSON格式的文件,这个文件包含了所有运行期间的系统调用. Make是一个工具,它用于根据Makefile规则自动构建和编译程序.
+当这两个工具一起使用时,可以使用“bear &amp;ndash; make”命令自动捕获Makefile的编译命令和编译期间的调用链,这个过程可以在后续的调试中使用. 该命令的执行将产生一个JSON格式的文件,其中包含编译期间的所有系统调用和它们的参数.这个文件可以用于调试,性能优化,以及自动化编译和构建系统的开发.
+总之,“bear &amp;ndash; make”命令可以帮助程序员更好地理解他们的代码在编译期间所做的事情,以及识别代码中的潜在问题.
 3. 写一个 pstree &amp;nbsp;http://jyywiki.cn/OS/2023/labs/M1 实现思路:
 扫描 /proc/ 目录下所有为数字的文件夹 读取 /proc/{pid}/status 文件 读取 name 以及 ppid 建树并打印树结构 </description>
       <content:encoded><![CDATA[<blockquote>
-<p>最近也是又追起了南京大学的操作系统课(前面几次都中途放弃了)，记录一下</p>
+<p>最近也是又追起了南京大学的操作系统课(前面几次都中途放弃了),记录一下</p>
 </blockquote>
-<h3 id="1-首先就是编译第三节课的一个demo时找不到-ld-等命令">1. 首先就是编译第三节课的一个demo时，找不到 ld 等命令</h3>
+<h3 id="1-首先就是编译第三节课的一个demo时找不到-ld-等命令">1. 首先就是编译第三节课的一个demo时,找不到 ld 等命令</h3>
 <blockquote>
 <p>&nbsp;<a href="http://jyywiki.cn/OS/2023/build/lect3.ipynb" target="_blank" rel="noopener">http://jyywiki.cn/OS/2023/build/lect3.ipynb</a>
  demo(&lsquo;hello-os&rsquo;, &lsquo;i/hello-os&rsquo;)</p>
 </blockquote>
-<p>由于我使用的是 archlinux, <code>binutils</code> 编译出来的 ld, gcc 等命令都是不带 x86 的前缀的，
+<p>由于我使用的是 archlinux, <code>binutils</code> 编译出来的 ld, gcc 等命令都是不带 x86 的前缀的,
 而 Makefile 中定义的都是带 x86 的, 所以需要建立一个链接:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">ln -s /usr/bin/ld /usr/bin/x86_64-linux-gnu-ld
 </span></span></code></pre></div>
@@ -52,10 +52,10 @@ bear -- make 来自 chatgpt 的解释: 该命令使用Bear和Make工具，用于
         来自 chatgpt 的解释:
         
     </p>
-    <p> <p>该命令创建了一个名为“x86_64-linux-gnu-ld”的符号链接，指向“/usr/bin/ld”。这个符号链接可以被用作“x86_64-linux-gnu-ld”二进制文件的替代品。
-符号链接是一种特殊的文件类型，它是一个指向另一个文件的文件，可以用来在文件系统中创建指向其他文件或目录的别名。</p>
-<p>在Linux系统中，“/usr/bin/ld”是一个连接器（linker），用于将多个目标文件合并为单个可执行文件。通过创建“x86_64-linux-gnu-ld”的符号链接，可以使该链接器的功能可以在不同的系统上使用，并且不需要更改可执行文件的代码。
-这个符号链接通常被用于交叉编译（cross-compiling）应用程序，这种情况下，应用程序在不同的硬件平台上运行。</p>
+    <p> <p>该命令创建了一个名为“x86_64-linux-gnu-ld”的符号链接,指向“/usr/bin/ld”.这个符号链接可以被用作“x86_64-linux-gnu-ld”二进制文件的替代品.
+符号链接是一种特殊的文件类型,它是一个指向另一个文件的文件,可以用来在文件系统中创建指向其他文件或目录的别名.</p>
+<p>在Linux系统中,“/usr/bin/ld”是一个连接器（linker）,用于将多个目标文件合并为单个可执行文件.通过创建“x86_64-linux-gnu-ld”的符号链接,可以使该链接器的功能可以在不同的系统上使用,并且不需要更改可执行文件的代码.
+这个符号链接通常被用于交叉编译（cross-compiling）应用程序,这种情况下,应用程序在不同的硬件平台上运行.</p>
  </p>
 </div>
 
@@ -66,7 +66,7 @@ bear -- make 来自 chatgpt 的解释: 该命令使用Bear和Make工具，用于
 
 
 
-<h3 id="2-使用-vscode-等编辑器时第一个问题的代码中头文件无法跳转">2. 使用 vscode 等编辑器时，第一个问题的代码中头文件无法跳转</h3>
+<h3 id="2-使用-vscode-等编辑器时第一个问题的代码中头文件无法跳转">2. 使用 vscode 等编辑器时,第一个问题的代码中头文件无法跳转</h3>
 <p>使用 bear 生成 compile_commands.json, 然后编辑器就会自动识别了</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">bear -- make
 </span></span></code></pre></div>
@@ -81,12 +81,12 @@ bear -- make 来自 chatgpt 的解释: 该命令使用Bear和Make工具，用于
         来自 chatgpt 的解释:
         
     </p>
-    <p> <p>该命令使用Bear和Make工具，用于自动捕获Makefile的编译命令和编译期间的调用链。</p>
-<p>具体来说，Bear是一个工具，它可以将系统调用跟踪器（strace）输出转换为JSON格式的文件，这个文件包含了所有运行期间的系统调用。
-Make是一个工具，它用于根据Makefile规则自动构建和编译程序。</p>
-<p>当这两个工具一起使用时，可以使用“bear &ndash; make”命令自动捕获Makefile的编译命令和编译期间的调用链，这个过程可以在后续的调试中使用。
-该命令的执行将产生一个JSON格式的文件，其中包含编译期间的所有系统调用和它们的参数。这个文件可以用于调试，性能优化，以及自动化编译和构建系统的开发。</p>
-<p>总之，“bear &ndash; make”命令可以帮助程序员更好地理解他们的代码在编译期间所做的事情，以及识别代码中的潜在问题。</p>
+    <p> <p>该命令使用Bear和Make工具,用于自动捕获Makefile的编译命令和编译期间的调用链.</p>
+<p>具体来说,Bear是一个工具,它可以将系统调用跟踪器（strace）输出转换为JSON格式的文件,这个文件包含了所有运行期间的系统调用.
+Make是一个工具,它用于根据Makefile规则自动构建和编译程序.</p>
+<p>当这两个工具一起使用时,可以使用“bear &ndash; make”命令自动捕获Makefile的编译命令和编译期间的调用链,这个过程可以在后续的调试中使用.
+该命令的执行将产生一个JSON格式的文件,其中包含编译期间的所有系统调用和它们的参数.这个文件可以用于调试,性能优化,以及自动化编译和构建系统的开发.</p>
+<p>总之,“bear &ndash; make”命令可以帮助程序员更好地理解他们的代码在编译期间所做的事情,以及识别代码中的潜在问题.</p>
  </p>
 </div>
 
@@ -118,11 +118,11 @@ Make是一个工具，它用于根据Makefile规则自动构建和编译程序�
       <pubDate>Sun, 12 Feb 2023 16:10:50 +0800</pubDate>
       
       <guid>https://fzdwx.github.io/posts/2023-02-12-tmux-st/</guid>
-      <description>&amp;nbsp;st 是一个非常的简单的终端软件，它对我的来说只少一个功能，就是多路服用(上下左右切分窗口)，这在其他终端软件中都有提供，比如说 wezterm 。
+      <description>&amp;nbsp;st 是一个非常的简单的终端软件,它对我的来说只少一个功能,就是多路服用(上下左右切分窗口),这在其他终端软件中都有提供,比如说 wezterm.
 而 tmux 刚好可以提供这个功能:
 tmux split-window # 向下切分 tmux split-window -h # 向右切分 然后就可以在 st 中设置快捷键: Details /* 切分 */ static char *sp[] = { &amp;#34;/bin/sh&amp;#34;, &amp;#34;-c&amp;#34;, &amp;#34;tmux split-window&amp;#34;,&amp;#34;externalpipe&amp;#34;, NULL }; static char *sph[] = { &amp;#34;/bin/sh&amp;#34;, &amp;#34;-c&amp;#34;, &amp;#34;tmux split-window -h&amp;#34;,&amp;#34;externalpipe&amp;#34;, NULL }; /* 切换窗口 */ static char *gd[] = { &amp;#34;/bin/sh&amp;#34;, &amp;#34;-c&amp;#34;, &amp;#34;tmux select-pane -D&amp;#34;,&amp;#34;externalpipe&amp;#34;, NULL }; static char *gu[] = { &amp;#34;/bin/sh&amp;#34;, &amp;#34;-c&amp;#34;, &amp;#34;tmux select-pane -U&amp;#34;,&amp;#34;externalpipe&amp;#34;, NULL }; static char *gr[] = { &amp;#34;/bin/sh&amp;#34;, &amp;#34;-c&amp;#34;, &amp;#34;tmux select-pane -R&amp;#34;,&amp;#34;externalpipe&amp;#34;, NULL }; static char *gl[] = { &amp;#34;/bin/sh&amp;#34;, &amp;#34;-c&amp;#34;, &amp;#34;tmux select-pane -L&amp;#34;,&amp;#34;externalpipe&amp;#34;, NULL }; /* 调整窗口大小 */ static char *rd[] = { &amp;#34;/bin/sh&amp;#34;, &amp;#34;-c&amp;#34;, &amp;#34;tmux resize-pane -D 2&amp;#34;,&amp;#34;externalpipe&amp;#34;, NULL }; static char *ru[] = { &amp;#34;/bin/sh&amp;#34;, &amp;#34;-c&amp;#34;, &amp;#34;tmux resize-pane -U 2&amp;#34;,&amp;#34;externalpipe&amp;#34;, NULL }; static char *rr[] = { &amp;#34;/bin/sh&amp;#34;, &amp;#34;-c&amp;#34;, &amp;#34;tmux resize-pane -R 2&amp;#34;,&amp;#34;externalpipe&amp;#34;, NULL }; static char *rl[] = { &amp;#34;/bin/sh&amp;#34;, &amp;#34;-c&amp;#34;, &amp;#34;tmux resize-pane -L 2&amp;#34;,&amp;#34;externalpipe&amp;#34;, NULL }; static Shortcut shortcuts[] = { { ControlMask, XK_minus, externalpipe, {.</description>
       <content:encoded><![CDATA[<p>&nbsp;<a href="https://st.suckless.org/" target="_blank" rel="noopener">st</a>
- 是一个非常的简单的终端软件，它对我的来说只少一个功能，就是多路服用(上下左右切分窗口)，这在其他终端软件中都有提供，比如说 wezterm 。</p>
+ 是一个非常的简单的终端软件,它对我的来说只少一个功能,就是多路服用(上下左右切分窗口),这在其他终端软件中都有提供,比如说 wezterm.</p>
 <p>而 tmux 刚好可以提供这个功能:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">tmux split-window    <span class="c1"># 向下切分</span>
 </span></span><span class="line"><span class="cl">tmux split-window -h <span class="c1"># 向右切分</span>
@@ -182,7 +182,7 @@ tmux split-window # 向下切分 tmux split-window -h # 向右切分 然后就�
 
 
 </p>
-<p>最后关闭 tmux 的 status line, 因为我只需要它的 pane 功能，其他的都太碍眼了。</p>
+<p>最后关闭 tmux 的 status line, 因为我只需要它的 pane 功能,其他的都太碍眼了.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">set</span> <span class="o">-</span><span class="n">g</span> <span class="n">status</span> <span class="n">off</span>
 </span></span></code></pre></div><p><figure id="a-https://user-images.githubusercontent.com/65269574/218301130-4e361459-e366-4793-b94f-a8b4b07a47e4.gif" class="align-center">
     <img src="https://user-images.githubusercontent.com/65269574/218301130-4e361459-e366-4793-b94f-a8b4b07a47e4.gif" alt="preview"  />
@@ -233,16 +233,16 @@ bluetoothctl power on # 扫描 bluetoothctl scan on # 结对 bluetoothctl pair x
       <pubDate>Thu, 26 Jan 2023 11:04:48 +0800</pubDate>
       
       <guid>https://fzdwx.github.io/posts/2023-01-26-hyprland/</guid>
-      <description>今天简单尝试了一下 &amp;nbsp;Hyprland ,它的功能类似于 &amp;nbsp;DWM + picom 的组合。只是粗略的尝试了一下，发现还是有一些问题:
-分屏的时候，扩展屏幕的光标不显示 设置 WLR_NO_HARDWARE_CURSORS=1 即可解决 扩展屏幕不时有一些黑块闪烁 替换安装包为 hyprland-nvidia-git 即可解决 waybar 有一点用的不爽，它的 workspaces 不是每个屏幕都是独立的(DWM 中的 tag 功能) 当然它还是有一些好处的:
-不打任何补丁就有很好的可用性 自带了一些动画效果 配置文件热加载(即每次修改就会立即生效) 这一点好评，DWM 是每次修改了配置都要重新 make 但是我还是选择继续使用 DWM，因为它没有什么必须切换的理由，而且有一些我常用的功能在 Hyprland 中没有找到替代的，加上我的 DWM 的配置也趋于稳定了，也新增了可以点击的 status bar（Hyprland 下使用waybar 可以做到这个功能）。
+      <description>今天简单尝试了一下 &amp;nbsp;Hyprland ,它的功能类似于 &amp;nbsp;DWM + picom 的组合.只是粗略的尝试了一下,发现还是有一些问题:
+分屏的时候,扩展屏幕的光标不显示 设置 WLR_NO_HARDWARE_CURSORS=1 即可解决 扩展屏幕不时有一些黑块闪烁 替换安装包为 hyprland-nvidia-git 即可解决 waybar 有一点用的不爽,它的 workspaces 不是每个屏幕都是独立的(DWM 中的 tag 功能) 当然它还是有一些好处的:
+不打任何补丁就有很好的可用性 自带了一些动画效果 配置文件热加载(即每次修改就会立即生效) 这一点好评,DWM 是每次修改了配置都要重新 make 但是我还是选择继续使用 DWM,因为它没有什么必须切换的理由,而且有一些我常用的功能在 Hyprland 中没有找到替代的,加上我的 DWM 的配置也趋于稳定了,也新增了可以点击的 status bar（Hyprland 下使用waybar 可以做到这个功能）.
 相关代码 安装脚本:
 # 安装 hyperland yay -S hyprland-nvidia-git # 安装 waybar yay -S waybar-hyprland-git # 安装 hyprland share yay -S xdg-desktop-portal-hyprland-git # 安装 rofi for wayland yay -S rofi-lbonn-wayland-git # 安装 壁纸切换 git clone https://github.</description>
       <content:encoded><![CDATA[<p>今天简单尝试了一下 &nbsp;<a href="https://hyprland.org/" target="_blank" rel="noopener">Hyprland</a>
 ,它的功能类似于 &nbsp;<a href="/posts/2022-09-29-dwm">DWM</a>
- + picom 的组合。只是粗略的尝试了一下，发现还是有一些问题:</p>
+ + picom 的组合.只是粗略的尝试了一下,发现还是有一些问题:</p>
 <ol>
-<li>分屏的时候，扩展屏幕的光标不显示
+<li>分屏的时候,扩展屏幕的光标不显示
 <ul>
 <li>设置 <code>WLR_NO_HARDWARE_CURSORS=1</code>  即可解决</li>
 </ul>
@@ -252,7 +252,7 @@ bluetoothctl power on # 扫描 bluetoothctl scan on # 结对 bluetoothctl pair x
 <li>替换安装包为 <code>hyprland-nvidia-git</code>  即可解决</li>
 </ul>
 </li>
-<li>waybar 有一点用的不爽，它的 workspaces 不是每个屏幕都是独立的(DWM 中的 tag 功能)</li>
+<li>waybar 有一点用的不爽,它的 workspaces 不是每个屏幕都是独立的(DWM 中的 tag 功能)</li>
 </ol>
 <p>当然它还是有一些好处的:</p>
 <ol>
@@ -260,11 +260,11 @@ bluetoothctl power on # 扫描 bluetoothctl scan on # 结对 bluetoothctl pair x
 <li>自带了一些动画效果</li>
 <li>配置文件热加载(即每次修改就会立即生效)
 <ul>
-<li>这一点好评，DWM 是每次修改了配置都要重新 <code>make</code></li>
+<li>这一点好评,DWM 是每次修改了配置都要重新 <code>make</code></li>
 </ul>
 </li>
 </ol>
-<p>但是我还是选择继续使用 DWM，因为它没有什么必须切换的理由，而且有一些我常用的功能在 Hyprland 中没有找到替代的，加上我的 DWM 的配置也趋于稳定了，也新增了可以点击的 status bar（Hyprland 下使用waybar 可以做到这个功能）。</p>
+<p>但是我还是选择继续使用 DWM,因为它没有什么必须切换的理由,而且有一些我常用的功能在 Hyprland 中没有找到替代的,加上我的 DWM 的配置也趋于稳定了,也新增了可以点击的 status bar（Hyprland 下使用waybar 可以做到这个功能）.</p>
 
 
 
@@ -536,30 +536,30 @@ bindm = $mainMod, mouse:273, resizewindow
       <pubDate>Tue, 11 Oct 2022 16:55:35 +0800</pubDate>
       
       <guid>https://fzdwx.github.io/posts/2022-10-11-about-source/</guid>
-      <description>起因 昨天晚上想用fzf与cd联动，就是fzf的结果传递给cd来执行于是有了这么一条命令:
-cd $(fd --type d | fzf) 这个命令也确实能完成任务，但是问题有两个:
-如果直接退出的话会回到家目录，因为$(..)的执行结果为空 每次都要输入这么多会很麻烦 用alias 然后尝试用alias来试试，所以就往.zshrc里面添加:
-alias cdf=&amp;#34;cd $(fd --type d | fzf)&amp;#34; 结果是直接不能运行，因为它直接识别了$(..)这一段，然后直接运行了，但是后面就不会运行。
+      <description>起因 昨天晚上想用fzf与cd联动,就是fzf的结果传递给cd来执行于是有了这么一条命令:
+cd $(fd --type d | fzf) 这个命令也确实能完成任务,但是问题有两个:
+如果直接退出的话会回到家目录,因为$(..)的执行结果为空 每次都要输入这么多会很麻烦 用alias 然后尝试用alias来试试,所以就往.zshrc里面添加:
+alias cdf=&amp;#34;cd $(fd --type d | fzf)&amp;#34; 结果是直接不能运行,因为它直接识别了$(..)这一段,然后直接运行了,但是后面就不会运行.
 用shell脚本 然后就写了这个文件:
-#!/bin/sh path=$(fd --type d --strip-cwd-prefix --hidden --follow --exclude .git --exclude node_modules | fzf) if [ -z &amp;#34;$path&amp;#34; ]; then exit fi cd &amp;#34;$path&amp;#34; || exit 结果也是不行，后面我在最下面加了一行echo &amp;quot;$PWD&amp;quot;，我看到是执行了的，但是程序退出了就失效了。
-解决 最后我搜索到可以使用source xxx或者. xxx来解决，最后是alias+shell脚本来完成这个操作的:
-alias cdf=&amp;#34;source /path/to/cdf&amp;#34; 同时它也解决我上面提到的两个问题。
-source为什么能解决？ 之所以直接用shell脚本直接运行会不行，是因为它不是在当前shell环境中运行的，而是一个子shell，所以结果就不能改变当前的文件目录了。
-而source或者.就代表着在当前的shell环境中执行，所以就能成功。
+#!/bin/sh path=$(fd --type d --strip-cwd-prefix --hidden --follow --exclude .git --exclude node_modules | fzf) if [ -z &amp;#34;$path&amp;#34; ]; then exit fi cd &amp;#34;$path&amp;#34; || exit 结果也是不行,后面我在最下面加了一行echo &amp;quot;$PWD&amp;quot;,我看到是执行了的,但是程序退出了就失效了.
+解决 最后我搜索到可以使用source xxx或者. xxx来解决,最后是alias+shell脚本来完成这个操作的:
+alias cdf=&amp;#34;source /path/to/cdf&amp;#34; 同时它也解决我上面提到的两个问题.
+source为什么能解决？ 之所以直接用shell脚本直接运行会不行,是因为它不是在当前shell环境中运行的,而是一个子shell,所以结果就不能改变当前的文件目录了.
+而source或者.就代表着在当前的shell环境中执行,所以就能成功.
 更新 2022/11/18 今天发现一种更容易解决的办法,就是在写一个 shell 方法:
 function cd() { cd &amp;#34;$(fzf)&amp;#34; } 把它加入到.</description>
       <content:encoded><![CDATA[<h2 id="起因">起因</h2>
-<p>昨天晚上想用fzf与cd联动，就是fzf的结果传递给cd来执行于是有了这么一条命令:</p>
+<p>昨天晚上想用fzf与cd联动,就是fzf的结果传递给cd来执行于是有了这么一条命令:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">cd</span> <span class="k">$(</span>fd --type d <span class="p">|</span> fzf<span class="k">)</span>
-</span></span></code></pre></div><p>这个命令也确实能完成任务，但是问题有两个:</p>
+</span></span></code></pre></div><p>这个命令也确实能完成任务,但是问题有两个:</p>
 <ol>
-<li>如果直接退出的话会回到家目录，因为<code>$(..)</code>的执行结果为空</li>
+<li>如果直接退出的话会回到家目录,因为<code>$(..)</code>的执行结果为空</li>
 <li>每次都要输入这么多会很麻烦</li>
 </ol>
 <h2 id="用alias">用alias</h2>
-<p>然后尝试用alias来试试，所以就往<code>.zshrc</code>里面添加:</p>
+<p>然后尝试用alias来试试,所以就往<code>.zshrc</code>里面添加:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">alias</span> <span class="nv">cdf</span><span class="o">=</span><span class="s2">&#34;cd </span><span class="k">$(</span>fd --type d <span class="p">|</span> fzf<span class="k">)</span><span class="s2">&#34;</span>
-</span></span></code></pre></div><p>结果是直接不能运行，因为它直接识别了<code>$(..)</code>这一段，然后直接运行了，但是后面就不会运行。</p>
+</span></span></code></pre></div><p>结果是直接不能运行,因为它直接识别了<code>$(..)</code>这一段,然后直接运行了,但是后面就不会运行.</p>
 <h2 id="用shell脚本">用shell脚本</h2>
 <p>然后就写了这个文件:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="cp">#!/bin/sh
@@ -570,21 +570,21 @@ function cd() { cd &amp;#34;$(fzf)&amp;#34; } 把它加入到.</description>
 </span></span><span class="line"><span class="cl"><span class="k">fi</span>
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="nb">cd</span> <span class="s2">&#34;</span><span class="nv">$path</span><span class="s2">&#34;</span> <span class="o">||</span> <span class="nb">exit</span>
-</span></span></code></pre></div><p>结果也是不行，后面我在最下面加了一行<code>echo &quot;$PWD&quot;</code>，我看到是执行了的，但是程序退出了就失效了。</p>
+</span></span></code></pre></div><p>结果也是不行,后面我在最下面加了一行<code>echo &quot;$PWD&quot;</code>,我看到是执行了的,但是程序退出了就失效了.</p>
 <h2 id="解决">解决</h2>
-<p>最后我搜索到可以使用<code>source xxx</code>或者<code>. xxx</code>来解决，最后是alias+shell脚本来完成这个操作的:</p>
+<p>最后我搜索到可以使用<code>source xxx</code>或者<code>. xxx</code>来解决,最后是alias+shell脚本来完成这个操作的:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">alias</span> <span class="nv">cdf</span><span class="o">=</span><span class="s2">&#34;source /path/to/cdf&#34;</span>
-</span></span></code></pre></div><p>同时它也解决我上面提到的两个问题。</p>
+</span></span></code></pre></div><p>同时它也解决我上面提到的两个问题.</p>
 <h2 id="source为什么能解决">source为什么能解决？</h2>
-<p>之所以直接用shell脚本直接运行会不行，是因为它不是在当前shell环境中运行的，而是一个子shell，所以结果就不能改变当前的文件目录了。</p>
-<p>而<code>source</code>或者<code>.</code>就代表着在当前的shell环境中执行，所以就能成功。</p>
+<p>之所以直接用shell脚本直接运行会不行,是因为它不是在当前shell环境中运行的,而是一个子shell,所以结果就不能改变当前的文件目录了.</p>
+<p>而<code>source</code>或者<code>.</code>就代表着在当前的shell环境中执行,所以就能成功.</p>
 <h2 id="更新">更新</h2>
 <h3 id="20221118">2022/11/18</h3>
 <p>今天发现一种更容易解决的办法,就是在写一个 shell 方法:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="k">function</span> cd<span class="o">()</span> <span class="o">{</span>
 </span></span><span class="line"><span class="cl">    <span class="nb">cd</span> <span class="s2">&#34;</span><span class="k">$(</span>fzf<span class="k">)</span><span class="s2">&#34;</span>
 </span></span><span class="line"><span class="cl"><span class="o">}</span>
-</span></span></code></pre></div><p>把它加入到<code>.zshrc</code>(我用的是 zsh)中，然后在命令行中输入 <code>cd</code> 就好了。</p>
+</span></span></code></pre></div><p>把它加入到<code>.zshrc</code>(我用的是 zsh)中,然后在命令行中输入 <code>cd</code> 就好了.</p>
 ]]></content:encoded>
     </item>
     
@@ -594,13 +594,13 @@ function cd() { cd &amp;#34;$(fzf)&amp;#34; } 把它加入到.</description>
       <pubDate>Sun, 09 Oct 2022 19:40:42 +0800</pubDate>
       
       <guid>https://fzdwx.github.io/posts/2022-10-09-mario-nes/</guid>
-      <description>最近在学习 jyy 的&amp;nbsp;计算机系统基础习题课 ， 在做&amp;nbsp;pa1 的时候提 到一个运行红白机游戏的&amp;nbsp;项目 遇到的坑:
+      <description>最近在学习 jyy 的&amp;nbsp;计算机系统基础习题课 , 在做&amp;nbsp;pa1 的时候提 到一个运行红白机游戏的&amp;nbsp;项目 遇到的坑:
 1.SIGSTKSZ 参数找不到
 SIGSTKSZ参数找不到 将SIGSTKSZ修改为一个固定的参数
 //uint8_t sigstack[SIGSTKSZ]; uint8_t sigstack[8192]; 2.serial 不正确
-serial不正确 修改nemu/src/device/serial.c#init_serial，每个人的不同，我的是 9。</description>
+serial不正确 修改nemu/src/device/serial.c#init_serial,每个人的不同,我的是 9.</description>
       <content:encoded><![CDATA[<p>最近在学习 jyy 的&nbsp;<a href="http://jyywiki.cn/ICS/2021/" target="_blank" rel="noopener">计算机系统基础习题课 </a>
-，
+,
 在做&nbsp;<a href="https://nju-projectn.github.io/ics-pa-gitbook/ics2021/1.1.html#nemu%E6%98%AF%E4%BB%80%E4%B9%88" target="_blank" rel="noopener">pa1</a>
 的时候提
 到一个运行红白机游戏的&nbsp;<a href="https://github.com/NJU-ProjectN/fceux-am" target="_blank" rel="noopener">项目</a>
@@ -627,7 +627,7 @@ serial不正确 修改nemu/src/device/serial.c#init_serial，每个人的不同�
     </figcaption>
     
 </figure></p>
-<p>修改<code>nemu/src/device/serial.c#init_serial</code>，每个人的不同，我的是 9。</p>
+<p>修改<code>nemu/src/device/serial.c#init_serial</code>,每个人的不同,我的是 9.</p>
 ]]></content:encoded>
     </item>
     
@@ -637,10 +637,10 @@ serial不正确 修改nemu/src/device/serial.c#init_serial，每个人的不同�
       <pubDate>Tue, 04 Oct 2022 10:07:28 +0800</pubDate>
       
       <guid>https://fzdwx.github.io/posts/2022-10-04-backlight/</guid>
-      <description>由于使用DWM，它不能像KDE那样之间有图形化的亮度调节功能，所以记录一下。</description>
+      <description>由于使用DWM,它不能像KDE那样之间有图形化的亮度调节功能,所以记录一下.</description>
       <content:encoded><![CDATA[<p><strong>查看当前backlight由什么控制:</strong></p>
 <blockquote>
-<p>一般都是<code>intel</code>。</p>
+<p>一般都是<code>intel</code>.</p>
 </blockquote>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">ls /sys/class/backlight
 </span></span></code></pre></div><p><strong>查看当前的亮度:</strong></p>
@@ -656,17 +656,17 @@ serial不正确 修改nemu/src/device/serial.c#init_serial，每个人的不同�
       <pubDate>Thu, 29 Sep 2022 23:42:41 +0800</pubDate>
       
       <guid>https://fzdwx.github.io/posts/2022-09-29-dwm/</guid>
-      <description>安装 git clone https://git.suckless.org/dwm cd dwm sudo make clean install 启动 如果已经有了sddm，可以使用sudo systemctl disable sddm.service 来进行关闭，如果到时候不想用了可以用sudo systemctl enable sddm.service来开启sddm。
-# 准备配置文件 cp /etc/X11/xinit/xinitrc ~/.xinitrc vim ~/.xinitrc # 添加 exec dwm # 注释 #twm &amp;amp; #xclock -geometry 50x50-1+1 &amp;amp; #xterm -geometry 80x50+494+51 &amp;amp; #xterm -geometry 80x20+494-0 &amp;amp; #exec xterm -geometry 80x66+0+0 -name login 然后重启并调用startx即可。
-遇到的问题 直接断网 使用NetworkManager进行连接，可能要用到dhcpcd。
-nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 可能会连接失败，你可以试试nmcli connection show 来查看是否存在以前的连接信息，可以用nmcli connection delete {{wifi name}}来删除对应的信息</description>
+      <description>安装 git clone https://git.suckless.org/dwm cd dwm sudo make clean install 启动 如果已经有了sddm,可以使用sudo systemctl disable sddm.service 来进行关闭,如果到时候不想用了可以用sudo systemctl enable sddm.service来开启sddm.
+# 准备配置文件 cp /etc/X11/xinit/xinitrc ~/.xinitrc vim ~/.xinitrc # 添加 exec dwm # 注释 #twm &amp;amp; #xclock -geometry 50x50-1+1 &amp;amp; #xterm -geometry 80x50+494+51 &amp;amp; #xterm -geometry 80x20+494-0 &amp;amp; #exec xterm -geometry 80x66+0+0 -name login 然后重启并调用startx即可.
+遇到的问题 直接断网 使用NetworkManager进行连接,可能要用到dhcpcd.
+nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 可能会连接失败,你可以试试nmcli connection show 来查看是否存在以前的连接信息,可以用nmcli connection delete {{wifi name}}来删除对应的信息</description>
       <content:encoded><![CDATA[<h2 id="安装">安装</h2>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">git clone https://git.suckless.org/dwm
 </span></span><span class="line"><span class="cl"><span class="nb">cd</span> dwm
 </span></span><span class="line"><span class="cl">sudo make clean install
 </span></span></code></pre></div><h2 id="启动">启动</h2>
-<p>如果已经有了sddm，可以使用<code>sudo systemctl disable sddm.service</code>
-来进行关闭，如果到时候不想用了可以用<code>sudo systemctl enable sddm.service</code>来开启sddm。</p>
+<p>如果已经有了sddm,可以使用<code>sudo systemctl disable sddm.service</code>
+来进行关闭,如果到时候不想用了可以用<code>sudo systemctl enable sddm.service</code>来开启sddm.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 准备配置文件</span>
 </span></span><span class="line"><span class="cl">cp /etc/X11/xinit/xinitrc ~/.xinitrc
 </span></span><span class="line"><span class="cl">vim ~/.xinitrc
@@ -680,14 +680,14 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
 </span></span><span class="line"><span class="cl"><span class="c1">#xterm -geometry 80x50+494+51 &amp;</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#xterm -geometry 80x20+494-0 &amp;</span>
 </span></span><span class="line"><span class="cl"><span class="c1">#exec xterm -geometry 80x66+0+0 -name login</span>
-</span></span></code></pre></div><p>然后重启并调用<code>startx</code>即可。</p>
+</span></span></code></pre></div><p>然后重启并调用<code>startx</code>即可.</p>
 <h2 id="遇到的问题">遇到的问题</h2>
 <h3 id="直接断网">直接断网</h3>
-<p>使用NetworkManager进行连接，可能要用到<code>dhcpcd</code>。</p>
+<p>使用NetworkManager进行连接,可能要用到<code>dhcpcd</code>.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">nmcli device wifi list
 </span></span><span class="line"><span class="cl">nmcli device wifi connect <span class="o">{{</span>wifi name<span class="o">}}</span> password <span class="o">{{</span>pwd<span class="o">}}</span>
-</span></span></code></pre></div><p>可能会连接失败，你可以试试<code>nmcli connection show</code>
-来查看是否存在以前的连接信息，可以用<code>nmcli connection delete {{wifi name}}</code>来删除对应的信息</p>
+</span></span></code></pre></div><p>可能会连接失败,你可以试试<code>nmcli connection show</code>
+来查看是否存在以前的连接信息,可以用<code>nmcli connection delete {{wifi name}}</code>来删除对应的信息</p>
 <h3 id="输入法失效">输入法失效</h3>
 <p>添加配置文件</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">vim ~/.pam_environment
@@ -705,8 +705,8 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="c1"># 可以先查看有哪些屏幕</span>
 </span></span><span class="line"><span class="cl">xrandr 
 </span></span><span class="line"><span class="cl"><span class="c1">#</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 将下面的命令加入 ~/.xinitrc1 中，在exec dwm之前添加</span>
-</span></span><span class="line"><span class="cl"><span class="c1"># 我有两个，是上下关系，所以用below 其他有 left 以及 right</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 将下面的命令加入 ~/.xinitrc1 中,在exec dwm之前添加</span>
+</span></span><span class="line"><span class="cl"><span class="c1"># 我有两个,是上下关系,所以用below 其他有 left 以及 right</span>
 </span></span><span class="line"><span class="cl">xrandr --output eDP-1-1  --auto --below HDMI-0
 </span></span></code></pre></div><h2 id="常用快捷键">常用快捷键</h2>
 <p>可以参考我配置： &nbsp;<a href="https://github.com/fzdwx/dwm" target="_blank" rel="noopener">https://github.com/fzdwx/dwm</a>
@@ -768,7 +768,7 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
 </tr>
 <tr>
 <td><code>MOD + a</code></td>
-<td>第一次是显示所有tag，第二次是跳转到聚焦的窗口所在的窗口</td>
+<td>第一次是显示所有tag,第二次是跳转到聚焦的窗口所在的窗口</td>
 </tr>
 </tbody>
 </table>
@@ -791,7 +791,7 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
 </tr>
 <tr>
 <td><code>MOD + SHIFT + h</code></td>
-<td>显示窗口（像一个栈一样。）</td>
+<td>显示窗口（像一个栈一样.）</td>
 </tr>
 <tr>
 <td><code>MOD + ENTER</code></td>
@@ -850,7 +850,7 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
 <p>主要原理就是根据预定义的格式解析出<code>signal</code>
 ,然后调用预定义的脚本文件(&nbsp;<a href="https://github.com/fzdwx/dwm/commit/b30b5bedb1661e70acf6830f924857650831b441#diff-62eebf5eaf0e6a76a21dfed9da6556ee5413ddb49f06013bd83403cc1a485d98" target="_blank" rel="noopener">commit</a>
 )</p>
-<p>也很容易扩展，可以参考我的&nbsp;<a href="https://github.com/fzdwx/dwm/blob/main/statusbar/packages/fm.sh" target="_blank" rel="noopener">fm</a>
+<p>也很容易扩展,可以参考我的&nbsp;<a href="https://github.com/fzdwx/dwm/blob/main/statusbar/packages/fm.sh" target="_blank" rel="noopener">fm</a>
 , <code>update</code>是构造要返回的内容,
 <code>click</code>就是点击时调用的方法,<code>wezterm start --class float ranger</code>我这一段就是启动 wezterm 并调用 ranger.</p>
 <p><figure id="a-/images/11.png" class="align-center">
@@ -881,28 +881,28 @@ nmcli device wifi list nmcli device wifi connect {{wifi name}} password {{pwd}} 
       <pubDate>Sun, 18 Sep 2022 22:15:39 +0800</pubDate>
       
       <guid>https://fzdwx.github.io/posts/2022-09-18-about-rofi/</guid>
-      <description>今天发现了一个 linux 下的 application launcher &amp;nbsp;rofi ，它可以快速切换窗口和启动程序， 我用它和wmctrl进行配合使用。
+      <description>今天发现了一个 linux 下的 application launcher &amp;nbsp;rofi ,它可以快速切换窗口和启动程序, 我用它和wmctrl进行配合使用.
 我的使用过程:
 1.Archlinux install
-yay -S rofi 2.添加自定义快捷键绑定 hotkey 为alt+space触发rofi -show。
-3.pressalt+space，然后使用shift+leftorright进行切换 mode 。
+yay -S rofi 2.添加自定义快捷键绑定 hotkey 为alt+space触发rofi -show.
+3.pressalt+space,然后使用shift+leftorright进行切换 mode.
 更改主题以及显示 icon:
 1.生成配置文件
 mkdir -p ~/.config/rofi rofi -dump-config &amp;gt; ~/.config/rofi/config.rasi 2.显示icon
 sed -i &amp;#39;8c show-icons: true;&amp;#39; ~/.config/rofi/config.rasi 3.更换主题
 参考 &amp;nbsp;https://github.com/lr-tech/rofi-themes-collection#installing-themes 我的wmctrl的配置示例:
-使用xprop WM_CLASS获取前缀。
+使用xprop WM_CLASS获取前缀.
 alias chrome=&amp;#34;wmctrl -x -a google-chrome || google-chrome-stable &amp;gt; /dev/null 2&amp;gt;&amp;amp;1 &amp;amp;&amp;#34; alias note=&amp;#34;wmctrl -x -a obsidian || /usr/bin/obsidian &amp;gt; /dev/null 2&amp;gt;&amp;amp;1 &amp;amp;&amp;#34; alias codew=&amp;#34;wmctrl -x -a code || /opt/code/code &amp;gt; /dev/null 2&amp;gt;&amp;amp;1 &amp;amp;&amp;#34; alias idea=&amp;#34;wmctrl -x -a jetbrains-idea || /opt/idea/bin/idea.</description>
       <content:encoded><![CDATA[<blockquote>
 <p>今天发现了一个 linux 下的 application launcher &nbsp;<a href="https://github.com/davatorium/rofi" target="_blank" rel="noopener">rofi</a>
- ，它可以快速切换窗口和启动程序，
-我用它和<code>wmctrl</code>进行配合使用。</p>
+ ,它可以快速切换窗口和启动程序,
+我用它和<code>wmctrl</code>进行配合使用.</p>
 </blockquote>
 <p><strong>我的使用过程:</strong></p>
 <p>1.Archlinux install</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">yay -S rofi
-</span></span></code></pre></div><p>2.添加自定义快捷键绑定 hotkey 为<code>alt</code>+<code>space</code>触发<code>rofi -show</code>。</p>
-<p>3.press<code>alt</code>+<code>space</code>，然后使用<code>shift</code>+<code>left</code>or<code>right</code>进行切换 mode 。</p>
+</span></span></code></pre></div><p>2.添加自定义快捷键绑定 hotkey 为<code>alt</code>+<code>space</code>触发<code>rofi -show</code>.</p>
+<p>3.press<code>alt</code>+<code>space</code>,然后使用<code>shift</code>+<code>left</code>or<code>right</code>进行切换 mode.</p>
 <hr>
 <p><strong>更改主题以及显示 icon</strong>:</p>
 <p>1.生成配置文件</p>
@@ -916,7 +916,7 @@ alias chrome=&amp;#34;wmctrl -x -a google-chrome || google-chrome-stable &amp;gt
 <hr>
 <p><strong>我的<code>wmctrl</code>的配置示例</strong>:</p>
 <blockquote>
-<p>使用<code>xprop WM_CLASS</code>获取前缀。</p>
+<p>使用<code>xprop WM_CLASS</code>获取前缀.</p>
 </blockquote>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">alias</span> <span class="nv">chrome</span><span class="o">=</span><span class="s2">&#34;wmctrl -x -a google-chrome || google-chrome-stable &gt; /dev/null 2&gt;&amp;1 &amp;&#34;</span>
 </span></span><span class="line"><span class="cl"><span class="nb">alias</span> <span class="nv">note</span><span class="o">=</span><span class="s2">&#34;wmctrl -x -a obsidian || /usr/bin/obsidian &gt; /dev/null 2&gt;&amp;1 &amp;&#34;</span>

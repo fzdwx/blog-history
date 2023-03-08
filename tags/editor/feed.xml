@@ -17,9 +17,9 @@
       <pubDate>Wed, 28 Sep 2022 15:59:37 +0800</pubDate>
       
       <guid>https://fzdwx.github.io/posts/2022-09-28-neovim-use-notes/</guid>
-      <description>由于最近切换到了 linux，不可避免的经常需要使用 vi 等编辑器，所以这次好好折腾一下。</description>
+      <description>由于最近切换到了 linux,不可避免的经常需要使用 vi 等编辑器,所以这次好好折腾一下.</description>
       <content:encoded><![CDATA[<blockquote>
-<p>由于最近切换到了linux，不可避免的经常需要使用vi等编辑器，所以这次好好折腾一下。</p>
+<p>由于最近切换到了linux,不可避免的经常需要使用vi等编辑器,所以这次好好折腾一下.</p>
 </blockquote>
 <p>我的配置地址: &nbsp;<a href="https://github.com/fzdwx/nvim" target="_blank" rel="noopener">https://github.com/fzdwx/nvim</a>
  ,现在直接使用 &nbsp;<a href="https://github.com/LazyVim/LazyVim" target="_blank" rel="noopener">LazyVim</a>
@@ -30,7 +30,7 @@
 </blockquote>
 <h2 id="我的配置">我的配置</h2>
 <h3 id="pakcer">pakcer</h3>
-<p>我选用的插件管理器是<code>packer</code>，我也不知道选什么好，就按最新的来吧。</p>
+<p>我选用的插件管理器是<code>packer</code>,我也不知道选什么好,就按最新的来吧.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="c1">--- setup packer</span>
 </span></span><span class="line"><span class="cl"><span class="kd">local</span> <span class="n">fn</span> <span class="o">=</span> <span class="n">vim.fn</span>
 </span></span><span class="line"><span class="cl"><span class="kd">local</span> <span class="n">install_path</span> <span class="o">=</span> <span class="n">fn.stdpath</span><span class="p">(</span><span class="s1">&#39;data&#39;</span><span class="p">)</span> <span class="o">..</span> <span class="s1">&#39;/site/pack/packer/start/packer.nvim&#39;</span>
@@ -51,7 +51,7 @@
 </span></span><span class="line"><span class="cl"><span class="kr">end</span><span class="p">)</span>
 </span></span></code></pre></div><h3 id="alphahttpsgithubcomgoolordalpha-nvim">&nbsp;<a href="https://github.com/goolord/alpha-nvim" target="_blank" rel="noopener">alpha</a>
 </h3>
-<p>是一个dashboard，也可以说是一个欢迎界面。</p>
+<p>是一个dashboard,也可以说是一个欢迎界面.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="n">require</span><span class="p">(</span><span class="s1">&#39;packer&#39;</span><span class="p">).</span><span class="n">startup</span><span class="p">(</span><span class="kr">function</span><span class="p">(</span><span class="n">use</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">-- ...</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">--- 添加下面两行进行安装</span>
@@ -59,11 +59,11 @@
 </span></span><span class="line"><span class="cl">    <span class="n">use</span> <span class="s2">&#34;kyazdani42/nvim-web-devicons&#34;</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">-- ...</span>
 </span></span><span class="line"><span class="cl"><span class="kr">end</span><span class="p">)</span>
-</span></span></code></pre></div><p>配置代码太长了就不放了，可以点击这里&nbsp;<a href="https://github.com/fzdwx/nvim/blob/main/lua/config/plugins/alpha.lua" target="_blank" rel="noopener"> 这里 </a>
-参考。</p>
+</span></span></code></pre></div><p>配置代码太长了就不放了,可以点击这里&nbsp;<a href="https://github.com/fzdwx/nvim/blob/main/lua/config/plugins/alpha.lua" target="_blank" rel="noopener"> 这里 </a>
+参考.</p>
 <h3 id="telescopehttpsgithubcomnvim-telescopetelescopenvim">&nbsp;<a href="https://github.com/nvim-telescope/telescope.nvim" target="_blank" rel="noopener">telescope</a>
 </h3>
-<p>主要作用是文件的查找与预览。</p>
+<p>主要作用是文件的查找与预览.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-lua" data-lang="lua"><span class="line"><span class="cl"><span class="n">require</span><span class="p">(</span><span class="s1">&#39;packer&#39;</span><span class="p">).</span><span class="n">startup</span><span class="p">(</span><span class="kr">function</span><span class="p">(</span><span class="n">use</span><span class="p">)</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">-- ...</span>
 </span></span><span class="line"><span class="cl">    <span class="c1">--- 添加下面代码进行安装</span>

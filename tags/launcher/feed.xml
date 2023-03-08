@@ -17,28 +17,28 @@
       <pubDate>Sun, 18 Sep 2022 22:15:39 +0800</pubDate>
       
       <guid>https://fzdwx.github.io/posts/2022-09-18-about-rofi/</guid>
-      <description>今天发现了一个 linux 下的 application launcher &amp;nbsp;rofi ，它可以快速切换窗口和启动程序， 我用它和wmctrl进行配合使用。
+      <description>今天发现了一个 linux 下的 application launcher &amp;nbsp;rofi ,它可以快速切换窗口和启动程序, 我用它和wmctrl进行配合使用.
 我的使用过程:
 1.Archlinux install
-yay -S rofi 2.添加自定义快捷键绑定 hotkey 为alt+space触发rofi -show。
-3.pressalt+space，然后使用shift+leftorright进行切换 mode 。
+yay -S rofi 2.添加自定义快捷键绑定 hotkey 为alt+space触发rofi -show.
+3.pressalt+space,然后使用shift+leftorright进行切换 mode.
 更改主题以及显示 icon:
 1.生成配置文件
 mkdir -p ~/.config/rofi rofi -dump-config &amp;gt; ~/.config/rofi/config.rasi 2.显示icon
 sed -i &amp;#39;8c show-icons: true;&amp;#39; ~/.config/rofi/config.rasi 3.更换主题
 参考 &amp;nbsp;https://github.com/lr-tech/rofi-themes-collection#installing-themes 我的wmctrl的配置示例:
-使用xprop WM_CLASS获取前缀。
+使用xprop WM_CLASS获取前缀.
 alias chrome=&amp;#34;wmctrl -x -a google-chrome || google-chrome-stable &amp;gt; /dev/null 2&amp;gt;&amp;amp;1 &amp;amp;&amp;#34; alias note=&amp;#34;wmctrl -x -a obsidian || /usr/bin/obsidian &amp;gt; /dev/null 2&amp;gt;&amp;amp;1 &amp;amp;&amp;#34; alias codew=&amp;#34;wmctrl -x -a code || /opt/code/code &amp;gt; /dev/null 2&amp;gt;&amp;amp;1 &amp;amp;&amp;#34; alias idea=&amp;#34;wmctrl -x -a jetbrains-idea || /opt/idea/bin/idea.</description>
       <content:encoded><![CDATA[<blockquote>
 <p>今天发现了一个 linux 下的 application launcher &nbsp;<a href="https://github.com/davatorium/rofi" target="_blank" rel="noopener">rofi</a>
- ，它可以快速切换窗口和启动程序，
-我用它和<code>wmctrl</code>进行配合使用。</p>
+ ,它可以快速切换窗口和启动程序,
+我用它和<code>wmctrl</code>进行配合使用.</p>
 </blockquote>
 <p><strong>我的使用过程:</strong></p>
 <p>1.Archlinux install</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">yay -S rofi
-</span></span></code></pre></div><p>2.添加自定义快捷键绑定 hotkey 为<code>alt</code>+<code>space</code>触发<code>rofi -show</code>。</p>
-<p>3.press<code>alt</code>+<code>space</code>，然后使用<code>shift</code>+<code>left</code>or<code>right</code>进行切换 mode 。</p>
+</span></span></code></pre></div><p>2.添加自定义快捷键绑定 hotkey 为<code>alt</code>+<code>space</code>触发<code>rofi -show</code>.</p>
+<p>3.press<code>alt</code>+<code>space</code>,然后使用<code>shift</code>+<code>left</code>or<code>right</code>进行切换 mode.</p>
 <hr>
 <p><strong>更改主题以及显示 icon</strong>:</p>
 <p>1.生成配置文件</p>
@@ -52,7 +52,7 @@ alias chrome=&amp;#34;wmctrl -x -a google-chrome || google-chrome-stable &amp;gt
 <hr>
 <p><strong>我的<code>wmctrl</code>的配置示例</strong>:</p>
 <blockquote>
-<p>使用<code>xprop WM_CLASS</code>获取前缀。</p>
+<p>使用<code>xprop WM_CLASS</code>获取前缀.</p>
 </blockquote>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl"><span class="nb">alias</span> <span class="nv">chrome</span><span class="o">=</span><span class="s2">&#34;wmctrl -x -a google-chrome || google-chrome-stable &gt; /dev/null 2&gt;&amp;1 &amp;&#34;</span>
 </span></span><span class="line"><span class="cl"><span class="nb">alias</span> <span class="nv">note</span><span class="o">=</span><span class="s2">&#34;wmctrl -x -a obsidian || /usr/bin/obsidian &gt; /dev/null 2&gt;&amp;1 &amp;&#34;</span>

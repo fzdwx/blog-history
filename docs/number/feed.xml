@@ -50,7 +50,7 @@
 
     
     <figcaption>
-        F 是尾数表示的值，E 是指数表示的值，S 就对应数的符号位, 1 表示负数。
+        F 是尾数表示的值,E 是指数表示的值,S 就对应数的符号位, 1 表示负数.
     </figcaption>
     
 </figure>
@@ -67,7 +67,7 @@
         TIP
         
     </p>
-    <p> 最理想的表示法是将最小的负指数表示为 00&hellip;00<sub>2</sub>， 将最大的正指数表示为 11&hellip;11<sub>2</sub>。从移码表示的数减去原数就可以得到相应的偏移值，从而由无符号的移码可得到真实的值。 </p>
+    <p> 最理想的表示法是将最小的负指数表示为 00&hellip;00<sub>2</sub>, 将最大的正指数表示为 11&hellip;11<sub>2</sub>.从移码表示的数减去原数就可以得到相应的偏移值,从而由无符号的移码可得到真实的值. </p>
 </div>
 
 
@@ -221,7 +221,7 @@
 <li><code>fle.s x5, f0, f1</code> =&gt; <code>x5 = 1 if f0 &lt;= f1, else 0</code></li>
 </ul>
 </li>
-<li>如果比较结果为 真，则将整点寄存器设置 1,否则为 0</li>
+<li>如果比较结果为 真,则将整点寄存器设置 1,否则为 0</li>
 <li>所以可以使用整数分支指令 <code>beq</code> 和 <code>bne</code> 来比较结果并进行分支</li>
 </ul>
 </li>
@@ -240,9 +240,9 @@
 </li>
 </ul>
 <blockquote>
-<p>上述指令都有单双精度版本，单精度以 <code>.s</code> 结尾，双精度以 <code>.d</code> 结尾</p>
+<p>上述指令都有单双精度版本,单精度以 <code>.s</code> 结尾,双精度以 <code>.d</code> 结尾</p>
 </blockquote>
-<p>一个示例: 从内存中取出两个单精度数，相加，然后将总和存入内存中</p>
+<p>一个示例: 从内存中取出两个单精度数,相加,然后将总和存入内存中</p>
 <pre tabindex="0"><code class="language-ricv-v" data-lang="ricv-v">flw    f0, 0(x10)     // 加载一个 32bit 的数到 f0
 flw    f1, 4(x10)     // 加载一个 32bit 的数到 f1
 fadd.s f2, f0, f1     // f2 = f0 + f1
@@ -259,8 +259,8 @@ fsw    f2, 8(x10)     // 保存来自 f2 的 32bit 的数
         TIP
         
     </p>
-    <p> <p>独立浮点寄存器的好处: 在不需要增加指令位的情况下，可以获得倍增的寄存器数目，同时因为有独立的整点和浮点寄存器，可以获得倍增的寄存器带宽，并且还能为浮点定制寄存器。</p>
-<p>例如一些寄存器中所有类型的操作数转换为单一的内部格式。</p>
+    <p> <p>独立浮点寄存器的好处: 在不需要增加指令位的情况下,可以获得倍增的寄存器数目,同时因为有独立的整点和浮点寄存器,可以获得倍增的寄存器带宽,并且还能为浮点定制寄存器.</p>
+<p>例如一些寄存器中所有类型的操作数转换为单一的内部格式.</p>
  </p>
 </div>
 
@@ -275,7 +275,7 @@ fsw    f2, 8(x10)     // 保存来自 f2 的 32bit 的数
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">float</span> <span class="nf">f2c</span><span class="p">(</span><span class="kt">float</span> <span class="n">qwe</span><span class="p">){</span>
 </span></span><span class="line"><span class="cl">	<span class="nf">retrun</span> <span class="p">((</span><span class="mf">5.0f</span> <span class="o">/</span> <span class="mf">9.0f</span><span class="p">)</span> <span class="o">*</span> <span class="p">(</span><span class="n">qwe</span> <span class="o">-</span> <span class="mf">32.0f</span><span class="p">));</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>假设参数 <code>qwe</code> 传入到寄存器 <code>f10</code> 中，且结果也存入 <code>f10</code>中:</p>
+</span></span></code></pre></div><p>假设参数 <code>qwe</code> 传入到寄存器 <code>f10</code> 中,且结果也存入 <code>f10</code>中:</p>
 <pre tabindex="0"><code class="language-risc-v" data-lang="risc-v">f2c:
 	flw    f0, const5(x3)  // f0 = 5.0f
 	flw    f1, const9(x3)  // f1 = 9.0f
@@ -302,7 +302,7 @@ fsw    f2, 8(x10)     // 保存来自 f2 的 32bit 的数
 </span></span><span class="line"><span class="cl">		<span class="p">}</span>
 </span></span><span class="line"><span class="cl">	<span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>方法参数分别存放在 x10, x11, x12; i, j, k 分别存放在x5, x6, x7。</p>
+</span></span></code></pre></div><p>方法参数分别存放在 x10, x11, x12; i, j, k 分别存放在x5, x6, x7.</p>
 <pre tabindex="0"><code class="language-risc-v" data-lang="risc-v">	mm:...
 		li x28, 32        // x28 = 32
 		li x5, 0          // i = 0;
@@ -456,10 +456,10 @@ Number Representation Overflow TIP 比如 add(or -,*,/)的结果不能由已经�
 
 <p>例如<code>0b1010</code>(10) + <code>0b0111</code>(7) = <code>0b10001</code>(17),这个结果就超过了 4 位数</p>
 <p><figure id="a-/images/img_7.png" class="align-center">
-    <img src="/images/img_7.png" alt="5 bits的无符号的 overflow 示意图，如果11111在加1就回到了00000，同样如果00000减去1回到11111，这两种情况都是overflow"  />
+    <img src="/images/img_7.png" alt="5 bits的无符号的 overflow 示意图,如果11111在加1就回到了00000,同样如果00000减去1回到11111,这两种情况都是overflow"  />
     
     <figcaption>
-       5 bits的无符号的 overflow 示意图，如果11111在加1就回到了00000，同样如果00000减去1回到11111，这两种情况都是overflow
+       5 bits的无符号的 overflow 示意图,如果11111在加1就回到了00000,同样如果00000减去1回到11111,这两种情况都是overflow
     </figcaption>
     
 </figure></p>
@@ -496,10 +496,10 @@ Number Representation Overflow TIP 比如 add(or -,*,/)的结果不能由已经�
 </li>
 </ul>
 <p><figure id="a-/images/img_8.png" class="align-center">
-    <img src="/images/img_8.png" alt="1个符号位，4个有效的数字位"  />
+    <img src="/images/img_8.png" alt="1个符号位,4个有效的数字位"  />
     
     <figcaption>
-       1个符号位，4个有效的数字位
+       1个符号位,4个有效的数字位
     </figcaption>
     
 </figure></p>

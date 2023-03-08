@@ -17,27 +17,27 @@
       <pubDate>Sun, 05 Mar 2023 22:27:31 +0800</pubDate>
       
       <guid>https://fzdwx.github.io/posts/2023-03-05-jyyos_c_compile/</guid>
-      <description> 最近也是又追起了南京大学的操作系统课(前面几次都中途放弃了)，记录一下
-1. 首先就是编译第三节课的一个demo时，找不到 ld 等命令 &amp;nbsp;http://jyywiki.cn/OS/2023/build/lect3.ipynb demo(&amp;lsquo;hello-os&amp;rsquo;, &amp;lsquo;i/hello-os&amp;rsquo;)
-由于我使用的是 archlinux, binutils 编译出来的 ld, gcc 等命令都是不带 x86 的前缀的， 而 Makefile 中定义的都是带 x86 的, 所以需要建立一个链接:
-ln -s /usr/bin/ld /usr/bin/x86_64-linux-gnu-ld 来自 chatgpt 的解释: 该命令创建了一个名为“x86_64-linux-gnu-ld”的符号链接，指向“/usr/bin/ld”。这个符号链接可以被用作“x86_64-linux-gnu-ld”二进制文件的替代品。 符号链接是一种特殊的文件类型，它是一个指向另一个文件的文件，可以用来在文件系统中创建指向其他文件或目录的别名。
-在Linux系统中，“/usr/bin/ld”是一个连接器（linker），用于将多个目标文件合并为单个可执行文件。通过创建“x86_64-linux-gnu-ld”的符号链接，可以使该链接器的功能可以在不同的系统上使用，并且不需要更改可执行文件的代码。 这个符号链接通常被用于交叉编译（cross-compiling）应用程序，这种情况下，应用程序在不同的硬件平台上运行。
-2. 使用 vscode 等编辑器时，第一个问题的代码中头文件无法跳转 使用 bear 生成 compile_commands.json, 然后编辑器就会自动识别了
-bear -- make 来自 chatgpt 的解释: 该命令使用Bear和Make工具，用于自动捕获Makefile的编译命令和编译期间的调用链。
-具体来说，Bear是一个工具，它可以将系统调用跟踪器（strace）输出转换为JSON格式的文件，这个文件包含了所有运行期间的系统调用。 Make是一个工具，它用于根据Makefile规则自动构建和编译程序。
-当这两个工具一起使用时，可以使用“bear &amp;ndash; make”命令自动捕获Makefile的编译命令和编译期间的调用链，这个过程可以在后续的调试中使用。 该命令的执行将产生一个JSON格式的文件，其中包含编译期间的所有系统调用和它们的参数。这个文件可以用于调试，性能优化，以及自动化编译和构建系统的开发。
-总之，“bear &amp;ndash; make”命令可以帮助程序员更好地理解他们的代码在编译期间所做的事情，以及识别代码中的潜在问题。
+      <description> 最近也是又追起了南京大学的操作系统课(前面几次都中途放弃了),记录一下
+1. 首先就是编译第三节课的一个demo时,找不到 ld 等命令 &amp;nbsp;http://jyywiki.cn/OS/2023/build/lect3.ipynb demo(&amp;lsquo;hello-os&amp;rsquo;, &amp;lsquo;i/hello-os&amp;rsquo;)
+由于我使用的是 archlinux, binutils 编译出来的 ld, gcc 等命令都是不带 x86 的前缀的, 而 Makefile 中定义的都是带 x86 的, 所以需要建立一个链接:
+ln -s /usr/bin/ld /usr/bin/x86_64-linux-gnu-ld 来自 chatgpt 的解释: 该命令创建了一个名为“x86_64-linux-gnu-ld”的符号链接,指向“/usr/bin/ld”.这个符号链接可以被用作“x86_64-linux-gnu-ld”二进制文件的替代品. 符号链接是一种特殊的文件类型,它是一个指向另一个文件的文件,可以用来在文件系统中创建指向其他文件或目录的别名.
+在Linux系统中,“/usr/bin/ld”是一个连接器（linker）,用于将多个目标文件合并为单个可执行文件.通过创建“x86_64-linux-gnu-ld”的符号链接,可以使该链接器的功能可以在不同的系统上使用,并且不需要更改可执行文件的代码. 这个符号链接通常被用于交叉编译（cross-compiling）应用程序,这种情况下,应用程序在不同的硬件平台上运行.
+2. 使用 vscode 等编辑器时,第一个问题的代码中头文件无法跳转 使用 bear 生成 compile_commands.json, 然后编辑器就会自动识别了
+bear -- make 来自 chatgpt 的解释: 该命令使用Bear和Make工具,用于自动捕获Makefile的编译命令和编译期间的调用链.
+具体来说,Bear是一个工具,它可以将系统调用跟踪器（strace）输出转换为JSON格式的文件,这个文件包含了所有运行期间的系统调用. Make是一个工具,它用于根据Makefile规则自动构建和编译程序.
+当这两个工具一起使用时,可以使用“bear &amp;ndash; make”命令自动捕获Makefile的编译命令和编译期间的调用链,这个过程可以在后续的调试中使用. 该命令的执行将产生一个JSON格式的文件,其中包含编译期间的所有系统调用和它们的参数.这个文件可以用于调试,性能优化,以及自动化编译和构建系统的开发.
+总之,“bear &amp;ndash; make”命令可以帮助程序员更好地理解他们的代码在编译期间所做的事情,以及识别代码中的潜在问题.
 3. 写一个 pstree &amp;nbsp;http://jyywiki.cn/OS/2023/labs/M1 实现思路:
 扫描 /proc/ 目录下所有为数字的文件夹 读取 /proc/{pid}/status 文件 读取 name 以及 ppid 建树并打印树结构 </description>
       <content:encoded><![CDATA[<blockquote>
-<p>最近也是又追起了南京大学的操作系统课(前面几次都中途放弃了)，记录一下</p>
+<p>最近也是又追起了南京大学的操作系统课(前面几次都中途放弃了),记录一下</p>
 </blockquote>
-<h3 id="1-首先就是编译第三节课的一个demo时找不到-ld-等命令">1. 首先就是编译第三节课的一个demo时，找不到 ld 等命令</h3>
+<h3 id="1-首先就是编译第三节课的一个demo时找不到-ld-等命令">1. 首先就是编译第三节课的一个demo时,找不到 ld 等命令</h3>
 <blockquote>
 <p>&nbsp;<a href="http://jyywiki.cn/OS/2023/build/lect3.ipynb" target="_blank" rel="noopener">http://jyywiki.cn/OS/2023/build/lect3.ipynb</a>
  demo(&lsquo;hello-os&rsquo;, &lsquo;i/hello-os&rsquo;)</p>
 </blockquote>
-<p>由于我使用的是 archlinux, <code>binutils</code> 编译出来的 ld, gcc 等命令都是不带 x86 的前缀的，
+<p>由于我使用的是 archlinux, <code>binutils</code> 编译出来的 ld, gcc 等命令都是不带 x86 的前缀的,
 而 Makefile 中定义的都是带 x86 的, 所以需要建立一个链接:</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">ln -s /usr/bin/ld /usr/bin/x86_64-linux-gnu-ld
 </span></span></code></pre></div>
@@ -52,10 +52,10 @@ bear -- make 来自 chatgpt 的解释: 该命令使用Bear和Make工具，用于
         来自 chatgpt 的解释:
         
     </p>
-    <p> <p>该命令创建了一个名为“x86_64-linux-gnu-ld”的符号链接，指向“/usr/bin/ld”。这个符号链接可以被用作“x86_64-linux-gnu-ld”二进制文件的替代品。
-符号链接是一种特殊的文件类型，它是一个指向另一个文件的文件，可以用来在文件系统中创建指向其他文件或目录的别名。</p>
-<p>在Linux系统中，“/usr/bin/ld”是一个连接器（linker），用于将多个目标文件合并为单个可执行文件。通过创建“x86_64-linux-gnu-ld”的符号链接，可以使该链接器的功能可以在不同的系统上使用，并且不需要更改可执行文件的代码。
-这个符号链接通常被用于交叉编译（cross-compiling）应用程序，这种情况下，应用程序在不同的硬件平台上运行。</p>
+    <p> <p>该命令创建了一个名为“x86_64-linux-gnu-ld”的符号链接,指向“/usr/bin/ld”.这个符号链接可以被用作“x86_64-linux-gnu-ld”二进制文件的替代品.
+符号链接是一种特殊的文件类型,它是一个指向另一个文件的文件,可以用来在文件系统中创建指向其他文件或目录的别名.</p>
+<p>在Linux系统中,“/usr/bin/ld”是一个连接器（linker）,用于将多个目标文件合并为单个可执行文件.通过创建“x86_64-linux-gnu-ld”的符号链接,可以使该链接器的功能可以在不同的系统上使用,并且不需要更改可执行文件的代码.
+这个符号链接通常被用于交叉编译（cross-compiling）应用程序,这种情况下,应用程序在不同的硬件平台上运行.</p>
  </p>
 </div>
 
@@ -66,7 +66,7 @@ bear -- make 来自 chatgpt 的解释: 该命令使用Bear和Make工具，用于
 
 
 
-<h3 id="2-使用-vscode-等编辑器时第一个问题的代码中头文件无法跳转">2. 使用 vscode 等编辑器时，第一个问题的代码中头文件无法跳转</h3>
+<h3 id="2-使用-vscode-等编辑器时第一个问题的代码中头文件无法跳转">2. 使用 vscode 等编辑器时,第一个问题的代码中头文件无法跳转</h3>
 <p>使用 bear 生成 compile_commands.json, 然后编辑器就会自动识别了</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">bear -- make
 </span></span></code></pre></div>
@@ -81,12 +81,12 @@ bear -- make 来自 chatgpt 的解释: 该命令使用Bear和Make工具，用于
         来自 chatgpt 的解释:
         
     </p>
-    <p> <p>该命令使用Bear和Make工具，用于自动捕获Makefile的编译命令和编译期间的调用链。</p>
-<p>具体来说，Bear是一个工具，它可以将系统调用跟踪器（strace）输出转换为JSON格式的文件，这个文件包含了所有运行期间的系统调用。
-Make是一个工具，它用于根据Makefile规则自动构建和编译程序。</p>
-<p>当这两个工具一起使用时，可以使用“bear &ndash; make”命令自动捕获Makefile的编译命令和编译期间的调用链，这个过程可以在后续的调试中使用。
-该命令的执行将产生一个JSON格式的文件，其中包含编译期间的所有系统调用和它们的参数。这个文件可以用于调试，性能优化，以及自动化编译和构建系统的开发。</p>
-<p>总之，“bear &ndash; make”命令可以帮助程序员更好地理解他们的代码在编译期间所做的事情，以及识别代码中的潜在问题。</p>
+    <p> <p>该命令使用Bear和Make工具,用于自动捕获Makefile的编译命令和编译期间的调用链.</p>
+<p>具体来说,Bear是一个工具,它可以将系统调用跟踪器（strace）输出转换为JSON格式的文件,这个文件包含了所有运行期间的系统调用.
+Make是一个工具,它用于根据Makefile规则自动构建和编译程序.</p>
+<p>当这两个工具一起使用时,可以使用“bear &ndash; make”命令自动捕获Makefile的编译命令和编译期间的调用链,这个过程可以在后续的调试中使用.
+该命令的执行将产生一个JSON格式的文件,其中包含编译期间的所有系统调用和它们的参数.这个文件可以用于调试,性能优化,以及自动化编译和构建系统的开发.</p>
+<p>总之,“bear &ndash; make”命令可以帮助程序员更好地理解他们的代码在编译期间所做的事情,以及识别代码中的潜在问题.</p>
  </p>
 </div>
 
@@ -118,7 +118,7 @@ Make是一个工具，它用于根据Makefile规则自动构建和编译程序�
       <pubDate>Sat, 10 Dec 2022 20:41:41 +0800</pubDate>
       
       <guid>https://fzdwx.github.io/posts/2022-12-10-risc-v/</guid>
-      <description>RISC-V 是一种指令集(汇编语言)，是一种 low-level 的编程语言，高级语言通过编译器编译到汇编语言</description>
+      <description>RISC-V 是一种指令集(汇编语言),是一种 low-level 的编程语言,高级语言通过编译器编译到汇编语言</description>
       <content:encoded><![CDATA[<h2 id="resource">Resource</h2>
 <ol>
 <li>&nbsp;<a href="https://inst.eecs.berkeley.edu/~cs61c/sp21/resources-pdfs/riscvcard.pdf" target="_blank" rel="noopener">RISC-V Green Card</a>
@@ -128,7 +128,7 @@ Make是一个工具，它用于根据Makefile规则自动构建和编译程序�
 <li>&nbsp;<a href="https://github.com/fzdwx/fzdwx.github.io/releases/download/v1.0/p.h.pdf" target="_blank" rel="noopener">P&amp;H(RISC-V)</a>
 </li>
 </ol>
-<p>在汇编语言中没有变量这个概念，汇编语言通常操作的是<strong>寄存器</strong>。算术指令的操作数必须取自寄存器，内建于硬件的特殊位置(CPU内？)。</p>
+<p>在汇编语言中没有变量这个概念,汇编语言通常操作的是<strong>寄存器</strong>.算术指令的操作数必须取自寄存器,内建于硬件的特殊位置(CPU内？).</p>
 
 
 
@@ -145,9 +145,9 @@ Make是一个工具，它用于根据Makefile规则自动构建和编译程序�
 内用来暂存指令、&nbsp;<a href="https://zh.wikipedia.org/wiki/%E6%95%B8%E6%93%9A" title="数据" target="_blank" rel="noopener">数据</a>
 和&nbsp;<a href="https://zh.wikipedia.org/wiki/%E5%86%85%E5%AD%98%E5%9C%B0%E5%9D%80" title="内存地址" target="_blank" rel="noopener">地址</a>
 的&nbsp;<a href="https://zh.wikipedia.org/wiki/%E9%9B%BB%E8%85%A6%E8%A8%98%E6%86%B6%E9%AB%94" title="电脑存储器" target="_blank" rel="noopener">电脑存储器</a>
-。寄存器的存贮容量有限，读写速度非常快。在&nbsp;<a href="https://zh.wikipedia.org/wiki/%E9%9B%BB%E8%85%A6%E6%9E%B6%E6%A7%8B" title="计算机体系结构" target="_blank" rel="noopener">计算机体系结构</a>
-里，寄存器存储在已知时间点所作计算的中间结果，通过快速地访问数据来加速&nbsp;<a href="https://zh.wikipedia.org/wiki/%E9%9B%BB%E8%85%A6%E7%A8%8B%E5%BC%8F" title="计算机程序" target="_blank" rel="noopener">计算机程序</a>
-的执行。 </p>
+.寄存器的存贮容量有限,读写速度非常快.在&nbsp;<a href="https://zh.wikipedia.org/wiki/%E9%9B%BB%E8%85%A6%E6%9E%B6%E6%A7%8B" title="计算机体系结构" target="_blank" rel="noopener">计算机体系结构</a>
+里,寄存器存储在已知时间点所作计算的中间结果,通过快速地访问数据来加速&nbsp;<a href="https://zh.wikipedia.org/wiki/%E9%9B%BB%E8%85%A6%E7%A8%8B%E5%BC%8F" title="计算机程序" target="_blank" rel="noopener">计算机程序</a>
+的执行. </p>
 </div>
 
 
@@ -164,7 +164,7 @@ Make是一个工具，它用于根据Makefile规则自动构建和编译程序�
     
 </figure></p>
 <ul>
-<li>如果寄存器的大小是 64位 则称为<strong>双字</strong>，32位 则是<strong>单字</strong>。</li>
+<li>如果寄存器的大小是 64位 则称为<strong>双字</strong>,32位 则是<strong>单字</strong>.</li>
 <li>x<sub>0</sub> 被硬连接到 0
 <ul>
 <li><code>add x3, x4, x0</code> =&gt; <code>x3 = x4</code> (x0 is hard-wired to value 0)</li>
@@ -192,7 +192,7 @@ Make是一个工具，它用于根据Makefile规则自动构建和编译程序�
         TIP
         
     </p>
-    <p> 将数据从内存复制到寄存器的数据传输指令称为 <em>载入指令(<code>load</code>)</em>。在 RISC-V 中指令是 <strong>ld</strong>,表示取双字。 </p>
+    <p> 将数据从内存复制到寄存器的数据传输指令称为 <em>载入指令(<code>load</code>)</em>.在 RISC-V 中指令是 <strong>ld</strong>,表示取双字. </p>
 </div>
 
 
@@ -202,17 +202,17 @@ Make是一个工具，它用于根据Makefile规则自动构建和编译程序�
 
 
 
-<h3 id="一个从数组中取值的c程序写出汇编代码">一个从数组中取值的C程序，写出汇编代码</h3>
+<h3 id="一个从数组中取值的c程序写出汇编代码">一个从数组中取值的C程序,写出汇编代码</h3>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">g</span> <span class="o">=</span> <span class="n">h</span> <span class="o">+</span> <span class="n">A</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span>
-</span></span></code></pre></div><p>A 是一个 100 个双字组成的数组，g, h分别存储在 x20, x21 中，数组起始地址或<em>基址</em>位于 x22 中。</p>
+</span></span></code></pre></div><p>A 是一个 100 个双字组成的数组,g, h分别存储在 x20, x21 中,数组起始地址或<em>基址</em>位于 x22 中.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">ld</span> <span class="no">x9</span><span class="p">,</span> <span class="mi">8</span><span class="p">(</span><span class="no">x22</span><span class="p">)</span> <span class="c1">// x9 = A[8]
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">add</span> <span class="no">x21</span><span class="p">,</span> <span class="no">x20</span><span class="p">,</span> <span class="no">x9</span><span class="c1">; // x21 = x20 + x9
-</span></span></span></code></pre></div><p>存放基址的寄存器(x22)被称为<em>基址寄存器</em>, 数据传输指令中的 8 称为<em>偏移量</em>。</p>
+</span></span></span></code></pre></div><p>存放基址的寄存器(x22)被称为<em>基址寄存器</em>, 数据传输指令中的 8 称为<em>偏移量</em>.</p>
 <p><figure id="a-/images/Pasted%20image%2020221212130603.png" class="align-center">
-    <img src="/images/Pasted%20image%2020221212130603.png" alt="实际的RISC-V内存地址和内存中双字的内容。 双字地址是 8 的倍数，同理单字地址是 4 的倍数"  />
+    <img src="/images/Pasted%20image%2020221212130603.png" alt="实际的RISC-V内存地址和内存中双字的内容. 双字地址是 8 的倍数,同理单字地址是 4 的倍数"  />
     
     <figcaption>
-       实际的RISC-V内存地址和内存中双字的内容。 双字地址是 8 的倍数，同理单字地址是 4 的倍数
+       实际的RISC-V内存地址和内存中双字的内容. 双字地址是 8 的倍数,同理单字地址是 4 的倍数
     </figcaption>
     
 </figure></p>
@@ -228,8 +228,8 @@ Make是一个工具，它用于根据Makefile规则自动构建和编译程序�
         大端与小端编址
         
     </p>
-    <p> <p>计算机分为两种，一种使用最左边或“大端”字节的地址作为双字地址，另一种使用最右端或“小端”字节的地址作为双字地址。</p>
-<p>RISC-V 使用小端  。由于仅在以双字形式和 8 个单独字节访问相同数据时，字节顺序才有影响，因此大多情况不需要关系“大小端”。</p>
+    <p> <p>计算机分为两种,一种使用最左边或“大端”字节的地址作为双字地址,另一种使用最右端或“小端”字节的地址作为双字地址.</p>
+<p>RISC-V 使用小端 .由于仅在以双字形式和 8 个单独字节访问相同数据时,字节顺序才有影响,因此大多情况不需要关系“大小端”.</p>
  </p>
 </div>
 
@@ -240,8 +240,8 @@ Make是一个工具，它用于根据Makefile规则自动构建和编译程序�
 
 
 
-<p>所以为了上面的代码获得正确的字节地址加到 x22 这个寄存器的偏移量为 64（8x8）。</p>
-<p>与载入指令相反的指令通常被成为<em>存储指令(store)</em>,从寄存器复制数据到内存。指令是<code>sd</code>,表示存储双字。</p>
+<p>所以为了上面的代码获得正确的字节地址加到 x22 这个寄存器的偏移量为 64（8x8）.</p>
+<p>与载入指令相反的指令通常被成为<em>存储指令(store)</em>,从寄存器复制数据到内存.指令是<code>sd</code>,表示存储双字.</p>
 
 
 
@@ -254,7 +254,7 @@ Make是一个工具，它用于根据Makefile规则自动构建和编译程序�
         TIP
         
     </p>
-    <p> 在一些体系结构中，字的起始地址必须是 4 的倍数，双字的起始地址必须是 8 的倍数。该要求成为<em>对齐限制</em> </p>
+    <p> 在一些体系结构中,字的起始地址必须是 4 的倍数,双字的起始地址必须是 8 的倍数.该要求成为<em>对齐限制</em> </p>
 </div>
 
 
@@ -264,14 +264,14 @@ Make是一个工具，它用于根据Makefile规则自动构建和编译程序�
 
 
 
-<p>RISC-V 和 Intel x86 没有对齐限制，但 MIPS 有这个限制。</p>
+<p>RISC-V 和 Intel x86 没有对齐限制,但 MIPS 有这个限制.</p>
 <p><figure id="a-/images/Pasted%20image%2020221212152022.png" class="align-center">
     <img src="/images/Pasted%20image%2020221212152022.png" alt=""  />
     
 </figure></p>
 <h3 id="使用-load-和-store-编译生成指令">使用 load 和 store 编译生成指令</h3>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="n">A</span><span class="p">[</span><span class="mi">12</span><span class="p">]</span> <span class="o">=</span> <span class="n">h</span> <span class="o">+</span> <span class="n">A</span><span class="p">[</span><span class="mi">8</span><span class="p">];</span>
-</span></span></code></pre></div><p>h 存放在 x21 中，A 的基址存放在 x22 中。</p>
+</span></span></code></pre></div><p>h 存放在 x21 中,A 的基址存放在 x22 中.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">ld</span> <span class="no">x9</span><span class="p">,</span> <span class="mi">64</span><span class="p">(</span><span class="no">x22</span><span class="p">)</span>  <span class="c1">// x9 = A[8]
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">add</span> <span class="no">x9</span><span class="p">,</span> <span class="no">x21</span><span class="p">,</span> <span class="no">x9</span> <span class="c1">// x9 = h + A[8]
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">sd</span> <span class="no">x9</span><span class="p">,</span> <span class="mi">96</span><span class="p">(</span><span class="no">x22</span><span class="p">)</span>  <span class="c1">// A[12] = x9
@@ -283,9 +283,9 @@ Make是一个工具，它用于根据Makefile规则自动构建和编译程序�
 </span></span><span class="line"><span class="cl">		<span class="n">i</span> <span class="o">+=</span> <span class="mi">1</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl">	<span class="p">}</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>x, y 的基址存放在 x10 和 x11 中， i 存放在 x19 中。</p>
+</span></span></code></pre></div><p>x, y 的基址存放在 x10 和 x11 中, i 存放在 x19 中.</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nl">strcpy:</span>
-</span></span><span class="line"><span class="cl">	<span class="nf">addi</span> <span class="no">sp</span><span class="p">,</span> <span class="no">sp</span><span class="p">,</span> <span class="p">-</span><span class="mi">8</span>  <span class="c1">// 调整栈指针，以存放一个item(x19)
+</span></span><span class="line"><span class="cl">	<span class="nf">addi</span> <span class="no">sp</span><span class="p">,</span> <span class="no">sp</span><span class="p">,</span> <span class="p">-</span><span class="mi">8</span>  <span class="c1">// 调整栈指针,以存放一个item(x19)
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">sd</span> <span class="no">x19</span><span class="p">,</span> <span class="mi">0</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>    <span class="c1">// x19 入栈
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>	<span class="nf">add</span> <span class="no">x19</span><span class="p">,</span> <span class="no">x0</span><span class="p">,</span> <span class="no">x0</span>  <span class="c1">// x19 = 0 + 0
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nl">L1:</span> <span class="nf">add</span> <span class="no">x5</span><span class="p">,</span> <span class="no">x19</span><span class="p">,</span> <span class="no">x11</span> <span class="c1">// x5 = x19 + x11 =&gt; address of y[i] in x5
@@ -349,19 +349,19 @@ Make是一个工具，它用于根据Makefile规则自动构建和编译程序�
 </ul>
 <h2 id="helpful-risc-v-assmebler-features">Helpful RISC-V Assmebler Features</h2>
 <ol>
-<li>a0 - a7 是参数寄存器(x10 - x17，用于函数调用。</li>
+<li>a0 - a7 是参数寄存器(x10 - x17,用于函数调用.</li>
 <li>zero 代表 x0</li>
 <li><code>mv rd, rs = addi rd, rs, 0</code></li>
 <li><code>li rd, 13 = addi rd, x0, 13</code></li>
 <li><code>nop = addi x0, x0</code></li>
 <li><code>la a1 Lable</code> 将 Label 的 地址 加载到 a1</li>
 <li>a0 - a7(x10 - x17): 8 个寄存器用于参数传递以及两个返回值(a0 - a1)</li>
-<li>ra（x1）: 一个返回 address 的寄存器，用于返回原点（调用的位置）</li>
+<li>ra（x1）: 一个返回 address 的寄存器,用于返回原点（调用的位置）</li>
 <li>s0 - s1(x8 - x9) and s2 - s11 (s18 - x27): 保存的寄存器</li>
 </ol>
 <h2 id="risc-v-函数调用的转换">RISC-V 函数调用的转换</h2>
 <ol>
-<li>寄存器比内存快，所以使用它们</li>
+<li>寄存器比内存快,所以使用它们</li>
 <li><code>jal rd, Label</code> 跳转和链接
 <ol>
 <li><code>jal x1, 100</code></li>
@@ -373,7 +373,7 @@ Make是一个工具，它用于根据Makefile规则自动构建和编译程序�
 </ol>
 </li>
 <li><code>jal Lable</code> =&gt; <code>jal ra, Lable</code> 调用函数</li>
-<li><code>jalr s1</code> 当 s1 是方法指针时，这就是一个函数调用</li>
+<li><code>jalr s1</code> 当 s1 是方法指针时,这就是一个函数调用</li>
 </ol>
 <h3 id="一段函数调用转换为汇编">一段函数调用转换为汇编</h3>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="p">...</span>
@@ -397,13 +397,13 @@ Make是一个工具，它用于根据Makefile规则自动构建和编译程序�
 <li>把需要的参数放到方法可以访问的地方（寄存器）</li>
 <li>转移控制权给函数,使用(<code>jal</code>)
 <ol>
-<li>保持地址，并跳转到函数的地址</li>
+<li>保持地址,并跳转到函数的地址</li>
 </ol>
 </li>
 <li>获取函数执行所需的(local)存储资源</li>
 <li>执行预期的函数</li>
-<li>将返回值放在调用代码可以访问的地方，并恢复我们使用到的寄存器，释放本地存储</li>
-<li>将控制器返回给主处理器（<code>ret</code>), 使用存储在寄存器中的地址，返回到调用它的地方</li>
+<li>将返回值放在调用代码可以访问的地方,并恢复我们使用到的寄存器,释放本地存储</li>
+<li>将控制器返回给主处理器（<code>ret</code>), 使用存储在寄存器中的地址,返回到调用它的地方</li>
 </ol>
 <h3 id="方法调用示例">方法调用示例</h3>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">leaf</span><span class="p">(</span><span class="kt">int</span> <span class="n">g</span><span class="p">,</span> <span class="kt">int</span> <span class="n">h</span><span class="p">,</span> <span class="kt">int</span> <span class="n">i</span><span class="p">,</span> <span class="kt">int</span> <span class="n">j</span><span class="p">){</span>
@@ -445,7 +445,7 @@ Make是一个工具，它用于根据Makefile规则自动构建和编译程序�
         TIP
         
     </p>
-    <p> <p>sp 是栈指针，从内存空间 的最顶部开始向下增长，在 RISC-V 中使用 x2 这个寄存器。</p>
+    <p> <p>sp 是栈指针,从内存空间 的最顶部开始向下增长,在 RISC-V 中使用 x2 这个寄存器.</p>
 <ol>
 <li>push 是减少 sp 的指针地址</li>
 <li>pop 是增加</li>
@@ -460,7 +460,7 @@ Make是一个工具，它用于根据Makefile规则自动构建和编译程序�
 
 
 
-<p>每个函数都有一组存放在栈上的数据，它们是<strong>栈帧</strong>（stack frame ），栈帧通常包含：</p>
+<p>每个函数都有一组存放在栈上的数据,它们是<strong>栈帧</strong>（stack frame ）,栈帧通常包含：</p>
 <ol>
 <li>返回地址</li>
 <li>参数</li>
@@ -470,14 +470,14 @@ Make是一个工具，它用于根据Makefile规则自动构建和编译程序�
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">int</span> <span class="nf">sumSquare</span><span class="p">(</span><span class="kt">int</span> <span class="n">x</span><span class="p">,</span><span class="kt">int</span> <span class="n">y</span><span class="p">){</span>
 </span></span><span class="line"><span class="cl">	<span class="k">return</span> <span class="nf">mult</span><span class="p">(</span><span class="n">x</span><span class="p">,</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">y</span><span class="p">;</span>
 </span></span><span class="line"><span class="cl"><span class="p">}</span>
-</span></span></code></pre></div><p>在 ra 中有一个 sumSquare 想要跳回的值，但是这个值会被调用 mult 覆盖。</p>
+</span></span></code></pre></div><p>在 ra 中有一个 sumSquare 想要跳回的值,但是这个值会被调用 mult 覆盖.</p>
 <ol>
 <li>caller: 调用函数的人</li>
 <li>calle： 被调用的函数</li>
-<li>当被调用者从执行中返回时，调用者需要知道哪些寄存器可能发生了变化，哪些寄存器被保证是不变的。</li>
-<li>寄存器规定： 即哪些寄存器在程序调用(<code>jal</code>) 后将被取消缓存 ，哪些可以被改变。
+<li>当被调用者从执行中返回时,调用者需要知道哪些寄存器可能发生了变化,哪些寄存器被保证是不变的.</li>
+<li>寄存器规定： 即哪些寄存器在程序调用(<code>jal</code>) 后将被取消缓存 ,哪些可以被改变.
 <ol>
-<li>即有一些寄存器是易失的(temp),一些是要保存的（<strong>调用者需要恢复它们原来的值</strong>）。</li>
+<li>即有一些寄存器是易失的(temp),一些是要保存的（<strong>调用者需要恢复它们原来的值</strong>）.</li>
 <li>这优化了每次进入栈帧的寄存器的数量</li>
 </ol>
 </li>
@@ -518,7 +518,7 @@ Make是一个工具，它用于根据Makefile规则自动构建和编译程序�
 </figure></p>
 <h2 id="risc-v-方法调用套路">RISC-V 方法调用套路</h2>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nl">matmul:</span>  
-</span></span><span class="line"><span class="cl">    <span class="c1"># 压栈，腾出空间保存我们要使用的几个 s 寄存器
+</span></span><span class="line"><span class="cl">    <span class="c1"># 压栈,腾出空间保存我们要使用的几个 s 寄存器
 </span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="nf">addi</span> <span class="no">sp</span> <span class="no">sp</span> <span class="p">-</span><span class="mi">36</span>  
 </span></span><span class="line"><span class="cl">    <span class="no">sw</span> <span class="no">ra</span> <span class="mi">0</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
 </span></span><span class="line"><span class="cl">    <span class="no">sw</span> <span class="no">s0</span> <span class="mi">4</span><span class="p">(</span><span class="no">sp</span><span class="p">)</span>  
@@ -553,7 +553,7 @@ Make是一个工具，它用于根据Makefile规则自动构建和编译程序�
     
 </figure></p>
 <ol>
-<li>opcode，funct3, funct7 : 将告诉我们是否要执行加，减，左移，异或等操作。
+<li>opcode,funct3, funct7 : 将告诉我们是否要执行加,减,左移,异或等操作.
 <ol>
 <li>R-format 的 opcode 固定为 0110011</li>
 </ol>
@@ -563,7 +563,7 @@ Make是一个工具，它用于根据Makefile规则自动构建和编译程序�
 <li><code>rs2 = x19</code>, <code>rs1 = x10</code>, <code>rd = x18</code></li>
 </ol>
 <h2 id="i-格式布局">I 格式布局</h2>
-<p>处理立即数，比如<code>addi rd rs1, imm</code> =&gt; <code>addi a0 a0 1</code></p>
+<p>处理立即数,比如<code>addi rd rs1, imm</code> =&gt; <code>addi a0 a0 1</code></p>
 <p><figure id="a-/images/Pasted%20image%2020221224220039.png" class="align-center">
     <img src="/images/Pasted%20image%2020221224220039.png" alt=""  />
     
@@ -580,7 +580,7 @@ Make是一个工具，它用于根据Makefile规则自动构建和编译程序�
     
 </figure></p>
 <h2 id="risc-v-loads">RISC-V Loads</h2>
-<p>load 指令也是 I 类型的。</p>
+<p>load 指令也是 I 类型的.</p>
 <p><figure id="a-/images/Pasted%20image%2020221224221104.png" class="align-center">
     <img src="/images/Pasted%20image%2020221224221104.png" alt="lw x14 8(x2)"  />
     
