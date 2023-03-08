@@ -10,7 +10,82 @@
     </image>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright [fzdwx](https://github.com/fzdwx)   since 2022</copyright>
-    <lastBuildDate>Mon, 06 Mar 2023 20:30:48 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/document/feed.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Wed, 08 Mar 2023 20:14:58 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/document/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>并发和线程</title>
+      <link>https://fzdwx.github.io/document/2023-03-08-jyyos_concurrency/</link>
+      <pubDate>Wed, 08 Mar 2023 20:14:58 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/document/2023-03-08-jyyos_concurrency/</guid>
+      <description>&amp;nbsp;http://ostep.org/Chinese/26.pdf 假设有这样的一段&amp;nbsp;代码 ，启动了两个协程，然后都循环了 n 次并进行 ++ 操作。
+正常来说，结果就应该是 2n，但实际的结果却距离 2n 还有很大的差距。
+1. 从汇编来看 其中的 count++ 这一行代码，在 RISC-V中可能有多条组成: 加载 -&amp;gt; 修改 -&amp;gt; 存储
+lw t0 count // t0 = count addi t0 t0 1 // t0 = t0 + 1 sw t0 count // count = t0 而我们启动了两个协程，这两个协程都会执行这三条指令，所以就会出现这样的情况:
+协程 A 加载 count 的值，得到 0 协程 B 加载 count 的值，得到 0 协程 A 修改 count 的值，得到 1 协程 B 修改 count 的值，得到 1 协程 A 存储 count 的值，得到 1 协程 B 存储 count 的值，得到 1 这就导致了，确实是执行了两次 count++，但是最终的结果却是 1</description>
+      <content:encoded><![CDATA[<blockquote>
+<p>&nbsp;<a href="http://ostep.org/Chinese/26.pdf" target="_blank" rel="noopener">http://ostep.org/Chinese/26.pdf</a>
+</p>
+</blockquote>
+<p>假设有这样的一段&nbsp;<a href="/code/jyyos_concurrency.go">代码</a>
+，启动了两个协程，然后都循环了 n 次并进行 ++ 操作。</p>
+<script type="application/javascript" src="https://gist.github.com/fzdwx/825f29e8da6f97451e17099055e3d0e9.js"></script>
+
+<p>正常来说，结果就应该是 2n，但实际的结果却距离 2n 还有很大的差距。</p>
+<h2 id="1-从汇编来看">1. 从汇编来看</h2>
+<p>其中的 <code>count++</code> 这一行代码，在 RISC-V中可能有多条组成: 加载 -&gt; 修改 -&gt; 存储</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-asm" data-lang="asm"><span class="line"><span class="cl"><span class="nf">lw</span> <span class="no">t0</span> <span class="no">count</span>     <span class="c1">// t0 = count
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">addi</span> <span class="no">t0</span> <span class="no">t0</span> <span class="mi">1</span>    <span class="c1">// t0 = t0 + 1
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="nf">sw</span> <span class="no">t0</span> <span class="no">count</span>     <span class="c1">// count = t0
+</span></span></span></code></pre></div><p>而我们启动了两个协程，这两个协程都会执行这三条指令，所以就会出现这样的情况:</p>
+<ol>
+<li>协程 A 加载 count 的值，得到 0</li>
+<li>协程 B 加载 count 的值，得到 0</li>
+<li>协程 A 修改 count 的值，得到 1</li>
+<li>协程 B 修改 count 的值，得到 1</li>
+<li>协程 A 存储 count 的值，得到 1</li>
+<li>协程 B 存储 count 的值，得到 1</li>
+</ol>
+<p>这就导致了，确实是执行了两次 <code>count++</code>，但是最终的结果却是 1</p>
+<h2 id="2-从操作系统的上下文切换来看">2. 从操作系统的上下文切换来看</h2>
+<p>如果两个协程都分属于不同的线程，那么在操作系统的上下文切换中，就会出现这样的情况:</p>
+<ol>
+<li>协程 A 加载 count 的值，得到 0</li>
+<li>协程 A 修改 count 的值，得到 1</li>
+<li>这个时候，假如操作系统进行上下文切换，切换到协程 B</li>
+<li>协程 B 加载 count 的值，得到 0</li>
+<li>协程 B 修改 count 的值，得到 1</li>
+<li>协程 B 存储 count 的值，得到 1</li>
+<li>切换到协程 A</li>
+<li>协程 A 存储 count 的值，得到 1</li>
+</ol>
+<p>这也会导致结果是 1</p>
+
+
+
+
+
+<div class="tip custom-block">
+    <p class="custom-block-title">
+        
+        
+        竞态条件
+        
+    </p>
+    <p> <p>这种情况就是竞态条件: 结果取决于代码的时间执行。由于运气不好(在执行的过程中发生上下文切换)，得到了错误的结果。</p>
+<p>这段代码也被称为临界区，因为这段代码访问了共享变量，在 golang 中可以用 <code>go run -race main.go</code> 来进行检测</p>
+ </p>
+</div>
+
+
+
+
+
+
+
+
+]]></content:encoded>
+    </item>
+    
     <item>
       <title>操作系统的地址空间</title>
       <link>https://fzdwx.github.io/document/2023-03-06-os_address_space/</link>
