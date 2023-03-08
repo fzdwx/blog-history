@@ -1,11 +1,11 @@
 ---
 title: "并发和线程"
 date: 2023-03-08T20:14:58+08:00
-update: 2023-03-08T20:14:58+08:00
+update: 2023-03-08T21:14:53+0800
 draft: false
 ShowToc: false
 ShowBreadCrumbs: false
-tags: [ostep]
+docs: [ostep]
 ---
 
 > http://ostep.org/Chinese/26.pdf
