@@ -369,3 +369,24 @@ h1, h2, h3, h4, h5, h6, p {
 .logo-img {
     margin-top: 10px;
 }
+
+.dark .gist .blob-num{
+    background: #000 !important;
+    color: var(--vp-c-text-dark-3) !important;
+}
+
+.dark .gist .pl-c1{
+    color: var(--a1) !important;
+}
+
+.dark .gist .pl-s{
+    color: var(--c0) !important;
+}
+
+.dark .gist .blob-code {
+    background: #000;
+}
+
+.dark .gist .blob-code-inner {
+    color: #fff;
+}
