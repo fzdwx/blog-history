@@ -1,0 +1,32 @@
+<!-- <iframe
+  class="gist-embed"
+  type="application/javascript"
+  src="https://gist.github.com/{{ index .Params 0 }}/{{ index .Params 1 }}.pibb"
+></iframe> -->
+
+<iframe
+  style="width: 100%; height: 300px; border: 0"
+  srcdoc='<html>
+    <body>
+      <style type="text/css">
+        body {
+         margin: 0; 
+        } 
+        .gist .gist-file, .gist .gist-data { 
+          border: 0 !important; 
+        }
+        .gist-meta {
+          display: none;
+        }
+      </style>
+      <script src="https://gist.github.com/{{ index .Params 0 }}/{{ index .Params 1 }}.js"></script>
+      <script>
+        const gistData = document.getElementsByClassName("gist-meta");
+        console.log(gistData);
+      </script>
+      
+    </body>
+    </html>'
+></iframe>
+
+<style></style>
