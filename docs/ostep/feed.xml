@@ -28,7 +28,34 @@ lw t0 count // t0 = count addi t0 t0 1 // t0 = t0 + 1 sw t0 count // count = t0 
 </blockquote>
 <p>假设有这样的一段&nbsp;<a href="/code/jyyos_concurrency.go">代码</a>
 ,启动了两个协程,然后都循环了 n 次并进行 ++ 操作.</p>
-<script type="application/javascript" src="https://gist.github.com/fzdwx/825f29e8da6f97451e17099055e3d0e9.js"></script>
+
+
+<iframe
+  style="width: 100%; height: 300px; border: 0"
+  srcdoc='<html>
+    <body>
+      <style type="text/css">
+        body {
+         margin: 0; 
+        } 
+        .gist .gist-file, .gist .gist-data { 
+          border: 0 !important; 
+        }
+        .gist-meta {
+          display: none;
+        }
+      </style>
+      <script src="https://gist.github.com/fzdwx/825f29e8da6f97451e17099055e3d0e9.js"></script>
+      <script>
+        const gistData = document.getElementsByClassName("gist-meta");
+        console.log(gistData);
+      </script>
+      
+    </body>
+    </html>'
+></iframe>
+
+<style></style>
 
 <p>正常来说,结果就应该是 2n,但实际的结果却距离 2n 还有很大的差距.</p>
 <h2 id="1-从汇编来看">1. 从汇编来看</h2>

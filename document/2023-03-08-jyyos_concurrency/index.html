@@ -18,7 +18,27 @@ lw t0 count // t0 = count addi t0 t0 1 // t0 = t0 + 1 sw t0 count // count = t0 
 </span><span class=meta-item><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentcolor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-tag meta-icon" style="user-select:text"><path d="M20.59 13.41l-7.17 7.17a2 2 0 01-2.83.0L2 12V2h10l8.59 8.59a2 2 0 010 2.82z" style="user-select:text"/><line x1="7" y1="7" x2="7" y2="7" style="user-select:text"/></svg>&nbsp;
 <span class=post-tags><a href=https://fzdwx.github.io/docs/ostep/>ostep</a></span></span>
 &nbsp;|&nbsp;<a href=https://github.com/fzdwx/fzdwx.github.io/blob/main/content/document/2023-03-08-jyyos_concurrency.md rel="noopener noreferrer" target=_blank>✍</a></div></header><div class=post-content><blockquote><p>&nbsp;<a href=http://ostep.org/Chinese/26.pdf target=_blank rel=noopener>http://ostep.org/Chinese/26.pdf</a></p></blockquote><p>假设有这样的一段&nbsp;<a href=/code/jyyos_concurrency.go>代码</a>
-,启动了两个协程,然后都循环了 n 次并进行 ++ 操作.</p><script type=application/javascript src=https://gist.github.com/fzdwx/825f29e8da6f97451e17099055e3d0e9.js></script><p>正常来说,结果就应该是 2n,但实际的结果却距离 2n 还有很大的差距.</p><h2 id=1-从汇编来看>1. 从汇编来看<a hidden class=anchor aria-hidden=true href=#1-从汇编来看>¶</a></h2><p>其中的 <code>count++</code> 这一行代码,在 RISC-V中可能有多条组成: 加载 -> 修改 -> 存储</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-asm data-lang=asm><span class=line><span class=cl><span class=nf>lw</span> <span class=no>t0</span> <span class=no>count</span>     <span class=c1>// t0 = count
+,启动了两个协程,然后都循环了 n 次并进行 ++ 操作.</p><iframe style=width:100%;height:300px;border:0 srcdoc='<html>
+    <body>
+      <style type="text/css">
+        body {
+         margin: 0; 
+        } 
+        .gist .gist-file, .gist .gist-data { 
+          border: 0 !important; 
+        }
+        .gist-meta {
+          display: none;
+        }
+      </style>
+      <script src="https://gist.github.com/fzdwx/825f29e8da6f97451e17099055e3d0e9.js"></script>
+      <script>
+        const gistData = document.getElementsByClassName("gist-meta");
+        console.log(gistData);
+      </script>
+      
+    </body>
+    </html>'></iframe><p>正常来说,结果就应该是 2n,但实际的结果却距离 2n 还有很大的差距.</p><h2 id=1-从汇编来看>1. 从汇编来看<a hidden class=anchor aria-hidden=true href=#1-从汇编来看>¶</a></h2><p>其中的 <code>count++</code> 这一行代码,在 RISC-V中可能有多条组成: 加载 -> 修改 -> 存储</p><div class=highlight><pre tabindex=0 class=chroma><code class=language-asm data-lang=asm><span class=line><span class=cl><span class=nf>lw</span> <span class=no>t0</span> <span class=no>count</span>     <span class=c1>// t0 = count
 </span></span></span><span class=line><span class=cl><span class=c1></span><span class=nf>addi</span> <span class=no>t0</span> <span class=no>t0</span> <span class=mi>1</span>    <span class=c1>// t0 = t0 + 1
 </span></span></span><span class=line><span class=cl><span class=c1></span><span class=nf>sw</span> <span class=no>t0</span> <span class=no>count</span>     <span class=c1>// count = t0
 </span></span></span></code></pre></div><p>而我们启动了两个协程,这两个协程都会执行这三条指令,所以就会出现这样的情况:</p><ol><li>协程 A 加载 count 的值,得到 0</li><li>协程 B 加载 count 的值,得到 0</li><li>协程 A 修改 count 的值,得到 1</li><li>协程 B 修改 count 的值,得到 1</li><li>协程 A 存储 count 的值,得到 1</li><li>协程 B 存储 count 的值,得到 1</li></ol><p>这就导致了,确实是执行了两次 <code>count++</code>,但是最终的结果却是 1</p><h2 id=2-从操作系统的上下文切换来看>2. 从操作系统的上下文切换来看<a hidden class=anchor aria-hidden=true href=#2-从操作系统的上下文切换来看>¶</a></h2><p>如果两个协程都分属于不同的线程,那么在操作系统的上下文切换中,就会出现这样的情况:</p><ol><li>协程 A 加载 count 的值,得到 0</li><li>协程 A 修改 count 的值,得到 1</li><li>这个时候,假如操作系统进行上下文切换,切换到协程 B</li><li>协程 B 加载 count 的值,得到 0</li><li>协程 B 修改 count 的值,得到 1</li><li>协程 B 存储 count 的值,得到 1</li><li>切换到协程 A</li><li>协程 A 存储 count 的值,得到 1</li></ol><p>这也会导致结果是 1</p><div class="tip custom-block"><p class=custom-block-title>竞态条件</p><p><p>这种情况就是竞态条件: 结果取决于代码的时间执行.由于运气不好(在执行的过程中发生上下文切换),得到了错误的结果.</p><p>这段代码也被称为临界区,因为这段代码访问了共享变量,在 golang 中可以用 <code>go run -race main.go</code> 来进行检测</p></p></div></div><footer class=post-footer></footer></article></main><footer class=footer><span>Copyright &nbsp;<a href=https://github.com/fzdwx target=_blank rel=noopener>fzdwx</a>
