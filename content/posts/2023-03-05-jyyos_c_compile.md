@@ -13,7 +13,7 @@ tags: [ "os","linux" ]
 
 ### 1. 首先就是编译第三节课的一个demo时,找不到 ld 等命令
 
-> http://jyywiki.cn/OS/2023/build/lect3.ipynb demo('hello-os', 'i/hello-os')
+> <http://jyywiki.cn/OS/2023/build/lect3.ipynb> demo('hello-os', 'i/hello-os')
 
 由于我使用的是 archlinux, `binutils` 编译出来的 ld, gcc 等命令都是不带 x86 的前缀的,
 而 Makefile 中定义的都是带 x86 的, 所以需要建立一个链接:
@@ -50,9 +50,9 @@ Make是一个工具,它用于根据Makefile规则自动构建和编译程序.
 总之,“bear -- make”命令可以帮助程序员更好地理解他们的代码在编译期间所做的事情,以及识别代码中的潜在问题.
 {{< /block >}}
 
-### 3. 写一个 pstree
+### 3. 写一个 pstree - M1
 
-> http://jyywiki.cn/OS/2023/labs/M1
+> <http://jyywiki.cn/OS/2023/labs/M1>
 
 实现思路:
 
@@ -60,3 +60,20 @@ Make是一个工具,它用于根据Makefile规则自动构建和编译程序.
 2. 读取 `/proc/{pid}/status` 文件
 3. 读取 name 以及 ppid
 4. 建树并打印树结构
+
+### 4. 关于编译新的os-workbench
+
+今天尝试下载了一下 2023 年的代码仓库,没想到可以下了
+
+```shell
+git clone https://git.nju.edu.cn/jyy/os-workbench.git
+```
+
+然后我就拉了 L0 来跑,但是怎么样都跑不动: `[-Werror=array-bounds]` 是关于数组越界的
+文件是 `os-workbench/abstract-machine/am/build/x86_64-qemu/src/x86/qemu/ioe.o:433`
+
+```shell
+git pull origin L0
+```
+
+解决办法是在 `os-workbench/abstract-machine/Makefile` 的 `CFLAGS` 最后添加 `-Wno-array-bounds`
