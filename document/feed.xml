@@ -205,7 +205,8 @@ void* malloc (size_t size); void free (void* ptr); 在 Rust 中我们可以通�
 </span></span></span><span class="line"><span class="cl"><span class="w">            </span><span class="p">.</span><span class="n">init</span><span class="p">(</span><span class="no">HEAP_SPACE</span><span class="p">.</span><span class="n">as_ptr</span><span class="p">()</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="kt">usize</span><span class="p">,</span><span class="w"> </span><span class="no">KERNEL_HEAP_SIZE</span><span class="p">);</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="p">}</span><span class="w">
 </span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
-</span></span></span></code></pre></div>]]></content:encoded>
+</span></span></span></code></pre></div><h1 id="2-地址空间">2. 地址空间</h1>
+]]></content:encoded>
     </item>
     
     <item>

@@ -17,7 +17,7 @@
       <pubDate>Sun, 05 Mar 2023 22:27:31 +0800</pubDate>
       
       <guid>https://fzdwx.github.io/posts/2023-03-05-jyyos_c_compile/</guid>
-      <description> 最近也是又追起了南京大学的操作系统课(前面几次都中途放弃了),记录一下
+      <description>最近也是又追起了南京大学的操作系统课(前面几次都中途放弃了),记录一下
 1. 首先就是编译第三节课的一个demo时,找不到 ld 等命令 &amp;nbsp;http://jyywiki.cn/OS/2023/build/lect3.ipynb demo(&amp;lsquo;hello-os&amp;rsquo;, &amp;lsquo;i/hello-os&amp;rsquo;)
 由于我使用的是 archlinux, binutils 编译出来的 ld, gcc 等命令都是不带 x86 的前缀的, 而 Makefile 中定义的都是带 x86 的, 所以需要建立一个链接:
 ln -s /usr/bin/ld /usr/bin/x86_64-linux-gnu-ld 来自 chatgpt 的解释: 该命令创建了一个名为“x86_64-linux-gnu-ld”的符号链接,指向“/usr/bin/ld”.这个符号链接可以被用作“x86_64-linux-gnu-ld”二进制文件的替代品. 符号链接是一种特殊的文件类型,它是一个指向另一个文件的文件,可以用来在文件系统中创建指向其他文件或目录的别名.
@@ -27,8 +27,8 @@ bear -- make 来自 chatgpt 的解释: 该命令使用Bear和Make工具,用于�
 具体来说,Bear是一个工具,它可以将系统调用跟踪器（strace）输出转换为JSON格式的文件,这个文件包含了所有运行期间的系统调用. Make是一个工具,它用于根据Makefile规则自动构建和编译程序.
 当这两个工具一起使用时,可以使用“bear &amp;ndash; make”命令自动捕获Makefile的编译命令和编译期间的调用链,这个过程可以在后续的调试中使用. 该命令的执行将产生一个JSON格式的文件,其中包含编译期间的所有系统调用和它们的参数.这个文件可以用于调试,性能优化,以及自动化编译和构建系统的开发.
 总之,“bear &amp;ndash; make”命令可以帮助程序员更好地理解他们的代码在编译期间所做的事情,以及识别代码中的潜在问题.
-3. 写一个 pstree &amp;nbsp;http://jyywiki.cn/OS/2023/labs/M1 实现思路:
-扫描 /proc/ 目录下所有为数字的文件夹 读取 /proc/{pid}/status 文件 读取 name 以及 ppid 建树并打印树结构 </description>
+3. 写一个 pstree - M1 &amp;nbsp;http://jyywiki.cn/OS/2023/labs/M1 实现思路:
+扫描 /proc/ 目录下所有为数字的文件夹 读取 /proc/{pid}/status 文件 读取 name 以及 ppid 建树并打印树结构 4.</description>
       <content:encoded><![CDATA[<blockquote>
 <p>最近也是又追起了南京大学的操作系统课(前面几次都中途放弃了),记录一下</p>
 </blockquote>
@@ -97,7 +97,7 @@ Make是一个工具,它用于根据Makefile规则自动构建和编译程序.</p
 
 
 
-<h3 id="3-写一个-pstree">3. 写一个 pstree</h3>
+<h3 id="3-写一个-pstree---m1">3. 写一个 pstree - M1</h3>
 <blockquote>
 <p>&nbsp;<a href="http://jyywiki.cn/OS/2023/labs/M1" target="_blank" rel="noopener">http://jyywiki.cn/OS/2023/labs/M1</a>
 </p>
@@ -109,6 +109,13 @@ Make是一个工具,它用于根据Makefile规则自动构建和编译程序.</p
 <li>读取 name 以及 ppid</li>
 <li>建树并打印树结构</li>
 </ol>
+<h3 id="4-关于编译新的os-workbench">4. 关于编译新的os-workbench</h3>
+<p>今天尝试下载了一下 2023 年的代码仓库,没想到可以下了</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">git clone https://git.nju.edu.cn/jyy/os-workbench.git
+</span></span></code></pre></div><p>然后我就拉了 L0 来跑,但是怎么样都跑不动: <code>[-Werror=array-bounds]</code> 是关于数组越界的
+文件是 <code>os-workbench/abstract-machine/am/build/x86_64-qemu/src/x86/qemu/ioe.o:433</code></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">git pull origin L0
+</span></span></code></pre></div><p>解决办法是在 <code>os-workbench/abstract-machine/Makefile</code> 的 <code>CFLAGS</code> 最后添加 <code>-Wno-array-bounds</code></p>
 ]]></content:encoded>
     </item>
     
