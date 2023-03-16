@@ -61,19 +61,53 @@ Make是一个工具,它用于根据Makefile规则自动构建和编译程序.
 3. 读取 name 以及 ppid
 4. 建树并打印树结构
 
-### 4. 关于编译新的os-workbench
+### ~~4. 关于编译新的os-workbench~~
 
-今天尝试下载了一下 2023 年的代码仓库,没想到可以下了
-
-```shell
-git clone https://git.nju.edu.cn/jyy/os-workbench.git
-```
-
-然后我就拉了 L0 来跑,但是怎么样都跑不动: `[-Werror=array-bounds]` 是关于数组越界的
-文件是 `os-workbench/abstract-machine/am/build/x86_64-qemu/src/x86/qemu/ioe.o:433`
+~~今天尝试下载了一下 2023 年的代码仓库,没想到可以下了~~
 
 ```shell
-git pull origin L0
+~~git clone https://git.nju.edu.cn/jyy/os-workbench.git~~
 ```
 
-解决办法是在 `os-workbench/abstract-machine/Makefile` 的 `CFLAGS` 最后添加 `-Wno-array-bounds`
+~~然后我就拉了 L0 来跑,但是怎么样都跑不动: `[-Werror=array-bounds]` 是关于数组越界的~~
+~~文件是 `os-workbench/abstract-machine/am/build/x86_64-qemu/src/x86/qemu/ioe.o:433`~~
+
+```shell
+~~git pull origin L0~~
+```
+
+~~解决办法是在 `os-workbench/abstract-machine/Makefile` 的 `CFLAGS` 最后添加 `-Wno-array-bounds`~~
+
+### 5. 跑起来 2023 版的代码
+
+昨天晚上在我在本机的 L0 代码下 `make run` 是跑不起来的,qemu 正常启动了但是界面是黑的,环境是
+
+```shell
+Linux archlinux 6.2.2-arch1-1
+qemu 7.2
+gcc 12.2.1
+```
+
+最后只能曲线救国,在 docker 中build,然后在本机跑 qemu
+
+```Dockerfile
+FROM ubuntu:22.04
+ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update
+RUN apt-get install -y build-essential git gcc-multilib qemu-system strace gdb sudo python3 libsdl2-dev libreadline-dev llvm-11 
+RUN useradd -ms /bin/bash user
+USER user
+WORKDIR /home/users
+```
+
+```shell
+docker build -t jyyos .
+# os-workbench
+docker run --rm -it -v ${PWD}:/mnt -w /mnt jyyos bash
+make
+
+# exit docker : os-workbench/kernel
+qemu-system-x86_64 ./build/kernel-x86_64-qemu
+```
+
+![run kernel](/images/12333.png)
