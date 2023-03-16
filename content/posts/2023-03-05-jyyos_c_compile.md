@@ -88,7 +88,7 @@ qemu 7.2
 gcc 12.2.1
 ```
 
-最后只能曲线救国,在 docker 中build,然后在本机跑 qemu
+最后只能曲线救国,在 docker 中 build, 然后在本机跑 qemu (docker 中不方便按图形化界面)
 
 ```Dockerfile
 FROM ubuntu:22.04
@@ -104,10 +104,26 @@ WORKDIR /home/users
 docker build -t jyyos .
 # os-workbench
 docker run --rm -it -v ${PWD}:/mnt -w /mnt jyyos bash
-make
 
 # exit docker : os-workbench/kernel
-qemu-system-x86_64 ./build/kernel-x86_64-qemu
+make
+qemu-system-x86_64 -serial mon:stdio -machine accel=tcg -smp "" -drive format=raw,file=./build/kernel-x86_64-qemu
 ```
 
+可能还是编译出了问题, 使用 docker 编译后就没有出现第 4 个问题
+
 ![run kernel](/images/12333.png)
+
+### 6. 在 AbstractMachine 中显示一张图片 - L0
+
+这个我记得去年是做一个可以动的游戏,根据键盘的输入去做一些响应,而今年的是只要打印一张图片,大概思路:
+
+1. `xxd -i xxx.png > img_data.h`
+2. 遍历这个数组,取 rgb 并调用 `draw_title`
+3. 解析参数,获取要输出的分辨率,然后在获得宽高的缩放比,最后获得对于的像素点
+
+![1800x1200](/images/1001.png)
+
+![320x240](/images/2023-03-16-21-45-20.png)
+
+感觉我的实现有问题,只是放大了左上角
