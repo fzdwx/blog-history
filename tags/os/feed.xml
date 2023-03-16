@@ -109,13 +109,41 @@ Make是一个工具,它用于根据Makefile规则自动构建和编译程序.</p
 <li>读取 name 以及 ppid</li>
 <li>建树并打印树结构</li>
 </ol>
-<h3 id="4-关于编译新的os-workbench">4. 关于编译新的os-workbench</h3>
-<p>今天尝试下载了一下 2023 年的代码仓库,没想到可以下了</p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">git clone https://git.nju.edu.cn/jyy/os-workbench.git
-</span></span></code></pre></div><p>然后我就拉了 L0 来跑,但是怎么样都跑不动: <code>[-Werror=array-bounds]</code> 是关于数组越界的
-文件是 <code>os-workbench/abstract-machine/am/build/x86_64-qemu/src/x86/qemu/ioe.o:433</code></p>
-<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">git pull origin L0
-</span></span></code></pre></div><p>解决办法是在 <code>os-workbench/abstract-machine/Makefile</code> 的 <code>CFLAGS</code> 最后添加 <code>-Wno-array-bounds</code></p>
+<h3 id="4-关于编译新的os-workbench"><del>4. 关于编译新的os-workbench</del></h3>
+<p><del>今天尝试下载了一下 2023 年的代码仓库,没想到可以下了</del></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">~~git clone https://git.nju.edu.cn/jyy/os-workbench.git~~
+</span></span></code></pre></div><p><del>然后我就拉了 L0 来跑,但是怎么样都跑不动: <code>[-Werror=array-bounds]</code> 是关于数组越界的</del>
+<del>文件是 <code>os-workbench/abstract-machine/am/build/x86_64-qemu/src/x86/qemu/ioe.o:433</code></del></p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">~~git pull origin L0~~
+</span></span></code></pre></div><p><del>解决办法是在 <code>os-workbench/abstract-machine/Makefile</code> 的 <code>CFLAGS</code> 最后添加 <code>-Wno-array-bounds</code></del></p>
+<h3 id="5-跑起来-2023-版的代码">5. 跑起来 2023 版的代码</h3>
+<p>昨天晚上在我在本机的 L0 代码下 <code>make run</code> 是跑不起来的,qemu 正常启动了但是界面是黑的,环境是</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">Linux archlinux 6.2.2-arch1-1
+</span></span><span class="line"><span class="cl">qemu 7.2
+</span></span><span class="line"><span class="cl">gcc 12.2.1
+</span></span></code></pre></div><p>最后只能曲线救国,在 docker 中build,然后在本机跑 qemu</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="line"><span class="cl"><span class="k">FROM</span><span class="s"> ubuntu:22.04</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">ENV</span> <span class="nv">DEBIAN_FRONTEND</span><span class="o">=</span>noninteractive
+</span></span><span class="line"><span class="cl"><span class="k">RUN</span> apt-get update<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">RUN</span> apt-get install -y build-essential git gcc-multilib qemu-system strace gdb sudo python3 libsdl2-dev libreadline-dev llvm-11 <span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">RUN</span> useradd -ms /bin/bash user<span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">USER</span><span class="s"> user</span><span class="err">
+</span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">WORKDIR</span><span class="s"> /home/users</span><span class="err">
+</span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">docker build -t jyyos .
+</span></span><span class="line"><span class="cl"><span class="c1"># os-workbench</span>
+</span></span><span class="line"><span class="cl">docker run --rm -it -v <span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>:/mnt -w /mnt jyyos bash
+</span></span><span class="line"><span class="cl">make
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="c1"># exit docker : os-workbench/kernel</span>
+</span></span><span class="line"><span class="cl">qemu-system-x86_64 ./build/kernel-x86_64-qemu
+</span></span></code></pre></div><p><figure id="a-/images/12333.png" class="align-center">
+    <img src="/images/12333.png" alt="run kernel"  />
+    
+    <figcaption>
+       run kernel
+    </figcaption>
+    
+</figure></p>
 ]]></content:encoded>
     </item>
     
