@@ -121,7 +121,7 @@ Make是一个工具,它用于根据Makefile规则自动构建和编译程序.</p
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">Linux archlinux 6.2.2-arch1-1
 </span></span><span class="line"><span class="cl">qemu 7.2
 </span></span><span class="line"><span class="cl">gcc 12.2.1
-</span></span></code></pre></div><p>最后只能曲线救国,在 docker 中build,然后在本机跑 qemu</p>
+</span></span></code></pre></div><p>最后只能曲线救国,在 docker 中 build, 然后在本机跑 qemu (docker 中不方便按图形化界面)</p>
 <div class="highlight"><pre tabindex="0" class="chroma"><code class="language-Dockerfile" data-lang="Dockerfile"><span class="line"><span class="cl"><span class="k">FROM</span><span class="s"> ubuntu:22.04</span><span class="err">
 </span></span></span><span class="line"><span class="cl"><span class="err"></span><span class="k">ENV</span> <span class="nv">DEBIAN_FRONTEND</span><span class="o">=</span>noninteractive
 </span></span><span class="line"><span class="cl"><span class="k">RUN</span> apt-get update<span class="err">
@@ -132,11 +132,12 @@ Make是一个工具,它用于根据Makefile规则自动构建和编译程序.</p
 </span></span></span></code></pre></div><div class="highlight"><pre tabindex="0" class="chroma"><code class="language-shell" data-lang="shell"><span class="line"><span class="cl">docker build -t jyyos .
 </span></span><span class="line"><span class="cl"><span class="c1"># os-workbench</span>
 </span></span><span class="line"><span class="cl">docker run --rm -it -v <span class="si">${</span><span class="nv">PWD</span><span class="si">}</span>:/mnt -w /mnt jyyos bash
-</span></span><span class="line"><span class="cl">make
 </span></span><span class="line"><span class="cl">
 </span></span><span class="line"><span class="cl"><span class="c1"># exit docker : os-workbench/kernel</span>
-</span></span><span class="line"><span class="cl">qemu-system-x86_64 ./build/kernel-x86_64-qemu
-</span></span></code></pre></div><p><figure id="a-/images/12333.png" class="align-center">
+</span></span><span class="line"><span class="cl">make
+</span></span><span class="line"><span class="cl">qemu-system-x86_64 -serial mon:stdio -machine <span class="nv">accel</span><span class="o">=</span>tcg -smp <span class="s2">&#34;&#34;</span> -drive <span class="nv">format</span><span class="o">=</span>raw,file<span class="o">=</span>./build/kernel-x86_64-qemu
+</span></span></code></pre></div><p>可能还是编译出了问题, 使用 docker 编译后就没有出现第 4 个问题</p>
+<p><figure id="a-/images/12333.png" class="align-center">
     <img src="/images/12333.png" alt="run kernel"  />
     
     <figcaption>
@@ -144,6 +145,30 @@ Make是一个工具,它用于根据Makefile规则自动构建和编译程序.</p
     </figcaption>
     
 </figure></p>
+<h3 id="6-在-abstractmachine-中显示一张图片---l0">6. 在 AbstractMachine 中显示一张图片 - L0</h3>
+<p>这个我记得去年是做一个可以动的游戏,根据键盘的输入去做一些响应,而今年的是只要打印一张图片,大概思路:</p>
+<ol>
+<li><code>xxd -i xxx.png &gt; img_data.h</code></li>
+<li>遍历这个数组,取 rgb 并调用 <code>draw_title</code></li>
+<li>解析参数,获取要输出的分辨率,然后在获得宽高的缩放比,最后获得对于的像素点</li>
+</ol>
+<p><figure id="a-/images/1001.png" class="align-center">
+    <img src="/images/1001.png" alt="1800x1200"  />
+    
+    <figcaption>
+       1800x1200
+    </figcaption>
+    
+</figure></p>
+<p><figure id="a-/images/2023-03-16-21-45-20.png" class="align-center">
+    <img src="/images/2023-03-16-21-45-20.png" alt="320x240"  />
+    
+    <figcaption>
+       320x240
+    </figcaption>
+    
+</figure></p>
+<p>感觉我的实现有问题,只是放大了左上角</p>
 ]]></content:encoded>
     </item>
     
