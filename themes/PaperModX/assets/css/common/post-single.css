@@ -240,7 +240,7 @@ h6:hover .anchor {
 .post-content code {
     /* inline code */
     color: var(--vp-c-text-code);
-    background-color: var(--vp-c-bg-mute);
+    background-color: rgba(0,0,0,0);
     margin: 0 3px;
     padding: 4px 5px;
     border-radius: 3px;

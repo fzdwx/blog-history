@@ -8,7 +8,7 @@ ShowBreadCrumbs: false
 docs: [ostep]
 ---
 
-> http://ostep.org/Chinese/26.pdf
+> <http://ostep.org/Chinese/26.pdf>
 
 假设有这样的一段[代码](/code/jyyos_concurrency.go),启动了两个协程,然后都循环了 n 次并进行 ++ 操作.
 
@@ -37,7 +37,6 @@ sw t0 count     // count = t0
 
 这就导致了,确实是执行了两次 `count++`,但是最终的结果却是 1
 
-
 ## 2. 从操作系统的上下文切换来看
 
 如果两个协程都分属于不同的线程,那么在操作系统的上下文切换中,就会出现这样的情况:
@@ -53,9 +52,8 @@ sw t0 count     // count = t0
 
 这也会导致结果是 1
 
-
 {{< block type="tip" title="竞态条件">}}
 这种情况就是竞态条件: 结果取决于代码的时间执行.由于运气不好(在执行的过程中发生上下文切换),得到了错误的结果.
 
 这段代码也被称为临界区,因为这段代码访问了共享变量,在 golang 中可以用 `go run -race main.go` 来进行检测
-{{< /block >}} 
+{{< /block >}}

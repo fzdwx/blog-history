@@ -6,4 +6,4 @@ run-profile-mode:
 
 chroma-css:
 	hugo gen chromastyles --style=monokai > assets/css/lib/chroma-dark.css
-	hugo gen chromastyles --style=github > assets/css/lib/chroma-light.css
+	hugo gen chromastyles --style=github-dark > assets/css/lib/chroma-light.css
