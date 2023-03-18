@@ -10,7 +10,167 @@
     </image>
     <generator>Hugo -- gohugo.io</generator>
     <copyright>Copyright [fzdwx](https://github.com/fzdwx)   since 2022</copyright>
-    <lastBuildDate>Wed, 08 Mar 2023 20:14:58 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/document/feed.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Sat, 18 Mar 2023 13:50:19 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/document/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Lock、CAS、Futex</title>
+      <link>https://fzdwx.github.io/document/2023-03-18-ostep-lock/</link>
+      <pubDate>Sat, 18 Mar 2023 13:50:19 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/document/2023-03-18-ostep-lock/</guid>
+      <description>在上一篇出现问题的最主要原因就是有多个线程访问了同一个变量(共享变量),导致出现了竞态条件. 从而使一个简单的 ++ 操作都不能正确的执行
+这是由于操作系统的打断机制: 操作系统不会让每个程序独占 cpu 一直执行,会进行周期性的打断, 来切换其他 线程/程序 来执行.(++ 操作不仅只是一条指令)
+而 Lock 可以直接解决这个问题,在代码中加锁,放在临界区的周围,确保临界区能够向单条指令的原子执行
+lock() 就是获取锁,如果没有其他线程持有锁,当前线程就会获取锁从而进入临界区. 如果此时有另一个线程也调用 lock() 那么这个线程调用的 lock() 不会返回,直到这把锁释放.
+而当锁的持有者调用 unlock() 后锁就变为可用的了. 如果没有其他线程卡在 lock() 里面,锁的状态就为可用的,如果有线程卡在 lock() 里面,那么其中的某一个会注意到锁状态的变化,然后获取到锁并进入临界区
+1. 禁用操作系统打断实现的锁 最简单的单 cpu 的锁实现, 可以通过 启用/禁用 操作系统的打断机制来实现
+void lock(){ disableInterrupts() } void unlock(){ enableInterrupts() } 这个锁实现的前提是单 cpu,调用 lock() 后当前线程就能独自 cpu,因为它禁用了操作系统的打断功能,从而独占了 cpu
+2. xchg 实现的锁 用一个变量来表示锁的状态,如果这个变量为 0,那么锁就是可用的,如果为 1,那么锁就是被占用的
+let lock = 0; fn lock(){ // Wait until the lock is free while (lock ==1){ // spin } // Lock the lock lock = 1; } fn unlock(){ lock = 0; } 但上面的代码很显然是有问题的,因为有一个共享变量 lock,而我们无法保证修改 lock 这个操作是原子的</description>
+      <content:encoded><![CDATA[<blockquote>
+<p>在上一篇出现问题的最主要原因就是有多个线程访问了同一个变量(共享变量),导致出现了竞态条件.
+从而使一个简单的 ++ 操作都不能正确的执行</p>
+<p>这是由于操作系统的打断机制: 操作系统不会让每个程序独占 cpu 一直执行,会进行周期性的打断,
+来切换其他 线程/程序 来执行.(++ 操作不仅只是一条指令)</p>
+<p>而 Lock 可以直接解决这个问题,在代码中加锁,放在临界区的周围,确保临界区能够向单条指令的原子执行</p>
+</blockquote>
+<p>lock() 就是获取锁,如果没有其他线程持有锁,当前线程就会获取锁从而进入临界区. 如果此时有另一个线程也调用 lock() 那么这个线程调用的 lock() 不会返回,直到这把锁释放.</p>
+<p>而当锁的持有者调用 unlock() 后锁就变为可用的了. 如果没有其他线程卡在 lock() 里面,锁的状态就为可用的,如果有线程卡在 lock() 里面,那么其中的某一个会注意到锁状态的变化,然后获取到锁并进入临界区</p>
+<h2 id="1-禁用操作系统打断实现的锁">1. 禁用操作系统打断实现的锁</h2>
+<p>最简单的单 cpu 的锁实现, 可以通过 启用/禁用 操作系统的打断机制来实现</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">lock</span><span class="p">(){</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">disableInterrupts</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">unlock</span><span class="p">(){</span>
+</span></span><span class="line"><span class="cl">  <span class="nf">enableInterrupts</span><span class="p">()</span>
+</span></span><span class="line"><span class="cl"><span class="p">}</span>
+</span></span></code></pre></div><p>这个锁实现的前提是单 cpu,调用 lock() 后当前线程就能独自 cpu,因为它禁用了操作系统的打断功能,从而独占了 cpu</p>
+<h2 id="2-xchg-实现的锁">2. xchg 实现的锁</h2>
+<p>用一个变量来表示锁的状态,如果这个变量为 0,那么锁就是可用的,如果为 1,那么锁就是被占用的</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="kd">let</span><span class="w"> </span><span class="n">lock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">fn</span> <span class="nf">lock</span><span class="p">(){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c1">// Wait until the lock is free
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">lock</span><span class="w"> </span><span class="o">==</span><span class="mi">1</span><span class="p">){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="c1">// spin
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">  </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="c1">// Lock the lock
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span><span class="w">  </span><span class="n">lock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">fn</span> <span class="nf">unlock</span><span class="p">(){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">lock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><p>但上面的代码很显然是有问题的,因为有一个共享变量 lock,而我们无法保证修改 lock 这个操作是原子的</p>
+<p>而操心系统为我们提供了一个指令,在 x86 是 xchg, 将旧值返回并写入新值</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="k">fn</span> <span class="nf">xchg</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">val</span>: <span class="kt">u32</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="kt">u32</span> <span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="kd">let</span><span class="w"> </span><span class="n">ret</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">self</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="o">*</span><span class="bp">self</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">val</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">ret</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><figure class="align-center">
+  <figcaption>一个模拟的xchg, 不代表真实实现</figcaption>
+</figure>
+
+<p>然后使用 xchg 改写</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="kd">let</span><span class="w"> </span><span class="n">lock</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">fn</span> <span class="nf">lock</span><span class="p">(){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">xchg</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lock</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="k">fn</span> <span class="nf">unlock</span><span class="p">(){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">xchg</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lock</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">);</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><p>这种锁可以保证正确性,但效率很低,因为如果当很多线程在获取锁时,那么就会有多少个线程在空转</p>
+<h2 id="3-cas-实现的锁">3. CAS 实现的锁</h2>
+<p>操作系统提供了一个指令 cmpxchg,如果和预期值相等,就将新值写入,否则什么也不做,最后返回实际值</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="k">fn</span> <span class="nf">cmpxchg</span><span class="p">(</span><span class="o">&amp;</span><span class="k">mut</span><span class="w"> </span><span class="bp">self</span><span class="p">,</span><span class="w"> </span><span class="n">expected</span>: <span class="kt">u32</span><span class="p">,</span><span class="w"> </span><span class="n">new</span>: <span class="kt">u32</span><span class="p">)</span><span class="w"> </span>-&gt; <span class="kt">u32</span> <span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="kd">let</span><span class="w"> </span><span class="n">actual</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="bp">self</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">if</span><span class="w"> </span><span class="o">*</span><span class="bp">self</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="n">expected</span><span class="w"> </span><span class="p">{</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="o">*</span><span class="bp">self</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">new</span><span class="p">;</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="n">actual</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><figure class="align-center">
+  <figcaption>一个模拟的cmpxchg, 不代表真实实现</figcaption>
+</figure>
+
+<p>从结果来说,它与 xchg 实现的锁是一样的</p>
+<h2 id="4-怎么避免自旋">4. 怎么避免自旋</h2>
+<p>基于 CAS 实现锁简单并且有效,但这种解决方案在某些条件会很抵消:</p>
+<ol>
+<li>当一个线程持有锁时,被打断</li>
+<li>而其他线程去获取锁,但是由于锁被持有,所以会开始自旋</li>
+<li>一直自旋,直到被打断,第一个线程继续运行,释放锁</li>
+<li>最后另一个线程获取到锁</li>
+</ol>
+<p>这种情况下,线程浪费了一次 cpu 执行时间</p>
+<h3 id="41-主动让出时间片">4.1 主动让出时间片</h3>
+<p>在需要自旋的地方的时候,调用 yield 出让时间片(主动打断自己的运行)</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-rust" data-lang="rust"><span class="line"><span class="cl"><span class="k">fn</span> <span class="nf">lock</span><span class="p">(){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="k">while</span><span class="w"> </span><span class="p">(</span><span class="n">cmpxchg</span><span class="p">(</span><span class="o">&amp;</span><span class="n">lock</span><span class="p">,</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">1</span><span class="p">){</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">    </span><span class="kr">yield</span><span class="p">();</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w">  </span><span class="p">}</span><span class="w">
+</span></span></span><span class="line"><span class="cl"><span class="w"></span><span class="p">}</span><span class="w">
+</span></span></span></code></pre></div><p>如果当我们有很多线程(100个)反复竞争同一把锁. 在这种情况下,一个线程持有锁,其他 99 个线程都调用 lock ,发现锁已经被持有了,然后调用 yield 让出 cpu.</p>
+<p>假设采用某种调度算法(比如顺序或随机),这 99 个线程会一直处于这种循环种,这种方式同样消耗极大(涉及到上下文切换,也就是执行流的切换)</p>
+<h3 id="42-使用队列休眠代替自旋">4.2 使用队列,休眠代替自旋</h3>
+<p>线程一直自旋或者立刻让出 CPU,无论哪种方案都可能造成浪费, 这次我们使用 park/unpark 来实现</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-c" data-lang="c"><span class="line"><span class="cl"><span class="k">typedef</span> <span class="k">struct</span> <span class="kt">lock_t</span> <span class="p">{</span> 
+</span></span><span class="line"><span class="cl">  <span class="kt">int</span> <span class="n">flag</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl">  <span class="kt">int</span> <span class="n">guard</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl">  <span class="kt">queue_t</span> <span class="o">*</span><span class="n">q</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl"><span class="p">}</span> <span class="kt">lock_t</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">lock_init</span><span class="p">(</span><span class="kt">lock_t</span> <span class="o">*</span><span class="n">m</span><span class="p">)</span> <span class="p">{</span> 
+</span></span><span class="line"><span class="cl">  <span class="n">m</span><span class="o">-&gt;</span><span class="n">flag</span>  <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl">  <span class="n">m</span><span class="o">-&gt;</span><span class="n">guard</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl">  <span class="nf">queue_init</span><span class="p">(</span><span class="n">m</span><span class="o">-&gt;</span><span class="n">q</span><span class="p">);</span> 
+</span></span><span class="line"><span class="cl"><span class="p">}</span> 
+</span></span><span class="line"><span class="cl"> 
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">lock</span><span class="p">(</span><span class="kt">lock_t</span> <span class="o">*</span><span class="n">m</span><span class="p">)</span> <span class="p">{</span> 
+</span></span><span class="line"><span class="cl">  <span class="k">while</span> <span class="p">(</span><span class="nf">TestAndSet</span><span class="p">(</span><span class="o">&amp;</span><span class="n">m</span><span class="o">-&gt;</span><span class="n">guard</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> 
+</span></span><span class="line"><span class="cl">         <span class="p">;</span> <span class="c1">//acquire guard lock by spinning 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">if</span> <span class="p">(</span><span class="n">m</span><span class="o">-&gt;</span><span class="n">flag</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span> <span class="p">{</span> 
+</span></span><span class="line"><span class="cl">    <span class="n">m</span><span class="o">-&gt;</span><span class="n">flag</span> <span class="o">=</span> <span class="mi">1</span><span class="p">;</span> <span class="c1">// lock is acquired 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>    <span class="n">m</span><span class="o">-&gt;</span><span class="n">guard</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl">  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span> 
+</span></span><span class="line"><span class="cl">    <span class="nf">queue_add</span><span class="p">(</span><span class="n">m</span><span class="o">-&gt;</span><span class="n">q</span><span class="p">,</span> <span class="nf">gettid</span><span class="p">());</span> 
+</span></span><span class="line"><span class="cl">    <span class="n">m</span><span class="o">-&gt;</span><span class="n">guard</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl">    <span class="nf">park</span><span class="p">();</span> 
+</span></span><span class="line"><span class="cl">  <span class="p">}</span> 
+</span></span><span class="line"><span class="cl"> <span class="p">}</span> 
+</span></span><span class="line"><span class="cl">
+</span></span><span class="line"><span class="cl"><span class="kt">void</span> <span class="nf">unlock</span><span class="p">(</span><span class="kt">lock_t</span> <span class="o">*</span><span class="n">m</span><span class="p">)</span> <span class="p">{</span> 
+</span></span><span class="line"><span class="cl">  <span class="k">while</span> <span class="p">(</span><span class="nf">xchg</span><span class="p">(</span><span class="o">&amp;</span><span class="n">m</span><span class="o">-&gt;</span><span class="n">guard</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">)</span> 
+</span></span><span class="line"><span class="cl">      <span class="p">;</span> <span class="c1">//acquire guard lock by spinning 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">if</span> <span class="p">(</span><span class="nf">queue_empty</span><span class="p">(</span><span class="n">m</span><span class="o">-&gt;</span><span class="n">q</span><span class="p">))</span> 
+</span></span><span class="line"><span class="cl">      <span class="n">m</span><span class="o">-&gt;</span><span class="n">flag</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> <span class="c1">// let go of lock; no one wants it 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="k">else</span> 
+</span></span><span class="line"><span class="cl">      <span class="nf">unpark</span><span class="p">(</span><span class="nf">queue_remove</span><span class="p">(</span><span class="n">m</span><span class="o">-&gt;</span><span class="n">q</span><span class="p">));</span> <span class="c1">// hold lock (for next thread!) 
+</span></span></span><span class="line"><span class="cl"><span class="c1"></span>  <span class="n">m</span><span class="o">-&gt;</span><span class="n">guard</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span> 
+</span></span><span class="line"><span class="cl"><span class="p">}</span> 
+</span></span></code></pre></div><p>将 park/unpark 与 xchg 结合使用,并通过 queue 控制谁或获得锁</p>
+<ol>
+<li>guard 用来自旋</li>
+<li>如果没有获取到锁,那么就将自己的线程 id 加入到队列中,然后 park 自己</li>
+<li>当锁被释放时,就从队列中取出一个线程 id,然后 unpark 这个线程</li>
+</ol>
+<p>这个方法并没有完全避免自旋等待。线程在获取锁或者释放锁时可能被中断，从而导致其他
+线程自旋等待。但是，这个自旋等待时间是很有限的(不是用户定义的临界区，只是在 lock
+和 unlock 代码中的几个指令)</p>
+<h2 id="5-futex">5. futex</h2>
+<p>Linux 提供了 futex, 每个 futex 都管理一个特定的物理内存地址,也有一个事先建好的内核队列. 调用者通过 futex 调用来睡眠或唤醒</p>
+<p>调用 futex_wait(address,expected) 如果 address 与 expected 相等那么就会让调用线程睡眠,然后睡眠,否则立即返回</p>
+<p>调用 futex_wake(address) 唤醒等待队列的一个线程</p>
+<p>Linux 采用的是两阶段锁: 如果第一个自旋阶段没有获得锁,第二阶段调用者会睡眠,知道锁可用</p>
+]]></content:encoded>
+    </item>
+    
     <item>
       <title>并发和线程</title>
       <link>https://fzdwx.github.io/document/2023-03-08-jyyos_concurrency/</link>
