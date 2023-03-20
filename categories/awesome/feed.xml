@@ -17,7 +17,7 @@
       <pubDate>Sat, 26 Nov 2022 09:42:10 +0000</pubDate>
       
       <guid>https://fzdwx.github.io/notes/16/</guid>
-      <description>1. 书籍类 1.在线阅读网站: &amp;nbsp;https://app.flowoss.com/ &amp;nbsp;https://www.chatpdf.com/ 2. 资源网站： &amp;nbsp;https://zbook.lol/ -&amp;gt; &amp;nbsp;https://github.com/book-searcher-org/book-searcher &amp;nbsp;https://zh.annas-archive.org/ &amp;nbsp;https://www.aliyundrive.com/s/AECNXPqn8WA dBeJ &amp;nbsp;https://xmsoushu.com/#/ &amp;nbsp;https://tools.pdf24.org/zh/pdf-to-epub or docker run -ti --rm -v pwd:/temp dodeeric/pdf2epubex pdf2epubEX 3. 书 &amp;nbsp;《深入解析CSS》 &amp;nbsp;《计算机网络：自顶向下》 &amp;nbsp;《CSAPP》 &amp;nbsp;《csapp》 中文 &amp;nbsp;《图解HTTP》 &amp;nbsp;《高性能MySQL》 &amp;nbsp;《计算机组成与设计：硬件_软件接口》(P&amp;amp;H) &amp;nbsp;《C程序设计语言》(K&amp;amp;R) &amp;nbsp;《Rust Atomics and Locks-Low-Level Concurrency in Practice》 &amp;nbsp;《FFmpeg原理》 &amp;nbsp;数据库/存储学习路径推荐 &amp;nbsp;MySQL 45讲 &amp;nbsp;OSTEP.pdf &amp;nbsp;每个程序员都应该了解的内存知识 2. AI ChatGPT Shortcut: &amp;nbsp;https://newzone.top/chatgpt/?tags=code </description>
+      <description>1. 书籍类 1.在线阅读网站: &amp;nbsp;https://app.flowoss.com/ &amp;nbsp;https://www.chatpdf.com/ 2. 资源网站： &amp;nbsp;https://zbook.lol/ -&amp;gt; &amp;nbsp;https://github.com/book-searcher-org/book-searcher &amp;nbsp;https://zh.annas-archive.org/ &amp;nbsp;https://www.aliyundrive.com/s/AECNXPqn8WA dBeJ &amp;nbsp;https://xmsoushu.com/#/ &amp;nbsp;https://tools.pdf24.org/zh/pdf-to-epub or docker run -ti --rm -v pwd:/temp dodeeric/pdf2epubex pdf2epubEX 3. 书 &amp;nbsp;《深入解析CSS》 &amp;nbsp;《计算机网络：自顶向下》 &amp;nbsp;《CSAPP》 &amp;nbsp;《csapp》 中文 &amp;nbsp;《图解HTTP》 &amp;nbsp;《高性能MySQL》 &amp;nbsp;《计算机组成与设计：硬件_软件接口》(P&amp;amp;H) &amp;nbsp;《C程序设计语言》(K&amp;amp;R) &amp;nbsp;《Rust Atomics and Locks-Low-Level Concurrency in Practice》 &amp;nbsp;《FFmpeg原理》 &amp;nbsp;数据库/存储学习路径推荐 &amp;nbsp;MySQL 45讲 &amp;nbsp;OSTEP.pdf &amp;nbsp;每个程序员都应该了解的内存知识 2. AI ChatGPT Shortcut: &amp;nbsp;https://newzone.top/chatgpt/?tags=code 3. MySQL 优化 事务 &amp;nbsp;https://docs.pingcap.com/zh/tidb/stable/dev-guide-transaction-overview TiDB 事务概览 &amp;nbsp;https://docs.pingcap.com/zh/tidb/stable/transaction-overview 性能调优最佳实践 &amp;nbsp;https://docs.pingcap.com/zh/tidb/stable/dev-guide-optimize-sql-best-practices 索引的最佳实践 &amp;nbsp;https://docs.pingcap.com/zh/tidb/stable/dev-guide-index-best-practice SQL 性能调优 &amp;nbsp;https://docs.pingcap.com/zh/tidb/stable/dev-guide-optimize-sql SQL 优化流程 &amp;nbsp;https://docs.</description>
       <content:encoded><![CDATA[<h2 id="1-书籍类">1. 书籍类</h2>
 <h3 id="1在线阅读网站">1.在线阅读网站:</h3>
 <ol>
@@ -74,6 +74,34 @@
 <h2 id="2-ai">2. AI</h2>
 <ol>
 <li>ChatGPT Shortcut: &nbsp;<a href="https://newzone.top/chatgpt/?tags=code" target="_blank" rel="noopener">https://newzone.top/chatgpt/?tags=code</a>
+</li>
+</ol>
+<h2 id="3-mysql-优化">3. MySQL 优化</h2>
+<ol>
+<li>事务 &nbsp;<a href="https://docs.pingcap.com/zh/tidb/stable/dev-guide-transaction-overview" target="_blank" rel="noopener">https://docs.pingcap.com/zh/tidb/stable/dev-guide-transaction-overview</a>
+
+<ul>
+<li>TiDB 事务概览 &nbsp;<a href="https://docs.pingcap.com/zh/tidb/stable/transaction-overview" target="_blank" rel="noopener">https://docs.pingcap.com/zh/tidb/stable/transaction-overview</a>
+</li>
+</ul>
+</li>
+<li>性能调优最佳实践 &nbsp;<a href="https://docs.pingcap.com/zh/tidb/stable/dev-guide-optimize-sql-best-practices" target="_blank" rel="noopener">https://docs.pingcap.com/zh/tidb/stable/dev-guide-optimize-sql-best-practices</a>
+</li>
+<li>索引的最佳实践 &nbsp;<a href="https://docs.pingcap.com/zh/tidb/stable/dev-guide-index-best-practice" target="_blank" rel="noopener">https://docs.pingcap.com/zh/tidb/stable/dev-guide-index-best-practice</a>
+</li>
+<li>SQL 性能调优 &nbsp;<a href="https://docs.pingcap.com/zh/tidb/stable/dev-guide-optimize-sql" target="_blank" rel="noopener">https://docs.pingcap.com/zh/tidb/stable/dev-guide-optimize-sql</a>
+</li>
+</ol>
+<ul>
+<li>SQL 优化流程 &nbsp;<a href="https://docs.pingcap.com/zh/tidb/stable/sql-optimization-concepts" target="_blank" rel="noopener">https://docs.pingcap.com/zh/tidb/stable/sql-optimization-concepts</a>
+</li>
+<li>控制执行计划 &nbsp;<a href="https://docs.pingcap.com/zh/tidb/stable/control-execution-plan" target="_blank" rel="noopener">https://docs.pingcap.com/zh/tidb/stable/control-execution-plan</a>
+</li>
+<li>使用 EXPLAIN 解读执行计划 &nbsp;<a href="https://docs.pingcap.com/zh/tidb/stable/explain-walkthrough" target="_blank" rel="noopener">https://docs.pingcap.com/zh/tidb/stable/explain-walkthrough</a>
+</li>
+</ul>
+<ol start="5">
+<li>删除数据最佳实践 &nbsp;<a href="https://docs.pingcap.com/zh/tidb/stable/dev-guide-delete-data#" target="_blank" rel="noopener">https://docs.pingcap.com/zh/tidb/stable/dev-guide-delete-data#</a>
 </li>
 </ol>
 ]]></content:encoded>
