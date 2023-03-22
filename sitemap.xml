@@ -2,13 +2,28 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:xhtml="http://www.w3.org/1999/xhtml">
     <url>
+        <loc>https://fzdwx.github.io/tags/front/</loc>
+        <lastmod>2023-03-22T20:32:27+08:00</lastmod>
+    </url><url>
+        <loc>https://fzdwx.github.io/</loc>
+        <lastmod>2023-03-22T20:32:27+08:00</lastmod>
+    </url><url>
+        <loc>https://fzdwx.github.io/posts/</loc>
+        <lastmod>2023-03-22T20:32:27+08:00</lastmod>
+    </url><url>
+        <loc>https://fzdwx.github.io/tags/</loc>
+        <lastmod>2023-03-22T20:32:27+08:00</lastmod>
+    </url><url>
+        <loc>https://fzdwx.github.io/tags/vitepress/</loc>
+        <lastmod>2023-03-22T20:32:27+08:00</lastmod>
+    </url><url>
+        <loc>https://fzdwx.github.io/posts/2023-03-22-web-font/</loc>
+        <lastmod>2023-03-22T20:32:27+08:00</lastmod>
+    </url><url>
         <loc>https://fzdwx.github.io/docs/</loc>
         <lastmod>2023-03-18T13:50:19+08:00</lastmod>
     </url><url>
         <loc>https://fzdwx.github.io/document/</loc>
-        <lastmod>2023-03-18T13:50:19+08:00</lastmod>
-    </url><url>
-        <loc>https://fzdwx.github.io/</loc>
         <lastmod>2023-03-18T13:50:19+08:00</lastmod>
     </url><url>
         <loc>https://fzdwx.github.io/document/2023-03-18-ostep-lock/</loc>
@@ -33,12 +48,6 @@
         <lastmod>2023-03-05T22:27:31+08:00</lastmod>
     </url><url>
         <loc>https://fzdwx.github.io/tags/os/</loc>
-        <lastmod>2023-03-05T22:27:31+08:00</lastmod>
-    </url><url>
-        <loc>https://fzdwx.github.io/posts/</loc>
-        <lastmod>2023-03-05T22:27:31+08:00</lastmod>
-    </url><url>
-        <loc>https://fzdwx.github.io/tags/</loc>
         <lastmod>2023-03-05T22:27:31+08:00</lastmod>
     </url><url>
         <loc>https://fzdwx.github.io/posts/2023-03-05-jyyos_c_compile/</loc>
