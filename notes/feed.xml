@@ -379,162 +379,35 @@ term:
 </blockquote>
 <h2 id="最近在看">最近在看</h2>
 <h3 id="动漫">动漫</h3>
-<p><div class="douban_show">
-    <div id="dbhttps://movie.douban.com/subject/35604677/"
-    urlstring="https://movie.douban.com/subject/35604677/"
-    to="https://ddys.art/the-witch-from-mercury/"
-    class="douban_item post-preview">
-    
-</div>
-
-<div class="douban_show">
-    <div id="dbhttps://movie.douban.com/subject/35417872/"
-    urlstring="https://movie.douban.com/subject/35417872/"
-    to="https://ddys.art/isekaiojisan/"
-    class="douban_item post-preview">
-    
-</div>
-
-<div class="douban_show">
-    <div id="dbhttps://movie.douban.com/subject/35853587/"
-    urlstring="https://movie.douban.com/subject/35853587/"
-    to=""
-    class="douban_item post-preview">
-    
-</div>
-</p>
+<ClientsOnly>
+  <Douban code="35604677" to="https://ddys.art/the-witch-from-mercury/"/>
+  <Douban code="35417872" to="https://ddys.art/isekaiojisan/"/>
+  <Douban code="35853587"/>
+</ClientsOnly>
 <h2 id="已看完">已看完</h2>
 <h3 id="动漫-1">动漫</h3>
-<p><div class="douban_show">
-    <div id="dbhttps://movie.douban.com/subject/35351365/"
-    urlstring="https://movie.douban.com/subject/35351365/"
-    to=""
-    class="douban_item post-preview">
-    
-</div>
-
-<div class="douban_show">
-    <div id="dbhttps://movie.douban.com/subject/35256195/"
-    urlstring="https://movie.douban.com/subject/35256195/"
-    to="https://ddys.art/chainsaw-man"
-    class="douban_item post-preview">
-    
-</div>
-
-<div class="douban_show">
-    <div id="dbhttps://movie.douban.com/subject/35679830/"
-    urlstring="https://movie.douban.com/subject/35679830/"
-    to="https://www.bilibili.com/bangumi/play/ss39696"
-    class="douban_item post-preview">
-    
-</div>
-
-<div class="douban_show">
-    <div id="dbhttps://movie.douban.com/subject/35366293/"
-    urlstring="https://movie.douban.com/subject/35366293/"
-    to="https://ddys.art/bocchi-the-rock/"
-    class="douban_item post-preview">
-    
-</div>
-</p>
+<ClientsOnly>
+  <Douban code="35351365"/>
+  <Douban code="35256195" to="https://ddys.art/chainsaw-man" />
+  <Douban code="35679830" to="https://www.bilibili.com/bangumi/play/ss39696" />
+  <Douban code="35366293" to="https://ddys.art/bocchi-the-rock/"/>
+</ClientsOnly>
 <h3 id="电影">电影</h3>
-<p><div class="douban_show">
-    <div id="dbhttps://movie.douban.com/subject/2124724/"
-    urlstring="https://movie.douban.com/subject/2124724/"
-    to=""
-    class="douban_item post-preview">
-    
-</div>
-
-<div class="douban_show">
-    <div id="dbhttps://movie.douban.com/subject/1304624/"
-    urlstring="https://movie.douban.com/subject/1304624/"
-    to="https://www.bilibili.com/bangumi/play/ss32937"
-    class="douban_item post-preview">
-    
-</div>
-
-<div class="douban_show">
-    <div id="dbhttps://movie.douban.com/subject/1303173/"
-    urlstring="https://movie.douban.com/subject/1303173/"
-    to=""
-    class="douban_item post-preview">
-    
-</div>
-
-<div class="douban_show">
-    <div id="dbhttps://movie.douban.com/subject/1291550/"
-    urlstring="https://movie.douban.com/subject/1291550/"
-    to=""
-    class="douban_item post-preview">
-    
-</div>
-
-<div class="douban_show">
-    <div id="dbhttps://movie.douban.com/subject/27060077/"
-    urlstring="https://movie.douban.com/subject/27060077/"
-    to=""
-    class="douban_item post-preview">
-    
-</div>
-
-<div class="douban_show">
-    <div id="dbhttps://movie.douban.com/subject/30270746/"
-    urlstring="https://movie.douban.com/subject/30270746/"
-    to=""
-    class="douban_item post-preview">
-    
-</div>
-
-<div class="douban_show">
-    <div id="dbhttps://movie.douban.com/subject/30128916/"
-    urlstring="https://movie.douban.com/subject/30128916/"
-    to=""
-    class="douban_item post-preview">
-    
-</div>
-
-<div class="douban_show">
-    <div id="dbhttps://movie.douban.com/subject/30323380/"
-    urlstring="https://movie.douban.com/subject/30323380/"
-    to=""
-    class="douban_item post-preview">
-    
-</div>
-</p>
+<ClientsOnly>
+  <Douban code="2124724" />
+  <Douban code="1304624" to="https://www.bilibili.com/bangumi/play/ss32937" />
+  <Douban code="1303173" />
+  <Douban code="1291550" />
+  <Douban code="27060077" />
+  <Douban code="30270746" />
+  <Douban code="30128916" />
+  <Douban code="30323380" />
+</ClientsOnly>
 <h3 id="电视剧">电视剧</h3>
-<p><div class="douban_show">
-    <div id="dbhttps://movie.douban.com/subject/30198955/"
-    urlstring="https://movie.douban.com/subject/30198955/"
-    to="https://ddys.art/the-peripheral/"
-    class="douban_item post-preview">
-    
-</div>
-
-<div class="douban_show">
-    <div id="dbhttps://movie.douban.com/subject/30291070/"
-    urlstring="https://movie.douban.com/subject/30291070/"
-    to="https://ddys.art/reborn-rich/"
-    class="douban_item post-preview">
-    
-</div>
-
-<div class="douban_show">
-    <div id="dbhttps://movie.douban.com/subject/35314632/"
-    urlstring="https://movie.douban.com/subject/35314632/"
-    to="https://ddys.art/the-glory-2022/"
-    class="douban_item post-preview">
-    
-</div>
-
-<div class="douban_show">
-    <div id="dbhttps://movie.douban.com/subject/35465232/"
-    urlstring="https://movie.douban.com/subject/35465232/"
-    to=""
-    class="douban_item post-preview">
-    
-</div>
-</p>
+<Douban code="30198955" to="https://ddys.art/the-peripheral/" />
+<Douban code="30291070" to="https://ddys.art/reborn-rich/" />
+<Douban code="35314632" to="https://ddys.art/the-glory-2022" />
+<Douban code="35465232" />
 ]]></content:encoded>
     </item>
     
