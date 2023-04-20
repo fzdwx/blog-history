@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>asdmkqneoh63ji4h5 on fzdwx</title>
+    <link>https://fzdwx.github.io/tags/asdmkqneoh63ji4h5/</link>
+    <description>Recent content in asdmkqneoh63ji4h5 on fzdwx</description>
+    <image>
+      <url>https://fzdwx.github.io/images/party_parrot.gif</url>
+      <link>https://fzdwx.github.io/images/party_parrot.gif</link>
+    </image>
+    <generator>Hugo -- gohugo.io</generator>
+    <copyright>Copyright [fzdwx](https://github.com/fzdwx)   since 2022</copyright>
+    <lastBuildDate>Wed, 22 Mar 2023 20:32:27 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/tags/asdmkqneoh63ji4h5/feed.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>浏览器字体加重不生效</title>
+      <link>https://fzdwx.github.io/posts/2023-03-22-web-font/</link>
+      <pubDate>Wed, 22 Mar 2023 20:32:27 +0800</pubDate>
+      
+      <guid>https://fzdwx.github.io/posts/2023-03-22-web-font/</guid>
+      <description>最近在研究 vitepress 的主题, 准备把博客从 hugo 改成 vitepress(因为 vitepress 的代码块比 hugo 的好看).
+在写主题时, 发现我添加的自定义的字体设置 font-weight 怎么也不生效, 但是在 hugo 中是可以的.
+最后一个个 F12 一个个样式的去尝试, 发现 vitepress 的 body 会带下面的样式:
+text-rendering: optimizeLegibility; direction: ltr; font-synthesis: style; -webkit-font-smoothing: antialiased; 问题就是出在 font-synthesis: style; 上, 改成 weight 即可.</description>
+      <content:encoded><![CDATA[<blockquote>
+<p>最近在研究 <code>vitepress</code> 的主题, 准备把博客从 <code>hugo</code> 改成 <code>vitepress</code>(因为 <code>vitepress</code> 的代码块比 <code>hugo</code> 的好看).</p>
+</blockquote>
+<p>在写主题时, 发现我添加的自定义的字体设置 <code>font-weight</code> 怎么也不生效, 但是在 <code>hugo</code> 中是可以的.</p>
+<p>最后一个个 <code>F12</code> 一个个样式的去尝试, 发现 <code>vitepress</code> 的 body 会带下面的样式:</p>
+<div class="highlight"><pre tabindex="0" class="chroma"><code class="language-css" data-lang="css"><span class="line"><span class="cl"><span class="nt">text-rendering</span><span class="o">:</span> <span class="nt">optimizeLegibility</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">direction</span><span class="o">:</span> <span class="nt">ltr</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">font-synthesis</span><span class="o">:</span> <span class="nt">style</span><span class="o">;</span>
+</span></span><span class="line"><span class="cl"><span class="nt">-webkit-font-smoothing</span><span class="o">:</span> <span class="nt">antialiased</span><span class="o">;</span>
+</span></span></code></pre></div><p>问题就是出在 <code>font-synthesis: style;</code> 上, 改成 <code>weight</code> 即可.</p>
+]]></content:encoded>
+    </item>
+    
+  </channel>
+</rss>
