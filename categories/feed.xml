@@ -9,10 +9,11 @@
       <link>https://fzdwx.github.io/images/party_parrot.gif</link>
     </image>
     <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
     <copyright>Copyright [fzdwx](https://github.com/fzdwx)   since 2022</copyright>
     <lastBuildDate>Sat, 26 Nov 2022 09:42:10 +0000</lastBuildDate><atom:link href="https://fzdwx.github.io/categories/feed.xml" rel="self" type="application/rss+xml" />
     <item>
-      <title>awesome</title>
+      <title>Awesome</title>
       <link>https://fzdwx.github.io/categories/awesome/</link>
       <pubDate>Sat, 26 Nov 2022 09:42:10 +0000</pubDate>
       
@@ -22,7 +23,7 @@
     </item>
     
     <item>
-      <title>cheatsheet</title>
+      <title>Cheatsheet</title>
       <link>https://fzdwx.github.io/categories/cheatsheet/</link>
       <pubDate>Wed, 16 Nov 2022 04:04:10 +0000</pubDate>
       
@@ -32,7 +33,7 @@
     </item>
     
     <item>
-      <title>cli</title>
+      <title>Cli</title>
       <link>https://fzdwx.github.io/categories/cli/</link>
       <pubDate>Fri, 04 Nov 2022 14:20:23 +0000</pubDate>
       
@@ -42,7 +43,7 @@
     </item>
     
     <item>
-      <title>idea</title>
+      <title>Idea</title>
       <link>https://fzdwx.github.io/categories/idea/</link>
       <pubDate>Fri, 04 Nov 2022 10:29:41 +0000</pubDate>
       
@@ -52,7 +53,7 @@
     </item>
     
     <item>
-      <title>cs</title>
+      <title>Cs</title>
       <link>https://fzdwx.github.io/categories/cs/</link>
       <pubDate>Mon, 24 Oct 2022 07:43:57 +0000</pubDate>
       
@@ -62,7 +63,7 @@
     </item>
     
     <item>
-      <title>rust</title>
+      <title>Rust</title>
       <link>https://fzdwx.github.io/categories/rust/</link>
       <pubDate>Mon, 17 Oct 2022 07:04:04 +0000</pubDate>
       

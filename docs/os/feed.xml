@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>os on fzdwx</title>
+    <title>Os on fzdwx</title>
     <link>https://fzdwx.github.io/docs/os/</link>
-    <description>Recent content in os on fzdwx</description>
+    <description>Recent content in Os on fzdwx</description>
     <image>
       <url>https://fzdwx.github.io/images/party_parrot.gif</url>
       <link>https://fzdwx.github.io/images/party_parrot.gif</link>
     </image>
     <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
     <copyright>Copyright [fzdwx](https://github.com/fzdwx)   since 2022</copyright>
     <lastBuildDate>Mon, 06 Mar 2023 20:30:48 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/docs/os/feed.xml" rel="self" type="application/rss+xml" />
     <item>
@@ -131,8 +132,7 @@ void* malloc (size_t size); void free (void* ptr); 在 Rust 中我们可以通�
 <li>通过提前加载应用程序到内存,减少应用程序切换开销</li>
 <li>通过协作机制支持程序主动放弃处理器,提高系统执行效率</li>
 <li>通过抢占机制支持程序被动放弃处理器,保证不同程序对处理器资源使用的公平性,也进一步提高了应用对 I/O 事件的响应效率</li>
-</ol>
- </p>
+</ol> </p>
 </div>
 
 
@@ -566,8 +566,7 @@ I/O 操作让处理器空闲或让处理器忙等,那其他需要处理器资源
 <li>任务运行状态: 任务从开始到结束执行过程中所处的不同运行状态,比如:未初始化、准备执行、正在执行、已推出</li>
 <li>任务控制块： 管理程序的执行过程的任务上下文,控制程序的执行与暂停</li>
 <li>任务相关系统调用： 应用程序和操作系统直接的接口,用于程序主动暂停 <code>sys_yield</code> 和主动退出 <code>sys_exit</code></li>
-</ul>
- </p>
+</ul> </p>
 </div>
 
 
@@ -1244,8 +1243,7 @@ AppManager 从 app 列表中一次加载各个 app 到指定的内存在用户�
 <li>比如之间运行在裸机硬件上的操作系统,其执行环境就是 计算机的硬件</li>
 <li>后面就出现了在应用程序下面有了一层比较通用的函数库,这使得程序不用直接访问硬件了.所以应用程序的执行环境就是 函数库 -&gt; 计算机硬件</li>
 <li>在后来,操作系统取代了函数库来访问硬件. 函数库 -&gt; 操作系统 -&gt; 计算机硬件</li>
-</ol>
- </p>
+</ol> </p>
 </div>
 
 

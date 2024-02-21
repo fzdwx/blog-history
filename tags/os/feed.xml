@@ -1,14 +1,15 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>os on fzdwx</title>
+    <title>Os on fzdwx</title>
     <link>https://fzdwx.github.io/tags/os/</link>
-    <description>Recent content in os on fzdwx</description>
+    <description>Recent content in Os on fzdwx</description>
     <image>
       <url>https://fzdwx.github.io/images/party_parrot.gif</url>
       <link>https://fzdwx.github.io/images/party_parrot.gif</link>
     </image>
     <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
     <copyright>Copyright [fzdwx](https://github.com/fzdwx)   since 2022</copyright>
     <lastBuildDate>Sun, 05 Mar 2023 22:27:31 +0800</lastBuildDate><atom:link href="https://fzdwx.github.io/tags/os/feed.xml" rel="self" type="application/rss+xml" />
     <item>
@@ -509,8 +510,7 @@ Make是一个工具,它用于根据Makefile规则自动构建和编译程序.</p
 <ol>
 <li>push 是减少 sp 的指针地址</li>
 <li>pop 是增加</li>
-</ol>
- </p>
+</ol> </p>
 </div>
 
 
